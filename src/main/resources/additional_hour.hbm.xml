@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+ 	<class name="com.EntityClasses.additional_hour" table="additional_hour">
+ 	 	
+ 	 <id name="id" column="id" >    
+ 	    <generator class="increment"/>    
+ 	 </id>
+    <property name="user_id"  column="user_id"/>
+    <property name="project_id" column="project_id"/>
+    <property name="additional_hour" column="additional_hour"/>
+    <property name="created_at" column="created_at"/>
+    <property name="updated_at" column="updated_at"/>
+ 	</class>
+</hibernate-mapping>

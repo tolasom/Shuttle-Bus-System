@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+      user-select: none;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+html, body {
+  background: #ffffff;
+  height: 100%;
+  width: 100%;
+}
+
+kanban-board {
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+  padding: 10pt;
+  overflow-y: hidden;
+}
+kanban-board kanban-column {
+  background: #e2e4e6;
+  border-radius: 3px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin-right: 5pt;
+  max-width: 270px;
+  min-width: 200px;
+  overflow: hidden;
+  padding: 10pt;
+}
+kanban-board kanban-column .wrapper {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+kanban-board kanban-column header {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 2pt;
+}
+kanban-board kanban-card {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 1px 1px -1px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  display: block;
+  font-size: 10pt;
+  margin: 5pt 0;
+  padding: 7pt;
+  -webkit-transition: -webkit-transform 0.2s ease-out;
+  transition: -webkit-transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
+}
+kanban-board kanban-card:hover {
+  background: #edeff0;
+}
+kanban-board kanban-card.ui-sortable-helper {
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.5);
+  -webkit-transform: rotate(5deg);
+          transform: rotate(5deg);
+}
+
+.placeholder {
+  background: #ccc !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.4) !important;
+  height: 33.6563px !important;
+}

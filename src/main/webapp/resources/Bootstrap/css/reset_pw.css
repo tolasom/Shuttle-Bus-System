@@ -1,0 +1,21 @@
+#form-box{
+    margin-top: 20px;
+    text-align: center;
+}
+
+#panel-heading{
+    height: 60px !important;
+}
+
+#panel-heading h2{
+    margin-top: 5px;
+}
+
+#remember{
+    float: left;
+    margin-top: 0px;
+}
+
+#clear{
+    clear: left;
+}
