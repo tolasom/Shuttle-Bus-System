@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>KIT Point</title>
+<title>Shuttle Bus Management</title>
   <!-- Login CSS -->
 <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
       <link rel="stylesheet" href="${loginStyle}">
@@ -12,28 +12,7 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
 
 
-<!-- Bootstrap Core JavaScript -->
-    <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
-    <script src="${JSCORE}"></script>
-	
 
-    	
-<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
-<!-- Bootstrap Core CSS -->	
-  <spring:url value="/resources/Bootstrap/css/bootstrap.min.css" var="bootatrapCore"/>
-  <spring:url value="/resources/Bootstrap/css/sb-admin.css" var="CustomCSS"/>
-  <spring:url value="/resources/Bootstrap/font-awesome/css/font-awesome.min.css" var="customfontCSS"/>
-  
- 		<link href="${bootatrapCore}" rel="stylesheet">
-   		<!-- Custom CSS -->
-    	<link href="${CustomCSS}" rel="stylesheet">
-    	<!-- Morris Charts CSS -->
-    	<link href="${morrisCSS }" rel="stylesheet">
-    	<!-- Custom Fonts -->
-   	    <link href="${customfontCSS }" rel="stylesheet" type="text/css">
-   	    
-   	    <!-- Sweet alert -->
 <!-- Sweet alert -->
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
@@ -60,7 +39,7 @@ $(document).ready(function(){
 <h1 align="center">${message}</h1>
   <div class="login-page">
   <div class="form">
-  	<h1>KIT Point Management</h1>
+  	<h1>Shuttle Bus Management</h1>
   
     <form class="login-form" id="myForm" action="<c:url value='/login' />" method="post">
     	<c:if test="${not empty error}">

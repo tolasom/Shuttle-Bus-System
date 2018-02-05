@@ -1,41 +1,71 @@
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<div class="collapse navbar-collapse navbar-ex1-collapse" id="menu">
-                <ul class="nav navbar-nav side-nav">
-                     <sec:authorize access="hasRole('ROLE_ADMIN')">
-	                    <li id="projectStlye">
-	                        <a href="project" ><i class="fa fa-fw fa-clipboard fa-3x">
-	                        </i><span>&nbsp;Project</span> </a>
-	                    </li>
-	                    <li id="taskStlye">
-	                        <a href="task"><i class="fa fa-fw fa-file fa-3x"></i>&nbsp;&nbsp;Tasks</a>
-	                    </li>
-	                    <li id="reportingStyle">
-	                        <a href="reporting"><i class="fa fa-fw fa-bar-chart-o fa-3x"></i>&nbsp;Report</a>
-	                    </li>
-	                   
-	                    <li id="settingStlye">
-	                        <a href="setting"><i class="fa fa-fw fa-wrench fa-3x"></i>&nbsp;Setting</a>
-	                    </li>
-            		</sec:authorize>
-            		 <sec:authorize access="hasRole('ROLE_N_ADMIN')">
-	                    <li id="projectStlye">
-	                        <a href="projectAdminView" ><i class="fa fa-fw fa-clipboard fa-3x">
-	                        </i><span>&nbsp;Project</span> </a>
-	                    </li>
-	                    <li id="taskStlye">
-	                        <a href="taskAdminView"><i class="fa fa-fw fa-file fa-3x"></i>&nbsp;&nbsp;Tasks</a>
-	                    </li>
-            		</sec:authorize>
-            		 <sec:authorize access="hasRole('ROLE_USER')">
-	                    <li id="projectStlye">
-	                        <a href="projectUserView" ><i class="fa fa-fw fa-clipboard fa-3x">
-	                        </i><span>&nbsp;Project</span> </a>
-	                    </li>
-	                    <li id="taskStlye">
-	                        <a href="taskUserView"><i class="fa fa-fw fa-file fa-3x"></i>&nbsp;&nbsp;Tasks</a>
-	                    </li>
-	                    
-            		</sec:authorize>
-                </ul>
-</div>
+<aside class="sidebar">
+                    <div class="sidebar-container">
+                        <div class="sidebar-header">
+                            <div class="brand">
+                                <div class="logo">
+                                    
+                                </div> SBS </div>
+                        </div>
+                        <nav class="menu">
+                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-calendar"></i> Schedules </a>
+                                </li>
+                                <li >
+                                    <a href="#">
+                                        <i class="fa fa-list"></i> Bookings </a>
+                                </li>
+                                <li id="busMng">
+                                    <a href="additional_hour">
+                                        <i class="fa fa-bus"></i> Manage Buses </a>
+                                </li>
+                                <li >
+                                    <a href="#">
+                                        <i class="fa fa-institution"></i> Manage Locations </a>
+                                </li>
+                                <li >
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart"></i> Reportings </a>
+                                </li>
+                                
+                                <!-- <li>
+                                    <a href="">
+                                        <i class="fa fa-th-large"></i> Items Manager
+                                        <i class="fa arrow"></i>
+                                    </a>
+                                    <ul class="sidebar-nav">
+                                        <li>
+                                            <a href="items-list.html"> Items List </a>
+                                        </li>
+                                        <li>
+                                            <a href="item-editor.html"> Item Editor </a>
+                                        </li>
+                                    </ul>
+                                </li> -->
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                    <footer class="sidebar-footer">
+                        <ul class="sidebar-menu metismenu" id="customize-menu">
+                            <li>
+                                <ul>
+                                    <li class="customize">
+                                        
+                                        <div class="customize-item">
+                                            
+                                        </div>
+                                    </li>
+                                </ul>
+                                Powered by: KIT
+                            </li>
+                        </ul>
+                    </footer>
+                    
+                </aside>
+                <div class="sidebar-overlay" id="sidebar-overlay"></div>
+                <div class="sidebar-mobile-menu-handle" id="sidebar-mobile-menu-handle"></div>
+                <div class="mobile-menu-handle"></div>
