@@ -18,9 +18,49 @@
 		<put-attribute name="title" value="Bus Management" />
 		<put-attribute name="body" value="/WEB-INF/views/view/bus_management.jsp" />		
 	</definition>
+	<definition name="location_management" extends="base.definition">
+		<put-attribute name="title" value="Location Management" />
+		<put-attribute name="body" value="/WEB-INF/views/view/location_management.jsp" />		
+	</definition>
 	<definition name="bus_update" extends="base.definition">
 		<put-attribute name="title" value="Bus Management" />
 		<put-attribute name="body" value="/WEB-INF/views/view/bus_update.jsp" />		
+	</definition>
+	<definition name="admin_booking" extends="base.definition">
+		<put-attribute name="title" value="Bookings" />
+		<put-attribute name="body" value="/WEB-INF/views/view/admin_booking.jsp" />		
+	</definition>
+	<definition name="historical_booking" extends="base.definition">
+		<put-attribute name="title" value="Bookings" />
+		<put-attribute name="body" value="/WEB-INF/views/view/historical_booking.jsp" />		
+	</definition>
+	<definition name="booking_detail" extends="base.definition">
+		<put-attribute name="title" value="Booking Details" />
+		<put-attribute name="body" value="/WEB-INF/views/view/booking_detail.jsp" />		
+	</definition>
+	<definition name="schedule" extends="base.definition">
+		<put-attribute name="title" value="Schedules" />
+		<put-attribute name="body" value="/WEB-INF/views/view/schedule.jsp" />		
+	</definition>
+	<definition name="schedule_list" extends="base.definition">
+		<put-attribute name="title" value="Schedules" />
+		<put-attribute name="body" value="/WEB-INF/views/view/schedule_list.jsp" />		
+	</definition>
+	<definition name="schedule_detail" extends="base.definition">
+		<put-attribute name="title" value="Schedule Detail" />
+		<put-attribute name="body" value="/WEB-INF/views/view/schedule_detail.jsp" />		
+	</definition>
+	<definition name="current_schedule" extends="base.definition">
+		<put-attribute name="title" value="Current Schedules" />
+		<put-attribute name="body" value="/WEB-INF/views/view/current_schedule.jsp" />		
+	</definition>
+	<definition name="historical_schedule" extends="base.definition">
+		<put-attribute name="title" value="Historical Schedules" />
+		<put-attribute name="body" value="/WEB-INF/views/view/historical_schedule.jsp" />		
+	</definition>
+	<definition name="create_schedule" extends="base.definition">
+		<put-attribute name="title" value="Create Schedule" />
+		<put-attribute name="body" value="/WEB-INF/views/view/create_schedule.jsp" />		
 	</definition>
 	
 	

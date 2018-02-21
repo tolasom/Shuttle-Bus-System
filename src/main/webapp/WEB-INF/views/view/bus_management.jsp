@@ -75,7 +75,8 @@ load = function(){
 												'<div class="cardHeader">'+
 													buses[i].model+
 												'</div></center>'+
-											'</h1><a href="bus_update?id='+buses[i].id+'">Update</a>'+    
+											'</h1><a href="bus_update?id='+buses[i].id+'">Update</a>'+ 
+											"<a href='javascript:func("+buses[i].id+")'>Delete</a>"+  
 										  '</div>'+
 				
 								'</div>'+
@@ -148,5 +149,58 @@ $(document).ready(function(){
 		
 	});	
 });
+
+	
+
+
+func=function(id)
+{
+swal({
+    title: "Do you want to delete this bus?",
+    text: "All information related to this bus will be deleted!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#E71D36",
+    confirmButtonText: "Delete",
+    cancelButtonText: "Cancel",
+    closeOnConfirm: false,
+    closeOnCancel: true
+  },
+    function (isConfirm) {
+      if (isConfirm) {
+    	  $.ajax({
+    	     url:'deleteBus',
+    	     type:'GET',
+    	     data:{id:id},
+    	     traditional: true,
+    	     success: function(response){
+    	      if(response.status=="200")
+    	      {
+    	      setTimeout(function() {
+    	             swal({
+    	                 title: "Done!",
+    	                 text: "You have deleted it successfully!",
+    	                 type: "success"
+    	             }, function() {
+    	                 window.location = "bus_management";
+    	             });
+    	         }, 10);
+
+    	      }
+
+    	          else 
+    	           {
+    	           swal("Oops!","It is not deleted", "error")
+
+    	           } 
+    	     },
+    				error: function(err){
+    					
+    					console.log(JSON.stringify(err));
+    					}
+    	       });
+      } 
+    });
+    }
 	
 </script>

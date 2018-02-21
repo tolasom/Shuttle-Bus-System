@@ -40,6 +40,7 @@
                 
 </body>
 <script type="text/javascript">
+var id;
 load = function () {
 	var data = ${data};
 	var bus = data.bus;
@@ -47,6 +48,7 @@ load = function () {
 	$("#plate_number").val(bus.plate_number);
 	$("#number_of_seat").val(bus.number_of_seat);
 	$("#description").val(bus.description);
+	id = bus.id;
 }
 
 $(document).ready(function(){
@@ -56,7 +58,8 @@ $(document).ready(function(){
 		$.ajax({
     		url:'updateBus',
     		type:'GET',
-    		data:{	plate_number:$("#plate_number").val(),
+    		data:{	id:id,
+    				plate_number:$("#plate_number").val(),
     				model:$("#model").val(),
     				number_of_seat:$("#number_of_seat").val(),
     				description:$("#description").val()
@@ -90,5 +93,7 @@ $(document).ready(function(){
 		
 	});	
 });
+
+
 	
 </script>

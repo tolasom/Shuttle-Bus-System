@@ -16,12 +16,21 @@ public class Booking_Master {
 		private int number_booking;
 		private String notification;
 		private String qr;
+		private String code;
 		private String description;
 		private Timestamp created_at;
 		private Timestamp updated_at;
 		
 		
 		
+		
+		
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
 		public int getId() {
 			return id;
 		}

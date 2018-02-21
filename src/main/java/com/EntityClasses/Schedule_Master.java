@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Schedule_Master {
 		private int id;
+		private String code;
 		private int bus_id;
 		private int driver_id;
 		private int destination_id;
@@ -24,6 +25,12 @@ public class Schedule_Master {
 		
 		
 		
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
 		public int getId() {
 			return id;
 		}
