@@ -52,7 +52,8 @@ $(document).ready(function(){
       <input type="password" placeholder="Password" name="password" required/>
       <input type="submit" class="a" value="Login" style="color:white;">
       <div style="font-size:10px;" class="gg">
-      <a href ="#" data-toggle="modal" data-target="#myModal">Forgot Password?</a>
+      <a href ="signup" data-toggle="modal" data-target="#myModal">Forgot Password?</a>
+      <a href ="signup">Sign Up</a>
       </div>
 	<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" />

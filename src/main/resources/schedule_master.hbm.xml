@@ -8,6 +8,8 @@
  	    <generator class="increment"/>    
  	 </id>
     <property name="bus_id"  column="bus_id"/>
+    <property name="from_id" column="from_id"/>
+    <property name="to_id" column="to_id"/>
     <property name="driver_id" column="driver_id"/>
     <property name="destination_id" column="destination_id"/>
     <property name="source_id" column="source_id"/>

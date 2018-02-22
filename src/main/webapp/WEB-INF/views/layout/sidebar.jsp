@@ -11,7 +11,7 @@
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li>
-                                    <a href="#">
+                                    <a href="signup">
                                         <i class="fa fa-calendar"></i> Schedules </a>
                                 </li>
                                 <li >

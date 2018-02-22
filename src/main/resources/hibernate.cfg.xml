@@ -27,6 +27,8 @@
          <mapping resource ="schedule_master.hbm.xml"/>
          <mapping resource ="user_info.hbm.xml"/>
          <mapping resource ="userRole.hbm.xml"/>
+         <mapping resource ="booking_request_master.hbm.xml"/>
+         <mapping resource ="dept_time_master.hbm.xml"/>
          
          
     </session-factory>
