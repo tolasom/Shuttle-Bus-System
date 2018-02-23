@@ -90,11 +90,11 @@
                     	var date_input=$('input[name="date"]');
                     	var time_input = $('input[name="time"]');
                         var options={
-                          format: 'mm/dd/yyyy',
+                          format: 'yyyy/mm/dd',
                           todayHighlight: true,
                           autoclose: true,
                         };
-                        var options2 = { now: "12:35", //hh:mm 24 hour format only, defaults to current time
+                        var options2 = { now: "08:00", //hh:mm 24 hour format only, defaults to current time
                         				 twentyFour: true, //Display 24 hour format, defaults to false 
                         				 upArrow: 'wickedpicker__controls__control-up', //The up arrow class selector to use, for custom CSS 
                         				 downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS 

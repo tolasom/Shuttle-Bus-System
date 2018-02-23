@@ -155,7 +155,7 @@ $(document).ready(function(){
     				            text: response.message,
     				            type: "success"
     				        }, function() {
-    				            window.location = "bus_management";
+    				            window.location = "current_schedule";
     				        });
     				    }, 10);
     					
@@ -210,7 +210,7 @@ function toDate(dStr,format) {
  		now.setHours(dStr.substr(0,dStr.indexOf(":")));
  		now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
  		now.setSeconds(0);
- 		return now.getHours()+":"+now.getMinutes();
+ 		return now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
 	}else 
 		return "Invalid Format";
 }

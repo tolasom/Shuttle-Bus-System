@@ -1,14 +1,9 @@
 <body onload="load()">
 <article class="content cards-page">
                     <div class="title-block">
-                        <h3 class="title"> Schedules </h3>
-                         <p class="title-description"> View all schedules </p> 
-                         <div class="btn-group pull-right">
-	                        <button type="button" class="btn btn-info" id="btnList" style="color:white;border-right:2px solid white;"><i class="fa fa-list-ul"></i></button>
-	                        <button type="button" class="btn btn-info" onclick="window.location.href='schedule'" style="color:white;"><i class="fa fa-calendar"></i></button>
-                         </div><br><br>
-                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_schedule';">View all historical schedules <i class="fa fa-angle-right"></i></button>
-                         <button type="button" class="btn btn-info" onclick="window.location.href='create_schedule'" style="color:white;">Create</button>
+                        <h3 class="title"> Booking Requests </h3>
+                         <p class="title-description"> View all requests made by customers </p> 
+                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking';">View all historical requests <i class="fa fa-angle-right"></i></button>
                     </div>
                     <section class="section">
                         <div class="row">
@@ -16,7 +11,7 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="card-title-block">
-                                            <h3 class="title"> Current and future schedules </h3>
+                                            <h3 class="title">Requests to be confirmed </h3>
                                             
                                         </div>
                                         <section class="example">
@@ -25,16 +20,16 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
-                                                            <th>Bus</th>
-                                                            <th>Driver</th>
+                                                            <th>Name</th>
                                                             <th>From</th>
                                                             <th>To</th>
                                                             <th>Departure Date</th>
                                                             <th>Departure Time</th>
                                                             <th>Number of bookings</th>
+                                                            <th>Status</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="allSchedules">
+                                                    <tbody id="allRequest">
                                                        
                                                     </tbody>
                                                 </table>
@@ -49,34 +44,34 @@
                 
 </body>
 <script>
+var requests, locations;
 load = function(){	
 	$.ajax({
-		url:'getAllCurrentSchedules',
+		url:'getAllCurrentBookingRequests',
 		type:'GET',
 		success: function(response){
 			console.log(response)
-			var schedules = response.schedules;
-			var locations = response.locations;
-			var buses = response.buses;
-			for (var i=0;i<schedules.length;i++)
+			requests = response.requests;
+			locations = response.locations;
+			for (var i=0;i<requests.length;i++)
 			{
-			var schedule = '<tr class="hoverr" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
-								+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
-								+'<td>'+schedules[i].driver_id+'</td>'
-								+'<td>'+searchLocation(schedules[i].source_id,locations)+'</td>'
-								+'<td>'+searchLocation(schedules[i].destination_id,locations)+'</td>'
-								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
-								+'<td>'+schedules[i].dept_time+'</td>'
-								+'<td>'+schedules[i].number_booking+'</td>'
-								+'<td class="unhoverr"><i class="fa fa-trash"></i></td></tr>';
-			$("#allSchedules").append(schedule);				
+			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
+								+'<td>'+requests[i].user_id+'</td>'
+								+'<td>'+searchLocation(requests[i].source_id,locations)+'</td>'
+								+'<td>'+searchLocation(requests[i].destination_id,locations)+'</td>'
+								+'<td>'+formatDate(requests[i].dept_date)+'</td>'
+								+'<td>'+requests[i].dept_time+'</td>'
+								+'<td>'+requests[i].number_of_booking+'</td>'
+								+'<td>'+requests[i].status+'</td></tr>';
+			$("#allRequest").append(booking);				
 			}
-			$(".hoverr").on('click', function() {
-		    	location.href=$(this).attr('data-url');
-			});
+		$(".hoverr").on('click', function() {
+	    	location.href=$(this).attr('data-url');
+		});
+			
     	},
 	error: function(err){
-		swal("Oops!", "Cannot get all buses data", "error")
+		swal("Oops!", "Cannot get all booking request data", "error")
 		console.log(JSON.stringify(err));
 		}
 		
@@ -85,18 +80,9 @@ load = function(){
 }
 
 
-goTO = function(){
-	$('#bsubmit').trigger('click');
-}
-
 
 $(document).ready(function(){
-	$("#scheduleMng").addClass("active");
-	$("#btnList").addClass("active");
-	$( ".unhoverr" ).click(function() {
-		  window.location.href="google.com"
-		});
-	
+	$("#bookingRequestMng").addClass("active");
 });
 
 
@@ -119,13 +105,4 @@ function searchLocation(id, myArray){
         }
     }
 }
-
-function searchBus(id, myArray){
-    for (var i=0; i < myArray.length; i++) {
-        if (myArray[i].id === id) {
-            return myArray[i].model;
-        }
-    }
-}
-
 </script>

@@ -20,6 +20,7 @@
          
          <mapping resource ="batch_master.hbm.xml"/>
          <mapping resource ="booking_master.hbm.xml"/>
+         <mapping resource ="booking_request_master.hbm.xml"/>
          <mapping resource ="bus_master.hbm.xml"/>
          <mapping resource ="driver_bus_assigned.hbm.xml"/>
          <mapping resource ="location_master.hbm.xml"/>
