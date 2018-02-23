@@ -52,7 +52,6 @@ public class CustomerController {
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
 	public @ResponseBody String customer_booking(Customer_Booking cb) {
-			System.out.println(cb.getDestination()+"  "+cb.getNumber_of_seat());
 			String ret = customer.customer_booking(cb);
 			return ret;
 		}	

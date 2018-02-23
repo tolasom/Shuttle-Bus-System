@@ -280,79 +280,74 @@ public class Custom_Imp implements Custom_Dao{
             
             //========1. query list of all available bus (result must be in order number of seat for small to big )===========
             query_all_bus = session.createQuery("from Bus_Master where enabled=? order by number_of_seat asc").setBoolean(0, true).list();
-            
+          
             if(query_all_bus.size()>0){       	  
-        	  total_bus = query_all_bus.size();											//1&2
-        	  number_of_bus=query_all_bus.size();										//3
-        	  List<Map<Object, String>> all_bus =new ArrayList<Map<Object, String>>();              
-              for(int i=0;i<query_all_bus.size();i++){
-            	  total_seat_of_all_bus+=query_all_bus.get(i).getNumber_of_seat();		//4 
-                  Map<Object, String> map =new HashMap<Object, String>();				//5
-                  map.put("bus_model", query_all_bus.get(i).getModel());
-                  map.put("number_of_seat", String.valueOf(query_all_bus.get(i).getNumber_of_seat()));
-                  map.put("id", String.valueOf(query_all_bus.get(i).getId()));
-                  all_bus.add(map);
-            } 
-              
-             System.out.println("========================= 2 =============================");
-             
-             
-             
-             //=========2. Find out number of total passengers in DB ============ 
-              all_booker1 = session.createQuery("from Booking_Master where from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
-                		.setParameter(0,pick_source.getLocation_id()).setParameter(1, pick_destin.getLocation_id()).setTime(2, java.sql.Time.valueOf(cb.getTime())).setDate(3,java.sql.Date.valueOf(cb.getDate())).list();
-              System.out.println("all_booker1 size: "+all_booker1.size());
-              for(int p=0;p<all_booker1.size();p++){
-            	  number_of_passenger+=all_booker1.get(p).getNumber_booking();
-              }
-              System.out.println(number_of_passenger);
-              number_of_passenger+=cb.getNumber_of_seat();
-              
-              
-              
-              System.out.println("========================= 3 =============================");
-              
-              
-              
-              //=========3. Start The Process of choosing the correct total bus
-              for(int i=1;i<=total_bus;i++){
-                  printCombination(all_bus, all_bus.size(), i,number_of_passenger, total_seat_of_all_bus);
-              }
-              
-              System.out.println("========================= 4 =============================");
-              
-              
-              
-              //=========4. After choosing the correct total bus &&
-              Collections.sort(total_choosen_bus_list);							
-              
-              for(int i=0;i<list.size();i++){
-              	int sum_each_bus=0;
-              	for(int j=0;j<list.get(i).size();j++){
-              		///sum_each_bus+=list.get(i).get(j);
-              		sum_each_bus+=Integer.valueOf(list.get(i).get(j).get("number_of_seat"));
-              	}
+	        	  total_bus = query_all_bus.size();											
+	        	  number_of_bus=query_all_bus.size();										
+	        	  List<Map<Object, String>> all_bus =new ArrayList<Map<Object, String>>();              
+	              for(int i=0;i<query_all_bus.size();i++){
+	            	  total_seat_of_all_bus+=query_all_bus.get(i).getNumber_of_seat();		
+	                  Map<Object, String> map =new HashMap<Object, String>();				
+	                  map.put("bus_model", query_all_bus.get(i).getModel());
+	                  map.put("number_of_seat", String.valueOf(query_all_bus.get(i).getNumber_of_seat()));
+	                  map.put("id", String.valueOf(query_all_bus.get(i).getId()));
+	                  all_bus.add(map);
+	              } 
+	              
+	             System.out.println("========================= 2 =============================");
+	             //=========2. Find out number of total passengers in DB ============ 
+	              all_booker1 = session.createQuery("from Booking_Master where from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
+	                		.setParameter(0,pick_source.getLocation_id()).setParameter(1, pick_destin.getLocation_id()).setTime(2, java.sql.Time.valueOf(cb.getTime())).setDate(3,java.sql.Date.valueOf(cb.getDate())).list();
+	              System.out.println("all_booker1 size: "+all_booker1.size());
+//	              System.out.println("all_booker1 0: "+all_booker1.get(0).getNumber_booking());
+//	              System.out.println("all_booker1 1: "+all_booker1.get(1).getNumber_booking());
+//	              System.out.println("all_booker1 2: "+all_booker1.get(2).getNumber_booking());
+	              for(int p=0;p<all_booker1.size();p++){
+	            	  number_of_passenger+=all_booker1.get(p).getNumber_booking();
+	              }
+	              number_of_passenger+=cb.getNumber_of_seat();
+	              
+	              
+	              
+	              System.out.println("========================= 3 =============================");
 
-              	if(sum_each_bus==total_choosen_bus_list.get(0)){ 
-              		list_bus_choosen.add(list.get(i));
-              		break;
-              	}
-              } 
+	              if(number_of_passenger+cb.getNumber_of_seat()<=total_seat_of_all_bus){
+	            	//=========3. Start The Process of choosing the correct total bus
+	                  for(int i=1;i<=total_bus;i++){
+	                      printCombination(all_bus, all_bus.size(), i,number_of_passenger, total_seat_of_all_bus);
+	                  }
+	                  
+	                  System.out.println("========================= 4 =============================");
+	                  //=========4. After choosing the correct total bus &&
+	                  Collections.sort(total_choosen_bus_list);							
+	                  
+	                  for(int i=0;i<list.size();i++){
+	                  	int sum_each_bus=0;
+	                  	for(int j=0;j<list.get(i).size();j++){
+	                  		///sum_each_bus+=list.get(i).get(j);
+	                  		sum_each_bus+=Integer.valueOf(list.get(i).get(j).get("number_of_seat"));
+	                  	}
+	
+	                  	if(sum_each_bus==total_choosen_bus_list.get(0)){ 
+	                  		list_bus_choosen.add(list.get(i));
+	                  		break;
+	                  	}
+	                  } 
+	              }else{
+	            	  System.out.println("No Bus available!!!");
+	            	  return "over_available_seat";
+	              }
               
           }else{
         	  System.out.println("No Bus available!!!");
-        	  return "no_bus";
+        	  return "have_no_bus";
           }
-          System.out.println(list_bus_choosen);
-          
-          
+            System.out.println(list_bus_choosen);  
+          System.out.println(list_bus_choosen.size());    
+          System.out.println(list_bus_choosen.get(0).size());  
           System.out.println("========================= 5 =============================");
-          
-          
-          
-          
-          if(list_bus_choosen.size()>0){       
-        	  
+          //Work after bus is assign
+          if(list_bus_choosen.size()>0){
         	 //============== 5. Delete old Schedule =================
         	  //call function to delete schedule
         	  int delete=delete_Schedule(pick_source.getLocation_id(),pick_destin.getLocation_id(),cb.getTime(), cb.getDate());
@@ -367,9 +362,9 @@ public class Custom_Imp implements Custom_Dao{
         	  List<List<Integer>> check_seat_each_bus=new ArrayList<List<Integer>>();
         	  List<Integer> list_of_index_remove=new ArrayList<Integer>();
         	  
-        	  	  
-	          for(int i=0;i<list_bus_choosen.get(0).size();i++){    	  
-	        	  	System.out.println("pppppp: "+list_bus_choosen.get(0).get(i).get("number_of_seat"));
+        	  Boolean insert_new_pass=true;	  
+	          for(int i=0;i<list_bus_choosen.get(0).size();i++){
+	        	  System.out.println("============ New Schedule ===============");
 	        		int number_booking=0;
 	        		int remaining_seat=Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"));
 	        		int number_customer=0;
@@ -388,29 +383,44 @@ public class Custom_Imp implements Custom_Dao{
 	        		
 	        		//============== 7. Insert & Update Passenger Booking to DB =================
 	        		//Query data of user to check number of seat
+	        		List<Booking_Master> pass_remove_list_copy=new ArrayList<Booking_Master>(pass_remove_list);
         			Booking_Master user_booking=new Booking_Master();
-	        		if(pass_remove_list.size()!=0){
-	        			System.out.println("pass_remove_list>0");
-	        			for(int j=0;j<pass_remove_list.size();j++){
-	        				user_booking = (Booking_Master) session.createQuery("from Booking_Master where id =?").setParameter(0, pass_remove_list.get(j).getId()).list().get(0);
-	        				System.out.println("user_booking: "+user_booking.getId());
+        			System.out.println("pass_remove_list: "+pass_remove_list.size());
+        			
+        			System.out.println(pass_remove_list);
+	        		if(pass_remove_list.size()>0){
+	        			System.out.println("pass_remove_list: "+pass_remove_list.get(0).getUser_id());
+	        			int remove_time=0;
+	        			for(int j=0;j<pass_remove_list_copy.size();j++){
+	        				user_booking = (Booking_Master) session.createQuery("from Booking_Master where id =?").setParameter(0, pass_remove_list_copy.get(j).getId()).list().get(0);
 	        				if(user_booking.getNumber_booking()+number_booking<=Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		        				Query query = session.createQuery("update Booking_Master set schedule_id =?, qr=?" +
 			            				" where id =?");
 						        query.setParameter(0, sm.getId());
 						        query.setParameter(1, cb.getSource()+cb.getDestination()+cb.getDate()+cb.getTime()+user_booking.getId());  //QR-Code(pickup_source+pickup_destination+date+time+user_id Generation
 						        query.setParameter(2, user_booking.getId()); 
+						        System.out.println("user_booking.getId(): "+ user_booking.getId());
 						        int res = query.executeUpdate();
 						        number_booking+=user_booking.getNumber_booking();
 						        remaining_seat-=user_booking.getNumber_booking();
 						        number_customer+=user_booking.getNumber_booking();
+						        System.out.println("number_booking remove: "+number_booking);
 						        list_of_index_remove.add(j);
+						        System.out.println("indeex: "+ (j-(remove_time++)));
+						        if(j-(remove_time++)>=0&&i>0){
+						        	pass_remove_list.remove(j-(remove_time++));
+						        } 
 		        			}
 	        			}
 	        			//remove the list of passenger who already assign sch & QR
-	        			for(int m=0;m<list_of_index_remove.size();m++){
-	        				pass_remove_list.remove(list_of_index_remove.get(m));
-	        			}
+//	        			System.out.println(pass_remove_list);
+//	        			
+//	        			int num_remove=0;
+//	        			for(int m=0;m<list_of_index_remove.size();m++){
+//	        				System.out.println(pass_remove_list.size());
+//	        				pass_remove_list.remove(list_of_index_remove.get(m)-num_remove);
+//	        				System.out.println(pass_remove_list.size()-num_remove);
+//	        			}
         			}
 	        		
 	        		
@@ -421,13 +431,13 @@ public class Custom_Imp implements Custom_Dao{
 	        		//2. k can not over bus_seat of each bus... mean one booking at least book one seat so can not passenger cannot more than one bus seat
 	        		//3. number_booking(each_bus) <= bus_choosen.get(i).getNumber_booking();
 	        		
-	        		System.out.println("Old passenger size: "+all_booker1.size());
-	        		System.out.println("Num seat each bus: "+list_bus_choosen.get(0).get(i).get("number_of_seat"));
 	        		for(int k=0;all_booker1.size()>0&&k<Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"))&&number_remove_pass>0&&number_booking<Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"));k++){			        				
 	        			System.out.println("IB: "+ib);
 	        			System.out.println("Sch Id : "+sm.getId());
 	        			user_booking = (Booking_Master) session.createQuery("from Booking_Master where id =?").setParameter(0, all_booker1.get(ib).getId()).list().get(0);
 	        			System.out.println("user_booking: "+all_booker1.get(ib).getId());
+	        			System.out.println("aaaaaaa: "+user_booking.getNumber_booking()+number_booking);
+	        			System.out.println("bbbbbbb: "+list_bus_choosen.get(0).get(i).get("number_of_seat"));
 	        			if(user_booking.getNumber_booking()+number_booking<=Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		        				Query qu = session.createQuery("update Booking_Master set schedule_id =?, qr=?" +
 			            				" where id =?");
@@ -436,19 +446,26 @@ public class Custom_Imp implements Custom_Dao{
 						        qu.setParameter(2, all_booker1.get(ib).getId()); 
 						        System.out.println("A: ");
 						        int res = qu.executeUpdate();
-						        System.out.println("B: ");
 						        number_booking+=user_booking.getNumber_booking();
 						        remaining_seat-=user_booking.getNumber_booking();
 						        number_customer+=user_booking.getNumber_booking(); 
+
+						        System.out.println("number_booking: "+number_booking);
 		        		}else{
-		        			pass_remove_list.add(all_booker1.get(i));
+		        			System.out.println("pass_remove_list.add(all_booker1.get(i)");
+		        			System.out.println("number_booking =="+number_booking);
+		        			System.out.println("list_bus_choosen.get(0).get(i).get(number_of_seat) =="+list_bus_choosen.get(0).get(i).get("number_of_seat"));
+		        			pass_remove_list.add(all_booker1.get(ib));
 		        		}
 	        			number_remove_pass--;
 					    ib++;
 	        		}
 	        		System.out.println("Finish ");
-	        	  // create record of user that are booking
-	        		if(cb.getNumber_of_seat()+number_booking<=Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"))){
+	        	    // create record of user that are booking
+	        		System.out.println(cb.getNumber_of_seat()+number_booking);
+	        		System.out.println(list_bus_choosen.get(0).get(i).get("number_of_seat"));
+	        		if(list_bus_choosen.get(0).size()-i==1&&insert_new_pass&&cb.getNumber_of_seat()+number_booking<=Integer.valueOf(list_bus_choosen.get(0).get(i).get("number_of_seat"))){
+	        			insert_new_pass=false;
 	        			Booking_Master pass=new Booking_Master();
 	  	          	  	pass.setSource_id(cb.getSource());
 	  	          	  	pass.setDestination_id(cb.getDestination());
@@ -466,18 +483,17 @@ public class Custom_Imp implements Custom_Dao{
 	  	          	  	number_booking+=cb.getNumber_of_seat();
 	  	          	  	remaining_seat-=cb.getNumber_of_seat();
 	  	          	  	number_customer+=cb.getNumber_of_seat();
-	        		}else{
-	        			System.out.println("Can not book");
+	  	          	  	System.out.println("number_booking new: "+number_booking);
 	        		}
 	        	  sm.setNumber_booking(number_booking);
 	        	  sm.setNumber_customer(number_customer);
 	        	  sm.setRemaining_seat(remaining_seat);
 	        	  
-	           } 
+	           }
           }
-        System.out.println("  PP 7");
+        
         trns1.commit();
-        System.out.println("  PP 5");
+        System.out.println("PP 5");
         } catch (RuntimeException e) {
         	e.printStackTrace();
         	trns1.rollback();
@@ -606,21 +622,24 @@ public class Custom_Imp implements Custom_Dao{
 	
 	
 	public static void main(String args[]){
-		GregorianCalendar gcalendar = new GregorianCalendar();
-		System.out.print("Time: ");
-	      System.out.print(gcalendar.get(Calendar.HOUR) + ":");
-	      System.out.print(gcalendar.get(Calendar.MINUTE) + ":");
-	      System.out.println(gcalendar.get(Calendar.SECOND));
 
-//		Transaction trns1 = null;
-//        Session session = HibernateUtil.getSessionFactory().openSession();       
-//		try {
-//            trns1 = session.beginTransaction();
-//        } catch (RuntimeException e) {
-//        	e.printStackTrace();
-//        }finally{
-//            session.flush();
-//            session.close();
-//        }              
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();   
+        
+		try {
+            trns1 = session.beginTransaction();
+            Query query = session.createQuery("update Booking_Master set schedule_id =?, qr=?" +
+    				" where id =?");
+	        query.setParameter(0, 1);
+	        query.setParameter(1, "kk");  //QR-Code(pickup_source+pickup_destination+date+time+user_id Generation
+	        query.setParameter(2, 44); 
+	        int res = query.executeUpdate();
+	        trns1.commit();
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }finally{
+            session.flush();
+            session.close();
+        }              
 	}
 }

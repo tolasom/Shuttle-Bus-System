@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Schedule_Master {
 		private int id;
+		private String code;
 		private int bus_id;
 		private int driver_id;
 		private int destination_id;
@@ -24,8 +25,6 @@ public class Schedule_Master {
 		private Timestamp updated_at;
 		
 		
-		
-		
 		public int getFrom_id() {
 			return from_id;
 		}
@@ -37,6 +36,13 @@ public class Schedule_Master {
 		}
 		public void setTo_id(int to_id) {
 			this.to_id = to_id;
+			
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
 		}
 		public int getId() {
 			return id;

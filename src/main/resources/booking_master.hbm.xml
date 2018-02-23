@@ -19,6 +19,7 @@
     <property name="number_booking" column="number_booking"/>
     <property name="notification" column="notification"/>
     <property name="qr" column="qr"/>
+    <property name="code" column="code"/>
     <property name="description" column="description"/>
     <property name="created_at" column="created_at"/>
     <property name="updated_at" column="updated_at"/>

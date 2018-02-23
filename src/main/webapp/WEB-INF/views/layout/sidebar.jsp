@@ -10,41 +10,32 @@
                         </div>
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
-                                <li>
-                                    <a href="signup">
+                                <li id="scheduleMng">
+                                    <a href="current_schedule">
                                         <i class="fa fa-calendar"></i> Schedules </a>
                                 </li>
-                                <li >
-                                    <a href="#">
+                                <li id="bookingMng">
+                                    <a href="admin_booking">
                                         <i class="fa fa-list"></i> Bookings </a>
                                 </li>
+                                <li id="bookingRequest">
+                                    <a href="#">
+                                        <i class="fa fa-envelope-open"></i> Booking Requests</a>
+                                </li>
                                 <li id="busMng">
-                                    <a href="additional_hour">
+                                    <a href="bus_management">
                                         <i class="fa fa-bus"></i> Manage Buses </a>
                                 </li>
-                                <li >
-                                    <a href="#">
+                                <li id="locationMng">
+                                    <a href="location_management">
                                         <i class="fa fa-institution"></i> Manage Locations </a>
                                 </li>
                                 <li >
-                                    <a href="#">
-                                        <i class="fa fa-bar-chart"></i> Reportings </a>
+                                    <a href="cusomer_home">
+                                        <i class="fa fa-bar-chart"></i> Reports </a>
                                 </li>
                                 
-                                <!-- <li>
-                                    <a href="">
-                                        <i class="fa fa-th-large"></i> Items Manager
-                                        <i class="fa arrow"></i>
-                                    </a>
-                                    <ul class="sidebar-nav">
-                                        <li>
-                                            <a href="items-list.html"> Items List </a>
-                                        </li>
-                                        <li>
-                                            <a href="item-editor.html"> Item Editor </a>
-                                        </li>
-                                    </ul>
-                                </li> -->
+                               
                                 
                             </ul>
                         </nav>
