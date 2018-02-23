@@ -10,6 +10,8 @@ public class Booking_Master {
 		private int destination_id;
 		private int source_id;
 		private int schedule_id;
+		private int from_id;
+		private int to_id;
 		private Date booking_date;
 		private Date dept_date;
 		private Time dept_time;
@@ -23,8 +25,19 @@ public class Booking_Master {
 		
 		
 		
+		public int getFrom_id() {
+			return from_id;
+		}
+		public void setFrom_id(int from_id) {
+			this.from_id = from_id;
+		}
+		public int getTo_id() {
+			return to_id;
+		}
+		public void setTo_id(int to_id) {
+			this.to_id = to_id;
 		
-		
+		}
 		public String getCode() {
 			return code;
 		}

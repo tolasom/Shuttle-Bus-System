@@ -9,6 +9,8 @@
  	 </id>
     <property name="user_id"  column="user_id"/>
     <property name="destination_id" column="destination_id"/>
+    <property name="from_id" column="from_id"/>
+    <property name="to_id" column="to_id"/>
     <property name="source_id" column="source_id"/>
     <property name="schedule_id" column="schedule_id"/>
    	<property name="booking_date"  column="booking_date"/>

@@ -1,7 +1,6 @@
 package com.EntityClasses;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Pickup_Location_Master {
 		private int id;

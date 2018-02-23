@@ -1,11 +1,9 @@
 package com.ServiceClasses;
 
-import java.net.MalformedURLException;
+
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.xmlrpc.XmlRpcException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +17,7 @@ import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.ModelClasses.Schedule_Model;
+
 
 
 
@@ -82,10 +81,10 @@ public class usersServiceImpl implements usersService{
 	public Booking_Master getBookingById (int id){
 		return usersDao1.getBookingById(id);
 	}
-	public List <Schedule_Master> getAllSchedulesByMonth(String month, String year) throws ParseException{
+	public List <Schedule_Master> getAllSchedulesByMonth(String month, String year) throws ParseException, java.text.ParseException{
 		return usersDao1.getAllSchedulesByMonth(month, year);
 	}
-	public List <Schedule_Master> schedule_list(String date, String month, String year) throws ParseException{
+	public List <Schedule_Master> schedule_list(String date, String month, String year) throws ParseException, java.text.ParseException{
 		return usersDao1.schedule_list(date, month, year);
 	}
 	public List<Booking_Master> getBookingByScheduleId (int id){

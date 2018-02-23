@@ -822,7 +822,7 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
-	public int updateSchedule(Schedule_Model schedule) throws ParseException{
+	public int updateSchedule(Schedule_Model schedule){
 		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
 		int count =0;
 		Date dept_date = null;
@@ -1163,8 +1163,6 @@ public class userDaoImpl implements usersDao{
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return Integer.toString(cal.getTime().getDate());
     }
-
-
 
 
 	

@@ -23,7 +23,5 @@
     <property name="enabled" type="java.lang.Boolean">
             <column name="enabled" not-null="true" />
      </property>
-    
-    
  	</class>
 </hibernate-mapping>

@@ -1,8 +1,10 @@
 package com.ServiceClasses;
 
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.List;
+
+import com.EntityClasses.Bus_Master;
+
 import java.util.Map;
 
 import com.EntityClasses.Batch_Master;
@@ -36,8 +38,8 @@ public interface usersService {
 	public List <Booking_Master> getAllCurrentBookings();
 	public List <Booking_Master> getAllHistoricalBookings();
 	public Booking_Master getBookingById (int id);
-	public List <Schedule_Master> getAllSchedulesByMonth(String month, String year) throws ParseException;
-	public List <Schedule_Master> schedule_list(String date, String month, String year) throws ParseException;
+	public List <Schedule_Master> getAllSchedulesByMonth(String month, String year) throws ParseException, java.text.ParseException;
+	public List <Schedule_Master> schedule_list(String date, String month, String year) throws ParseException, java.text.ParseException;
 	public List<Booking_Master> getBookingByScheduleId (int id);
 	public Schedule_Master getScheduleById (int id);
 	public List <Schedule_Master> getAllHistoricalSchedules();
