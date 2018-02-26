@@ -120,6 +120,15 @@ public class usersServiceImpl implements usersService{
 	public int confirmRequest(Booking_Request_Master request){
 		return usersDao1.confirmRequest(request);
 	}
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests(){
+		return usersDao1.getAllHistoricalBookingRequests();
+	}
+	public int rejectRequest(Booking_Request_Master request){
+		return usersDao1.rejectRequest(request);
+	}
+	public int deleteSchedule(int id){
+		return usersDao1.deleteSchedule(id);
+	}
 }
 
 

@@ -24,9 +24,7 @@
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">To</label>
                                             <select class="form-control" style="width: inherit;" id="sto"><option></option></select> </div>     
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
-                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Number of booking</label>
-                                            <input type="text" class="form-control" style="width: inherit;" id="snumberbooking" placeholder="Number of booking"> </div>                                       
+                                                                               
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Departure Date</label>
                                             <input type="text" name="date" class="form-control" style="width: inherit;" id="sdeptdate" placeholder="Departure Date"> </div>
@@ -37,7 +35,7 @@
 											<button type="submit" class="btn btn-info">Create</button>
 											</div>
                                     </form>
-                                    <div class="col-xl-12">
+                      <!--                  <div class="col-xl-12">
                                     <div class="card-block" style="padding-left:2px;">
                                         <ul class="nav nav-tabs nav-tabs-bordered">
                                             <li class="nav-item">
@@ -45,7 +43,7 @@
                                             </li>
                                         
                                         </ul>
-                                        <!-- Tab panes -->
+                                        
                                         <div class="tab-content tabs-bordered">
                                             <div class="tab-pane fade in active" style="display:initial;" id="home">
                                                 <div class="table-responsive">
@@ -69,7 +67,7 @@
                                         </div>
                                     </div>
                                   
-                            </div>
+                            </div>  -->
                                 </div>
                             </div>
                         </div>
@@ -141,7 +139,7 @@ $(document).ready(function(){
     				bus_id:parseInt($("#sbus").val()),
     				source_id:parseInt($("#sfrom").val()),
     				destination_id:parseInt($("#sto").val()),
-    				number_booking:parseInt($("#snumberbooking").val()),
+    				number_booking:0,
     				dept_date:$("#sdeptdate").val(),
     				dept_time:toDate($("#sdepttime").val(),'h:m')
     			},

@@ -7,8 +7,7 @@
                                 <div class="card card-block sameheight-item">
                                     <div class="title-block">
                                         <h3 class="title"> Booking Request Information </h3> <br>
-                                        <button type="button" class="btn btn-oval btn-success pull-left" onClick="goTO()" style="color:white;margin: 0 1% 0 2%;">Confirm</button>
-                                        <button type="button" class="btn btn-oval btn-danger pull-left" onClick="reject()" style="color:white;">Reject</button>
+                                     
                                         
                       
                                     </div>
@@ -48,10 +47,7 @@
                                             <input type="text" class="form-control" id="requestedOn" style="width: inherit;"> 
                                         </div>
                                         
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
-                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Booking Time Allowance</label>
-                                            <input type="text" name="time" class="form-control" id="timeAllowance" style="width: inherit;"> 
-                                        </div>
+                                        
                                         
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Number of bookings</label>
@@ -103,46 +99,11 @@ load = function () {
 	
 	
 	$("input").prop('disabled', true);
-	$("#timeAllowance").prop('disabled', false);
 }
 
 $(document).ready(function(){
 	$("#bookingRequestMng").addClass("active");
-	$("#myForm").on('submit',function(e){
-		e.preventDefault();
-		$.ajax({
-    		url:'confirmRequest',
-    		type:'GET',
-    		data:{	id:id,
-    				provided_time:toDate($("#timeAllowance").val(),'h:m')
-    			},
-    		traditional: true,			
-    		success: function(response){
-    				if(response.status=="1")
-    					{
-    					setTimeout(function() {
-    				        swal({
-    				            title: "Done!",
-    				            text: response.message,
-    				            type: "success"
-    				        }, function() {
-    				            window.location = "admin_booking_request";
-    				        });
-    				    }, 10);
-    					
-    					}
-    				//var obj = jQuery.parseJSON(response);
-    				else 
-     					swal("Oops!", response.message, "error")    
-    				
-    				},
-    		error: function(err){
-    				console.log(JSON.stringify(err));
-    				
-    				}
-    		
-    			});	
-	});
+	
 });
 
 
@@ -167,55 +128,9 @@ function searchLocation(id, myArray){
     }
 }
 
-goTO = function(){
-	$('#bsubmit').trigger('click');
-}
-reject = function(){
-	
-	$.ajax({
-		url:'rejectRequest',
-		type:'GET',
-		data:{	id:id	},
-		traditional: true,			
-		success: function(response){
-				if(response.status=="1")
-					{
-					setTimeout(function() {
-				        swal({
-				            title: "Done!",
-				            text: response.message,
-				            type: "success"
-				        }, function() {
-				            window.location = "admin_booking_request";
-				        });
-				    }, 10);
-					
-					}
-				//var obj = jQuery.parseJSON(response);
-				else 
- 					swal("Oops!", response.message, "error")    
-				
-				},
-		error: function(err){
-				console.log(JSON.stringify(err));
-				
-				}
-		
-			});	
-	
-}
 
 
-function toDate(dStr,format) {
-	var now = new Date();
-	if (format == "h:m") {
- 		now.setHours(dStr.substr(0,dStr.indexOf(":")));
- 		now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
- 		now.setSeconds(0);
- 		return now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
-	}else 
-		return "Invalid Format";
-}
+
 
 	
 </script>

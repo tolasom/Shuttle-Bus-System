@@ -34,6 +34,14 @@
 		<put-attribute name="title" value="Booking Requests" />
 		<put-attribute name="body" value="/WEB-INF/views/view/admin_booking_request.jsp" />		
 	</definition>
+	<definition name="historical_booking_request" extends="base.definition">
+		<put-attribute name="title" value="Historical Booking Requests" />
+		<put-attribute name="body" value="/WEB-INF/views/view/historical_booking_request.jsp" />		
+	</definition>
+	<definition name="historical_request_detail" extends="base.definition">
+		<put-attribute name="title" value="Booking Request Detail" />
+		<put-attribute name="body" value="/WEB-INF/views/view/historical_request_detail.jsp" />		
+	</definition>
 	<definition name="historical_booking" extends="base.definition">
 		<put-attribute name="title" value="Bookings" />
 		<put-attribute name="body" value="/WEB-INF/views/view/historical_booking.jsp" />		

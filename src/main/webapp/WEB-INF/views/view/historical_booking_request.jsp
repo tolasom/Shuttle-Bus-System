@@ -1,9 +1,9 @@
 <body onload="load()">
 <article class="content cards-page">
                     <div class="title-block">
-                        <h3 class="title"> Booking Requests </h3>
-                         <p class="title-description"> View all requests made by customers </p> 
-                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking_request';">View all historical and confirmed requests <i class="fa fa-angle-right"></i></button>
+                        <h3 class="title"> Historical Booking Requests </h3>
+                         <p class="title-description"> View all historical requests made by customers </p> 
+                         <button type="button" class="btn btn-pill-left btn-info pull-left" style="color:white;" onclick="location.href='admin_booking_request';"><i class="fa fa-angle-left"></i> View all to-be-confirmed requests </button>
                     </div>
                     <section class="section">
                         <div class="row">
@@ -11,7 +11,7 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="card-title-block">
-                                            <h3 class="title">Requests to be confirmed </h3>
+                                            <h3 class="title">Confirmed, rejected, historical requests</h3>
                                             
                                         </div>
                                         <section class="example">
@@ -47,7 +47,7 @@
 var requests, locations;
 load = function(){	
 	$.ajax({
-		url:'getAllCurrentBookingRequests',
+		url:'getAllHistoricalBookingRequests',
 		type:'GET',
 		success: function(response){
 			console.log(response)
@@ -55,7 +55,7 @@ load = function(){
 			locations = response.locations;
 			for (var i=0;i<requests.length;i++)
 			{
-			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
+			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="historical_request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
 								+'<td>'+requests[i].user_id+'</td>'
 								+'<td>'+searchLocation(requests[i].source_id,locations)+'</td>'
 								+'<td>'+searchLocation(requests[i].destination_id,locations)+'</td>'

@@ -689,6 +689,29 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 	}
+	
+	public int deleteSchedule(int id){
+		Transaction trns21 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Schedule_Master schedule = new Schedule_Master();
+        try {
+            trns21 = session.beginTransaction();
+            String queryString = "from Schedule_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            schedule=(Schedule_Master)query.uniqueResult();
+            session.delete(schedule);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
 	public void deletePickUpLocationByLocatinId(int id){
 		Transaction trns24 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -898,6 +921,35 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
+	public int rejectRequest(Booking_Request_Master request){
+    	Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Booking_Request_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",request.getId());
+            Booking_Request_Master r  = (Booking_Request_Master) query.uniqueResult();
+    		Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+    		r.setUpdated_at(updated_at);
+    		r.setStatus("Rejected");
+    		session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
+	
+	
 	
 	public int savePickUpLocation(Pickup_Location_Master p_location){
 		List <Pickup_Location_Master> p_locations  = new ArrayList<Pickup_Location_Master>();
@@ -971,13 +1023,41 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Request_Master where dept_date>=:localDate";
+            String queryString = "from Booking_Request_Master where dept_date>=:localDate and status=:status";
             Query query = session.createQuery(queryString);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(dtf.format(localDate));
             query.setDate("localDate", date);
+            query.setString("status", "Pending");
+            requests=(List<Booking_Request_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return requests;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return requests;
+		
+	}
+	
+	
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests(){
+		List <Booking_Request_Master> requests  = new ArrayList<Booking_Request_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Request_Master where dept_date<=:localDate or status!=:status";
+            Query query = session.createQuery(queryString);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(dtf.format(localDate));
+            query.setDate("localDate", date);
+            query.setString("status", "Pending");
             requests=(List<Booking_Request_Master>)query.list();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -1163,7 +1243,12 @@ public class userDaoImpl implements usersDao{
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return Integer.toString(cal.getTime().getDate());
     }
-
+	
+	
+	
+	
+	
+	
 
 	
 

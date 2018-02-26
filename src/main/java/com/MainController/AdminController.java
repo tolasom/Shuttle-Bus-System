@@ -45,6 +45,11 @@ public class AdminController {
 	public ModelAndView admin_booking() {
 		return new ModelAndView("admin_booking");
 	}
+//=========================Returns historical_booking_requestt view================================
+	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
+	public ModelAndView historical_booking_request() {
+		return new ModelAndView("historical_booking_request");
+	}
 //=========================Returns admin booking request view================================
 	@RequestMapping(value="/admin_booking_request", method=RequestMethod.GET)
 	public ModelAndView admin_booking_request() {
@@ -145,6 +150,25 @@ public class AdminController {
 	}
 	
 	
+	
+//=========================Returns historical booking request detail view================================
+	@RequestMapping(value="/historical_request_detail", method=RequestMethod.GET)
+	public ModelAndView historical_request_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
+		Booking_Request_Master request = usersService1.getBookingRequestById(id);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("request", request);
+		map.put("locations", usersService1.getAllPickUpLocations());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("historical_request_detail","data",json);
+	}
+	
+	
 //=========================Returns schedule detail view================================
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
@@ -229,6 +253,50 @@ public class AdminController {
 		}
 		return map;
 		}
+	
+	//====================To getBookingByScheduleId by admin============================
+		@RequestMapping(value="/getBookingByScheduleId", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toGetBookingByScheduleId(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+			bookings = usersService1.getBookingByScheduleId(id);
+			int check =bookings.size();
+			if(check>0)
+				map.put("message","Not Fine");
+			else
+				map.put("message","Fine");
+			return map;
+			}
+//====================To delete Schedule By id by admin============================
+		@RequestMapping(value="/deleteSchedule", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> deleteSchedule(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+			bookings = usersService1.getBookingByScheduleId(id);
+			int check =bookings.size();
+			if(check<=0)
+			{
+				
+				if(usersService1.deleteSchedule(id)==1)
+					{
+						map.put("status", "1");
+						map.put("message","This schedule has just been deleted successfully!");
+					}
+				else
+					{
+						map.put("status", "0");
+						map.put("message","This schedule has not been deleted!");
+					}
+				
+			}
+				
+			else
+				{
+				map.put("status", "5");
+				map.put("message","This schedule cannot be deleted, please make sure this schedule is not containing any bookings.");
+				}
+			return map;
+			}
 //====================To save schedule by admin============================
 	@RequestMapping(value="/updateSchedule", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toUpdateSchedule(Schedule_Model schedule) throws Exception{
@@ -269,6 +337,27 @@ public class AdminController {
 		{
 			map.put("status","1");
 			map.put("message","This request has just been confirmed successfully");
+		}
+		
+		return map;
+		}
+	
+	
+	
+//====================To reject request by admin============================
+	@RequestMapping(value="/rejectRequest", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toRejectRequest(Booking_Request_Master request) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.rejectRequest(request);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This request has just been rejected successfully");
 		}
 		
 		return map;
@@ -484,6 +573,32 @@ public class AdminController {
 			
 			return map;
 	}
+	
+	
+	
+	
+	@RequestMapping(value="/getAllHistoricalBookingRequests", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getAllHistoricalBookingRequests(){
+				
+		 Map<String,Object> map = new HashMap<String,Object>();
+	
+		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
+			List<Booking_Request_Master> list = usersService1.getAllHistoricalBookingRequests();
+			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			 		
+			if (list != null)
+			{
+			map.put("locations", list2);
+			map.put("requests", list);
+			}
+			else
+				map.put("message","Data not found");			
+			
+			return map;
+	}
+	
+	
+	
 	
 	
 	

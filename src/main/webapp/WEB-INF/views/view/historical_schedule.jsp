@@ -66,15 +66,22 @@ load = function(){
 								+'<td>'+searchLocation(schedules[i].destination_id,locations)+'</td>'
 								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
 								+'<td>'+schedules[i].dept_time+'</td>'
-								+'<td>'+schedules[i].number_booking+'</td></tr>';
+								+'<td>'+schedules[i].number_booking+'</td>'
+								+'<td class="unhoverr" data-url="'+schedules[i].id+'"><i class="fa fa-trash"></i></td></tr>';
 			$("#allSchedules").append(schedule);				
 			}
-			$(".hoverr").on('click', function() {
+			$( ".unhoverr" ).on('click', function(e) {
+				e.stopPropagation();	
+				var s_id = parseInt($(this).attr('data-url'));
+				deleteSchedule(s_id);
+			});
+			$(".hoverr").on('click', function(e) {
+				e.stopPropagation();
 		    	location.href=$(this).attr('data-url');
 			});
     	},
 	error: function(err){
-		swal("Oops!", "Cannot get all buses data", "error")
+		swal("Oops!", "Cannot get all schedules data", "error")
 		console.log(JSON.stringify(err));
 		}
 		
@@ -121,4 +128,55 @@ function searchBus(id, myArray){
         }
     }
 }
+
+
+
+deleteSchedule=function(s_id)
+{
+swal({
+    title: "Do you want to delete this schedule?",
+    text: "Make sure there is no booking in this schedule.",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#E71D36",
+    confirmButtonText: "Delete",
+    cancelButtonText: "Cancel",
+    closeOnConfirm: false,
+    closeOnCancel: true
+  },
+    function (isConfirm) {
+      if (isConfirm) {
+    	  $.ajax({
+    			url:'deleteSchedule?id='+s_id,
+    			type:'GET',
+    			success: function(response){
+    				if(response.status=="1")
+    	  	      {
+    	  	      setTimeout(function() {
+    	  	             swal({
+    	  	                 title: "Done!",
+    	  	                 text: response.message,
+    	  	                 type: "success"
+    	  	             }, function() {
+    	  	            	window.location.reload();
+    	  	             });
+    	  	         }, 10);
+
+    	  	      }
+
+    	  	          else
+    	  	           {
+    	  	           swal("Oops!",response.message, "error")
+
+    	  	           } 		
+    			},
+    			error: function(err){
+    			swal("Oops!", "Cannot get all buses data", "error")
+    			console.log(JSON.stringify(err));
+    			}
+    		});
+      } 
+    });
+    }
+
 </script>

@@ -51,4 +51,7 @@ public interface usersService {
 	public List <Booking_Request_Master> getAllCurrentBookingRequests();
 	public Booking_Request_Master getBookingRequestById (int id);
 	public int confirmRequest(Booking_Request_Master request);
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests();
+	public int rejectRequest(Booking_Request_Master request);
+	public int deleteSchedule(int id);
 }
