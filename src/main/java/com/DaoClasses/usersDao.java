@@ -51,5 +51,7 @@ public interface usersDao {
 	public List <Booking_Request_Master> getAllHistoricalBookingRequests();
 	public int rejectRequest(Booking_Request_Master request);
 	public int deleteSchedule(int id);
-	
+	public int moveSchedule(int arr[], int id);
+	public int saveSchedule2(Schedule_Model schedule)throws ParseException;
+	public int moveSimple(int arr[], int old_id, int new_id, int bookings);
 }

@@ -101,6 +101,8 @@ import org.springframework.stereotype.Repository;
 
 
 
+
+
 //import org.springframework.stereotype.Service;
 import com.EncryptionDecryption.Decryption;
 import com.EncryptionDecryption.Encryption;
@@ -813,6 +815,7 @@ public class userDaoImpl implements usersDao{
             if(schedules.size()>0)
     				return 0;
     		Timestamp created_at = new Timestamp(System.currentTimeMillis());
+    		int remaining =  new userDaoImpl().getBusById(schedule.getBus_id()).getNumber_of_seat()-schedule.getNumber_booking();
     		s.setBus_id(schedule.getBus_id());
     		s.setCode(schedule.getCode());
     		s.setCreated_at(created_at);
@@ -824,8 +827,10 @@ public class userDaoImpl implements usersDao{
     		s.setNumber_customer(schedule.getNumber_customer());
     		s.setNumber_staff(schedule.getNumber_staff());
     		s.setNumber_student(schedule.getNumber_student());
-    		s.setRemaining_seat(schedule.getRemaining_seat());
+    		s.setRemaining_seat(remaining);
     		s.setSource_id(schedule.getSource_id());
+    		s.setFrom_id(new userDaoImpl().getPickUpLocationById(schedule.getSource_id()).getLocation_id());
+    		s.setTo_id(new userDaoImpl().getPickUpLocationById(schedule.getDestination_id()).getLocation_id());
             session.save(s);  
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -839,6 +844,56 @@ public class userDaoImpl implements usersDao{
             session.close();
         }
 		return 1;
+	}
+	
+	
+	public int saveSchedule2(Schedule_Model schedule) throws ParseException{
+		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
+		Schedule_Master s = new Schedule_Master();
+		int id;
+		Date dept_date = null;
+		Time dept_time = null;
+    	Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Schedule_Master where code=:code";
+            Query query = session.createQuery(queryString);
+            query.setString("code",schedule.getCode());
+            schedules=(List<Schedule_Master>)query.list();
+            if(schedules.size()>0)
+    				return 0;
+    		Timestamp created_at = new Timestamp(System.currentTimeMillis());
+    		int remaining =  new userDaoImpl().getBusById(schedule.getBus_id()).getNumber_of_seat()-schedule.getNumber_booking();
+    		s.setBus_id(schedule.getBus_id());
+    		s.setCode(schedule.getCode());
+    		s.setCreated_at(created_at);
+    		s.setDept_date(getScheduleById(schedule.getIdd()).getDept_date());
+    		s.setDept_time(getScheduleById(schedule.getIdd()).getDept_time());
+    		s.setDestination_id(schedule.getDestination_id());
+    		s.setDriver_id(schedule.getDriver_id());
+    		s.setNumber_booking(schedule.getNumber_booking());
+    		s.setNumber_customer(schedule.getNumber_customer());
+    		s.setNumber_staff(schedule.getNumber_staff());
+    		s.setNumber_student(schedule.getNumber_student());
+    		s.setRemaining_seat(remaining);
+    		s.setSource_id(schedule.getSource_id());
+    		s.setFrom_id(schedule.getFrom_id());
+    		s.setTo_id(schedule.getTo_id());
+            session.save(s);
+            id = s.getId();
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return -5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return id;
 	}
 	
 	
@@ -1245,7 +1300,77 @@ public class userDaoImpl implements usersDao{
     }
 	
 	
+	public int moveSchedule(int arr[], int id)
+	{
+		Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int a[]=arr;    
+        try {
+            trns19 =  session.beginTransaction();
+            Schedule_Master master = new userDaoImpl().getScheduleById(new userDaoImpl().getBookingById(a[0]).getSchedule_id());
+            master.setNumber_booking(master.getNumber_booking()-new userDaoImpl().getScheduleById(id).getNumber_booking());
+            session.update(master);
+            for (int i = 0; i < a.length; i++)
+   		   {
+              Booking_Master booking = new userDaoImpl().getBookingById(a[i]);
+              booking.setSchedule_id(id);
+   		      session.update(booking);
+   		     
+   		   }
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns19 != null) {
+                trns19.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+	}
 	
+	
+	
+	public int moveSimple(int arr[], int old_id, int new_id, int bookings)
+	{
+		Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int a[]=arr;    
+        try {
+            trns19 =  session.beginTransaction();
+            for (int i = 0; i < a.length; i++)
+   		   {
+              System.out.println(a[i]);
+              Booking_Master booking = getBookingById(a[i]);
+              booking.setSchedule_id(new_id);
+   		      session.update(booking);
+   		     
+   		   }
+            Schedule_Master old_schedule = getScheduleById(old_id);
+            old_schedule.setNumber_booking(old_schedule.getNumber_booking()-bookings);
+            old_schedule.setRemaining_seat(old_schedule.getRemaining_seat()+bookings);
+            
+            Schedule_Master new_schedule = getScheduleById(new_id);
+            new_schedule.setNumber_booking(new_schedule.getNumber_booking()+bookings);
+            new_schedule.setRemaining_seat(new_schedule.getRemaining_seat()-bookings);
+            
+            session.update(old_schedule);
+            session.update(new_schedule);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns19 != null) {
+                trns19.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+	}
 	
 	
 	

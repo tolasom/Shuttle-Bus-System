@@ -9,7 +9,8 @@
                          </div><br><br>
                          <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_schedule';">View all historical schedules <i class="fa fa-angle-right"></i></button>
                          <button type="button" class="btn btn-info" onclick="window.location.href='create_schedule'" style="color:white;">Create</button>
-                      
+                      	<input type="text" class="form-control" placeholder="Search for any schedule by code..." id="txtbox"/>
+                    		
                     </div>
                     <section class="section">
                         <div class="row">
@@ -26,6 +27,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
+                                                            <th>Code</th>
                                                             <th>Bus</th>
                                                             <th>Driver</th>
                                                             <th>From</th>
@@ -33,6 +35,7 @@
                                                             <th>Departure Date</th>
                                                             <th>Departure Time</th>
                                                             <th>Number of bookings</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="allSchedules">
@@ -62,7 +65,8 @@ load = function(){
 			var buses = response.buses;
 			for (var i=0;i<schedules.length;i++)
 			{
-			var schedule = '<tr class="hoverr" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
+			var schedule = '<tr class="hoverr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
+								+'<td>'+schedules[i].code+'</td>'
 								+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
 								+'<td>'+schedules[i].driver_id+'</td>'
 								+'<td>'+searchLocation(schedules[i].source_id,locations)+'</td>'
@@ -70,7 +74,7 @@ load = function(){
 								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
 								+'<td>'+schedules[i].dept_time+'</td>'
 								+'<td>'+schedules[i].number_booking+'</td>'
-								+'<td class="unhoverr" data-url="'+schedules[i].id+'"><i class="fa fa-trash"></i></td></tr>';
+								+'<td class="unhoverr" data-url="'+schedules[i].id+'" style="color:#e85a71"><i class="fa fa-trash"></i></td></tr>';
 			$("#allSchedules").append(schedule);				
 			}
 			$( ".unhoverr" ).on('click', function(e) {
@@ -101,7 +105,36 @@ goTO = function(){
 $(document).ready(function(){
 	$("#scheduleMng").addClass("active");
 	$("#btnList").addClass("active");
-	
+	$("#txtbox").keyup(function(){
+		   
+		   
+		   $(".search").each(function(){
+	 	         
+		          $(this).show();
+		         
+		        });
+		     var searchValue = $("#txtbox").val().toLowerCase();
+		     	if(searchValue!=null&&searchValue!="")
+		     		{
+		     		 $(".search").each(function(){
+		    	         var title = $(this).attr('s-title'); 
+		    	         title = title.toLowerCase();
+		    	         var check = title.search(searchValue);
+		    	         if(check==-1)
+		    	         {
+		    	          $(this).hide();
+		    	         }
+		    	        });
+		     		}
+		     	else{
+		       
+		        $(".search").each(function(){
+		   	         
+		   	          $(this).show();
+		   	         
+		   	        });
+		     	}
+		    });
 	
 });
 

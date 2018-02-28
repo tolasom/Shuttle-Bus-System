@@ -5,11 +5,16 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class Schedule_Model {
+	private int idd;
 	private int id;
+	private int old_id;
+	private int new_id;
 	private int bus_id;
 	private int driver_id;
 	private int destination_id;
 	private int source_id;
+	private int from_id;
+	private int to_id;
 	private String dept_date;
 	private String dept_time;
 	private String description;
@@ -21,9 +26,29 @@ public class Schedule_Model {
 	private int number_student;
 	private String created_at;
 	private String updated_at;
+	private int b[];
 	
 	
 	
+	
+	public int getFrom_id() {
+		return from_id;
+	}
+	public void setFrom_id(int from_id) {
+		this.from_id = from_id;
+	}
+	public int getTo_id() {
+		return to_id;
+	}
+	public void setTo_id(int to_id) {
+		this.to_id = to_id;
+	}
+	public int[] getB() {
+		return b;
+	}
+	public void setB(int[] b) {
+		this.b = b;
+	}
 	public String getCode() {
 		return code;
 	}
@@ -35,6 +60,12 @@ public class Schedule_Model {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getIdd() {
+		return idd;
+	}
+	public void setIdd(int idd) {
+		this.idd = idd;
 	}
 	public int getBus_id() {
 		return bus_id;
@@ -119,6 +150,18 @@ public class Schedule_Model {
 	}
 	public void setUpdated_at(String updated_at) {
 		this.updated_at = updated_at;
+	}
+	public int getOld_id() {
+		return old_id;
+	}
+	public void setOld_id(int old_id) {
+		this.old_id = old_id;
+	}
+	public int getNew_id() {
+		return new_id;
+	}
+	public void setNew_id(int new_id) {
+		this.new_id = new_id;
 	}
 	
 	

@@ -42,29 +42,10 @@ import com.client_mail.MailService;
 public class test {
 	
 	public static void main (String args[]) throws ParseException{
-		
-			Transaction trns19 = null;
-	        Session session = HibernateUtil.getSessionFactory().openSession();
-	        int a[]=new int[2];  
-	        a[0]=1;  
-	        a[1]=2;  
-	        try {
-	            trns19 =  session.beginTransaction();
-	            for (int i = 0; i < a.length; i++)
-	   		   {
-	              System.out.println(a[i]);
-	              Booking_Master booking = getBookingById(a[i]);
-	              booking.setSchedule_id(5);
-	   		      session.update(booking);
-	   		     
-	   		   }
-	            session.getTransaction().commit();
-	        } catch (RuntimeException e) {
-	            e.printStackTrace();
-	        } finally {
-	            session.flush();
-	            session.close();
-	        }
+		int arr[] =new int[2];
+		arr[0]=1;
+		arr[1]=2;
+		System.out.println(moveSimple(arr,16,10,5));
 		
 		
 	}
@@ -109,6 +90,66 @@ public class test {
 		
 	}
 	
+	public static int moveSimple(int arr[], int old_id, int new_id, int bookings)
+	{
+		Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int a[]=arr;    
+        try {
+            trns19 =  session.beginTransaction();
+            for (int i = 0; i < a.length; i++)
+   		   {
+              System.out.println(a[i]);
+              Booking_Master booking = getBookingById(a[i]);
+              booking.setSchedule_id(new_id);
+   		      session.update(booking);
+   		     
+   		   }
+            Schedule_Master old_schedule = getScheduleById(old_id);
+            old_schedule.setNumber_booking(old_schedule.getNumber_booking()-bookings);
+            old_schedule.setRemaining_seat(old_schedule.getRemaining_seat()+bookings);
+            
+            Schedule_Master new_schedule = getScheduleById(new_id);
+            new_schedule.setNumber_booking(new_schedule.getNumber_booking()+bookings);
+            new_schedule.setRemaining_seat(new_schedule.getRemaining_seat()-bookings);
+            
+            session.update(old_schedule);
+            session.update(new_schedule);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns19 != null) {
+                trns19.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+	}
+	
+	
+	public static Schedule_Master getScheduleById (int id){
+		Schedule_Master schedule= new Schedule_Master();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 = session.beginTransaction();
+            String queryString = "from Schedule_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            schedule=(Schedule_Master)query.uniqueResult();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return schedule;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return schedule;
+		
+	}
 	
 	
 	

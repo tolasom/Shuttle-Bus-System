@@ -59,9 +59,7 @@
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Status</label>
                                             <input type="text" class="form-control" id="status" style="width: inherit;"> 
                                         </div>
-                                        <div class="form-group col-md-10" style="margin-bottom:2%;">
-                                            <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)"><i class="fa fa-angle-left"></i><b>Back</b></button>
-                                        </div>
+                                        
                                         <button type="submit" id ="bsubmit" style="display:none;">aa</button>
                                         
                                         

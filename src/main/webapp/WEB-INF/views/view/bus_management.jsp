@@ -136,7 +136,7 @@ $(document).ready(function(){
     					
     					}
     				//var obj = jQuery.parseJSON(response);
-    				else 
+    				else	 
      					swal("Oops!", response.message, "error")    
     				
     				},

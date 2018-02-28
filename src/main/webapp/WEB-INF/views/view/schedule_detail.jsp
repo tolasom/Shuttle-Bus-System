@@ -33,10 +33,16 @@
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Departure Time</label>
                                             <input type="text" class="form-control" id="sdepttime" style="width: inherit;" placeholder="Departure Time"> </div>
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Remaining seats</label>
+                                            <input type="text" class="form-control" id="sremaining" style="width: inherit;" placeholder="Remaining seats"> </div>
                                         <div class="form-group col-md-12" style="margin-bottom:2%;">
-											<button type="submit" class="btn btn-info">Update</button>
-											</div>
+											<button type="submit" class="btn btn-info">Update</button>									
+								     	</div>
                                     </form>
+                                    
+                                    
+                                   
                                     <div class="col-xl-12">
                                     <div class="card-block" style="padding-left:2px;">
                                         <ul class="nav nav-tabs nav-tabs-bordered">
@@ -71,29 +77,112 @@
                                     </div>
                                   
                             </div>
+                            
+                            <div class="col-md-12">
+								<button class="btn btn-warning pull-right" onClick="openModal()" style="color:white;" id="moveBtn">Move to other schedule <i class="fa fa-exchange"></i></button>
+							</div>
                                 </div>
                             </div>
+                            
                         </div>
                     </section>
                     
                     
                 </article>
                 
+                
+                
+                <div class="modal fade" id="moveModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title center">Move bookings to another schedule</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="mf">
+                                        <div class="form-group">
+                                            <label class="control-label">Choose a schedule</label>
+                                            <select class="form-control boxed" id="mschedule">
+                                            	<option></option>
+                                            </select>
+                                             </div>
+                                          <button type="submit" id="bsubmit2" class="btn btn-default" style="display:none;">Create</button>
+                                    </form>
+        </div>
+        <div class="modal-footer">
+          <button onClick="goTO2()" class="btn btn-info" id="moveNew">Create a new schedule</button>
+          <button onClick="goTO3()" class="btn btn-info" id="moveSimple">Move</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="modal fade" id="selectBusModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title center">Move bookings to another schedule</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="moveForm">
+                                        <div class="form-group">
+                                            <label class="control-label">Select a driver</label>
+                                            <select class="form-control boxed" id="mdriver">
+                                            	<option></option>
+                                            </select>
+                                       </div>
+                                       <div class="form-group">
+                                            <label class="control-label">Select a bus</label>
+                                            <select class="form-control boxed" id="mbus">
+                                            	<option></option>
+                                            </select>
+                                       </div>
+                                         <button type="submit" id="bsubmit" class="btn btn-default" style="display:none;">Create</button>
+                                    </form>
+        </div>
+        <div class="modal-footer">
+          <button onClick="goTO()" class="btn btn-info" id="moveNew">Create a new schedule</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+                
 </body>
 <script type="text/javascript">
 var current_schedule;
 var all_bus;
 var all_driver;
+var all_schedule;
+var idd;
+var all_booking;
 load = function () {
+	var bootstrapjs = $("<script>");
+  	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
+  	$(bootstrapjs).appendTo('body');
 	var data = ${data};
 	var bookings = data.bookings;
 	var buses  = data.buses;
+	all_schedule = data.schedules;
 	all_bus = buses;
 	all_driver = data.drivers;
+	all_booking = bookings;
 	var locations = data.locations;
 	var schedule  = data.schedule;
+	idd = schedule.id;
 	current_schedule = schedule;
 	$("#scode").val(schedule.code);
+	$("#sremaining").val(schedule.remaining_seat);
 	$("#sfrom").val(searchLocation(schedule.source_id,locations));
 	$("#sto").val(searchLocation(schedule.destination_id,locations));
 	$("#snumberbooking").val(schedule.number_booking);
@@ -109,25 +198,39 @@ load = function () {
 	$("#sbus").val(schedule.bus_id);
 	$("#sfrom").val(current_schedule.source_id);
 	$("#sto").val(current_schedule.destination_id);
+	
 	for (var i=0;i<bookings.length;i++)
 	{
-	var booking = '<tr class="hoverr" data-url="booking_detail?id='+bookings[i].id+'">'
-						+'<td><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
+	var booking = '<tr class="hoverr" data-url="booking_detail?id='+bookings[i].id+'" toGet="'+bookings[i].id+'">'
+						+'<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>'
     					+'<td>'+(i+1)+'</td>'
 						+'<td>'+bookings[i].user_id+'</td>'
 						+'<td>'+bookings[i].number_booking+'</td></tr>';
 	$("#allBooking").append(booking);				
 	}
-	$(".hoverr").on('click', function() {
+	$( ".unhoverr" ).on('click', function(e) {
+		e.stopPropagation();	
+	});
+	$(".hoverr").on('click', function(e) {
+		e.stopPropagation();
     	location.href=$(this).attr('data-url');
 	});
+	$(".checkbox").on('click', function(e) {
+		var a = $(this).parents(".hoverr")[0];
+		$(a).toggleClass("selected");
+		showMoveBtn(a);
+	});
+	$("#moveBtn").hide();
 }
 
 
 
 $(document).ready(function(){
 	$("#scheduleMng").addClass("active");
+	
+	
+	
 	$("#myForm").on('submit',function(e){
 		e.preventDefault();
 		var driverId = parseInt($("#sdriver").val());
@@ -203,7 +306,147 @@ $(document).ready(function(){
 			
 		
 	});
+	
+	
+	$("#moveForm").on('submit',function(e){
+		e.preventDefault();
+		var b_ids = [];
+		$(".selected").each(function(){
+			b_ids.push(parseInt($(this).attr("toget"))); 
+		});
+		var total_seat=0;
+		for (var i=0;i<b_ids.length;i++)
+			{
+				total_seat+=searchBooking(b_ids[i],all_booking);
+			}
+		var bId = parseInt($("#mbus").val());
+		var dId = parseInt($("#mdriver").val());
+		if(validateNumberOfSeat(bId,all_bus,total_seat))
+		{
+			$.ajax({
+	    		url:'moveNew',
+	    		type:'GET',
+	    		data:{	
+	    				id:idd,
+	    				b:b_ids,
+	    				driver_id:dId,
+	    				bus_id:bId	    				
+	    			},
+	    		traditional: true,			
+	    		success: function(response){
+	    				if(response.status=="1")
+	    					{
+	    					setTimeout(function() {
+	    				        swal({
+	    				            title: "Done!",
+	    				            text: response.message,
+	    				            type: "success"
+	    				        }, function() {
+	    				            window.location.reload();;
+	    				        });
+	    				    }, 10);
+	    					
+	    					}
+	    				//var obj = jQuery.parseJSON(response);
+	    				else 
+	     					swal("Oops!", response.message, "error")    
+	    				
+	    				},
+	    		error: function(err){
+	    				console.log(JSON.stringify(err));
+	    				
+	    				}
+	    		
+	    			});
+		}
+		else
+		{
+			swal("Action Disallowed!", "This bus's seats are not enough", "error")
+		}
+	});
+	
+	
+	
+	$("#mf").on('submit',function(e){
+		e.preventDefault();
+		console.log($("#mschedule").val());
+		var old_date = new Date($("#sdeptdate").val()).getTime();
+		var s = searchSchedule($("#mschedule").val(),all_schedule)
+		var new_date = s.dept_date;
+		var n1= String (formatDate(new Date()))+" "+ s.dept_time;
+		var new_time = Date.parse(n1);
+		var o1 = String (formatDate(new Date())) +" "+ $("#sdepttime").val();
+		var old_time = Date.parse(o1);
+		console.log(old_time);
+		console.log(new_time);
+		var b_ids = [];
+		$(".selected").each(function(){
+			b_ids.push(parseInt($(this).attr("toget"))); 
+		});
+		var total_seat=0;
+		for (var i=0;i<b_ids.length;i++)
+			{
+				total_seat+=searchBooking(b_ids[i],all_booking);
+			}
+		if(old_date!=new_date||old_time!=new_time)
+		{
+		swal("Action Disallowed!", "You cannot move to the schedule which has different departure date and time!", "error")
+		return
+		}
+		if(s.remaining_seat>=total_seat)
+		{
+			$.ajax({
+	    		url:'moveSimple',
+	    		type:'GET',
+	    		data:{	
+	    				old_id:idd,
+	    				new_id:$("#mschedule").val(),
+	    				b:b_ids,
+	    				number_booking:total_seat	    				
+	    			},
+	    		traditional: true,			
+	    		success: function(response){
+	    				if(response.status=="1")
+	    					{
+	    					setTimeout(function() {
+	    				        swal({
+	    				            title: "Done!",
+	    				            text: response.message,
+	    				            type: "success"
+	    				        }, function() {
+	    				            window.location.reload();;
+	    				        });
+	    				    }, 10);
+	    					
+	    					}
+	    				//var obj = jQuery.parseJSON(response);
+	    				else 
+	     					swal("Oops!", response.message, "error")    
+	    				
+	    				},
+	    		error: function(err){
+	    				console.log(JSON.stringify(err));
+	    				
+	    				}
+	    		
+	    			});	
+		}
+		else
+		{
+			swal("Action Disallowed!", "This bus's seats of that schedule are not enough", "error")	
+		}
+		
+		
+		
+	});
+	
+	
+
+	
 });
+
+
+
 
 
 formatDate =function (date) {
@@ -226,6 +469,17 @@ function searchLocation(id, myArray){
     }
 }
 
+
+function searchSchedule(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id == id) {
+            return myArray[i];
+        }
+    }
+}
+
+
+
 function searchBus(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
@@ -233,6 +487,18 @@ function searchBus(id, myArray){
         }
     }
 }
+
+
+function searchBooking(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].number_booking;
+        }
+    }
+}
+
+
+
 function validateNumberOfSeat(id, myArray,seats){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
@@ -256,5 +522,75 @@ function toDate(dStr,format) {
 		return "Invalid Format";
 }
 
+
+function toDate2(dStr,format) {
+	var now = new Date();
+	if (format == "h:m:s") {
+ 		now.setHours(dStr.substr(0,dStr.indexOf(":")));
+ 		now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
+ 		now.setSeconds(dStr.substr(dStr.indexOf(":")+2));
+ 		return now;
+	}else 
+		return "Invalid Format";
+}
+
+
+function showMoveBtn(e){
 	
+	var numItems = $('.selected').length;
+	if(numItems>0)
+		$("#moveBtn").show();
+	else 
+		$("#moveBtn").hide();
+	
+}
+
+
+function openModal(){
+	$('#moveModal').modal('toggle');
+	$('#mschedule').children('option:not(:first)').remove();
+	for(var i=0; i<all_schedule.length; i++)					
+		{
+		if(all_schedule[i].id!=idd)
+			{
+			var s  = "<option value="+all_schedule[i].id+">"+all_schedule[i].code+"</option>";
+			$("#mschedule").append(s);
+			}
+		}
+	$("#moveSimple").hide();
+	$("#moveNew").show();
+
+}
+
+$( "#mschedule" ).on('change', function(e) {
+	if(this.value==""||this.value==null)
+		{
+		$("#moveSimple").hide();
+		$("#moveNew").show();
+		}
+	else
+		{
+		$("#moveNew").hide();
+		$("#moveSimple").show();
+		}
+		
+});
+
+goTO = function(){
+	$('#bsubmit').trigger('click');
+}
+
+goTO3 = function(){
+	$('#bsubmit2').trigger('click');
+}
+goTO2 = function(){
+	$("#selectBusModal").modal('toggle');
+	$('#mdriver').children('option:not(:first)').remove();
+	$('#mbus').children('option:not(:first)').remove();
+	for(i=0; i<all_bus.length; i++)					
+		$("#mbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" </option>");
+	for(i=0; i<all_driver.length; i++)					
+		$("#mdriver").append("<option value="+all_driver[i].id+">"+all_driver[i].name+" </option>");
+}
+
 </script>

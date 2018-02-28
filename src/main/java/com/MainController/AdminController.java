@@ -174,6 +174,7 @@ public class AdminController {
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("schedule", usersService1.getScheduleById(id));
+		map.put("schedules", usersService1.getAllSchedules());
 		map.put("locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
@@ -320,6 +321,74 @@ public class AdminController {
 		}
 		return map;
 		}
+//====================To move booking to new schedule by admin============================
+	@RequestMapping(value="/moveNew", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toMoveNew(Schedule_Model s) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int all_booking = 0;
+		int a[] =s.getB();
+		for(int i=0; i<a.length;i++)
+			all_booking+=usersService1.getBookingById(a[i]).getNumber_booking();
+		Schedule_Model newSchedule = new Schedule_Model();
+		Schedule_Master schedule = usersService1.getScheduleById(s.getId());
+		newSchedule.setIdd(s.getId());
+		newSchedule.setCode(getScheduleSequence());
+		newSchedule.setDriver_id(s.getDriver_id());
+		newSchedule.setBus_id(s.getBus_id());
+		newSchedule.setSource_id(schedule.getSource_id());
+		newSchedule.setDestination_id(schedule.getDestination_id());
+		newSchedule.setNumber_booking(all_booking);
+		newSchedule.setFrom_id(schedule.getFrom_id());
+		newSchedule.setTo_id(schedule.getTo_id());
+		int check = usersService1.saveSchedule2(newSchedule);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Schedule code already existed!");
+		}
+		else if(check==-5)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem when creating new schedule occurs!");
+		}
+		else
+		{
+			int check2 = usersService1.moveSchedule(a,check);
+			if(check2==1)
+			{
+				map.put("status","1");
+				map.put("message","New schedule has just been created and its code is "+usersService1.getScheduleById(check).getCode()+"!");
+			}
+			else
+			{
+				usersService1.deleteSchedule(check);
+				map.put("status","0");
+				map.put("message","New schedule has not just been created and bookings are not moved to anywhere!");
+			}
+		}
+		return map;
+		}	
+	
+	
+	
+//====================To move booking to existing schedule by admin============================
+	@RequestMapping(value="/moveSimple", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toMoveSimlple(Schedule_Model s) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.moveSimple(s.getB(), s.getOld_id(), s.getNew_id(), s.getNumber_booking());
+		if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","Bookings have just been successfully moved!");
+		}
+		else
+		{
+			map.put("status","0");
+			map.put("message","Bookings have not been successfully moved!");
+		}
+		return map;
+		}		
+	
 	
 	
 	

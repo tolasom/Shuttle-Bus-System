@@ -129,6 +129,15 @@ public class usersServiceImpl implements usersService{
 	public int deleteSchedule(int id){
 		return usersDao1.deleteSchedule(id);
 	}
+	public int moveSchedule(int arr[], int id){
+		return usersDao1.moveSchedule(arr, id);
+	}
+	public int saveSchedule2(Schedule_Model schedule)throws ParseException{
+		return usersDao1.saveSchedule2(schedule);
+	}
+	public int moveSimple(int arr[], int old_id, int new_id, int bookings){
+		return usersDao1.moveSimple(arr, old_id, new_id, bookings);
+	}
 }
 
 
