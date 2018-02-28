@@ -1,5 +1,6 @@
 package com.MainController;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -18,17 +19,17 @@ import com.ModelClasses.Customer_Booking;
 @Controller
 public class CustomerController {
 	Custom_Dao customer=new Custom_Imp();
-	
+	static Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
 	//=========================User Information================================
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
-		public @ResponseBody Map<Object, String> user_info() {
-		Map<Object, String> map = customer.user_info();
+		public @ResponseBody Map<String,Object> user_info() {
+		Map<String, Object> map = customer.user_info();
 		return map;
 	}
 	//=========================check_booking_request Information================================
 		@RequestMapping(value="/check_booking_request", method=RequestMethod.GET)
-			public @ResponseBody Map<Object, String> check_booking_request() {
-			Map<Object, String> map = customer.user_info();
+			public @ResponseBody Map<String,Object> check_booking_request() {
+			Map<String, Object> map = customer.user_info();
 			return map;
 		}
 	//=========================Location Information================================
@@ -39,8 +40,8 @@ public class CustomerController {
 		}	
 	//=========================Departure Time Information================================
 		@RequestMapping(value="/departure_time_info", method=RequestMethod.GET)
-			public @ResponseBody List<Map<Object, String>> departure_time_info() {
-			List<Map<Object, String>> list = customer.departure_time_info();
+			public @ResponseBody List<Map<String,Object>> departure_time_info() {
+			List<Map<String, Object>> list = customer.departure_time_info();
 			return list;
 		}		
 	//=========================Check Location Information================================
@@ -52,6 +53,7 @@ public class CustomerController {
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
 	public @ResponseBody String customer_booking(Customer_Booking cb) {
+			System.out.println("AAAAAAAAAAAAA");
 			String ret = customer.customer_booking(cb);
 			return ret;
 		}	
@@ -73,14 +75,14 @@ public class CustomerController {
 		}
 	//=========================Customer Booking History Information================================
 		@RequestMapping(value="/customer_booking_history", method=RequestMethod.GET)
-			public @ResponseBody List<Map<Object, String>> customer_booking_history() {
-			List<Map<Object, String>> map = customer.cusomer_booking_history();
+			public @ResponseBody List<Map<String,Object>> customer_booking_history() {
+			List<Map<String, Object>> map = customer.cusomer_booking_history();
 			return map;
 		}	
 	//======================== Get Booking Request Information================================
 		@RequestMapping(value="/get_request_booking", method=RequestMethod.GET)
-		public @ResponseBody List<Map<Object, String>> get_request_booking() {
-		List<Map<Object, String>> map = customer.get_request_booking();
+		public @ResponseBody List<Map<String,Object>> get_request_booking() {
+		List<Map<String, Object>> map = customer.get_request_booking();
 		return map;
 	}	
 }

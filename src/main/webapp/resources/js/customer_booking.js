@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	 $('select').material_select();
-	 
+//	 $('.modal').modal();
+//	 $('.modal').modal('open');
 	 $(".flatpickr input").flatpickr({
 			mode: "single",
 			minDate: "today",
@@ -136,15 +137,13 @@ $(document).ready(function() {
 			}
 	});
 	 
-		// ======== Booking Session ==========
+		// ======== Book Now ==========
 	 $('#book_now').click(function(){
 		 var source = $("#source_name").val();
 		 var destination = $("#destination_name").val();
 		 var time=$("#departure_time").val();
 		 var date=$("#departure_date").val();
 		 var number_of_seat=$("#number_of_seat").val();
-		 console.log("KK");
-		 console.log(source);
 		 var submit={
 				 "source":source,
 				 "destination":destination,
@@ -167,12 +166,22 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					console.log(data);
-					alert("A")
-					//document.getElementById('fullname').innerHTML=data.username;
+					var text;
+					if(data=="success"){
+						text="You are sucessful booking";
+					}else if(data=="no_bus_available"){
+						text="No Bus is available";
+					}else if(data=="over_bus_available"){
+						text="Over bus available";
+					}else{
+						text="Process is error!!";
+					}
+					document.getElementById('confirm_text').innerHTML=text;
+					$('#confirm').modal();
+				    $('#confirm').modal('open');
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
-					alert("A")
 				},
 				done: function(e) {
 					console.log("DONE");
@@ -195,7 +204,7 @@ $(document).ready(function() {
 				var bh_form='';
 				if(data.length>0){
 					bh_form+='<h5 class="center">Booking History</h5>'
-							+'<table class="bordered"><thead><tr>'
+							+'<table class="bordered centered"><thead><tr>'
 							+'<th>No.</th>'
 							+'<th>Departure Date&Time</th>'
 							+'<th>Source and Destination</th>'
@@ -226,7 +235,6 @@ $(document).ready(function() {
 			}
 	});
 
-	 console.log("LLLLLLLLLLLLLLLL")
 	// ======== Request Booking Form==========
 	 $.ajax({
 			async: false,
@@ -239,29 +247,29 @@ $(document).ready(function() {
 				console.log("get_request_booking");
 				console.log(data);
 				
-//				var bh_form='';
-//				if(data.length>0){
-//					bh_form+='<h5 class="center">Booking History</h5>'
-//							+'<table class="bordered"><thead><tr>'
-//							+'<th>No.</th>'
-//							+'<th>Departure Date&Time</th>'
-//							+'<th>Source and Destination</th>'
-//							+'<th>Number of Ticket</th>'
-//							+'<th>Bus Model</th>'
-//							+'<th>Driver\'s Name</th>'
-//							+'</tr></thead><tbody>';
-//					for(i=0;i<data.length;i++){
-//						bh_form+='<tr><td>'+(i+1)+'</td>'
-//								 +'<td>'+convert_date(data[i].dept_date)+' '+convert_time(data[i].dept_time)+'</td>'
-//								 +'<td>'+data[i].scource+' to '+data[i].destination +'</td>'
-//								 +'<td>'+data[i].number_of_ticket+'</td>'
-//								 +'<td>'+data[i].bus_model+'</td>'
-//								 +'<td>'+data[i].diver_name+'</td></tr>';
-//   
-//					}
-//					bh_form+='</tbody></table>';
-//				}
-//				document.getElementById('booking_history').innerHTML=bh_form;
+				var bh_form='';
+				if(data.length>0){
+					bh_form+='<h5 class="center">Booking Request</h5>'
+							+'<table class="bordered"><thead><tr>'
+							+'<th>No.</th>'
+							+'<th>Departure Date&Time</th>'
+							+'<th>Source and Destination</th>'
+							+'<th>Number of Ticket</th>'
+							+'<th>Status</th>'
+							+'<th>Option</th>'
+							+'</tr></thead><tbody>';
+					for(i=0;i<data.length;i++){
+						bh_form+='<tr><td>'+(i+1)+'</td>'
+								 +'<td>'+convert_date(data[i].dept_date)+' '+convert_time(data[i].dept_time)+'</td>'
+								 +'<td>'+data[i].scource+' to '+data[i].destination +'</td>'
+								 +'<td>'+data[i].number_of_ticket+'</td>'
+								 +'<td>'+data[i].status+'</td>'
+								 +'<td>'+data[i].diver_name+'</td></tr>';
+   
+					}
+					bh_form+='</tbody></table>';
+				}
+				document.getElementById('get_booking_request').innerHTML=bh_form;
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
