@@ -112,5 +112,11 @@
 		  </div>
 	</div>
 	</form>
+	<!-- Confirm Modal -->
+	<div id="confirm" class="modal">
+	    <div class="modal-content">
+	      <p id="confirm_text"></p>
+	    </div>
+	</div>
   </body>
 </html>

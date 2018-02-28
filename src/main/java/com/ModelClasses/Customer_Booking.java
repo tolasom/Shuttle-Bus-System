@@ -1,6 +1,4 @@
 package com.ModelClasses;
-
-
 public class Customer_Booking {
 	private int source;
 	private int destination;

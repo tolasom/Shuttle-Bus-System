@@ -127,8 +127,19 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					console.log(data);
-					alert("A")
-					//document.getElementById('fullname').innerHTML=data.username;
+					var text;
+					if(data=="success"){
+						text="You are sucessful booking";
+					}else if(data=="no_bus_available"){
+						text="No Bus is available";
+					}else if(data=="over_bus_available"){
+						text="Over bus available";
+					}else{
+						text="Process is error!!";
+					}
+					document.getElementById('confirm_text').innerHTML=text;
+					$('#confirm').modal();
+				    $('#confirm').modal('open');
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);

@@ -112,6 +112,15 @@
 		  </div>  
 	</div>
 </form>
+
+<div id="get_booking_request" class="row container"></div> 
 <div id="booking_history" class="row container booking_history"></div> 
+
+<!-- Confirm Modal -->
+<div id="confirm" class="modal">
+    <div class="modal-content">
+      <p id="confirm_text"></p>
+    </div>
+</div>
   </body>
 </html>
