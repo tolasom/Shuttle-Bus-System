@@ -1,6 +1,7 @@
 package com.ServiceClasses;
 
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 import com.DaoClasses.usersDao;
 import com.EntityClasses.Batch_Master;
 import com.EntityClasses.Booking_Master;
+import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+import com.ModelClasses.Schedule_Model;
+
 
 
 
@@ -96,11 +99,35 @@ public class usersServiceImpl implements usersService{
 	public List <Schedule_Master> getAllCurrentSchedules(){
 		return usersDao1.getAllCurrentSchedules();
 	}
+	public List <Schedule_Master> getAllSchedules(){
+		return usersDao1.getAllSchedules();
+	}
 	public List<User_Info> getAllUsers(){
 		return usersDao1.getAllUsers();
 	}
-	public int saveSchedule(Schedule_Master schedule){
+	public int saveSchedule(Schedule_Model schedule)throws ParseException{
 		return usersDao1.saveSchedule(schedule);
+	}
+	public int updateSchedule(Schedule_Model schedule) throws ParseException{
+		return usersDao1.updateSchedule(schedule);
+	}
+	public List <Booking_Request_Master> getAllCurrentBookingRequests(){
+		return usersDao1.getAllCurrentBookingRequests();
+	}
+	public Booking_Request_Master getBookingRequestById (int id){
+		return usersDao1.getBookingRequestById(id);
+	}
+	public int confirmRequest(Booking_Request_Master request){
+		return usersDao1.confirmRequest(request);
+	}
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests(){
+		return usersDao1.getAllHistoricalBookingRequests();
+	}
+	public int rejectRequest(Booking_Request_Master request){
+		return usersDao1.rejectRequest(request);
+	}
+	public int deleteSchedule(int id){
+		return usersDao1.deleteSchedule(id);
 	}
 }
 

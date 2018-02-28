@@ -4,7 +4,9 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,12 +98,16 @@ import org.springframework.stereotype.Repository;
 
 
 
+
+
+
 //import org.springframework.stereotype.Service;
 import com.EncryptionDecryption.Decryption;
 import com.EncryptionDecryption.Encryption;
 import com.EncryptionDecryption.SecretKeyClass;
 import com.EntityClasses.Batch_Master;
 import com.EntityClasses.Booking_Master;
+import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
@@ -523,6 +529,30 @@ public class userDaoImpl implements usersDao{
 	}
 	
 	
+	
+	
+	public Booking_Request_Master getBookingRequestById (int id){
+		Booking_Request_Master request= new Booking_Request_Master();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 = session.beginTransaction();
+            String queryString = "from Booking_Request_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            request=(Booking_Request_Master)query.uniqueResult();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return request;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return request;
+		
+	}
+	
+	
 	public List<Booking_Master> getBookingByScheduleId (int id){
 		List<Booking_Master> booking= new ArrayList<Booking_Master>();
         Transaction trns19 = null;
@@ -659,6 +689,29 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 	}
+	
+	public int deleteSchedule(int id){
+		Transaction trns21 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Schedule_Master schedule = new Schedule_Master();
+        try {
+            trns21 = session.beginTransaction();
+            String queryString = "from Schedule_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            schedule=(Schedule_Master)query.uniqueResult();
+            session.delete(schedule);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
 	public void deletePickUpLocationByLocatinId(int id){
 		Transaction trns24 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -744,9 +797,11 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 	}
-	public int saveSchedule(Schedule_Model schedule){
+	public int saveSchedule(Schedule_Model schedule) throws ParseException{
 		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
 		Schedule_Master s = new Schedule_Master();
+		Date dept_date = null;
+		Time dept_time = null;
     	Transaction trns7 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -761,7 +816,7 @@ public class userDaoImpl implements usersDao{
     		s.setBus_id(schedule.getBus_id());
     		s.setCode(schedule.getCode());
     		s.setCreated_at(created_at);
-    		s.setDept_date(java.sql.Date.valueOf(schedule.getDept_date()));
+    		s.setDept_date(new SimpleDateFormat("MM/dd/yyyy").parse(schedule.getDept_date()));
     		s.setDept_time(java.sql.Time.valueOf(schedule.getDept_time()));
     		s.setDestination_id(schedule.getDestination_id());
     		s.setDriver_id(schedule.getDriver_id());
@@ -771,7 +826,7 @@ public class userDaoImpl implements usersDao{
     		s.setNumber_student(schedule.getNumber_student());
     		s.setRemaining_seat(schedule.getRemaining_seat());
     		s.setSource_id(schedule.getSource_id());
-            session.save(schedule);  
+            session.save(s);  
             session.getTransaction().commit();
         } catch (RuntimeException e) {
         	if (trns7 != null) {
@@ -785,6 +840,116 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 	}
+	
+	
+	
+	
+	
+	public int updateSchedule(Schedule_Model schedule){
+		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
+		int count =0;
+		Date dept_date = null;
+		Time dept_time = null;
+    	Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            schedules = getAllSchedules();
+            for(Schedule_Master ss:schedules)
+            {
+                if(schedule.getId()!=ss.getId())
+                        {
+                            if (ss.getCode().equals(schedule.getCode()))
+                                count++;
+                        }
+            }
+            if(count>=1)
+                return 0;
+            String queryString = "FROM Schedule_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",schedule.getId());
+            Schedule_Master s  = (Schedule_Master) query.uniqueResult();
+    		Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+    		s.setBus_id(schedule.getBus_id());
+    		s.setUpdated_at(updated_at);
+    		s.setDriver_id(schedule.getDriver_id());
+            session.update(s);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
+	
+	
+	
+	public int confirmRequest(Booking_Request_Master request){
+    	Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Booking_Request_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",request.getId());
+            Booking_Request_Master r  = (Booking_Request_Master) query.uniqueResult();
+    		Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+    		r.setProvided_time(request.getProvided_time());
+    		r.setUpdated_at(updated_at);
+    		r.setStatus("Confirmed");
+    		session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
+	
+	
+	public int rejectRequest(Booking_Request_Master request){
+    	Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Booking_Request_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",request.getId());
+            Booking_Request_Master r  = (Booking_Request_Master) query.uniqueResult();
+    		Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+    		r.setUpdated_at(updated_at);
+    		r.setStatus("Rejected");
+    		session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+        	if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+		return 1;
+	}
+	
+	
+	
 	
 	public int savePickUpLocation(Pickup_Location_Master p_location){
 		List <Pickup_Location_Master> p_locations  = new ArrayList<Pickup_Location_Master>();
@@ -850,6 +1015,64 @@ public class userDaoImpl implements usersDao{
 	}
 	
 	
+	
+	
+	public List <Booking_Request_Master> getAllCurrentBookingRequests(){
+		List <Booking_Request_Master> requests  = new ArrayList<Booking_Request_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Request_Master where dept_date>=:localDate and status=:status";
+            Query query = session.createQuery(queryString);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(dtf.format(localDate));
+            query.setDate("localDate", date);
+            query.setString("status", "Pending");
+            requests=(List<Booking_Request_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return requests;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return requests;
+		
+	}
+	
+	
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests(){
+		List <Booking_Request_Master> requests  = new ArrayList<Booking_Request_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Request_Master where dept_date<=:localDate or status!=:status";
+            Query query = session.createQuery(queryString);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(dtf.format(localDate));
+            query.setDate("localDate", date);
+            query.setString("status", "Pending");
+            requests=(List<Booking_Request_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return requests;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return requests;
+		
+	}
+	
+	
+	
+	
 	public List <Schedule_Master> getAllCurrentSchedules(){
 		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
         Transaction trns19 = null;
@@ -874,6 +1097,29 @@ public class userDaoImpl implements usersDao{
         return schedules;
 		
 	}
+	
+	
+	public List <Schedule_Master> getAllSchedules(){
+		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Schedule_Master order by id asc";
+            Query query = session.createQuery(queryString);
+            schedules=(List<Schedule_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return schedules;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return schedules;
+		
+	}
+	
+	
 	
 	public List <Schedule_Master> getAllHistoricalSchedules(){
 		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
@@ -997,13 +1243,13 @@ public class userDaoImpl implements usersDao{
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return Integer.toString(cal.getTime().getDate());
     }
+	
+	
+	
+	
+	
+	
 
-
-
-	public int saveSchedule(Schedule_Master schedule) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 
 	

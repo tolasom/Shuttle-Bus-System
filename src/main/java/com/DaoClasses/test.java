@@ -43,9 +43,54 @@ public class test {
 	
 	public static void main (String args[]) throws ParseException{
 		
-		System.out.println(getScheduleSequence());
+			Transaction trns19 = null;
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	        int a[]=new int[2];  
+	        a[0]=1;  
+	        a[1]=2;  
+	        try {
+	            trns19 =  session.beginTransaction();
+	            for (int i = 0; i < a.length; i++)
+	   		   {
+	              System.out.println(a[i]);
+	              Booking_Master booking = getBookingById(a[i]);
+	              booking.setSchedule_id(5);
+	   		      session.update(booking);
+	   		     
+	   		   }
+	            session.getTransaction().commit();
+	        } catch (RuntimeException e) {
+	            e.printStackTrace();
+	        } finally {
+	            session.flush();
+	            session.close();
+	        }
+		
 		
 	}
+	
+	
+	public static Booking_Master getBookingById (int id){
+		Booking_Master booking= new Booking_Master();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 = session.beginTransaction();
+            String queryString = "from Booking_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            booking=(Booking_Master)query.uniqueResult();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return booking;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return booking;
+		
+	}
+	
 	
 	
 	public static String getScheduleSequence(){

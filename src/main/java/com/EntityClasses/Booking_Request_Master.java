@@ -1,9 +1,7 @@
 package com.EntityClasses;
-
-import java.sql.Date;
 import java.sql.Time;
-
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Booking_Request_Master {
 	private int id;
@@ -121,5 +119,4 @@ public class Booking_Request_Master {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	
 }

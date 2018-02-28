@@ -18,8 +18,8 @@
                                     <a href="admin_booking">
                                         <i class="fa fa-list"></i> Bookings </a>
                                 </li>
-                                <li id="bookingRequest">
-                                    <a href="#">
+                                <li id="bookingRequestMng">
+                                    <a href="admin_booking_request">
                                         <i class="fa fa-envelope-open"></i> Booking Requests</a>
                                 </li>
                                 <li id="busMng">

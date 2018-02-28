@@ -16,7 +16,6 @@
     <property name="number_of_booking" column="number_of_booking"/>
     <property name="description" column="description"/>
     <property name="user_id"  column="user_id"/>
-    <property name="provided_date"  column="provided_date"/>
     <property name="provided_time"  column="provided_time"/>
     <property name="status" column="status"/>
     <property name="created_at" column="created_at"/>

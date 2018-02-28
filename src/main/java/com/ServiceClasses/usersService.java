@@ -1,5 +1,6 @@
 package com.ServiceClasses;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.EntityClasses.Bus_Master;
@@ -8,12 +9,13 @@ import java.util.Map;
 
 import com.EntityClasses.Batch_Master;
 import com.EntityClasses.Booking_Master;
+import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+import com.ModelClasses.Schedule_Model;
 
 
 public interface usersService {
@@ -42,6 +44,14 @@ public interface usersService {
 	public Schedule_Master getScheduleById (int id);
 	public List <Schedule_Master> getAllHistoricalSchedules();
 	public List <Schedule_Master> getAllCurrentSchedules();
+	public List <Schedule_Master> getAllSchedules();
 	public List<User_Info> getAllUsers();
-	public int saveSchedule(Schedule_Master schedule);
+	public int saveSchedule(Schedule_Model schedule)throws ParseException;
+	public int updateSchedule(Schedule_Model schedule) throws ParseException;
+	public List <Booking_Request_Master> getAllCurrentBookingRequests();
+	public Booking_Request_Master getBookingRequestById (int id);
+	public int confirmRequest(Booking_Request_Master request);
+	public List <Booking_Request_Master> getAllHistoricalBookingRequests();
+	public int rejectRequest(Booking_Request_Master request);
+	public int deleteSchedule(int id);
 }

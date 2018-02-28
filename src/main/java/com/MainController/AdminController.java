@@ -17,11 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.DaoClasses.userDaoImpl;
 import com.EntityClasses.Booking_Master;
+import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.ModelClasses.B_Model;
+import com.ModelClasses.Schedule_Model;
 import com.ServiceClasses.usersService;
 
 @Controller
@@ -42,6 +44,16 @@ public class AdminController {
 	@RequestMapping(value="/admin_booking", method=RequestMethod.GET)
 	public ModelAndView admin_booking() {
 		return new ModelAndView("admin_booking");
+	}
+//=========================Returns historical_booking_requestt view================================
+	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
+	public ModelAndView historical_booking_request() {
+		return new ModelAndView("historical_booking_request");
+	}
+//=========================Returns admin booking request view================================
+	@RequestMapping(value="/admin_booking_request", method=RequestMethod.GET)
+	public ModelAndView admin_booking_request() {
+		return new ModelAndView("admin_booking_request");
 	}
 //=========================Returns location management view================================
 	@RequestMapping(value="/location_management", method=RequestMethod.GET)
@@ -118,6 +130,45 @@ public class AdminController {
 	}
 	
 	
+	
+	
+//=========================Returns booking request detail view================================
+	@RequestMapping(value="/request_detail", method=RequestMethod.GET)
+	public ModelAndView request_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
+		Booking_Request_Master request = usersService1.getBookingRequestById(id);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("request", request);
+		map.put("locations", usersService1.getAllPickUpLocations());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("request_detail","data",json);
+	}
+	
+	
+	
+//=========================Returns historical booking request detail view================================
+	@RequestMapping(value="/historical_request_detail", method=RequestMethod.GET)
+	public ModelAndView historical_request_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
+		Booking_Request_Master request = usersService1.getBookingRequestById(id);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("request", request);
+		map.put("locations", usersService1.getAllPickUpLocations());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("historical_request_detail","data",json);
+	}
+	
+	
 //=========================Returns schedule detail view================================
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
@@ -126,6 +177,7 @@ public class AdminController {
 		map.put("locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
+		map.put("drivers", usersService1.getAllUsers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -168,7 +220,7 @@ public class AdminController {
 		else if(check==1)
 		{
 			map.put("status","1");
-			map.put("message","Bus have just been created successfully");
+			map.put("message","Bus has just been created successfully");
 		}
 		else
 		{
@@ -177,30 +229,141 @@ public class AdminController {
 		}
 		return map;
 		}
-////====================To save schedule by admin============================
-//	@RequestMapping(value="/createSchedule", method=RequestMethod.GET)
-//	public @ResponseBody Map<String,Object> toSaveSchedule(Schedule_Model schedule) throws Exception{
-//		Map<String,Object> map = new HashMap<String,Object>();
-//		System.out.println(("In java"));
-//		System.out.println(schedule.getCode()+"  "+schedule.getDriver_id()+"  "+schedule.getBus_id()+"  "+schedule.getSource_id()+"  "+schedule.getDestination_id()+"  "+schedule.getNumber_booking()+"  "+schedule.getDept_date()+"  "+schedule.getDept_time());;
-//		int check = usersService1.saveSchedule(schedule);
-//		if(check==0)
-//		{
-//			map.put("status","0");
-//			map.put("message","Code already existed!");
-//		}
-//		else if(check==1)
-//		
-//			map.put("status","1");
-//			map.put("message","Bus have just been created successfully");
-//		}
-//		else
-//		{
-//			map.put("status","5");
-//			map.put("message","Technical problem occurs");
-//		}
-//		return map;
-//		}
+//====================To save schedule by admin============================
+	@RequestMapping(value="/createSchedule", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toSaveSchedule(Schedule_Model schedule) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(("In java"));
+		System.out.println(schedule.getCode()+"  "+schedule.getDriver_id()+"  "+schedule.getBus_id()+"  "+schedule.getSource_id()+"  "+schedule.getDestination_id()+"  "+schedule.getNumber_booking()+"  "+schedule.getDept_date()+"  "+schedule.getDept_time());;
+		int check = usersService1.saveSchedule(schedule);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Code already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","Schedule has just been created successfully");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+		}
+	
+	//====================To getBookingByScheduleId by admin============================
+		@RequestMapping(value="/getBookingByScheduleId", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toGetBookingByScheduleId(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+			bookings = usersService1.getBookingByScheduleId(id);
+			int check =bookings.size();
+			if(check>0)
+				map.put("message","Not Fine");
+			else
+				map.put("message","Fine");
+			return map;
+			}
+//====================To delete Schedule By id by admin============================
+		@RequestMapping(value="/deleteSchedule", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> deleteSchedule(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+			bookings = usersService1.getBookingByScheduleId(id);
+			int check =bookings.size();
+			if(check<=0)
+			{
+				
+				if(usersService1.deleteSchedule(id)==1)
+					{
+						map.put("status", "1");
+						map.put("message","This schedule has just been deleted successfully!");
+					}
+				else
+					{
+						map.put("status", "0");
+						map.put("message","This schedule has not been deleted!");
+					}
+				
+			}
+				
+			else
+				{
+				map.put("status", "5");
+				map.put("message","This schedule cannot be deleted, please make sure this schedule is not containing any bookings.");
+				}
+			return map;
+			}
+//====================To save schedule by admin============================
+	@RequestMapping(value="/updateSchedule", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toUpdateSchedule(Schedule_Model schedule) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(schedule.getCode()+"  "+schedule.getDriver_id()+"  "+schedule.getBus_id()+"  "+schedule.getSource_id()+"  "+schedule.getDestination_id()+"  "+schedule.getNumber_booking()+"  "+schedule.getDept_date()+"  "+schedule.getDept_time());;
+		int check = usersService1.updateSchedule(schedule);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Code already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","Schedule has just been updated successfully");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+		}
+	
+	
+	
+//====================To confirm request by admin============================
+	@RequestMapping(value="/confirmRequest", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toConfirmRequest(Booking_Request_Master request) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.confirmRequest(request);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This request has just been confirmed successfully");
+		}
+		
+		return map;
+		}
+	
+	
+	
+//====================To reject request by admin============================
+	@RequestMapping(value="/rejectRequest", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toRejectRequest(Booking_Request_Master request) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.rejectRequest(request);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This request has just been rejected successfully");
+		}
+		
+		return map;
+		}
+	
+	
 	
 //====================To update bus============================
 		@RequestMapping(value="/updateBus", method=RequestMethod.GET)
@@ -389,6 +552,56 @@ public class AdminController {
 	
 	
 	
+	
+	
+	@RequestMapping(value="/getAllCurrentBookingRequests", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getAllCurrentBookingRequests(){
+				
+		 Map<String,Object> map = new HashMap<String,Object>();
+	
+		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
+			List<Booking_Request_Master> list = usersService1.getAllCurrentBookingRequests();
+			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			 		
+			if (list != null)
+			{
+			map.put("locations", list2);
+			map.put("requests", list);
+			}
+			else
+				map.put("message","Data not found");			
+			
+			return map;
+	}
+	
+	
+	
+	
+	@RequestMapping(value="/getAllHistoricalBookingRequests", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getAllHistoricalBookingRequests(){
+				
+		 Map<String,Object> map = new HashMap<String,Object>();
+	
+		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
+			List<Booking_Request_Master> list = usersService1.getAllHistoricalBookingRequests();
+			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			 		
+			if (list != null)
+			{
+			map.put("locations", list2);
+			map.put("requests", list);
+			}
+			else
+				map.put("message","Data not found");			
+			
+			return map;
+	}
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value="/getAllCurrentSchedules", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllCurrentSchedules(){
 				
@@ -532,9 +745,11 @@ public class AdminController {
 	}
 	public static String getScheduleSequence(){
 		List<Schedule_Master> schedules = new ArrayList<Schedule_Master>();
-		schedules = new userDaoImpl().getAllHistoricalSchedules();
+		schedules = new userDaoImpl().getAllSchedules();
 		int code;
 		String scode= "000001";
+		for(Schedule_Master s : schedules)
+			System.out.println(s.getId());
 		if(schedules.size()>0){
 			code = 1000000+schedules.get(schedules.size()-1).getId()+1;
 			scode = Integer.toString(code);
