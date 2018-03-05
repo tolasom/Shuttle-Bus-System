@@ -69,13 +69,12 @@
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
   <li class="booking_history1"><a href="booking_history">History</a></li>
-  <li class="custom_booking"><a href="request_booking">Request</a></li>
   <li><a href="#!">Profile</a></li>
   <li><a href="#!">Logout</a></li>
 </ul>
 <nav>
   <div class="nav-wrapper">
-    <a href="signup" class="brand-logo">Logo</a>
+    <a href="cusomer_home" class="brand-logo">Logo</a>
       <ul class="right">
       <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>

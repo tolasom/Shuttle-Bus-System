@@ -62,6 +62,27 @@
 			display:none;
 		}
 	}
+	.custom_link{
+		font-size: 9px;
+		color:#64B5F6;
+	}
+	#departure_date{
+		    margin: 0 0 2px 0!important;
+	}
+	.modal-content .input-field .dropdown-content{
+	    max-height: 180px!important;
+	}
+	#source_loc_id-error,#new_source_pickup_name-error,#new_dropoff_name-error,#select_dest_id-error{
+		color:red;
+	}
+	.select-wrapper span.caret {
+	    margin: 15px 0!important;
+    }
+    .modal-content .input-field .select-wrapper input.select-dropdown {
+	    margin: 0!important;
+	}
+    
+	
   </style>
 </head>
 <body>
@@ -69,15 +90,13 @@
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
   <li class="booking_history1"><a href="booking_history">History</a></li>
-  <li class="custom_booking"><a href="request_booking">Request</a></li>
   <li><a href="#!">Profile</a></li>
   <li><a href="#!">Logout</a></li>
 </ul>
 <nav>
   <div class="nav-wrapper">
-    <a href="signup" class="brand-logo">Logo</a>
+    <a href="cusomer_home" class="brand-logo">Logo</a>
       <ul class="right">
-      <li><a href="status_request"><span class="new badge">4</span></a></li>
       <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
@@ -102,6 +121,7 @@
 		    	<div class="input-field s6 flatpickr">
 					<input type="text" placeholder="Select Date" id="departure_date" data-input class="input flatpickr-input active"> 					
 				</div>
+				<a id="custom_location" class="custom_link right" href="request_booking">**can not find date or time</a>
 		  </div>
 		   <div class="input-field col s12">
 		       <input id="number_of_seat" type="text" class="validate">
@@ -121,6 +141,59 @@
     <div class="modal-content">
       <p id="confirm_text"></p>
     </div>
+</div>
+<!-- Ask for confirm booking request -->
+<div id="confirm_booking_request" class="modal">
+    <div class="modal-content container">
+	    <h5 class="center">Option Confirm</h5>
+		<p> Do you want to book ticket now?
+	</div>
+	<div class="modal-footer">
+		<span id="get_req_book_footer"></span>
+	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+	 </div>
+</div>
+<!-- Ask for cancel booking request -->
+<div id="cancel_booking_request" class="modal">
+    <div class="modal-content">
+      <p id="confirm_text"></p>
+    </div>
+</div>
+<!-- Custom Source Pick Up Location -->
+<div id="coustom_source_pl" class="modal">
+	<form id="form_coustom_source_pl">
+	    <div class="modal-content container">
+	      <h5 class="center">Add Your Custom Pick Up location</h5>
+	      <div class="input-field col s12 m6">
+			    <select id="source_loc_id" name="source_loc_id" required></select>
+		  </div>
+		  <div class="input-field col s6">
+	          <input placeholder="Where you want us to pick up?" id="new_source_pickup_name" name="new_source_pickup_name" type="text" class="validate">
+	        </div>
+	    </div>
+	    <div class="modal-footer">
+	    	<button type="submit" class="modal-action waves-effect waves-green btn-flat">Confirm</button>
+	      	<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+	    </div>
+	</form>
+</div>
+<!-- Custom Drop-Off Location -->
+<div id="coustom_dropoff" class="modal">
+	<form id="form_coustom_dropoff">
+	    <div class="modal-content container">
+	      <h5 class="center">Add Your Custom drop-off location</h5>
+	      <div class="input-field col s12 m6">
+			    <select id="select_dest_id" name="select_dest_id" required></select>
+		  </div>
+		  <div class="input-field col s6">
+	          <input placeholder="Where you want us to drop-off?" id="new_dropoff_name" name="new_dropoff_name" type="text" class="validate">
+	        </div>
+	    </div>
+	    <div class="modal-footer">
+	    	<button type="submit" class="modal-action waves-effect waves-green btn-flat">Confirm</button>
+	      	<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+	    </div>
+	</form>
 </div>
   </body>
 </html>

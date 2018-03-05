@@ -32,6 +32,7 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.New_Pickup_Location;
 
 public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
@@ -80,11 +81,12 @@ public class Custom_Imp implements Custom_Dao{
             locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
             System.out.println(locat.get(0).getId());
             for(int i=0;i<locat.size();i++){
-            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).list();
+            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2,true).list();
             	System.out.println(pick.size());
             	list.put(locat.get(i).getName().toString(), pick);
             }
             pickup.put("location", list);
+            System.out.println(pickup);
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }finally {
@@ -93,6 +95,83 @@ public class Custom_Imp implements Custom_Dao{
         }              
 
 		return pickup;
+	}
+	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();       
+		List<Location_Master> locat = new ArrayList<Location_Master>();
+		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
+		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
+		Pickup_Location_Master pick= new Pickup_Location_Master();
+		List<Pickup_Location_Master> all_pick=new ArrayList<Pickup_Location_Master>();
+		Boolean assign=true;
+		try {
+            trns1 = session.beginTransaction();
+            pick.setName(np.getPickup_name());
+            pick.setLocation_id(np.getLocation_id());
+            pick.setEnabled(true);
+            pick.setPermanent(false);
+            pick.setCreated_at(current_timestamp);
+            pick.setUpdated_at(current_timestamp);
+            session.save(pick);
+            
+            trns1.commit();
+            
+            locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
+            System.out.println(locat.get(0).getId());
+            for(int i=0;i<locat.size();i++){
+            	all_pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2, true).list();
+            	if(locat.get(i).getId()==np.getLocation_id()&&assign){
+            		System.out.println("Hello August!!!");
+            		all_pick.add(pick);
+            		assign=false;
+            	}
+            	list.put(locat.get(i).getName().toString(), all_pick);
+            }
+            pickup.put("location", list);
+            
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }finally {
+            session.flush();
+            session.close();
+        }              
+
+		return pickup;
+	}
+	
+	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+		Pickup_Location_Master drop= new Pickup_Location_Master();
+		Map<String, Object> map=new HashMap<String, Object>();
+		try {
+            trns1 = session.beginTransaction();
+            drop.setName(np.getDropoff_name());
+            drop.setLocation_id(np.getLocation_id());
+            drop.setEnabled(true);
+            drop.setPermanent(false);
+            drop.setCreated_at(current_timestamp);
+            drop.setUpdated_at(current_timestamp);
+            session.save(drop);
+            
+            Location_Master locat = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, np.getLocation_id()).list().get(0);
+            
+            trns1.commit();
+            
+            map.put("drop_off_name", drop.getName());
+            map.put("id", drop.getId());
+            map.put("location_id", drop.getLocation_id());  
+            map.put("location_name", locat.getName()); 
+         
+            
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }finally {
+            session.flush();
+            session.close();
+        }              
+		return map;
 	}
 	
 	public Map<String, Map<String, List<Pickup_Location_Master>>> check_location(int id){
@@ -112,7 +191,7 @@ public class Custom_Imp implements Custom_Dao{
             locat = session.createQuery("from Location_Master where id!=?").setParameter(0, pick_selected.get(0).getLocation_id()).list();
             System.out.println(locat.get(0).getId());
             for(int i=0;i<locat.size();i++){
-            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).list();
+            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2, true).list();
             	System.out.println(pick.size());
             	list.put(locat.get(i).getName().toString(), pick);
             }
@@ -445,6 +524,7 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setDestination_id(pick_destin.getId());
 		    				new_booker.setTo_id(pick_destin.getLocation_id());
 		    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+		    				System.out.println(cb.getDate());
 		    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
 		    				new_booker.setCreated_at(current_timestamp);
 		    				new_booker.setUpdated_at(current_timestamp);
@@ -672,21 +752,62 @@ public class Custom_Imp implements Custom_Dao{
             session.flush();
             session.close();
         }
-		return "a";
+		return "success";
 	}
-	
+	public String request_book_now(int id){
+		Custom_Dao cus=new Custom_Imp();
+		Transaction trns1 = null;
+		 Customer_Booking cb=new Customer_Booking();
+        Session session = HibernateUtil.getSessionFactory().openSession();       
+		try {
+            trns1 = session.beginTransaction();
+            Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?").setParameter(0, id).list().get(0);
+            System.out.println(br.getNumber_of_booking());
+           
+            cb.setDate(br.getDept_date().toString().subSequence(0, 10).toString());
+            cb.setTime(br.getDept_time().toString());
+            cb.setSource(br.getSource_id());
+            cb.setDestination(br.getDestination_id());
+            cb.setNumber_of_seat(br.getNumber_of_booking());
+            
+            String book=cus.customer_booking(cb);
+            if(book.equals("success")){
+            	Query query = session.createQuery("delete Booking_Request_Master where id = :id");
+            	query.setParameter("id", id);
+            	int result = query.executeUpdate();
+            	trns1.commit();
+            }
+            
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }finally {
+            session.flush();
+            session.close();
+        }              
+		//return cus.customer_booking(cb);
+		return null;
+	}
 	public static void main(String args[]) throws ParseException{
 
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();   
-        List<Booking_Request_Master> bh = new ArrayList<Booking_Request_Master>();	
+        List<Location_Master> locat = new ArrayList<Location_Master>();
+		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
+		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
+		Pickup_Location_Master pick= new Pickup_Location_Master();
 		try {
             trns1 = session.beginTransaction();
-            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? order by dept_date asc")
-            		.setParameter(0,1).setDate(1, new Date()).setTime(2, java.sql.Time.valueOf(TimeNow())).list();
-            System.out.println(bh.size());
+            pick.setName("IIPP");
+            pick.setLocation_id(1);
+            pick.setEnabled(true);
+            pick.setPermanent(false);
+            pick.setCreated_at(current_timestamp);
+            pick.setUpdated_at(current_timestamp);
+            session.save(pick);
             
-            System.out.println();
+            locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
+            System.out.println(locat.get(0).getId());
+            System.out.println(locat.size());
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }finally{

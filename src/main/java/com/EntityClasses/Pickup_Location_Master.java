@@ -8,6 +8,7 @@ public class Pickup_Location_Master {
 		private int location_id;
 		private Timestamp created_at;
 		private Timestamp updated_at;
+		private boolean permanent;
 		private boolean enabled;
 		
 		
@@ -48,6 +49,12 @@ public class Pickup_Location_Master {
 		}
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
+		}
+		public boolean isPermanent() {
+			return permanent;
+		}
+		public void setPermanent(boolean permanent) {
+			this.permanent = permanent;
 		}
 		
 		

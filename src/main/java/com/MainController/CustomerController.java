@@ -14,6 +14,7 @@ import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.EntityClasses.Pickup_Location_Master;
 import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.New_Pickup_Location;
 
 
 @Controller
@@ -50,13 +51,39 @@ public class CustomerController {
 		Map<String, Map<String, List<Pickup_Location_Master>>> map = customer.check_location(id);
 		return map;
 	}	
+	//========================= Create customer pickup location ================================
+	@RequestMapping(value="/create_custom_pickup_location", method=RequestMethod.GET)
+	public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np) {
+			System.out.println(np.getLocation_id());
+			Map<String, Map<String, List<Pickup_Location_Master>>> ret = customer.create_custom_pickup_location(np);
+			return ret;
+	}
+	//========================= Create customer drop-off location ================================
+	@RequestMapping(value="/create_custom_dropoff_location", method=RequestMethod.GET)
+	public @ResponseBody Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np) {
+			System.out.println(np.getLocation_id());
+			Map<String, Object> ret = customer.create_custom_dropoff_location(np);
+			return ret;
+	}
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
 	public @ResponseBody String customer_booking(Customer_Booking cb) {
-			System.out.println("AAAAAAAAAAAAA");
+			System.out.println(cb.getDate());
+			System.out.println(cb.getTime());
+			System.out.println(cb.getNumber_of_seat());
+			System.out.println(cb.getSource());
+			System.out.println(cb.getDestination());
 			String ret = customer.customer_booking(cb);
 			return ret;
 		}	
+	
+	//=========================Request Book Now================================
+	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
+	public @ResponseBody String request_book_now(int id) {
+		String ret = customer.request_book_now(id);
+		System.out.println(id);
+		return "A";
+	}
 	//=========================Customer Request Booking Information================================
 		@RequestMapping(value="/customer_request_booking", method=RequestMethod.GET)
 		public @ResponseBody String customer_request_booking(Customer_Booking cb) {
