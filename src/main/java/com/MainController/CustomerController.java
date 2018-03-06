@@ -82,7 +82,7 @@ public class CustomerController {
 	public @ResponseBody String request_book_now(int id) {
 		String ret = customer.request_book_now(id);
 		System.out.println(id);
-		return "A";
+		return ret;
 	}
 	//=========================Customer Request Booking Information================================
 		@RequestMapping(value="/customer_request_booking", method=RequestMethod.GET)

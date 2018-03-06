@@ -758,7 +758,8 @@ public class Custom_Imp implements Custom_Dao{
 		Custom_Dao cus=new Custom_Imp();
 		Transaction trns1 = null;
 		 Customer_Booking cb=new Customer_Booking();
-        Session session = HibernateUtil.getSessionFactory().openSession();       
+        Session session = HibernateUtil.getSessionFactory().openSession();     
+        String book;
 		try {
             trns1 = session.beginTransaction();
             Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?").setParameter(0, id).list().get(0);
@@ -770,7 +771,7 @@ public class Custom_Imp implements Custom_Dao{
             cb.setDestination(br.getDestination_id());
             cb.setNumber_of_seat(br.getNumber_of_booking());
             
-            String book=cus.customer_booking(cb);
+            book=cus.customer_booking(cb);
             if(book.equals("success")){
             	Query query = session.createQuery("delete Booking_Request_Master where id = :id");
             	query.setParameter("id", id);
@@ -780,12 +781,12 @@ public class Custom_Imp implements Custom_Dao{
             
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	return "error";
         }finally {
             session.flush();
             session.close();
         }              
-		//return cus.customer_booking(cb);
-		return null;
+		return book;
 	}
 	public static void main(String args[]) throws ParseException{
 

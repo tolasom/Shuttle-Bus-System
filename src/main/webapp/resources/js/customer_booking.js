@@ -1,10 +1,14 @@
 $(document).ready(function() {
 	 $('select').material_select();
-	 $("#source_loc_id[required],#select_dest_id[required]").css({display: "inline", height: 0, padding: 0, width: 0});
+	 $("#source_loc_id[required]," +
+	 		"#select_dest_id[required]," +
+	 		"#source_name[required]," +
+	 		"#destination_name[required]," +
+	 		"#departure_time[required]").css({display: "inline", height: 0, padding: 0, width: 0});
 	 
 	 $(".flatpickr input").flatpickr({
 			mode: "single",
-			minDate: "today",
+			minDate: new Date().fp_incr(1),
 			dateFormat: "Y-m-d"
 	});
 	 // ======== User Information ==========
@@ -55,7 +59,7 @@ $(document).ready(function() {
 				console.log("location data:");
 				console.log(data);
 				var location= Object.keys( data.location );
-				var l_form='';
+				var l_form='<option disabled selected></option>';
 				var custom_pl_form='<option disabled selected>Choose your main source</option>';
 				for(i=0;i<location.length;i++){
 					console.log(location[i])
@@ -99,7 +103,7 @@ $(document).ready(function() {
 						custom_dropoff+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
 						for(j=0;j<data.location[location[i]].length;j++){
 							console.log(data.location[location[i]][j]);
-							l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'</option>';
+							l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'   ('+location[i]+')</option>';
 						}
 						l_form+='</optgroup>';		
 					}
@@ -170,57 +174,57 @@ $(document).ready(function() {
 	});
 	 
 		// ======== Book Now ==========
-	 $('#book_now').click(function(){
-		 var source = $("#source_name").val();
-		 var destination = $("#destination_name").val();
-		 var time=$("#departure_time").val();
-		 var date=$("#departure_date").val();
-		 var number_of_seat=$("#number_of_seat").val();
-		 var submit={
-				 "source":source,
-				 "destination":destination,
-				 "time":time,
-				 "date":date,
-				 "number_of_seat":number_of_seat,
-		 }
-		 $.ajax({
-				async: false,
-				cache: false,
-				type: "GET",
-				url: "customer_booking",
-				data :	{
-						 source:source,
-						 destination:destination,
-						 time:time,
-						 date:date,
-						 number_of_seat:number_of_seat
-				},
-				timeout: 100000,
-				success: function(data) {
-					console.log(data);
-					var text;
-					if(data=="success"){
-						text="You are sucessful booking";
-					}else if(data=="no_bus_available"){
-						text="No Bus is available";
-					}else if(data=="over_bus_available"){
-						text="Over bus available";
-					}else{
-						text="Process is error!!";
-					}
-					document.getElementById('confirm_text').innerHTML=text;
-					$('#confirm').modal();
-				    $('#confirm').modal('open');
-				},
-				error: function(e) {
-					console.log("ERROR: ", e);
-				},
-				done: function(e) {
-					console.log("DONE");
-				}
-		});
-	 }) 
-	 
+//	 $('#book_now').click(function(){
+//		 var source = $("#source_name").val();
+//		 var destination = $("#destination_name").val();
+//		 var time=$("#departure_time").val();
+//		 var date=$("#departure_date").val();
+//		 var number_of_seat=$("#number_of_seat").val();
+//		 var submit={
+//				 "source":source,
+//				 "destination":destination,
+//				 "time":time,
+//				 "date":date,
+//				 "number_of_seat":number_of_seat,
+//		 }
+//		 $.ajax({
+//				async: false,
+//				cache: false,
+//				type: "GET",
+//				url: "customer_booking",
+//				data :	{
+//						 source:source,
+//						 destination:destination,
+//						 time:time,
+//						 date:date,
+//						 number_of_seat:number_of_seat
+//				},
+//				timeout: 100000,
+//				success: function(data) {
+//					console.log(data);
+//					var text;
+//					if(data=="success"){
+//						text="You are sucessful booking";
+//					}else if(data=="no_bus_available"){
+//						text="No Bus is available";
+//					}else if(data=="over_bus_available"){
+//						text="Over bus available";
+//					}else{
+//						text="Process is error!!";
+//					}
+//					document.getElementById('confirm_text').innerHTML=text;
+//					$('#confirm').modal();
+//				    $('#confirm').modal('open');
+//				},
+//				error: function(e) {
+//					console.log("ERROR: ", e);
+//				},
+//				done: function(e) {
+//					console.log("DONE");
+//				}
+//		});
+//	 }) 
+//	 
 	// ======== History Booking ==========
 	 $.ajax({
 			async: false,
@@ -296,8 +300,7 @@ $(document).ready(function() {
 								 +'<td>'+data[i].number_of_ticket+'</td>'
 								 //+'<td>'+data[i].status+'</td>';
 						if(data[i].status=='Confirm'){
-							bh_form+='<td><a href="#!" id="confirm_booking_request_model" value="'+data[i].id +'">Book Now</a>  or'
-									+'  <a href="#!" id="concel_booking_request_model" value="'+data[i].id +'">Cancel</a></td>'
+							bh_form+='<td><a href="#!" class="btn" id="confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></td>'
 						}else{
 							bh_form+='<td>'+data[i].status+'</td>';
 						}
@@ -317,25 +320,51 @@ $(document).ready(function() {
 	 
 	 // confirm booking request
 	$('#confirm_booking_request_model').click(function(){
-		var id =$('#confirm_booking_request_model').val();
+		var id=$(this).attr("request") ;
+		//var id =$('#confirm_booking_request_model').val();
 		console.log(id);
 		$('#confirm_booking_request').modal();
 		$('#confirm_booking_request').modal('open');
-		var form='<button id="confirm_booking_request_btn" value="'+id
+		var form='<button id="confirm_booking_request_btn" request="'+id
 					+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
 		document.getElementById('get_req_book_footer').innerHTML=form;
 		$('#confirm_booking_request_btn').click(function(){
-			var id =$('#confirm_booking_request_btn').val();
-			console.log(id);
+			var id1=$(this).attr("request") ;
+			console.log(id1);
 			$.ajax({
 				async: false,
 				cache: false,
 				type: "GET",
 				url: "request_book_now",
-				data :{'id':id},
+				data :{'id':id1},
 				timeout: 100000,
 				success: function(data) {
+					
+					var form=''
+					if(data=="success"){
+						form+="You booking have done.";
+						$("#confirm" ).addClass( "confirm_success" );
+					}else if(data=="no_bus_available"){
+						form+="Sorry, No Bus Available on that day.";
+						$("#confirm" ).addClass( "confirm_error" );
+					}else if(data=="over_bus_available"){
+						form+="Sorry, No more ticket available.";
+						$("#confirm" ).addClass( "confirm_error" );
+					}else{
+						form+="Sorry, there is internal problem";
+						$("#confirm" ).addClass( "confirm_error" );
+					}
 					console.log(data);
+					
+					document.getElementById('confirm_text').innerHTML=form;
+					$('#confirm_booking_request').modal('close');
+					$('#confirm').modal({
+					    complete: function() {
+								window.location.replace("cusomer_home");
+						} 
+					});
+					$('#confirm').modal('open');
+					
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -347,24 +376,6 @@ $(document).ready(function() {
 
 		})
 	})
-	// cancel booking request
-	$('#concel_booking_request_model').click(function(){
-		var id =$('#concel_booking_request_model').val();
-		console.log(id);
-		$('#cancel_booking_request').modal();
-		$('#cancel_booking_request').modal('open');
-		var form='<button id="cancel_booking_request_btn" value="'+id
-					+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
-		document.getElementById('get_req_book_footer').innerHTML=form;
-		$('#confirm_booking_request_btn').click(function(){
-			var id =this.val();
-			console.log(id);
-			console.log("KKKIII")
-		})
-	})
-	
-	
-	 
 	 
 	// ======== Convert Time 13:00:00 to 01:00 PM ==========
 	 function convert_time(time_input){
@@ -389,11 +400,142 @@ $(document).ready(function() {
 		  return date_input.slice(0, 10);;
 	}
 	 
+	 function compared_tomorrow(dept_date_time){
+		 var today = moment().format('Y-M-D, HH:mm:ss');
+		 var date = new Date(today)
+		 date.setDate(date.getDate() + 1);
+		  var tomorrow = date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+		 console.log(tomorrow)
+		 console.log(dept_date_time)
+		 if(new Date(dept_date_time) > new Date(tomorrow)){
+   			 return true;
+   		 }else{
+   			 return false;
+   		 }
+	 }
+	 
+	 
 //============================== Validation Part ===========================//
 	 $.validator.addMethod("valueNotEquals", function(value, element, arg){
 		 console.log(value);
 		  return arg !== value;
 		 }, "Value must not equal arg.");
+
+	//============================== Custom Source Pickup Location ===========================
+	 $("#form_book_now").validate({
+	        rules: {
+	        	source_name: {
+	        		 valueNotEquals: "none" 
+	            },
+	            destination_name: {
+	        		 valueNotEquals: "none" 
+	            },
+	            departure_time: {
+	        		 valueNotEquals: "none" 
+	            },
+	            departure_date: {
+	        		 valueNotEquals: "none" 
+	            },
+	            number_of_seat: {
+			         required: true,
+			         min: 1,
+			         max: 10
+			     }
+
+	        },
+	        messages: {
+	          
+	            source_name: {
+	            	required: "Source location is required"
+	            },
+	            destination_name: {
+	            	required: "Destination location is required" 
+	            },
+	            departure_time: {
+	            	required: "Departure time is required" 
+	            },
+	            departure_date: {
+	            	required: "Departure date is required" 
+	            },
+	            number_of_seat: {
+			         required: "Number of ticket is required",
+			         min: "Manimun 1 tickets each time booking",
+			         max: "Maximun 10 tickets each time booking"
+			     }
+
+	        },
+	        errorElement: 'div',
+	        errorPlacement: function(error, element) {
+	            var placement = $(element).data('error');
+	            if (placement) {
+	                $(placement).append(error)
+	                console.log("correct");
+	            } else {
+	                error.insertAfter(element);
+	                console.log("incorrect");
+	            }
+	        },
+	        submitHandler: function() {
+		   		 var source = $("#source_name").val();
+		   		 var destination = $("#destination_name").val();
+		   		 var time=$("#departure_time").val();
+		   		 var date=$("#departure_date").val();
+		   		 var number_of_seat=$("#number_of_seat").val();
+		   		 var dept_dt=date+" "+time;
+		   		 console.log("dept_dt: "+dept_dt);
+		   		 if(compared_tomorrow(dept_dt)){
+			   		 $.ajax({
+			   				async: false,
+			   				cache: false,
+			   				type: "GET",
+			   				url: "customer_booking",
+			   				data :	{
+			   						 source:source,
+			   						 destination:destination,
+			   						 time:time,
+			   						 date:date,
+			   						 number_of_seat:number_of_seat
+			   				},
+			   				timeout: 100000,
+			   				success: function(data) {
+			   					console.log(data);
+			   					var text;
+			   					if(data=="success"){
+			   						text="You are sucessful booking";
+			   					}else if(data=="no_bus_available"){
+			   						text="No Bus is available";
+			   					}else if(data=="over_bus_available"){
+			   						text="Over bus available";
+			   					}else{
+			   						text="Process is error!!";
+			   					}
+			   					document.getElementById('confirm_text').innerHTML=text;
+			   					$('#confirm').modal();
+			   				    $('#confirm').modal('open');
+			   				},
+			   				error: function(e) {
+			   					console.log("ERROR: ", e);
+			   				},
+			   				done: function(e) {
+			   					console.log("DONE");
+			   				}
+			   		});
+		   		 }else{
+		   			var form="Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
+					$("#confirm" ).addClass( "confirm_error" );
+						
+						document.getElementById('confirm_text').innerHTML=form;
+						$('#confirm').modal({
+						    complete: function() {
+									window.location.replace("cusomer_home");
+							} 
+						});
+						$('#confirm').modal('open');
+		   		 }
+
+	            return false;
+	        }
+	    });
 	 
 	//============================== Custom Source Pickup Location ===========================
 	 $("#form_coustom_source_pl").validate({
