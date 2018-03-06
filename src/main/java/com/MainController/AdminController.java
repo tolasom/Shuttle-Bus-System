@@ -40,6 +40,11 @@ public class AdminController {
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
 	}
+//=========================Returns report view================================
+	@RequestMapping(value="/report", method=RequestMethod.GET)
+	public ModelAndView viewReport() {
+		return new ModelAndView("report");
+	}
 //=========================Returns admin booking view================================
 	@RequestMapping(value="/admin_booking", method=RequestMethod.GET)
 	public ModelAndView admin_booking() {
@@ -102,7 +107,7 @@ public class AdminController {
 	public ModelAndView booking_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
 		Booking_Master booking = usersService1.getBookingById(id);
 		B_Model model = new B_Model();
-		model.setBooking_date(booking.getBooking_date().toString());
+		model.setCode(booking.getCode());
 		model.setCreated_at(booking.getCreated_at().toString());
 		model.setDept_date(booking.getDept_date().toString());
 		model.setDept_time(booking.getDept_time());
@@ -116,9 +121,12 @@ public class AdminController {
 		model.setSource_id(booking.getSource_id());
 		model.setUpdated_at(booking.getUpdated_at().toString());
 		model.setUser_id(booking.getUser_id());
+		model.setFrom_id(booking.getFrom_id());
+		model.setTo_id(booking.getTo_id());
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("booking", model);
-		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -138,7 +146,8 @@ public class AdminController {
 		Booking_Request_Master request = usersService1.getBookingRequestById(id);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("request", request);
-		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("locations", usersService1.getAllLocations());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -157,7 +166,8 @@ public class AdminController {
 		Booking_Request_Master request = usersService1.getBookingRequestById(id);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("request", request);
-		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -175,7 +185,8 @@ public class AdminController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("schedule", usersService1.getScheduleById(id));
 		map.put("schedules", usersService1.getAllSchedules());
-		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
 		map.put("drivers", usersService1.getAllUsers());
@@ -562,6 +573,13 @@ public class AdminController {
 		}
 		return map;
 		}
+//====================Booking report============================
+	@RequestMapping(value="/bookingReport", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> bookingReport(){
+		Map<String,Object> map = new HashMap<String,Object>();
+			map.put("locations",usersService1.getAllLocations());
+		return map;
+		}
 //====================To save location============================
 	@RequestMapping(value="/createPickUpLocation", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSavePickUpLocation(Pickup_Location_Master p_location) throws Exception{
@@ -606,7 +624,7 @@ public class AdminController {
 	
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Master> list = usersService1.getAllCurrentBookings();
-			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			List<Location_Master> list2 =  usersService1.getAllLocations();
 			 		
 			if (list != null)
 			{
@@ -630,7 +648,7 @@ public class AdminController {
 	
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Request_Master> list = usersService1.getAllCurrentBookingRequests();
-			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			List<Location_Master> list2 =  usersService1.getAllLocations();
 			 		
 			if (list != null)
 			{
@@ -653,7 +671,7 @@ public class AdminController {
 	
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Request_Master> list = usersService1.getAllHistoricalBookingRequests();
-			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			List<Location_Master> list2 =  usersService1.getAllLocations();
 			 		
 			if (list != null)
 			{
@@ -679,7 +697,7 @@ public class AdminController {
 			if (list != null)
 			{
 			map.put("schedules", list);
-			map.put("locations", usersService1.getAllPickUpLocations());
+			map.put("locations", usersService1.getAllLocations());
 			map.put("buses", usersService1.getAllBuses());
 			}
 			else
@@ -698,7 +716,7 @@ public class AdminController {
 			if (list != null)
 			{
 			map.put("schedules", list);
-			map.put("locations", usersService1.getAllPickUpLocations());
+			map.put("locations", usersService1.getAllLocations());
 			map.put("buses", usersService1.getAllBuses());
 			}
 			else
@@ -717,7 +735,7 @@ public class AdminController {
 	
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Master> list = usersService1.getAllHistoricalBookings();
-			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
+			List<Location_Master> list2 =  usersService1.getAllLocations();
 			 		
 			if (list != null)
 				{
@@ -824,6 +842,24 @@ public class AdminController {
 			scode = Integer.toString(code);
 			scode = scode.substring(1);
 			return "S"+scode;
+		}
+		else 
+			return "S"+scode;
+		
+	}
+	
+	public static String getBookingSequence(){
+		List<Booking_Master> bookings = new ArrayList<Booking_Master>();
+		bookings = new userDaoImpl().getAllBookings();
+		int code;
+		String scode= "000001";
+		for(Booking_Master s : bookings)
+			System.out.println(s.getId());
+		if(bookings.size()>0){
+			code = 1000000+bookings.get(bookings.size()-1).getId()+1;
+			scode = Integer.toString(code);
+			scode = scode.substring(1);
+			return "B"+scode;
 		}
 		else 
 			return "S"+scode;

@@ -11,26 +11,26 @@
                                     <form class="form-inline" id="myForm">
                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Code</label>
-                                            <input type="text" class="form-control" style="width: inherit;" id="scode" placeholder=Code> </div>
+                                            <input type="text" class="form-control" style="width: inherit;" id="scode" placeholder=Code required> </div>
                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Driver</label>
-                                            <select class="form-control" style="width: inherit;" id="sdriver"><option></option></select> </div>
+                                            <select class="form-control" style="width: inherit;" id="sdriver" required><option></option></select> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Bus</label>
-                                            <select class="form-control" style="width: inherit;" id="sbus"><option></option></select> </div>                                     
+                                            <select class="form-control" style="width: inherit;" id="sbus" required><option></option></select> </div>                                     
 										<div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">From</label>
-                                            <select class="form-control" style="width: inherit;" id="sfrom"><option></option></select></div>
+                                            <select class="form-control" style="width: inherit;" id="sfrom" required><option></option></select></div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">To</label>
-                                            <select class="form-control" style="width: inherit;" id="sto"><option></option></select> </div>     
+                                            <select class="form-control" style="width: inherit;" id="sto" required><option></option></select> </div>     
                                                                                
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Departure Date</label>
-                                            <input type="text" name="date" class="form-control" style="width: inherit;" id="sdeptdate" placeholder="Departure Date"> </div>
+                                            <input type="text" name="date" class="form-control" style="width: inherit;" id="sdeptdate" placeholder="Departure Date" required> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Departure Time</label>
-                                            <input type="text" name="time" class="form-control" style="width: inherit;" id="sdepttime" placeholder="Departure Time"> </div>
+                                            <input type="text" name="time" class="form-control" style="width: inherit;" id="sdepttime" placeholder="Departure Time" required> </div>
                                         <div class="form-group col-md-12" style="margin-bottom:2%;">
 											<button type="submit" class="btn btn-info">Create</button>
 											</div>
@@ -80,11 +80,13 @@
 <script type="text/javascript">
 var locations;
 var pickup_location;
+var s_code;
 load = function () {
 	var data = ${data};
 	console.log(data)
 	var buses  = data.buses;
 	var code = data.code;
+	s_code = code;
 	var location = data.locations;
 	pickup_locations = location;
 	locations = data.main_locations;
@@ -92,7 +94,7 @@ load = function () {
 	for(i=0; i<buses.length; i++)					
 		$("#sbus").append("<option value="+buses[i].id+">"+buses[i].model+" </option>");
 	for(i=0; i<pickup_locations.length; i++)					
-		$("#sfrom").append("<option value="+pickup_locations[i].id+">"+pickup_locations[i].name+" </option>");
+		$("#sfrom").append("<option value="+pickup_locations[i].id+">"+pickup_locations[i].name+"  ("+searchPLocation(pickup_locations[i].location_id,locations)+")"+" </option>");
 	for(i=0; i<drivers.length; i++)					
 		$("#sdriver").append("<option value="+drivers[i].id+">"+drivers[i].name+" </option>");
 	$("#scode").val(code);
@@ -122,15 +124,49 @@ $(document).ready(function(){
 			
 			}
 		else
-			$("#sto").append("<option value="+pickup_locations[i].id+">"+pickup_locations[i].name+" </option>");
+			$("#sto").append("<option value="+pickup_locations[i].id+">"+pickup_locations[i].name+"  ("+searchPLocation(pickup_locations[i].location_id,locations)+")"+" </option>");
 			
 		}	
 	    
 	});
 	
 	$("#myForm").on('submit',function(e){
-		console.log("Fired")
 		e.preventDefault();
+		if($("#scode").val()!=s_code)
+		{
+		swal("Action Disallowed!", "You cannot change Code!", "error")
+		return
+		}
+		if($("#sdriver").val()==""||$("#sdriver").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Driver field blank!", "error")
+		return
+		}
+		if($("#sbus").val()==""||$("#sbus").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Bus field blank!", "error")
+		return
+		}
+		if($("#sfrom").val()==""||$("#sfrom").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave From field blank!", "error")
+		return
+		}
+		if($("#sto").val()==""||$("#sto").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave To field blank!", "error")
+		return
+		}
+		if($("#sdeptdate").val()==""||$("#sdeptdate").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Departure Date field blank!", "error")
+		return
+		}
+		if($("#sdepttime").val()==""||$("#sdepttime").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Departure Time blank!", "error")
+		return
+		}
 		$.ajax({
     		url:'createSchedule',
     		type:'GET',
@@ -187,6 +223,13 @@ formatDate =function (date) {
 };
 
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+function searchPLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

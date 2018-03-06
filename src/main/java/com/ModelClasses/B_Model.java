@@ -9,6 +9,8 @@ public class B_Model	{
 	private int user_id;
 	private int destination_id;
 	private int source_id;
+	private int from_id;
+	private int to_id;
 	private int schedule_id;
 	private String booking_date;
 	private String dept_date;
@@ -16,9 +18,19 @@ public class B_Model	{
 	private int number_booking;
 	private String notification;
 	private String qr;
+	private String code;
 	private String description;
 	private String created_at;
 	private String updated_at;
+	
+	
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	public int getId() {
 		return id;
 	}
@@ -102,6 +114,18 @@ public class B_Model	{
 	}
 	public void setUpdated_at(String updated_at) {
 		this.updated_at = updated_at;
+	}
+	public int getFrom_id() {
+		return from_id;
+	}
+	public void setFrom_id(int from_id) {
+		this.from_id = from_id;
+	}
+	public int getTo_id() {
+		return to_id;
+	}
+	public void setTo_id(int to_id) {
+		this.to_id = to_id;
 	}
 	
 	

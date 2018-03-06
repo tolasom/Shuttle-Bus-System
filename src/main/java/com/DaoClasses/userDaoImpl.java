@@ -926,6 +926,7 @@ public class userDaoImpl implements usersDao{
             Schedule_Master s  = (Schedule_Master) query.uniqueResult();
     		Timestamp updated_at = new Timestamp(System.currentTimeMillis());
     		s.setBus_id(schedule.getBus_id());
+    		s.setRemaining_seat(new userDaoImpl().getBusById(schedule.getBus_id()).getNumber_of_seat()-new userDaoImpl().getScheduleById(schedule.getId()).getNumber_booking());
     		s.setUpdated_at(updated_at);
     		s.setDriver_id(schedule.getDriver_id());
             session.update(s);  
@@ -1069,6 +1070,27 @@ public class userDaoImpl implements usersDao{
 		
 	}
 	
+	
+	
+	public List <Booking_Master> getAllBookings(){
+		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Maste";
+            Query query = session.createQuery(queryString);
+            bookings=(List<Booking_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return bookings;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return bookings;
+		
+	}
 	
 	
 	
@@ -1305,10 +1327,13 @@ public class userDaoImpl implements usersDao{
 		Transaction trns19 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         int a[]=arr;    
+        int old_id;
         try {
             trns19 =  session.beginTransaction();
-            Schedule_Master master = new userDaoImpl().getScheduleById(new userDaoImpl().getBookingById(a[0]).getSchedule_id());
+            old_id = new userDaoImpl().getBookingById(a[0]).getSchedule_id();
+            Schedule_Master master = new userDaoImpl().getScheduleById(old_id);
             master.setNumber_booking(master.getNumber_booking()-new userDaoImpl().getScheduleById(id).getNumber_booking());
+            master.setRemaining_seat(master.getRemaining_seat()+new userDaoImpl().getScheduleById(id).getNumber_booking());
             session.update(master);
             for (int i = 0; i < a.length; i++)
    		   {
