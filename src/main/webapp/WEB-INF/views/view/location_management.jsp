@@ -16,7 +16,7 @@
           <form id="myForm">
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
-                                            <input type="text" class="form-control boxed" id="name"> </div>
+                                            <input type="text" class="form-control boxed" id="name" maxlength="30"  required> </div>
                                        
                                          <button type="submit" id="bsubmit" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
@@ -46,7 +46,7 @@
           <form id="myForm2">
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
-                                            <input type="text" class="form-control boxed" id="pname"> </div>
+                                            <input type="text" class="form-control boxed" id="pname" maxlength="30"  required> </div>
                                        
                                          <button type="submit" id="bpsubmit" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
@@ -75,7 +75,7 @@
           <form id="updateLocationForm">
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
-                                            <input type="text" class="form-control boxed" id="updateLName"> </div>
+                                            <input type="text" class="form-control boxed" id="updateLName" maxlength="30"  required> </div>
                                        
                                          <button type="submit" id="updateLocationBtn" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
@@ -106,7 +106,7 @@
           <form id="updatePLocationForm">
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
-                                            <input type="text" class="form-control boxed" id="updatePLName"> </div>
+                                            <input type="text" class="form-control boxed" id="updatePLName" maxlength="30"  required> </div>
                                        
                                          <button type="submit" id="updatePLocationBtn" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
@@ -267,10 +267,27 @@ $(document).ready(function(){
 	$("#myForm").on('submit',function(e){
 		console.log("Fired")
 		e.preventDefault();
+		var b_name = $("#name").val().trim();
+		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+		if(b_name=='')
+		{
+		swal("Oops!", "The input cannot be empty", "error")
+		return
+		}
+		if(format.test(b_name))
+		{
+		swal("Oops!", "You cannot input special characters", "error")  
+		return
+		}
+		if(getlength(b_name)>30)
+		{
+			swal("Oops!", "Name Cannot Be More Than 30 Digits", "error")  
+			return
+		}
 		$.ajax({
     		url:'createLocation',
     		type:'GET',
-    		data:{	name:$("#name").val()
+    		data:{	name:b_name
     			},
     		traditional: true,			
     		success: function(response){
@@ -306,10 +323,27 @@ $(document).ready(function(){
 	$("#myForm2").on('submit',function(e){
 		console.log("Fired2")
 		e.preventDefault();
+		var p_name = $("#pname").val().trim();
+		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+		if(p_name=='')
+		{
+		swal("Oops!", "The input cannot be empty", "error")
+		return
+		}
+		if(format.test(p_name))
+		{
+		swal("Oops!", "You cannot input special characters", "error")  
+		return
+		}
+		if(getlength(p_name)>30)
+		{
+			swal("Oops!", "Name Cannot Be More Than 30 Digits", "error")  
+			return
+		}
 		$.ajax({
     		url:'createPickUpLocation',
     		type:'GET',
-    		data:{	name:$("#pname").val(),
+    		data:{	name:p_name,
     				location_id:l
     			},
     		traditional: true,			
@@ -333,11 +367,28 @@ $(document).ready(function(){
 	
 	$("#updateLocationForm").on('submit',function(e){
 		e.preventDefault();
+		var p_name = $("#updateLName").val().trim();
+		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+		if(p_name=='')
+		{
+		swal("Oops!", "The input cannot be empty", "error")
+		return
+		}
+		if(format.test(p_name))
+		{
+		swal("Oops!", "You cannot input special characters", "error")  
+		return
+		}
+		if(getlength(p_name)>30)
+		{
+			swal("Oops!", "Name Cannot Be More Than 30 Digits", "error")  
+			return
+		}
 		$.ajax({
     		url:'updateLocation',
     		type:'GET',
     		data:{	id:llid,
-    				name:$("#updateLName").val()
+    				name:p_name
     			},
     		traditional: true,			
     		success: function(response){
@@ -373,11 +424,28 @@ $(document).ready(function(){
 
 	$("#updatePLocationForm").on('submit',function(e){
 		e.preventDefault();
+		var p_name = $("#updatePLName").val().trim();
+		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+		if(p_name=='')
+		{
+		swal("Oops!", "The input cannot be empty", "error")
+		return
+		}
+		if(format.test(p_name))
+		{
+		swal("Oops!", "You cannot input special characters", "error")  
+		return
+		}
+		if(getlength(p_name)>30)
+		{
+			swal("Oops!", "Name Cannot Be More Than 30 Digits", "error")  
+			return
+		}
 		$.ajax({
     		url:'updatePickUpLocation',
     		type:'GET',
     		data:{	id:plid,
-    				name:$("#updatePLName").val()
+    				name:p_name
     			},
     		traditional: true,			
     		success: function(response){

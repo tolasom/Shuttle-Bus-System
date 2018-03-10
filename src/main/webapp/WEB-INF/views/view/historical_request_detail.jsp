@@ -47,7 +47,10 @@
                                             <input type="text" class="form-control" id="requestedOn" style="width: inherit;"> 
                                         </div>
                                         
-                                        
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Booking Time Allowance</label>
+                                            <input type="text" name="time" class="form-control" id="timeAllowance" style="width: inherit;"> 
+                                        </div>
                                         
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Number of bookings</label>
@@ -82,14 +85,16 @@ load = function () {
 	var data = ${data};
 	var request = data.request;
 	var locations = data.locations;
+	var p_locations = data.p_locations;
 	id= parseInt(request.id);
 	console.log(data)
 	$("#uname").val(request.user_id);
-	$("#from").val(searchLocation(request.source_id,locations));
-	$("#to").val(searchLocation(request.destination_id,locations));
+	$("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
+	$("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
 	$("#dept_date").val(formatDate(request.dept_date));
 	$("#dept_time").val(request.dept_time);
 	$("#requestedOn").val(formatDate(request.created_at));
+	$("#timeAllowance").val(request.provided_time);
 	$("#no_booking").val(request.number_of_booking);
 	$("#description").val(request.description);
 	$("#status").val(request.status);
@@ -118,7 +123,18 @@ formatDate =function (date) {
     return [month, day, year].join('-');
 };
 
+
+
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+
+function searchPLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

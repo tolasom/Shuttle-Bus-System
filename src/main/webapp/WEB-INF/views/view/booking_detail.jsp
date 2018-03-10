@@ -10,6 +10,10 @@
                                     </div>
                                     <br><br>
                                     <form class="form-group" id ="myForm">
+                                    	<div class="form-group">
+                                            <label for="exampleInputEmail3">Booking Code</label>
+                                            <input type="text" class="form-control" id="code">
+                                        </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Name</label>
                                             <input type="text" class="form-control" id="uname">
@@ -60,12 +64,15 @@
 var id;
 load = function () {
 	var data = ${data};
+	console.log(data)
 	var booking = data.booking;
 	var locations = data.locations;
+	var p_locations = data.p_locations;
 	console.log(data)
+	$("#code").val(booking.code);
 	$("#uname").val(booking.user_id);
-	$("#from").val(searchLocation(booking.source_id,locations));
-	$("#to").val(searchLocation(booking.destination_id,locations));
+	$("#from").val(searchPLocation(booking.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
+	$("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
 	$("#dept_date").val(formatDate(booking.dept_date));
 	$("#dept_time").val(booking.dept_time);
 	$("#bookedOn").val(formatDate(booking.booking_date));
@@ -97,6 +104,17 @@ formatDate =function (date) {
 
     return [month, day, year].join('-');
 };
+
+
+function searchPLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+
 
 function searchLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {

@@ -7,9 +7,10 @@
                                 <div class="card card-block sameheight-item">
                                     <div class="title-block">
                                         <h3 class="title"> Booking Request Information </h3> <br>
-                                        <button type="button" class="btn btn-oval btn-success pull-left" onClick="goTO()" style="color:white;margin: 0 1% 0 2%;">Confirm</button>
+                                        <div id="actionn">
+                                       	<button type="button" class="btn btn-oval btn-success pull-left" onClick="goTO()" style="color:white;margin: 0 1% 0 2%;">Confirm</button>
                                         <button type="button" class="btn btn-oval btn-danger pull-left" onClick="reject()" style="color:white;">Reject</button>
-                                        
+                      					</div>                  
                       
                                     </div>
                                     
@@ -63,9 +64,7 @@
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Status</label>
                                             <input type="text" class="form-control" id="status" style="width: inherit;"> 
                                         </div>
-                                        <div class="form-group col-md-10" style="margin-bottom:2%;">
-                                            <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)"><i class="fa fa-angle-left"></i><b>Back</b></button>
-                                        </div>
+                                        
                                         <button type="submit" id ="bsubmit" style="display:none;">aa</button>
                                         
                                         
@@ -88,11 +87,14 @@ load = function () {
 	var data = ${data};
 	var request = data.request;
 	var locations = data.locations;
+	var p_locations = data.p_locations;
 	id= parseInt(request.id);
 	console.log(data)
+	if(request.status!="Pending")
+		$("#actionn").hide();
 	$("#uname").val(request.user_id);
-	$("#from").val(searchLocation(request.source_id,locations));
-	$("#to").val(searchLocation(request.destination_id,locations));
+	$("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
+	$("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
 	$("#dept_date").val(formatDate(request.dept_date));
 	$("#dept_time").val(request.dept_time);
 	$("#requestedOn").val(formatDate(request.created_at));
@@ -160,6 +162,14 @@ formatDate =function (date) {
 };
 
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchPLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

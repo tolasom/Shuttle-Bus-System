@@ -18,6 +18,10 @@
 		<put-attribute name="title" value="Bus Management" />
 		<put-attribute name="body" value="/WEB-INF/views/view/bus_management.jsp" />		
 	</definition>
+	<definition name="report" extends="base.definition">
+		<put-attribute name="title" value="Reports" />
+		<put-attribute name="body" value="/WEB-INF/views/view/report.jsp" />		
+	</definition>
 	<definition name="location_management" extends="base.definition">
 		<put-attribute name="title" value="Location Management" />
 		<put-attribute name="body" value="/WEB-INF/views/view/location_management.jsp" />		

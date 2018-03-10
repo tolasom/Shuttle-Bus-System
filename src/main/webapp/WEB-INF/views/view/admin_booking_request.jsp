@@ -2,7 +2,7 @@
 <article class="content cards-page">
                     <div class="title-block">
                         <h3 class="title"> Booking Requests </h3>
-                         <p class="title-description"> View all requests made by customers </p> 
+                         <p class="title-description"> All to-be-confirmed requests made by customers </p> 
                          <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking_request';">View all historical and confirmed requests <i class="fa fa-angle-right"></i></button>
                     </div>
                     <section class="section">
@@ -57,8 +57,8 @@ load = function(){
 			{
 			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
 								+'<td>'+requests[i].user_id+'</td>'
-								+'<td>'+searchLocation(requests[i].source_id,locations)+'</td>'
-								+'<td>'+searchLocation(requests[i].destination_id,locations)+'</td>'
+								+'<td>'+searchLocation(requests[i].from_id,locations)+'</td>'
+								+'<td>'+searchLocation(requests[i].to_id,locations)+'</td>'
 								+'<td>'+formatDate(requests[i].dept_date)+'</td>'
 								+'<td>'+requests[i].dept_time+'</td>'
 								+'<td>'+requests[i].number_of_booking+'</td>'

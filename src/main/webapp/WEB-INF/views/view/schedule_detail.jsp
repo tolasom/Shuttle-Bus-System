@@ -11,31 +11,31 @@
                                     <form class="form-inline" id="myForm">
                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Code</label>
-                                            <input type="text" class="form-control" id="scode" style="width: inherit;" placeholder=Code> </div>
+                                            <input type="text" class="form-control" id="scode" style="width: inherit;" placeholder=Code required disabled> </div>
                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Driver</label>
                                             <select class="form-control" style="width: inherit;" id="sdriver"><option></option></select> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Bus</label>
-                                            <select class="form-control" style="width: inherit;" id="sbus"><option></option></select> </div>                                     
+                                            <select class="form-control" style="width: inherit;" id="sbus" required><option></option></select> </div>                                     
 										<div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">From</label>
-                                            <select class="form-control" style="width: inherit;" id="sfrom"><option></option></select> </div>
+                                            <select class="form-control" style="width: inherit;" id="sfrom" required disabled><option></option></select> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">To</label>
-                                            <select class="form-control" style="width: inherit;" id="sto"><option></option></select> </div>     
+                                            <select class="form-control" style="width: inherit;" id="sto" required disabled><option></option></select> </div>     
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Number of booking</label>
-                                            <input type="text" class="form-control" id="snumberbooking" style="width: inherit;" placeholder="Number of booking"> </div>                                       
+                                            <input type="text" class="form-control" id="snumberbooking" style="width: inherit;" placeholder="Number of booking" required disabled> </div>                                       
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Departure Date</label>
-                                            <input type="text" class="form-control" id="sdeptdate" style="width: inherit;" placeholder="Departure Date"> </div>
+                                            <input type="text" class="form-control" id="sdeptdate" style="width: inherit;" placeholder="Departure Date" required disabled> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Departure Time</label>
-                                            <input type="text" class="form-control" id="sdepttime" style="width: inherit;" placeholder="Departure Time"> </div>
+                                            <input type="text" class="form-control" id="sdepttime" style="width: inherit;" placeholder="Departure Time" required disabled> </div>
                                         <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Remaining seats</label>
-                                            <input type="text" class="form-control" id="sremaining" style="width: inherit;" placeholder="Remaining seats"> </div>
+                                            <input type="text" class="form-control" id="sremaining" style="width: inherit;" placeholder="Remaining seats" required disabled> </div>
                                         <div class="form-group col-md-12" style="margin-bottom:2%;">
 											<button type="submit" class="btn btn-info">Update</button>									
 								     	</div>
@@ -137,13 +137,13 @@
           <form id="moveForm">
                                         <div class="form-group">
                                             <label class="control-label">Select a driver</label>
-                                            <select class="form-control boxed" id="mdriver">
+                                            <select class="form-control boxed" id="mdriver" required>
                                             	<option></option>
                                             </select>
                                        </div>
                                        <div class="form-group">
                                             <label class="control-label">Select a bus</label>
-                                            <select class="form-control boxed" id="mbus">
+                                            <select class="form-control boxed" id="mbus" required>
                                             	<option></option>
                                             </select>
                                        </div>
@@ -166,6 +166,7 @@ var all_driver;
 var all_schedule;
 var idd;
 var all_booking;
+var s_code;
 load = function () {
 	var bootstrapjs = $("<script>");
   	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
@@ -178,9 +179,11 @@ load = function () {
 	all_driver = data.drivers;
 	all_booking = bookings;
 	var locations = data.locations;
+	var p_locations = data.p_locations;
 	var schedule  = data.schedule;
 	idd = schedule.id;
 	current_schedule = schedule;
+	s_code = schedule.code;
 	$("#scode").val(schedule.code);
 	$("#sremaining").val(schedule.remaining_seat);
 	$("#sfrom").val(searchLocation(schedule.source_id,locations));
@@ -188,8 +191,8 @@ load = function () {
 	$("#snumberbooking").val(schedule.number_booking);
 	$("#sdeptdate").val(formatDate(schedule.dept_date));
 	$("#sdepttime").val(schedule.dept_time);
-	$("#sfrom").append("<option value="+current_schedule.source_id+">"+searchLocation(current_schedule.source_id,locations)+" </option>");
-	$("#sto").append("<option value="+current_schedule.destination_id+">"+searchLocation(current_schedule.destination_id,locations)+" </option>");
+	$("#sfrom").append("<option value="+current_schedule.source_id+">"+searchPLocation(current_schedule.source_id,p_locations)+", "+searchLocation(current_schedule.from_id,locations)+" </option>");
+	$("#sto").append("<option value="+current_schedule.destination_id+">"+searchPLocation(current_schedule.destination_id,p_locations)+", "+searchLocation(current_schedule.to_id,locations)+" </option>");
 	for(i=0; i<all_bus.length; i++)					
 		$("#sbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" </option>");
 	for(i=0; i<all_driver.length; i++)					
@@ -233,8 +236,17 @@ $(document).ready(function(){
 	
 	$("#myForm").on('submit',function(e){
 		e.preventDefault();
-		var driverId = parseInt($("#sdriver").val());
-		var busId = parseInt($("#sbus").val());
+		var driverId = 0;
+		if($("#sdriver").val()==""||$("#sdriver").val()==null)
+			{}
+		else
+			driverId = parseInt($("#sdriver").val());
+		
+		var busId = 0;
+		if($("#sbus").val()==""||$("#sbus").val()==null)
+			{}
+		else
+			busId = parseInt($("#sbus").val());
 		var seats = $("#snumberbooking").val();
 		if($("#scode").val()!=current_schedule.code)
 		{
@@ -256,9 +268,44 @@ $(document).ready(function(){
 		swal("Action Disallowed!", "You cannot update number of bookings.", "error")
 		return
 		}
-		if($("#snumberbooking").val()!=current_schedule.number_booking)
+		if($("#sremaining").val()!=current_schedule.remaining_seat)
 		{
-		swal("Action Disallowed!", "You cannot update number of bookings.", "error")
+		swal("Action Disallowed!", "You cannot update number of remaining seat.", "error")
+		return
+		}
+		if($("#sdeptdate").val()!=formatDate(current_schedule.dept_date))
+		{
+		swal("Action Disallowed!", "You cannot update departure date.", "error")
+		return
+		}
+		if($("#sdepttime").val()!=current_schedule.dept_time)
+		{
+		swal("Action Disallowed!", "You cannot update departure time.", "error")
+		return
+		}
+		if($("#sbus").val()==""||$("#sbus").val()==null||$("#sbus").val()==0)
+		{
+		swal("Action Disallowed!", "You cannot leave Bus field blank!", "error")
+		return
+		}
+		if($("#sfrom").val()==""||$("#sfrom").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave From field blank!", "error")
+		return
+		}
+		if($("#sto").val()==""||$("#sto").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave To field blank!", "error")
+		return
+		}
+		if($("#sdeptdate").val()==""||$("#sdeptdate").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Departure Date field blank!", "error")
+		return
+		}
+		if($("#sdepttime").val()==""||$("#sdepttime").val()==null)
+		{
+		swal("Action Disallowed!", "You cannot leave Departure Time blank!", "error")
 		return
 		}
 		if(validateNumberOfSeat(busId,all_bus,seats))
@@ -319,9 +366,18 @@ $(document).ready(function(){
 			{
 				total_seat+=searchBooking(b_ids[i],all_booking);
 			}
-		var bId = parseInt($("#mbus").val());
-		var dId = parseInt($("#mdriver").val());
-		if(validateNumberOfSeat(bId,all_bus,total_seat))
+		console.log(total_seat)
+		if($("#mbus").val()==""||$("#mbus").val()==null)
+			{
+			swal("Action Disallowed!", "You cannot leave Bus field blank.", "error")
+			return
+			}
+		if($("#mdriver").val()==""||$("#mdriver").val()==null)
+			{
+			swal("Action Disallowed!", "You cannot leave Driver field blank.", "error")
+			return
+			}
+		if(validateNumberOfSeat(parseInt($("#mbus").val()),all_bus,total_seat))
 		{
 			$.ajax({
 	    		url:'moveNew',
@@ -329,8 +385,8 @@ $(document).ready(function(){
 	    		data:{	
 	    				id:idd,
 	    				b:b_ids,
-	    				driver_id:dId,
-	    				bus_id:bId	    				
+	    				driver_id:parseInt($("#mdriver").val()),
+	    				bus_id:parseInt($("#mbus").val())	    				
 	    			},
 	    		traditional: true,			
 	    		success: function(response){
@@ -468,6 +524,16 @@ function searchLocation(id, myArray){
         }
     }
 }
+
+
+function searchPLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
 
 
 function searchSchedule(id, myArray){

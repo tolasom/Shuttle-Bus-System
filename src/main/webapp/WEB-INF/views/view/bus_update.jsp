@@ -12,19 +12,19 @@
                                     <form class="form-group" id ="myForm">
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Model</label>
-                                            <input type="text" class="form-control" id="model">
+                                            <input type="text" class="form-control" id="model" maxlength="20" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Plate Number</label>
-                                            <input type="text" class="form-control" id="plate_number">
+                                            <input type="text" class="form-control" id="plate_number" maxlength="9" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Number of seat</label>
-                                            <input type="number" class="form-control" id="number_of_seat">
+                                            <input type="text" class="form-control" id="number_of_seat" maxlength="2" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Description</label>
-                                            <textarea rows="4" cols="100" class="form-inline boxed" id="description"></textarea>
+                                            <textarea rows="4" cols="100" class="form-inline boxed" id="description" maxlength="80"></textarea>
                                         </div>
                                         <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)">Cancel</button> 
                                         <button type="submit" class="btn btn-primary" on>Update</button>
@@ -53,16 +53,59 @@ load = function () {
 
 $(document).ready(function(){
 	$("#busMng").addClass("active");
+	$("#number_of_seat").keypress(function (e) {
+	     //if the letter is not digit then display error and don't type anything
+	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+	        //display error message
+	        $("#errmsg").html("Digits Only").show().fadeOut("slow");
+	               return false;
+	    }
+	   });
 	$("#myForm").on('submit',function(e){
 		e.preventDefault();
+		var b_plate = $("#plate_number").val().trim();
+		var b_model = $("#model").val().trim();
+		var b_number_of_seat = $("#number_of_seat").val().trim();
+		var b_des = $("#description").val().trim();
+		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+		if((b_plate=='') || (b_model=='')||(b_number_of_seat==''))
+		{
+		swal("Oops!", "The input cannot be empty", "error")
+		return
+		}
+		if((format.test(b_plate)) || (format.test(b_model))|| (format.test(b_number_of_seat)))
+		{
+		swal("Oops!", "You cannot input special characters in any one of the fields", "error")  
+		return
+		}
+		if(getlength(b_plate)>9)
+		{
+			swal("Oops!", "Plate Number Cannot Be More Than 9 Digits", "error")  
+			return
+		}
+		if(getlength(b_model)>20)
+		{
+			swal("Oops!", "Model Cannot Be More Than 20 Characters", "error")  
+			return
+		}
+		if(getlength(b_number_of_seat)>2)
+		{
+			swal("Oops!", "Number of seats Cannot Be More Than 2 Digits", "error")  
+			return
+		}
+		if(getlength(b_des)>80)
+		{
+			swal("Oops!", "Description Cannot Be More Than 80 Digits", "error")  
+			return
+		}
 		$.ajax({
     		url:'updateBus',
     		type:'GET',
     		data:{	id:id,
-    				plate_number:$("#plate_number").val(),
-    				model:$("#model").val(),
-    				number_of_seat:$("#number_of_seat").val(),
-    				description:$("#description").val()
+    				plate_number:b_plate,
+    				model:b_model,
+    				number_of_seat:parseInt(b_number_of_seat),
+    				description:b_des
     			},
     		traditional: true,			
     		success: function(response){

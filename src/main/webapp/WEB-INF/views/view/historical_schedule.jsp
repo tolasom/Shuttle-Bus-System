@@ -1,15 +1,41 @@
 <body onload="load()">
-<article class="content cards-page">
+<article class="content cards-page">                   
+                    
                     <div class="title-block">
-                        <h3 class="title"> Schedules </h3>
-                         <p class="title-description"> View all schedules </p> 
-                         <div class="btn-group pull-right">
-	                        <button type="button" class="btn btn-info" id="btnList" style="color:white;border-right:2px solid white;"><i class="fa fa-list-ul"></i></button>
-	                        <button type="button" class="btn btn-info" onclick="window.location.href='schedule'" style="color:white;"><i class="fa fa-calendar"></i></button>
+                         <div class="clearfix" style="margin-bottom: 10px;">
+                         	<div class="pull-left">
+                         		<h3 class="title"> Schedules </h3>
+                         		<p class="title-description"> All Historical schedules </p> 
+                         	</div>
+                         	<div class="btn-group pull-right">
+		                        <button type="button" class="btn btn-info" id="btnList" style="color:white;border-right:2px solid white;"><i class="fa fa-list-ul"></i></button>
+		                        <button type="button" class="btn btn-info" onclick="window.location.href='schedule'" style="color:white;"><i class="fa fa-calendar"></i></button>
+		                    </div>
+                         	
                          </div>
-                         <button type="button" class="btn btn-pill-left btn-info pull-left" style="color:white;" onclick="location.href='current_schedule';"><i class="fa fa-angle-left"></i> View all current schedules </button>
-                   		<input type="text" class="form-control" placeholder="Search for any schedule by code..." id="txtbox"/>
-                    </div>
+                         
+                       
+	                         <div style="margin-bottom: 10px;">
+		                         <button type="button" class="btn btn-pill-left btn-info pull-left" style="color:white;" onclick="location.href='current_schedule';"><i class="fa fa-angle-left"></i> View all current schedules </button>
+	                      	 </div>
+	                  </div>
+	                      	 <div style="margin-bottom: 10px;">
+	                      	     <input type="text" class="form-control" placeholder="Search for any schedule by code..." id="txtbox"/>
+	                    	 </div>
+	                    	 
+	                    	 
+	                    	 
+	                    	 
+	                    	 
+	                    	 
+	                    	 
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     <section class="section">
                         <div class="row">
                             <div class="col-md-12">
@@ -66,8 +92,8 @@ load = function(){
 								+'<td>'+schedules[i].code+'</td>'
 								+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
 								+'<td>'+schedules[i].driver_id+'</td>'
-								+'<td>'+searchLocation(schedules[i].source_id,locations)+'</td>'
-								+'<td>'+searchLocation(schedules[i].destination_id,locations)+'</td>'
+								+'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
+								+'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
 								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
 								+'<td>'+schedules[i].dept_time+'</td>'
 								+'<td>'+schedules[i].number_booking+'</td>'

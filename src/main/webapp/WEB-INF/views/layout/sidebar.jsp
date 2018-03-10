@@ -30,6 +30,10 @@
                                     <a href="location_management">
                                         <i class="fa fa-institution"></i> Manage Locations </a>
                                 </li>
+                                <li id="reportMng" >
+                                    <a href="report">
+                                        <i class="fa fa-bar-chart"></i> Reports </a>
+                                </li>
                                 <li >
                                     <a href="customer_home">
                                         <i class="fa fa-bar-chart"></i> Reports </a>
