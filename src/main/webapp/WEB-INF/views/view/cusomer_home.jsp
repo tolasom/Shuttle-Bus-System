@@ -52,17 +52,6 @@
 	    background-color: #ee6e73;
 	}
 	
-	@media screen and (min-width: 401px) {
-		.booking_history1{
-				display:none;
-			}
-		
-	}
-	@media screen and (max-width: 400px) {
-		.booking_history{
-			display:none;
-		}
-	}
 	.custom_link{
 		font-size: 9px;
 		color:#64B5F6;
@@ -95,8 +84,17 @@
     	overflow-y: visible;
     	 width: 50%;
     }
-	#confirm_booking_request{
+	#confirm_booking_request,#cancel_confirm_model{
 		width: 300px;
+	}
+	.content_confirm{
+		padding: 0px!important;
+	}
+	.confirm_booking_request_model{
+		width:100%
+	}
+	.cancel_booking_modal{
+		width:100%;
 	}
 	
   </style>
@@ -105,13 +103,13 @@
   
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-  <li class="booking_history1"><a href="booking_history">History</a></li>
+  <li class="booking_history1 hide-on-med-and-up"><a href="booking_history">History</a></li>
   <li><a href="#!">Profile</a></li>
   <li><a href="#!">Logout</a></li>
 </ul>
 <nav>
   <div class="nav-wrapper">
-    <a href="cusomer_home" class="brand-logo">Logo</a>
+    <a href="customer_home" class="brand-logo">Logo</a>
       <ul class="right">
       <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
@@ -150,30 +148,35 @@
 </form>
 
 <div id="get_booking_request" class="row container"></div> 
-<div id="booking_history" class="row container booking_history"></div> 
-
-<!-- Confirm Modal -->
-<div id="confirm" class="modal">
-    <div class="modal-content center">
-      <p id="confirm_text"></p>
-    </div>
-</div>
+<div id="all_booking_history" class="row container hide-on-small-only"></div> 
 <!-- Ask for confirm booking request -->
-<div id="confirm_booking_request" class="modal">
+<div id="cancel_confirm_model" class="modal">
     <div class="modal-content container center">
-	    <h5 class="center">Option Confirm</h5>
-		<p> Do you want to book ticket now?
+	    <h5 class="center">Confirm</h5>
+		<p> Do you want to cancel your shuttle bus booking now?
 	</div>
 	<div class="modal-footer">
 		<span id="get_req_book_footer"></span>
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
 </div>
-<!-- Ask for cancel booking request -->
-<div id="cancel_booking_request" class="modal">
-    <div class="modal-content">
+
+<!-- Confirm Modal -->
+<div id="confirm" class="modal">
+    <div class="modal-content center content_confirm">
       <p id="confirm_text"></p>
     </div>
+</div>
+<!-- Ask for confirm booking request -->
+<div id="confirm_booking_request" class="modal">
+    <div class="modal-content container center">
+	    <h5 class="center">Confirm</h5>
+		<p> Do you want to book ticket now?
+	</div>
+	<div class="modal-footer">
+		<span id="get_req_book_footer"></span>
+	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+	 </div>
 </div>
 <!-- Custom Source Pick Up Location -->
 <div id="coustom_source_pl" class="modal">

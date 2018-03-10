@@ -76,7 +76,6 @@ public class CustomerController {
 			String ret = customer.customer_booking(cb);
 			return ret;
 		}	
-	
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
 	public @ResponseBody String request_book_now(int id) {
@@ -101,15 +100,22 @@ public class CustomerController {
 			return new ModelAndView("request_booking");
 		}
 	//=========================Customer Booking History Information================================
-		@RequestMapping(value="/customer_booking_history", method=RequestMethod.GET)
-			public @ResponseBody List<Map<String,Object>> customer_booking_history() {
-			List<Map<String, Object>> map = customer.cusomer_booking_history();
-			return map;
-		}	
+	@RequestMapping(value="/customer_booking_history", method=RequestMethod.GET)
+		public @ResponseBody List<Map<String,Object>> customer_booking_history() {
+		List<Map<String, Object>> map = customer.cusomer_booking_history();
+		return map;
+	}	
 	//======================== Get Booking Request Information================================
 		@RequestMapping(value="/get_request_booking", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String,Object>> get_request_booking() {
 		List<Map<String, Object>> map = customer.get_request_booking();
 		return map;
 	}	
+		
+	//=========================To Cancel Booking Ticket================================
+	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.GET)
+		public @ResponseBody String cancel_booking_ticket(int id) {
+		String ret = customer.cancel_booking_ticket(id);
+		return ret;
+	}
 }

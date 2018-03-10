@@ -31,7 +31,7 @@
                                         <i class="fa fa-institution"></i> Manage Locations </a>
                                 </li>
                                 <li >
-                                    <a href="cusomer_home">
+                                    <a href="customer_home">
                                         <i class="fa fa-bar-chart"></i> Reports </a>
                                 </li>
                                 

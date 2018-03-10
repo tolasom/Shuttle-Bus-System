@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	 $('select').material_select();
+	 
 	 $("#source_loc_id[required]," +
 	 		"#select_dest_id[required]," +
 	 		"#source_name[required]," +
@@ -11,6 +12,7 @@ $(document).ready(function() {
 			minDate: new Date().fp_incr(1),
 			dateFormat: "Y-m-d"
 	});
+	 
 	 // ======== User Information ==========
 	 $.ajax({
 			async: false,
@@ -173,58 +175,6 @@ $(document).ready(function() {
 			}
 	});
 	 
-		// ======== Book Now ==========
-//	 $('#book_now').click(function(){
-//		 var source = $("#source_name").val();
-//		 var destination = $("#destination_name").val();
-//		 var time=$("#departure_time").val();
-//		 var date=$("#departure_date").val();
-//		 var number_of_seat=$("#number_of_seat").val();
-//		 var submit={
-//				 "source":source,
-//				 "destination":destination,
-//				 "time":time,
-//				 "date":date,
-//				 "number_of_seat":number_of_seat,
-//		 }
-//		 $.ajax({
-//				async: false,
-//				cache: false,
-//				type: "GET",
-//				url: "customer_booking",
-//				data :	{
-//						 source:source,
-//						 destination:destination,
-//						 time:time,
-//						 date:date,
-//						 number_of_seat:number_of_seat
-//				},
-//				timeout: 100000,
-//				success: function(data) {
-//					console.log(data);
-//					var text;
-//					if(data=="success"){
-//						text="You are sucessful booking";
-//					}else if(data=="no_bus_available"){
-//						text="No Bus is available";
-//					}else if(data=="over_bus_available"){
-//						text="Over bus available";
-//					}else{
-//						text="Process is error!!";
-//					}
-//					document.getElementById('confirm_text').innerHTML=text;
-//					$('#confirm').modal();
-//				    $('#confirm').modal('open');
-//				},
-//				error: function(e) {
-//					console.log("ERROR: ", e);
-//				},
-//				done: function(e) {
-//					console.log("DONE");
-//				}
-//		});
-//	 }) 
-//	 
 	// ======== History Booking ==========
 	 $.ajax({
 			async: false,
@@ -240,28 +190,79 @@ $(document).ready(function() {
 				var bh_form='';
 				if(data.length>0){
 					bh_form+='<h5 class="center">Booking History</h5>'
-							+'<table class="bordered centered"><thead><tr>'
-							+'<th>No.</th>'
-							+'<th>Departure Date&Time</th>'
-							+'<th>Source and Destination</th>'
-							+'<th>Number of Ticket</th>'
-							+'<th>Bus Model</th>'
-							+'<th>Driver\'s Name</th>'
-							+'</tr></thead><tbody>';
+						+'<ul class="collapsible" data-collapsible="accordion">';
 					for(i=0;i<data.length;i++){
-//						var get_time=convert_time(data[i].dept_time);
-//						option+='<option value="'+data[i].dept_time+'">'+get_time+'</option>';
-						bh_form+='<tr><td>'+(i+1)+'</td>'
-								 +'<td>'+convert_date(data[i].dept_date)+' '+convert_time(data[i].dept_time)+'</td>'
-								 +'<td>'+data[i].scource+' to '+data[i].destination +'</td>'
-								 +'<td>'+data[i].number_of_ticket+'</td>'
-								 +'<td>'+data[i].bus_model+'</td>'
-								 +'<td>'+data[i].diver_name+'</td></tr>';
-   
+						var dept_date_time=convert_date(data[i].dept_date)+' '+data[i].dept_time;
+						console.log("dept_date_time: "+dept_date_time)
+						if(data[i].notification=="Cancelled"){
+							bh_form+='<li><div class="collapsible-header"><i class="material-icons">cancel</i>&nbsp&nbsp'
+								+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
+								+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
+						        +'<div class="collapsible-body">'
+						        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
+						        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
+						        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
+						        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
+						        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
+						        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
+						        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+						        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+						        if(data[i].diver_name=="no_driver"){
+								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
+								 }else{
+								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
+								    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+								 } 
+						}else{
+							if(compared_tomorrow(dept_date_time)){
+								bh_form+='<li><div class="collapsible-header"><i class="material-icons">schedule</i>&nbsp&nbsp'
+									+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
+									+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
+							        +'<div class="collapsible-body">'
+							        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
+							        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
+							        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
+							        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
+							        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
+							        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
+							        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
+							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+							        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+							        if(data[i].diver_name=="no_driver"){
+									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
+									 }else{
+									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
+									    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+									 } 
+								bh_form+='<tr><th colspan="2"><a href="#!" class="btn cancel_booking_modal" booking="'+data[i].id +'">Cancel</a></th></tr>'
+							}else{
+								bh_form+='<li><div class="collapsible-header"><i class="material-icons">history</i>&nbsp&nbsp'
+									+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
+									+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
+							        +'<div class="collapsible-body">'
+							        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
+							        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
+							        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
+							        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
+							        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
+							        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
+							        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
+							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+							        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+							        if(data[i].diver_name=="no_driver"){
+									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
+									 }else{
+									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
+									    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+									 }  
+							}
+						}   
+						bh_form+='</table></div></li>';
 					}
-					bh_form+='</tbody></table>';
 				}
-				document.getElementById('booking_history').innerHTML=bh_form;
+				bh_form+='</ul>'
+				document.getElementById('all_booking_history').innerHTML=bh_form;
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -270,6 +271,61 @@ $(document).ready(function() {
 				console.log("DONE");
 			}
 	});
+
+	//Cancel Booking
+	$('.cancel_booking_modal').click(function(){
+			var id=$(this).attr("booking") ;
+			console.log(id);
+			$('#cancel_confirm_model').modal();
+			$('#cancel_confirm_model').modal('open');
+			var form='<button id="confirm_cancel_booking_btn" booking="'+id
+						+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
+			document.getElementById('get_req_book_footer').innerHTML=form;
+			$('#confirm_cancel_booking_btn').click(function(){
+				var id1=$(this).attr("booking") ;
+				console.log(id1);
+				$.ajax({
+					async: false,
+					cache: false,
+					type: "GET",
+					url: "cancel_booking_ticket",
+					data :{'id':id1},
+					timeout: 100000,
+					success: function(data) {
+						
+						var form=''
+						if(data=="success"){
+							form+="You have cancelled";
+							$("#confirm" ).addClass( "confirm_success" );
+						}else if(data=="no_record"){
+							form+="Sorry, there is no schedule";
+							$("#confirm" ).addClass( "confirm_error" );
+						}else{
+							form+="Sorry, there is internal problem";
+							$("#confirm" ).addClass( "confirm_error" );
+						}
+						console.log(data);
+						
+						document.getElementById('confirm_text').innerHTML=form;
+						$('#cancel_confirm_model').modal('close');
+						$('#confirm').modal({
+						    complete: function() {
+									window.location.replace("customer_home");
+							} 
+						});
+						$('#confirm').modal('open');
+						
+					},
+					error: function(e) {
+						console.log("ERROR: ", e);
+					},
+					done: function(e) {
+						console.log("DONE");
+					}
+			});
+
+			})
+		})
 
 	// ======== Request Booking Form==========
 	 $.ajax({
@@ -282,33 +338,60 @@ $(document).ready(function() {
 			success: function(data) {
 				console.log("get_request_booking");
 				console.log(data);
-				
+				var mobile='<ul class="collapsible hide-on-med-and-up" data-collapsible="accordion">';
 				var bh_form='';
 				if(data.length>0){
 					bh_form+='<h5 class="center">Booking Request</h5>'
-							+'<table class="bordered centered"><thead><tr>'
+							+'<table class="bordered centered hide-on-small-only"><thead><tr>'
 							+'<th>No.</th>'
-							+'<th>Departure Date&Time</th>'
-							+'<th>Source and Destination</th>'
+							+'<th>Departure Date & Time</th>'
+							+'<th>Route</th>'
 							+'<th>Number of Ticket</th>'
 							+'<th>Status</th>'
+							+'<th>Option</th>'
 							+'</tr></thead><tbody>';
+					
 					for(i=0;i<data.length;i++){
 						bh_form+='<tr><td>'+(i+1)+'</td>'
-								 +'<td>'+convert_date(data[i].dept_date)+' '+convert_time(data[i].dept_time)+'</td>'
+								 +'<td>'+convert_date(data[i].dept_date)+'; '+convert_time(data[i].dept_time)+'</td>'
 								 +'<td>'+data[i].scource+' to '+data[i].destination +'</td>'
 								 +'<td>'+data[i].number_of_ticket+'</td>'
-								 //+'<td>'+data[i].status+'</td>';
-						if(data[i].status=='Confirm'){
-							bh_form+='<td><a href="#!" class="btn" id="confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></td>'
+								 +'<td>'+data[i].status+'</td>';
+						if(data[i].status=='Confirmed'){
+							bh_form+='<td><a href="#!" class="btn confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></td>'
+							
+							mobile+='<li><div class="collapsible-header"><i class="material-icons">book</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)+'</div>'
+								+'<div class="collapsible-body"><table>'
+						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+						        +'<tr><th>Departure Time</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+						        +'<tr><th colspan="2"><a href="#!" class="btn confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></th></tr>'
+								+'</table></div></li>'
+							
 						}else{
-							bh_form+='<td>'+data[i].status+'</td>';
+							bh_form+='<td></td>';
+							
+							mobile+='<li><div class="collapsible-header"><i class="material-icons">book</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)+'</div>'
+								+'<div class="collapsible-body"><table>'
+						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+						        +'<tr><th>Departure Time</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+								+'</table></div></li>'
 						}
    
 					}
 					bh_form+='</tbody></table>';
+					mobile+='</ul>';
+					bh_form+=mobile;
 				}
 				document.getElementById('get_booking_request').innerHTML=bh_form;
+				$('.collapsible').collapsible();
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -319,9 +402,8 @@ $(document).ready(function() {
 	});
 	 
 	 // confirm booking request
-	$('#confirm_booking_request_model').click(function(){
+	$('.confirm_booking_request_model').click(function(){
 		var id=$(this).attr("request") ;
-		//var id =$('#confirm_booking_request_model').val();
 		console.log(id);
 		$('#confirm_booking_request').modal();
 		$('#confirm_booking_request').modal('open');
@@ -360,7 +442,7 @@ $(document).ready(function() {
 					$('#confirm_booking_request').modal('close');
 					$('#confirm').modal({
 					    complete: function() {
-								window.location.replace("cusomer_home");
+								window.location.replace("customer_home");
 						} 
 					});
 					$('#confirm').modal('open');
@@ -527,7 +609,7 @@ $(document).ready(function() {
 						document.getElementById('confirm_text').innerHTML=form;
 						$('#confirm').modal({
 						    complete: function() {
-									window.location.replace("cusomer_home");
+									window.location.replace("customer_home");
 							} 
 						});
 						$('#confirm').modal('open');

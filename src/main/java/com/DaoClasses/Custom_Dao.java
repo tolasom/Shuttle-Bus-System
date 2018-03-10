@@ -27,4 +27,5 @@ public interface Custom_Dao {
 	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np);
 	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np);
 	public String request_book_now(int id);
+	public String cancel_booking_ticket(int id);
 }
