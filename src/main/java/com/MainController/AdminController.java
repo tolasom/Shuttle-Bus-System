@@ -862,7 +862,7 @@ public class AdminController {
 			return "B"+scode;
 		}
 		else 
-			return "S"+scode;
+			return "B"+scode;
 		
 	}
 }

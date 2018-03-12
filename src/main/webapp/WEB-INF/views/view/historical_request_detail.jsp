@@ -63,6 +63,12 @@
                                             <input type="text" class="form-control" id="status" style="width: inherit;"> 
                                         </div>
                                         
+                                        
+                                        <div class="form-group col-md-12" style="margin-bottom:2%;">
+                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Description</label>
+                                            <textarea rows="4" cols="100" class="form-inline boxed" id="description"  style="width: inherit;"></textarea> 
+                                        </div>
+                                        
                                         <button type="submit" id ="bsubmit" style="display:none;">aa</button>
                                         
                                         
@@ -102,6 +108,7 @@ load = function () {
 	
 	
 	$("input").prop('disabled', true);
+	$("#description").prop('disabled', true);
 }
 
 $(document).ready(function(){

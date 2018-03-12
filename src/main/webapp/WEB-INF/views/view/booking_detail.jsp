@@ -43,10 +43,7 @@
                                             <input type="text" class="form-control" id="no_booking">
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail3">Description</label>
-                                            <textarea rows="4" cols="100" class="form-inline boxed" id="description"></textarea>
-                                        </div>
+                                        
                                         <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)"><i class="fa fa-angle-left"></i><b>Back</b></button> 
                                
                                        
@@ -77,7 +74,6 @@ load = function () {
 	$("#dept_time").val(booking.dept_time);
 	$("#bookedOn").val(formatDate(booking.booking_date));
 	$("#no_booking").val(booking.number_booking);
-	$("#description").val(booking.description);
 	
 	
 	

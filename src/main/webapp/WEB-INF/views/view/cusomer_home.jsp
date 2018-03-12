@@ -137,7 +137,7 @@
 		    	<div class="input-field s6 flatpickr">
 					<input type="text" placeholder="Select Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
 				</div>
-				<a id="custom_location" class="custom_link right" href="request_booking">**can not find date or time</a>
+				<a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
 		  </div>
 		   <div class="input-field col s12">
 		       <input id="number_of_seat" name="number_of_seat" type="text" class="validate" required> 

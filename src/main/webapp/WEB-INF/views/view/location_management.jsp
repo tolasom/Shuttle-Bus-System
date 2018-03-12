@@ -583,6 +583,10 @@ swal({
       } 
     });
     }
+    
+function getlength(number) {
+    return number.toString().length;
+}
 
 
 
