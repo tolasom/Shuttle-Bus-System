@@ -31,5 +31,15 @@
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	
+	<filter>
+    <filter-name>myFilter</filter-name>
+    <filter-class>com.LoginFilter.LoginFilterClass</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>myFilter</filter-name>
+    <url-pattern>/googleUser</url-pattern>
+  </filter-mapping>
+	
 </web-app>
 

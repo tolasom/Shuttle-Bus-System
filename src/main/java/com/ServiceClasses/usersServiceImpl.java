@@ -17,6 +17,7 @@ import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.ModelClasses.Schedule_Model;
+import com.ModelClasses.UserModel;
 
 
 
@@ -138,6 +139,11 @@ public class usersServiceImpl implements usersService{
 	public int moveSimple(int arr[], int old_id, int new_id, int bookings){
 		return usersDao1.moveSimple(arr, old_id, new_id, bookings);
 	}
+	public boolean createUser(UserModel user) {
+
+		return usersDao1.createUser(user);
+	}
+	
 }
 
 

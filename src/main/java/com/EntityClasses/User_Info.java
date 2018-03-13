@@ -11,6 +11,7 @@ public class User_Info {
 		private String name;
 		private String email;
 		private String password;
+		private String googlePassword;
 		private Timestamp created_at;
 		private Timestamp updated_at;
 		private boolean enabled;
@@ -46,6 +47,13 @@ public class User_Info {
 		}
 		public void setPassword(String password) {
 			this.password = password;
+		}
+		
+		public String getGooglePassword() {
+			return googlePassword;
+		}
+		public void setGooglePassword(String googlePassword) {
+			this.googlePassword = googlePassword;
 		}
 		public Timestamp getCreated_at() {
 			return created_at;

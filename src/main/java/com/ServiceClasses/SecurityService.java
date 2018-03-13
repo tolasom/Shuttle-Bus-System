@@ -24,11 +24,10 @@ public class SecurityService implements UserDetailsService {
 
 	@Autowired
 	private usersDao userDao1;
-
+	
 	
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-	
 		com.EntityClasses.User_Info user_info = userDao1.findByUserName(username);        //Here we are getting the username
 		List<GrantedAuthority> authorities = buildUserAuthority(user_info.getUserRole()); //Here we are getting the userrole  that's why we haven't close the session.
 		return buildUserForAuthentication(user_info, authorities);		
@@ -50,7 +49,17 @@ public class SecurityService implements UserDetailsService {
 	
 	
 	private User buildUserForAuthentication(com.EntityClasses.User_Info user_info, List<GrantedAuthority> authorities) {
-			return new User(user_info.getName(), user_info.getPassword(), user_info.isEnabled(), true, true, true, authorities);
+			System.out.println(user_info.getUsername().split("--").length);
+			int length = user_info.getUsername().split("--").length;
+			String password ="";
+			if(length>1){
+				password= user_info.getGooglePassword();
+			}
+			else {
+				password = user_info.getPassword();
+			}
+			System.out.println(user_info.getEmail());
+		return new User(user_info.getEmail()+"--google", password, user_info.isEnabled(), true, true, true, authorities);
 	}
 
 	

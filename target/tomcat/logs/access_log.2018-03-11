@@ -1,0 +1,4 @@
+0:0:0:0:0:0:0:1 - - [11/Mar/2018:13:11:46 +0700] "POST /KITPointSystem/googleUser HTTP/1.1" 405 1047 http-bio-8080-exec-6 29
+0:0:0:0:0:0:0:1 - - [11/Mar/2018:13:11:48 +0700] "GET /KITPointSystem/login HTTP/1.1" 200 6608 http-bio-8080-exec-8 7
+0:0:0:0:0:0:0:1 - - [11/Mar/2018:13:11:48 +0700] "GET /KITPointSystem/resources/Bootstrap/css/style.css HTTP/1.1" 200 2864 http-bio-8080-exec-8 7
+0:0:0:0:0:0:0:1 - - [11/Mar/2018:13:11:48 +0700] "GET /KITPointSystem/resources/Bootstrap/css/sweetalert.css HTTP/1.1" 200 22989 http-bio-8080-exec-3 7

@@ -35,6 +35,7 @@ public class AdminController {
 	public ModelAndView signup() {
 		return new ModelAndView("cusomer_home");
 	}
+	
 //=========================Returns bus management view================================
 	@RequestMapping(value="/bus_management", method=RequestMethod.GET)
 	public ModelAndView viewBusMng() {

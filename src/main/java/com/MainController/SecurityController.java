@@ -13,17 +13,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.DaoClasses.userDaoImpl;
+import com.DaoClasses.usersDao;
+import com.EntityClasses.User_Info;
+import com.ModelClasses.UserModel;
 
 @Controller
 public class SecurityController {
 
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView defaultPage() {
+	public String defaultPage() {
 
 		ModelAndView model = new ModelAndView();
 		
@@ -40,36 +47,43 @@ public class SecurityController {
 		 System.out.print(userRole);
 		 if ("[ROLE_ADMIN]".contentEquals(userRole))
 		 {
-			 model.setViewName("bus_management");
+			 return "redirect:current_schedule";
 		 }
-		 if ("[ROLE_N_ADMIN]".contentEquals(userRole))
+		 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
 		 {
-			 model.setViewName("projectAdminView");
+			 return "redirect:customer_home";
 		 }
-		 if ("[ROLE_USER]".contentEquals(userRole))
-		 {
-			 model.setViewName("projectUserView");
-		 }
-		
-		return model;
+		return "redirect:login";
 
 	}
 
-/*	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
-	public ModelAndView adminPage() {
-
-		ModelAndView model = new ModelAndView();
-		model.setViewName("projectAdminView");
-
-		return model;
-
-	}	*/
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
-
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		 UserDetails userDetails=(UserDetails) auth.getPrincipal();
+		 
+		 Map<String ,Object> role= new HashMap<String ,Object>();
+		 role.put("role1",userDetails.getAuthorities());
+		 Object role2=(Object) role.get("role1");
+		 StringBuffer userRole=new StringBuffer(role2.toString());
+		 
 		ModelAndView model = new ModelAndView();
+		
+		 if ("[ROLE_ADMIN]".contentEquals(userRole))
+		 {
+			 model.setViewName("redirect:current_schedule");
+			 return model;
+		 }
+		 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
+		 {
+			 model.setViewName("redirect:customer_home");
+			 return model;
+		 }
+		 
 		if (error != null) {
 			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 		}
@@ -117,6 +131,21 @@ public class SecurityController {
 		}
 		model.setViewName("security/403");
 		return model;
+
+	}
+	@RequestMapping(value = "/check_signup", method = RequestMethod.POST)
+	@ResponseBody public Map<String,Object> checkSignup(@RequestBody UserModel user) {
+		usersDao userdao = new userDaoImpl();
+		boolean status = true;
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println("hello:"+user.getPassword());
+		User_Info user_info = userdao.findByUserName(user.getEmail());
+		
+		if(user_info==null){
+			status = userdao.createUser(user);
+		}
+		map.put("status", status);
+		return map;
 
 	}
 

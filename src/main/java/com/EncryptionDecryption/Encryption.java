@@ -3,6 +3,8 @@ package com.EncryptionDecryption;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import sun.misc.BASE64Encoder;
 
 public class Encryption {
@@ -15,5 +17,10 @@ public class Encryption {
 	        String dataEncrypted = new BASE64Encoder().encode(byteCipherText);
 	        return dataEncrypted;
 	    }
+	 public String PasswordEncode(String pass){
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String cyper_pass = passwordEncoder.encode(pass);
+			return cyper_pass;
+		}
 	    
 }
