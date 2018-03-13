@@ -21,6 +21,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
+                                                            <th>Code</th>
                                                             <th>Bus</th>
                                                             <th>Driver</th>
                                                             <th>From</th>
@@ -58,6 +59,7 @@ load = function(){
 		schedules[i].created_at = new Date(schedules[0].created_at);
 		schedules[i].updated_dt = new Date(schedules[0].updated_dt);
 	var schedule = '<tr class="hoverr" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
+						+'<td>'+schedules[i].code+'</td>'
 						+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
 						+'<td>'+schedules[i].driver_id+'</td>'
 						+'<td>'+searchLocation(schedules[i].source_id,locations)+'</td>'

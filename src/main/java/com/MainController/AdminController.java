@@ -31,7 +31,7 @@ public class AdminController {
 	@Autowired
 	usersService usersService1;
 //=========================To sign up an account for customer================================
-	@RequestMapping(value="/cusomer_home")
+	@RequestMapping(value="/customer_home")
 	public ModelAndView signup() {
 		return new ModelAndView("cusomer_home");
 	}
@@ -863,7 +863,7 @@ public class AdminController {
 			return "B"+scode;
 		}
 		else 
-			return "S"+scode;
+			return "B"+scode;
 		
 	}
 }

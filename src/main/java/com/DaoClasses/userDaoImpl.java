@@ -1011,6 +1011,7 @@ public class userDaoImpl implements usersDao{
     		Timestamp created_at = new Timestamp(System.currentTimeMillis());
         	p_location.setCreated_at(created_at);
         	p_location.setEnabled(true);
+        	p_location.setPermanent(true);
             session.save(p_location);  
             session.getTransaction().commit();
         } catch (RuntimeException e) {

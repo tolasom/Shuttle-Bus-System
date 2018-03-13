@@ -18,6 +18,7 @@
   
   
   <!--  Scripts  -->
+  <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -62,6 +63,21 @@
 			display:none;
 		}
 	}
+	.select-wrapper span.caret {
+	    margin: 15px 0!important;
+    }
+    .confirm_success{
+    	color:white;
+    	background-color: green;
+    }
+    .confirm_error{
+    	color:white;
+    	background-color: red;
+    }
+    #confirm{
+    	overflow-y: visible;
+    	 width: 50%;
+    }
   </style>
 </head>
 <body>
@@ -74,36 +90,36 @@
 </ul>
 <nav>
   <div class="nav-wrapper">
-    <a href="cusomer_home" class="brand-logo">Logo</a>
+    <a href="customer_home" class="brand-logo">Logo</a>
       <ul class="right">
       <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
 </nav>
-<form class="col s12">
+<form id="form_booking_request" class="col s12">
 	<div class="row container">
 		<h5 class="center">Bus Booking Request</h5>
 		<div class="input-field col s12 m6">
-		    <select id="source_name"></select>
+		    <select id="source_name" name="source_name" required></select>
 		    <label>Source</label>
 		  </div>
 		    <div class="input-field col s12 m6">
-		    <select id="destination_name">
+		    <select id="destination_name" name="destination_name" required>
 		    </select>
 		    <label>Destination</label>
 		  </div>
 		  <div class="input-field col s12 m6">
 		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Date" id="departure_time" data-input class="input flatpickr-input active"> 					
+					<input type="text" placeholder="Select Date" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
 				</div>
 		  </div>
 		    <div class="input-field col s12 m6">
 		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Date" id="departure_date" data-input class="input flatpickr-input active"> 					
+					<input type="text" placeholder="Select Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
 				</div>
 		  </div>
 		   <div class="input-field col s12">
-		       <input id="number_of_seat" type="text" class="validate">
+		       <input id="number_of_seat" type="text" class="validate" name="number_of_seat" >
 		       <label for="last_name">Number of Ticket</label>
 		  </div> 
 		  <div class="input-field col s12">
@@ -113,7 +129,7 @@
 	</form>
 	<!-- Confirm Modal -->
 	<div id="confirm" class="modal">
-	    <div class="modal-content">
+	    <div class="modal-content center">
 	      <p id="confirm_text"></p>
 	    </div>
 	</div>

@@ -35,8 +35,8 @@
                                         <i class="fa fa-bar-chart"></i> Reports </a>
                                 </li>
                                 <li >
-                                    <a href="cusomer_home">
-                                        <i class="fa fa-bar-chart"></i> Reports 2 </a>
+                                    <a href="customer_home">
+                                        <i class="fa fa-bar-chart"></i> Reports </a>
                                 </li>
                                 
                                
