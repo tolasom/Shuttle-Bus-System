@@ -7,35 +7,40 @@
 <title>Shuttle Bus Management</title>
   <!-- Login CSS -->
 <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
-      <link rel="stylesheet" href="${loginStyle}">
+      <link rel="stylesheet"  type="text/css" href="${loginStyle}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
 
 
+<!-- Bootstrap Core JavaScript -->
+    <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
+    <script src="${JSCORE}"></script>
+	
 
+    	
+<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+<link rel="stylesheet"  type="text/css" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<!-- Bootstrap Core CSS -->	
+  <spring:url value="/resources/Bootstrap/css/bootstrap.min.css" var="bootatrapCore"/>
+  <spring:url value="/resources/Bootstrap/css/sb-admin.css" var="CustomCSS"/>
+  <spring:url value="/resources/Bootstrap/font-awesome/css/font-awesome.min.css" var="customfontCSS"/>
+  
+ 		<link href="${bootatrapCore}" rel="stylesheet" type="text/css">
+   		<!-- Custom CSS -->
+    	<link href="${CustomCSS}" rel="stylesheet" type="text/css">
+    	<!-- Morris Charts CSS -->
+    	<link href="${morrisCSS }" rel="stylesheet" type="text/css">
+    	<!-- Custom Fonts -->
+   	    <link href="${customfontCSS }" rel="stylesheet" type="text/css">
+   	    
+   	    <!-- Sweet alert -->
 <!-- Sweet alert -->
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
    	    	 
-<script>
-$(document).ready(function(){
-	$("#myForm").on("submit",function(e){
-		e.preventDefault();
-		var text = $("#username").val().trim();
-		var formatemail = /[!#$%^&*()+\-=\[\]{};':"\\|,<>\/?]+/;
-		if(formatemail.test(text))
-			{
-			swal("Oops!", "You cannot input special characters", "error")  
-			return
-			}
-		$(this).unbind("submit").submit();
-	});
-});	
-</script>
-  </head>
-<body onload='document.loginForm.username.focus()'>
-<script src="${alertJS}"></script>
-<link rel="stylesheet" href="${alertStyle}">
+</head>
+
+<body>
 <h1 align="center">${message}</h1>
   <div class="login-page">
   <div class="form">
@@ -102,35 +107,57 @@ $(document).ready(function(){
   </div>	
 </body>
 <script type="text/javascript">
-$("#myForm2").on("submit",function(e){
-	e.preventDefault();
-	$("#toload").addClass("loader");
-		$.ajax({
-			url:'forgetPasswordSubmit',
-			type:'GET',
-			data:{email:$("#eemail").val()},
-			success: function(response){			     
-				if(response.status=="999")
-					{
-					$("#toload").removeClass("loader");
-					swal("We cannot find you!", "Please give a valid email!", "error")
-					$('#closing').trigger('click');
-					}
-				
-				else 
-					{
-					$("#toload").removeClass("loader");
-					swal("Done!","We found you! Please check your email to reset new password!", "success")
-					$('#closing').trigger('click');
-					//alert("<div class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>")
-					}
-					
-			},
-			error: function(err){
-				console.log(JSON.stringify(err));
+$(document).ready(function(){
+	$("#myForm").on("submit",function(e){
+		e.preventDefault();
+		var text = $("#username").val().trim();
+		var formatemail = /[!#$%^&*()+\-=\[\]{};':"\\|,<>\/?]+/;
+		if(formatemail.test(text))
+			{
+			swal("Oops!", "You cannot input special characters", "error")  
+			return
 			}
-		});			
-});
+		$(this).unbind("submit").submit();
+	});
+	
+	
+	
+	
+	$("#myForm2").on("submit",function(e){
+		e.preventDefault();
+		$("#toload").addClass("loader");
+			$.ajax({
+				url:'forgetPasswordSubmit',
+				type:'GET',
+				data:{email:$("#eemail").val()},
+				success: function(response){			     
+					if(response.status=="999")
+						{
+						$("#toload").removeClass("loader");
+						swal("We cannot find you!", "Please give a valid email!", "error")
+						$('#closing').trigger('click');
+						}
+					
+					else 
+						{
+						$("#toload").removeClass("loader");
+						swal("Done!","We found you! Please check your email to reset new password!", "success")
+						$('#closing').trigger('click');
+						//alert("<div class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>")
+						}
+						
+				},
+				error: function(err){
+					console.log(JSON.stringify(err));
+				}
+			});			
+	});
+	
+	
+	
+	
+});	
+
 
 
 goTO = function(){
@@ -138,5 +165,23 @@ $('#bsubmit').trigger('click');
 }
 </script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	
