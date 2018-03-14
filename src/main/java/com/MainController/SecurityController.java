@@ -74,6 +74,15 @@ public class SecurityController {
 		
 		 
 		ModelAndView model = new ModelAndView();
+		
+		
+		if (error != null) {
+			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(!(auth.getPrincipal()=="anonymousUser")){
 			 UserDetails userDetails=(UserDetails) auth.getPrincipal();
@@ -98,15 +107,7 @@ public class SecurityController {
 			 }
 		 }
 		
-		if (error != null) {
-			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
-		}
-
-		if (logout != null) {
-			model.addObject("msg", "You've been logged out successfully.");
-		}
 		model.setViewName("security/login");
-
 		return model;
 
 	}

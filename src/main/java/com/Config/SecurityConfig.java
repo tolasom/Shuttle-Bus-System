@@ -82,15 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		   .and().exceptionHandling().accessDeniedPage("/403");
 		
 		http.authorizeRequests()
-        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_CUSTOMER','ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
-		   .usernameParameter("username")
-		   .passwordParameter("password")
-		   .and().logout().logoutSuccessUrl("/login?logout")
-		   .and().csrf()
-		   .and().exceptionHandling().accessDeniedPage("/403");
-		
-		http.authorizeRequests()
-        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_CUSTOMER')").and().formLogin().loginPage("/login").failureUrl("/login?error")
 		   .usernameParameter("username")
 		   .passwordParameter("password")
 		   .and().logout().logoutSuccessUrl("/login?logout")

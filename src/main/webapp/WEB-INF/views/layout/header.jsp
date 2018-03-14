@@ -78,8 +78,8 @@
                                         <i class="fa fa-user icon"></i> Profile </a>
                                     
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="login.html">
-                                        <i class="fa fa-power-off icon"></i> Logout </a>
+                                    <a class="dropdown-item" onclick="formSubmit" >
+                                        <i class="fa fa-power-off icon" ></i> Logout </a>
                                 </div>
                             </li>
                         </ul>

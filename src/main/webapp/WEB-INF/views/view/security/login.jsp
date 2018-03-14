@@ -85,6 +85,8 @@ function googleSignin(data){
   function onSignIn(googleUser) {
 	 	var profile = googleUser.getBasicProfile();
         console.log(profile.getEmail())
+        var auth2 = gapi.auth2.getAuthInstance();
+     	auth2.disconnect();
         axios.post('/check_signup', {
             email: profile.getEmail(),
             password: profile.getId(),
