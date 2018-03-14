@@ -20,7 +20,8 @@ import com.ModelClasses.UserModel;
 
 
 public interface usersService {
-	public boolean createUser(UserModel user);
+	public boolean createUser(UserModel user,String type);
+	public boolean updateUser(User_Info user,UserModel user_model);
 	public int saveBus(Bus_Master bus);
 	public List<Bus_Master> getAllBuses();
 	public Bus_Master getBusById (int id);

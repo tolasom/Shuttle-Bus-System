@@ -139,9 +139,13 @@ public class usersServiceImpl implements usersService{
 	public int moveSimple(int arr[], int old_id, int new_id, int bookings){
 		return usersDao1.moveSimple(arr, old_id, new_id, bookings);
 	}
-	public boolean createUser(UserModel user) {
+	public boolean createUser(UserModel user,String type) {
 
-		return usersDao1.createUser(user);
+		return usersDao1.createUser(user,type);
+	}
+	public boolean updateUser(User_Info user, UserModel user_model) {
+		
+		return usersDao1.updateUser(user, user_model);
 	}
 	
 }

@@ -37,23 +37,32 @@ public class SecurityController {
 		model.setViewName("project");
 
 		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	
-		 UserDetails userDetails=(UserDetails) auth.getPrincipal();
+		 if(!(auth.getPrincipal()=="anonymousUser")){
+			 UserDetails userDetails=(UserDetails) auth.getPrincipal();
+			 Map<String ,Object> role= new HashMap<String ,Object>();
+			 role.put("role1",userDetails.getAuthorities());
+			 Object role2=(Object) role.get("role1");
+			 StringBuffer userRole=new StringBuffer(role2.toString());
+			 System.out.print(userRole);
+			 if ("[ROLE_ADMIN]".contentEquals(userRole))
+			 {
+				 return "redirect:current_schedule";
+			 }
+			 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
+			 {
+				 return "redirect:customer_home";
+			 }
+			 if ("[ROLE_STUDENT]".contentEquals(userRole))
+			 {
+				 return "redirect:customer_home";
+			 }
+		 }
+			 return "redirect:login";
 		 
-		 Map<String ,Object> role= new HashMap<String ,Object>();
-		 role.put("role1",userDetails.getAuthorities());
-		 Object role2=(Object) role.get("role1");
-		 StringBuffer userRole=new StringBuffer(role2.toString());
-		 System.out.print(userRole);
-		 if ("[ROLE_ADMIN]".contentEquals(userRole))
-		 {
-			 return "redirect:current_schedule";
-		 }
-		 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
-		 {
-			 return "redirect:customer_home";
-		 }
-		return "redirect:login";
+		 
+		 
+		
+		
 
 	}
 
@@ -62,28 +71,33 @@ public class SecurityController {
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		 UserDetails userDetails=(UserDetails) auth.getPrincipal();
-		 
-		 Map<String ,Object> role= new HashMap<String ,Object>();
-		 role.put("role1",userDetails.getAuthorities());
-		 Object role2=(Object) role.get("role1");
-		 StringBuffer userRole=new StringBuffer(role2.toString());
 		 
 		ModelAndView model = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(!(auth.getPrincipal()=="anonymousUser")){
+			 UserDetails userDetails=(UserDetails) auth.getPrincipal();
+			 Map<String ,Object> role= new HashMap<String ,Object>();
+			 role.put("role1",userDetails.getAuthorities());
+			 Object role2=(Object) role.get("role1");
+			 StringBuffer userRole=new StringBuffer(role2.toString());
+			 if ("[ROLE_ADMIN]".contentEquals(userRole))
+			 {
+				 model.setViewName("redirect:current_schedule");
+				 return model;
+			 }
+			 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
+			 {
+				 model.setViewName("redirect:customer_home");
+				 return model;
+			 }
+			 if ("[ROLE_STUDENT]".contentEquals(userRole))
+			 {
+				 model.setViewName("redirect:customer_home");
+				 return model;
+			 }
+		 }
 		
-		 if ("[ROLE_ADMIN]".contentEquals(userRole))
-		 {
-			 model.setViewName("redirect:current_schedule");
-			 return model;
-		 }
-		 if ("[ROLE_CUSTOMER]".contentEquals(userRole))
-		 {
-			 model.setViewName("redirect:customer_home");
-			 return model;
-		 }
-		 
 		if (error != null) {
 			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 		}
@@ -142,7 +156,23 @@ public class SecurityController {
 		User_Info user_info = userdao.findByUserName(user.getEmail());
 		
 		if(user_info==null){
-			status = userdao.createUser(user);
+			status = userdao.createUser(user,"google");
+		}
+		map.put("status", status);
+		return map;
+
+	}
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	@ResponseBody public Map<String,Object> signup(@RequestBody UserModel user) {
+		usersDao userdao = new userDaoImpl();
+		boolean status = true;
+		Map<String,Object> map = new HashMap<String,Object>();
+		User_Info user_info = userdao.findByUserName(user.getEmail());
+		
+		if(user_info==null){
+			status = userdao.createUser(user,"stystem");
+		}else{
+			status =userdao.updateUser(user_info, user);
 		}
 		map.put("status", status);
 		return map;

@@ -126,7 +126,7 @@ public class userDaoImpl implements usersDao{
 		return null;
 	}
 	
-	public boolean createUser(UserModel user) {
+	public boolean createUser(UserModel user,String type) {
     	Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
@@ -140,7 +140,13 @@ public class userDaoImpl implements usersDao{
             user_info.setEmail(user.getEmail());
             user_info.setName(user.getName());
             user_info.setUsername(user.getUsername());
-            user_info.setGooglePassword(hashedPassword);
+            if(type.equals("google")){
+            	user_info.setGooglePassword(hashedPassword);
+            }
+            else {
+            	user_info.setPassword(hashedPassword);
+            }
+            
             user_info.setEnabled(true);
             if(user.getEmail().contains("@kit.edu.kh")){
             	
@@ -154,6 +160,22 @@ public class userDaoImpl implements usersDao{
             user_role.setUser_info(user_info);
             session.save(user_info);
             session.save(user_role);
+          trns1.commit();
+          return true;
+        } catch (RuntimeException e) {
+        	
+        }                         
+		return false;
+	}
+	public boolean updateUser(User_Info user,UserModel user_model){
+    	Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+            trns1 = session.beginTransaction();
+            Encryption encode = new Encryption();
+            String hashedPassword = encode.PasswordEncode(user_model.getPassword());
+            user.setPassword(hashedPassword);
+            session.update(user);
           trns1.commit();
           return true;
         } catch (RuntimeException e) {

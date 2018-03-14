@@ -49,9 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		"/bus_update",
 		"/location_management",
 		"/report"
-   
     };
 	private static final String[] USER_MATCHERS = {
+
+		"/customer_home",
+		"/request_booking",
+		"/booking_history"
+		
+   
+    };
+	private static final String[] STUDENT_MATCHERS = {
 
 		"/customer_home",
 		"/request_booking",
@@ -66,7 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		
 		http.authorizeRequests()
-        .antMatchers(ADMIN_MATCHERS).access("hasRole('ROLE_N_ADMIN')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+        .antMatchers(ADMIN_MATCHERS).access("hasRole('ROLE_ADMIN')").and().formLogin()
+        .loginPage("/login").failureUrl("/login?error")
 		   .usernameParameter("username")
 		   .passwordParameter("password")
 		   .and().logout().logoutSuccessUrl("/login?logout")
@@ -74,15 +82,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		   .and().exceptionHandling().accessDeniedPage("/403");
 		
 		http.authorizeRequests()
-        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_CUSTOMER')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_CUSTOMER','ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
 		   .usernameParameter("username")
 		   .passwordParameter("password")
 		   .and().logout().logoutSuccessUrl("/login?logout")
 		   .and().csrf()
 		   .and().exceptionHandling().accessDeniedPage("/403");
-					
-	}
 		
+		http.authorizeRequests()
+        .antMatchers(USER_MATCHERS).access("hasRole('ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+		   .usernameParameter("username")
+		   .passwordParameter("password")
+		   .and().logout().logoutSuccessUrl("/login?logout")
+		   .and().csrf()
+		   .and().exceptionHandling().accessDeniedPage("/403");
+	}
+	
 	@Bean
 	public PasswordEncoder passwordEncoder(){
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
