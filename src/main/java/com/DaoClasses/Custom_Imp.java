@@ -416,7 +416,7 @@ public class Custom_Imp implements Custom_Dao{
 		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 		try {
             trns1 = session.beginTransaction();
-            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? order by dept_date asc")
+            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? and enabled='true' order by dept_date asc")
             		.setParameter(0, user.getAuthentic()).setDate(1, new Date()).setTime(2, java.sql.Time.valueOf(TimeNow())).list();
             System.out.println("KK");
             System.out.println(bh.size());
@@ -433,7 +433,11 @@ public class Custom_Imp implements Custom_Dao{
             	Map<String,Object> map=new HashMap<String,Object>();
             	map.put("id", String.valueOf(bh.get(i).getId()));
             	map.put("dept_date", bh.get(i).getDept_date().toString());
-            	map.put("dept_time", bh.get(i).getDept_time().toString());
+            	if(bh.get(i).getStatus().equals("Confirmed")){
+            		map.put("dept_time", bh.get(i).getProvided_time());
+            	}else{
+            		map.put("dept_time", bh.get(i).getDept_time().toString());
+            	}
             	map.put("pick_source_id", String.valueOf(pick_source.getId()));
             	map.put("pick_source_name", String.valueOf(pick_source.getName()));
             	map.put("drop_dest_id", String.valueOf(pick_source.getId()));
@@ -647,6 +651,9 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setFrom_id(pick_source.getLocation_id());
 		    				new_booker.setDestination_id(pick_destin.getId());
 		    				new_booker.setTo_id(pick_destin.getLocation_id());
+		    				System.out.println("POPO");
+		    				System.out.println(cb.getDate());
+		    				System.out.println(cb.getTime());
 		    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
 		    				System.out.println(cb.getDate());
 		    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
@@ -860,6 +867,7 @@ public class Custom_Imp implements Custom_Dao{
           	
             book.setCreated_at(current_timestamp);
             book.setUpdated_at(current_timestamp);
+            book.setProvided_time(cb.getTime()+":00");
             book.setSource_id(cb.getSource());
             book.setFrom_id(pick_source.getLocation_id());
             book.setDestination_id(cb.getDestination());
@@ -868,6 +876,7 @@ public class Custom_Imp implements Custom_Dao{
             book.setDept_time(java.sql.Time.valueOf(cb.getTime()+":00"));
             book.setNumber_of_booking(cb.getNumber_of_seat());
             book.setUser_id(user.getAuthentic());
+            book.setEnabled(true);
             book.setStatus("Pending");
             session.save(book);
             trns1.commit();
@@ -889,17 +898,16 @@ public class Custom_Imp implements Custom_Dao{
 		try {
             trns1 = session.beginTransaction();
             Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?").setParameter(0, id).list().get(0);
-            System.out.println(br.getNumber_of_booking());
            
             cb.setDate(br.getDept_date().toString().subSequence(0, 10).toString());
-            cb.setTime(br.getDept_time().toString());
+            cb.setTime(br.getProvided_time());
             cb.setSource(br.getSource_id());
             cb.setDestination(br.getDestination_id());
             cb.setNumber_of_seat(br.getNumber_of_booking());
             
             book=cus.customer_booking(cb);
             if(book.equals("success")){
-            	Query query = session.createQuery("delete Booking_Request_Master where id = :id");
+            	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
             	query.setParameter("id", id);
             	int result = query.executeUpdate();
             	trns1.commit();

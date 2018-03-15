@@ -21,6 +21,12 @@ import com.ModelClasses.New_Pickup_Location;
 public class CustomerController {
 	Custom_Dao customer=new Custom_Imp();
 	static Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
+	
+	//========================= Sign Up UI================================
+	@RequestMapping(value="/sign_up")
+	public ModelAndView sign_up() {
+		return new ModelAndView("sign_up");
+	}
 	//=========================User Information================================
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
 		public @ResponseBody Map<String,Object> user_info() {
@@ -95,10 +101,10 @@ public class CustomerController {
 		return new ModelAndView("booking_history");
 	}
 	//=========================To Request Booking================================
-		@RequestMapping(value="/request_booking")
-		public ModelAndView request_booking() {
-			return new ModelAndView("request_booking");
-		}
+	@RequestMapping(value="/request_booking")
+	public ModelAndView request_booking() {
+		return new ModelAndView("request_booking");
+	}
 	//=========================Customer Booking History Information================================
 	@RequestMapping(value="/customer_booking_history", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String,Object>> customer_booking_history() {

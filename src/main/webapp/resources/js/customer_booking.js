@@ -10,7 +10,8 @@ $(document).ready(function() {
 	 $(".flatpickr input").flatpickr({
 			mode: "single",
 			minDate: new Date().fp_incr(1),
-			dateFormat: "Y-m-d"
+			dateFormat: "Y-m-d",
+			disableMobile: "true"
 	});
 	 
 	 // ======== User Information ==========
@@ -280,7 +281,7 @@ $(document).ready(function() {
 			$('#cancel_confirm_model').modal('open');
 			var form='<button id="confirm_cancel_booking_btn" booking="'+id
 						+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
-			document.getElementById('get_req_book_footer').innerHTML=form;
+			document.getElementById('get_cancel_booking_footer').innerHTML=form;
 			$('#confirm_cancel_booking_btn').click(function(){
 				var id1=$(this).attr("booking") ;
 				console.log(id1);
@@ -592,7 +593,11 @@ $(document).ready(function() {
 			   						text="Process is error!!";
 			   					}
 			   					document.getElementById('confirm_text').innerHTML=text;
-			   					$('#confirm').modal();
+			   					$('#confirm').modal({
+								    complete: function() {
+											window.location.replace("customer_home");
+									} 
+								});
 			   				    $('#confirm').modal('open');
 			   				},
 			   				error: function(e) {

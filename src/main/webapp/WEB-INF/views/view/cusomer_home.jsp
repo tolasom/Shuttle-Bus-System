@@ -156,7 +156,8 @@
 		<p> Do you want to cancel your shuttle bus booking now?
 	</div>
 	<div class="modal-footer">
-		<span id="get_req_book_footer"></span>
+		<!-- <span id="get_req_book_footer"></span> -->
+		<span id="get_cancel_booking_footer"></span>
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
 </div>
