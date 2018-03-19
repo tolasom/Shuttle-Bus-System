@@ -170,6 +170,7 @@
  
 
 
+<<<<<<< HEAD
  <build>
     <finalName>KITPointSystem</finalName>
     <plugins>
@@ -191,5 +192,8 @@
 	
     </plugins>
  </build>
+=======
+ 
+>>>>>>> 3039625ce0b23e54ff8cf18efc91a62e6d251137
  
 </project>

@@ -10,14 +10,14 @@
 
 
 
+<spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="BootJS"/>
+      <script src="${BootJS}"></script>
 
 
 <!--  jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <!--  jQuery Validation -->
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
-<spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="BootJS"/>
-      <script src="${BootJS}"></script>
 
       
       

@@ -9,13 +9,17 @@
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
          <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/SBS</property>
+<<<<<<< HEAD
         <property name="hibernate.connection.username">rathana</property>
+=======
+        <property name="hibernate.connection.username">postgres</property>
+>>>>>>> 3039625ce0b23e54ff8cf18efc91a62e6d251137
         <property name="hibernate.connection.password">admin</property>
          
         <!--  <property name="current_session_context_class">thread</property> -->
         <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
         <property name="show_sql">true</property>
-        <property name="hbm2ddl.auto">updat</property>
+        <property name="hbm2ddl.auto">update</property>
          
          <mapping resource ="batch_master.hbm.xml"/>
          <mapping resource ="booking_master.hbm.xml"/>
