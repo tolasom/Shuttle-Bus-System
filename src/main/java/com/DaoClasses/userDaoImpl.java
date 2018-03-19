@@ -108,12 +108,16 @@ public class userDaoImpl implements usersDao{
 		
 		try {
             trns1 = session.beginTransaction();
-            
             users = session.createQuery("from User_Info where email=?").setParameter(0, Username[0]).list();
             		//setParameter(0, username).list();
             
+           
             if (users.size() > 0) {
+            	for( UserRole us: users.get(0).getUserRole()){
+            		System.out.println(us.getRole());
+            	}
             	if(Username.length>1){
+            		
             		users.get(0).setUsername(username);
             	}
     			return users.get(0);
@@ -121,8 +125,11 @@ public class userDaoImpl implements usersDao{
     			return null;
     		}
         } catch (RuntimeException e) {
+        	e.printStackTrace();
         	
-        }                         
+        }finally{
+        	session.close();
+        }
 		return null;
 	}
 	
@@ -142,9 +149,13 @@ public class userDaoImpl implements usersDao{
             user_info.setUsername(user.getUsername());
             if(type.equals("google")){
             	user_info.setGooglePassword(hashedPassword);
+            	System.out.println("google");
             }
             else {
+            	System.out.println("system");
             	user_info.setPassword(hashedPassword);
+            	user_info.setGender(user.getGender());
+            	
             }
             
             user_info.setEnabled(true);
@@ -167,19 +178,28 @@ public class userDaoImpl implements usersDao{
         }                         
 		return false;
 	}
-	public boolean updateUser(User_Info user,UserModel user_model){
+	public boolean updateUser(User_Info user,UserModel user_model,String type){
     	Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
             trns1 = session.beginTransaction();
             Encryption encode = new Encryption();
             String hashedPassword = encode.PasswordEncode(user_model.getPassword());
-            user.setPassword(hashedPassword);
-            session.update(user);
+            System.out.println(user_model.getPassword());
+            if(type.equals("google")){
+            	user.setGooglePassword(hashedPassword);
+            }
+            else {
+            	System.out.println(type);
+            	System.out.println(user.getEmail());
+            	user.setPassword(hashedPassword);
+            }
+            
+          session.update(user);
           trns1.commit();
           return true;
         } catch (RuntimeException e) {
-        	
+        	e.printStackTrace();
         }                         
 		return false;
 	}

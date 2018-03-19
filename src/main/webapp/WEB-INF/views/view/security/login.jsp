@@ -68,10 +68,11 @@ axios.defaults.headers.common[header] = token;
 function googleSignin(data){
         axios({
             method: 'post',
-            url: '/login',
+            url: 'login',
             data: data
             })
           .then(function (response) {
+            console.log(response)
         	  var url = response.request.responseURL;
               if(!url.includes("login")){
             	  window.location.replace(url);
@@ -87,7 +88,7 @@ function googleSignin(data){
         console.log(profile.getEmail())
         var auth2 = gapi.auth2.getAuthInstance();
      	auth2.disconnect();
-        axios.post('/check_signup', {
+        axios.post('check_signup', {
             email: profile.getEmail(),
             password: profile.getId(),
             username:profile.getName(),
@@ -96,7 +97,6 @@ function googleSignin(data){
           })
           .then(function (response) {
             if(response.data.status){
-            	console.log(response.data)
                 data = 'username='+profile.getEmail()+"--google" + '&password='+profile.getId()
             }
             

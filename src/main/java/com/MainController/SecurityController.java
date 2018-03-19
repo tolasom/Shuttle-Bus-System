@@ -159,6 +159,11 @@ public class SecurityController {
 		if(user_info==null){
 			status = userdao.createUser(user,"google");
 		}
+		else {
+			if(user_info.getGooglePassword()==null){
+				status =userdao.updateUser(user_info, user,"google");
+			}
+		}
 		map.put("status", status);
 		return map;
 
@@ -169,11 +174,13 @@ public class SecurityController {
 		boolean status = true;
 		Map<String,Object> map = new HashMap<String,Object>();
 		User_Info user_info = userdao.findByUserName(user.getEmail());
-		
+		System.out.println();
 		if(user_info==null){
+			System.out.println("create");
 			status = userdao.createUser(user,"stystem");
 		}else{
-			status =userdao.updateUser(user_info, user);
+			System.out.println("update");
+			status =userdao.updateUser(user_info, user,"system");
 		}
 		map.put("status", status);
 		return map;

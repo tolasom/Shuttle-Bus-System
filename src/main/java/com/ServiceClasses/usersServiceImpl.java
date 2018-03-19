@@ -143,9 +143,9 @@ public class usersServiceImpl implements usersService{
 
 		return usersDao1.createUser(user,type);
 	}
-	public boolean updateUser(User_Info user, UserModel user_model) {
+	public boolean updateUser(User_Info user, UserModel user_model,String type) {
 		
-		return usersDao1.updateUser(user, user_model);
+		return usersDao1.updateUser(user, user_model,type);
 	}
 	
 }
