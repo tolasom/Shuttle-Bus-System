@@ -116,7 +116,7 @@ public class Custom_Imp implements Custom_Dao{
 		        } 
 		        return bookings; 
 		   
-		 }
+	}
 	public Map<String,Object> user_info(){
 		IdUser user= new IdUser();
 		System.out.println(user.getAuthentic());
@@ -131,7 +131,6 @@ public class Custom_Imp implements Custom_Dao{
             System.out.println(users.size());
             if (users.size() > 0) {
             	map.put("username", users.get(0).getUsername());
-            	map.put("today", current_timestamp);
     		}
         } catch (RuntimeException e) {
         	e.printStackTrace();

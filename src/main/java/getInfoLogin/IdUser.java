@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 
+
 public class IdUser {
 
 	public int getAuthentic(){
@@ -26,7 +27,8 @@ public class IdUser {
 	
 		try {
             trns1 = session.beginTransaction();
-            users = session.createQuery("from User_Info where name=? and enabled=?").setString(0, "SS").setBoolean(1, true).list();
+            System.out.println("KK: "+userDetail.getUsername());
+            users = session.createQuery("from User_Info where email=? and enabled=?").setString(0, userDetail.getUsername()).setBoolean(1, true).list();
             
            System.out.println(users.size());
         } catch (RuntimeException e) {

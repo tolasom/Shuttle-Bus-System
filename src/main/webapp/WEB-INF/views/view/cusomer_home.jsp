@@ -105,7 +105,7 @@
 <ul id="dropdown1" class="dropdown-content">
   <li class="booking_history1 hide-on-med-and-up"><a href="booking_history">History</a></li>
   <li><a href="#!">Profile</a></li>
-  <li><a href="#!">Logout</a></li>
+  <li><a onclick="formSubmit()">Logout</a></li>
 </ul>
 <nav>
   <div class="nav-wrapper">
@@ -215,5 +215,15 @@
 	    </div>
 	</form>
 </div>
+
+	<form action="logout" method="post" id="logoutForm">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	</form>
   </body>
+  
+  <script>
+		function formSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+</script>
 </html>

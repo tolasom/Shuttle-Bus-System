@@ -26,6 +26,8 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -39,68 +41,6 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //import org.springframework.stereotype.Service;
@@ -117,10 +57,12 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.UserRole;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
+import com.ModelClasses.IdentifyTypeUser;
 import com.ModelClasses.Mail;
 import com.ModelClasses.Project_Model;
 import com.ModelClasses.Reset_Password;
 import com.ModelClasses.Schedule_Model;
+import com.ModelClasses.UserModel;
 import com.client_mail.ApplicationConfig;
 //import com.ServiceClasses.usersService;
 //import com.client_mail.ApplicationConfig;
@@ -157,17 +99,23 @@ public class userDaoImpl implements usersDao{
 	
 	
 	public User_Info findByUserName(String username) {
-    	Transaction trns1 = null;
+    	Transaction trns1 = null; 
         Session session = HibernateUtil.getSessionFactory().openSession();
+        //System.out.println("String type user: "+username.split("--")[1]);
+        String Username[] = username.split("--");
         
 		List<User_Info> users = new ArrayList<User_Info>();
-	
+		
 		try {
             trns1 = session.beginTransaction();
-            users = session.createQuery("from User_Info where email=?").setParameter(0, username).list();
+            
+            users = session.createQuery("from User_Info where email=?").setParameter(0, Username[0]).list();
             		//setParameter(0, username).list();
             
             if (users.size() > 0) {
+            	if(Username.length>1){
+            		users.get(0).setUsername(username);
+            	}
     			return users.get(0);
     		} else {
     			return null;
@@ -177,9 +125,64 @@ public class userDaoImpl implements usersDao{
         }                         
 		return null;
 	}
-
-
-
+	
+	public boolean createUser(UserModel user,String type) {
+    	Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+            trns1 = session.beginTransaction();
+            User_Info user_info = new User_Info();
+            Encryption encode = new Encryption();
+            String hashedPassword = encode.PasswordEncode(user.getPassword());
+            UserRole user_role = new UserRole();
+            
+            user_info.setBatch_id(0);
+            user_info.setEmail(user.getEmail());
+            user_info.setName(user.getName());
+            user_info.setUsername(user.getUsername());
+            if(type.equals("google")){
+            	user_info.setGooglePassword(hashedPassword);
+            }
+            else {
+            	user_info.setPassword(hashedPassword);
+            }
+            
+            user_info.setEnabled(true);
+            if(user.getEmail().contains("@kit.edu.kh")){
+            	
+            	user_role.setRole("ROLE_STUDENT");
+            	
+            }else{
+            	
+            	user_role.setRole("ROLE_CUSTOMER");
+     	
+            }
+            user_role.setUser_info(user_info);
+            session.save(user_info);
+            session.save(user_role);
+          trns1.commit();
+          return true;
+        } catch (RuntimeException e) {
+        	
+        }                         
+		return false;
+	}
+	public boolean updateUser(User_Info user,UserModel user_model){
+    	Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+            trns1 = session.beginTransaction();
+            Encryption encode = new Encryption();
+            String hashedPassword = encode.PasswordEncode(user_model.getPassword());
+            user.setPassword(hashedPassword);
+            session.update(user);
+          trns1.commit();
+          return true;
+        } catch (RuntimeException e) {
+        	
+        }                         
+		return false;
+	}
 	public int saveBus(Bus_Master bus) {
 		List <Bus_Master> buses  = new ArrayList<Bus_Master>();
     	Transaction trns7 = null;

@@ -11,12 +11,16 @@ import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.ModelClasses.Schedule_Model;
+import com.ModelClasses.UserModel;
+
 import java.text.ParseException;
 
 
 
 public interface usersDao {
 	public User_Info findByUserName(String name);
+	public boolean createUser(UserModel user,String type);
+	public boolean updateUser(User_Info user,UserModel user_model);
 	public int saveBus(Bus_Master bus);
 	public List<Bus_Master> getAllBuses();
 	public Bus_Master getBusById (int id);
