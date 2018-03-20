@@ -147,6 +147,12 @@ public class usersServiceImpl implements usersService{
 		
 		return usersDao1.updateUser(user, user_model);
 	}
+	public List<User_Info> getAlDrivers(){
+		return usersDao1.getAlDrivers();
+	}
+	public List<User_Info> getAlCustomers(){
+		return usersDao1.getAlCustomers();
+	}
 	
 }
 

@@ -60,6 +60,7 @@
                                                         <tr>
                                                         	<th></th>
                                                             <th>No</th>
+                                                            <th>Code</th>
                                                             <th>Name</th>
                                                             <th>Number of bookings</th>
                                                             
@@ -157,19 +158,23 @@
       
     </div>
   </div>
-                
+       
+       
+      
+  
 </body>
 <script type="text/javascript">
 var current_schedule;
 var all_bus;
 var all_driver;
+var all_customer;
 var all_schedule;
 var idd;
 var all_booking;
 var s_code;
 load = function () {
 	var bootstrapjs = $("<script>");
-  	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
+  	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
 	var data = ${data};
 	var bookings = data.bookings;
@@ -177,6 +182,7 @@ load = function () {
 	all_schedule = data.schedules;
 	all_bus = buses;
 	all_driver = data.drivers;
+	all_customer = data.customers;
 	all_booking = bookings;
 	var locations = data.locations;
 	var p_locations = data.p_locations;
@@ -208,12 +214,17 @@ load = function () {
 						+'<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>'
     					+'<td>'+(i+1)+'</td>'
-						+'<td>'+bookings[i].user_id+'</td>'
+    					+'<td>'+bookings[i].code+'</td>'
+						+'<td class="unhoverr2" style="color:blue" data-url="'+bookings[i].id+'">'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
 						+'<td>'+bookings[i].number_booking+'</td></tr>';
 	$("#allBooking").append(booking);				
 	}
 	$( ".unhoverr" ).on('click', function(e) {
 		e.stopPropagation();	
+	});
+	$( ".unhoverr2" ).on('click', function(e) {
+		e.stopPropagation();	
+		alert("User")
 	});
 	$(".hoverr").on('click', function(e) {
 		e.stopPropagation();
@@ -540,6 +551,15 @@ function searchSchedule(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id == id) {
             return myArray[i];
+        }
+    }
+}
+
+
+function searchCustomer(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
         }
     }
 }

@@ -19,10 +19,6 @@
 <!-- Bootstrap Core JavaScript -->
     <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
     <script src="${JSCORE}"></script>
-	
-
-<<<<<<< HEAD
-    	
 <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
 <link rel="stylesheet"  type="text/css" href="https://formden.com/static/cdn/bootstrap-iso.css" />
 <!-- Bootstrap Core CSS -->	
@@ -45,8 +41,6 @@
    	    	 
 </head>
 
-<body>
-=======
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
    	    	 
@@ -57,7 +51,6 @@
 <body>
 <script src="${alertJS}"></script>
 <link rel="stylesheet" href="${alertStyle}">
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7
 <h1 align="center">${message}</h1>
   <div class="login-page">
   <div class="form">
@@ -92,7 +85,6 @@
   <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-<<<<<<< HEAD
 $(document).ready(function(){
 	$("#myForm").on("submit",function(e){
 		e.preventDefault();
@@ -144,8 +136,6 @@ $(document).ready(function(){
 	
 });	
 
-=======
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7
 
 var token = $('#csrfToken').val();
 var header = $('#csrfHeader').val();
@@ -199,26 +189,3 @@ function googleSignin(data){
 </script>
 </html>
 
-
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-=======
- 
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7

@@ -190,7 +190,8 @@ public class AdminController {
 		map.put("p_locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
-		map.put("drivers", usersService1.getAllUsers());
+		map.put("drivers", usersService1.getAlDrivers());
+		map.put("customers", usersService1.getAlCustomers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -700,6 +701,7 @@ public class AdminController {
 			map.put("schedules", list);
 			map.put("locations", usersService1.getAllLocations());
 			map.put("buses", usersService1.getAllBuses());
+			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
 				map.put("message","Data not found");			
