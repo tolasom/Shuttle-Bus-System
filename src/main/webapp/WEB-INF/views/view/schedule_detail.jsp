@@ -222,10 +222,18 @@ load = function () {
 	$( ".unhoverr" ).on('click', function(e) {
 		e.stopPropagation();	
 	});
-	$( ".unhoverr2" ).on('click', function(e) {
-		e.stopPropagation();	
+	
+
+
+	$( ".unhoverr2" ).hover(function(e) 
+	{
+	    e.stopPropagation();		
 		alert("User")
-	});
+  });
+
+
+
+
 	$(".hoverr").on('click', function(e) {
 		e.stopPropagation();
     	location.href=$(this).attr('data-url');

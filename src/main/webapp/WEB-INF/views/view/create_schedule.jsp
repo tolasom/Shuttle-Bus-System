@@ -107,6 +107,13 @@ load = function () {
 $(document).ready(function(){
 	$("#scheduleMng").addClass("active");
 	
+    $("[name=date]").keydown(function (event) {
+            event.preventDefault();
+        });
+    $("[name=time]").keydown(function (event) { 
+            event.preventDefault();
+        });
+
 	$("#sfrom").change(function(){
 		var input  = this.value;
 		var location_id;
