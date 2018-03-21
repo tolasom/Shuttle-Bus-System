@@ -20,7 +20,8 @@
                                 </li>
                                 <li id="bookingRequestMng">
                                     <a href="admin_booking_request">
-                                        <i class="fa fa-envelope-open"></i> Booking Requests</a>
+                                        <i class="fa fa-envelope-open"></i> Booking Requests <span style="background-color: red;" class="badge pull-right" id="notii"></span></a>
+                                        
                                 </li>
                                 <li id="busMng">
                                     <a href="bus_management">
@@ -34,10 +35,7 @@
                                     <a href="report">
                                         <i class="fa fa-bar-chart"></i> Reports </a>
                                 </li>
-                                <li >
-                                    <a href="customer_home">
-                                        <i class="fa fa-bar-chart"></i> Reports </a>
-                                </li>
+                                    
                                 
                                
                                 

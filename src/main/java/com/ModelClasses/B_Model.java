@@ -22,7 +22,7 @@ public class B_Model	{
 	private String description;
 	private String created_at;
 	private String updated_at;
-	
+	private String n;
 	
 	
 	public String getCode() {
@@ -30,6 +30,12 @@ public class B_Model	{
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public String getN() {
+		return n;
+	}
+	public void setN(String n) {
+		this.n = n;
 	}
 	public int getId() {
 		return id;

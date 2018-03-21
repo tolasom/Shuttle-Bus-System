@@ -53,6 +53,7 @@ load = function(){
 	console.log(schedules)
 	var locations = data.locations;
 	var buses = data.buses;
+    var drivers = data.drivers;
 	for (var i=0;i<schedules.length;i++)
 	{
 		schedules[i].dept_date = new Date(schedules[0].dept_date);
@@ -61,7 +62,7 @@ load = function(){
 	var schedule = '<tr class="hoverr" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
 						+'<td>'+schedules[i].code+'</td>'
 						+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
-						+'<td>'+schedules[i].driver_id+'</td>'
+						+'<td>'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
 						+'<td>'+searchLocation(schedules[i].source_id,locations)+'</td>'
 						+'<td>'+searchLocation(schedules[i].destination_id,locations)+'</td>'
 						+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
@@ -111,6 +112,15 @@ function searchBus(id, myArray){
         }
     }
 }
+
+function searchDriver(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
 
 
 	

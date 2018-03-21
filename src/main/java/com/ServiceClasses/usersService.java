@@ -61,4 +61,7 @@ public interface usersService {
 	public int moveSimple(int arr[], int old_id, int new_id, int bookings);
 	public List<User_Info> getAlDrivers();
 	public List<User_Info> getAlCustomers();
+	public void rejectedRequest(String email);
+	public void confirmedRequest(String email);
+	public User_Info getCustomerById(int id);
 }

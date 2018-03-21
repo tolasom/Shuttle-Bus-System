@@ -22,6 +22,7 @@ import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
+import com.EntityClasses.User_Info;
 import com.ModelClasses.B_Model;
 import com.ModelClasses.Schedule_Model;
 import com.ServiceClasses.usersService;
@@ -113,6 +114,7 @@ public class AdminController {
 	public ModelAndView booking_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
 		Booking_Master booking = usersService1.getBookingById(id);
 		B_Model model = new B_Model();
+		model.setN(usersService1.getCustomerById(booking.getUser_id()).getName());
 		model.setCode(booking.getCode());
 		model.setCreated_at(booking.getCreated_at().toString());
 		model.setDept_date(booking.getDept_date().toString());
@@ -419,11 +421,15 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
+
 		}
 		else
 		{
 			map.put("status","1");
 			map.put("message","This request has just been confirmed successfully");
+			User_Info user = usersService1.getCustomerById(request.getUser_id());
+			String email = user.getEmail();
+			usersService1.confirmedRequest(email);	
 		}
 		
 		return map;
@@ -440,11 +446,15 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
+			
 		}
 		else
 		{
 			map.put("status","1");
 			map.put("message","This request has just been rejected successfully");
+			User_Info user = usersService1.getCustomerById(request.getUser_id());
+			String email = user.getEmail();
+			usersService1.rejectedRequest(email);
 		}
 		
 		return map;
@@ -637,6 +647,7 @@ public class AdminController {
 			{
 			map.put("locations", list2);
 			map.put("bookings", list);
+			map.put("customers", usersService1.getAlCustomers());
 			}
 			else
 				map.put("message","Data not found");			
@@ -662,6 +673,23 @@ public class AdminController {
 			map.put("locations", list2);
 			map.put("requests", list);
 			}
+			else
+				map.put("message","Data not found");			
+			
+			return map;
+	}
+
+
+	@RequestMapping(value="/getBookingRequestNotification", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getBookingRequestNotification(){
+				
+		 Map<String,Object> map = new HashMap<String,Object>();
+	
+		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
+			List<Booking_Request_Master> list = usersService1.getAllCurrentBookingRequests();
+			
+			if (list != null)
+				map.put("requests", list);
 			else
 				map.put("message","Data not found");			
 			
@@ -726,6 +754,7 @@ public class AdminController {
 			map.put("schedules", list);
 			map.put("locations", usersService1.getAllLocations());
 			map.put("buses", usersService1.getAllBuses());
+			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
 				map.put("message","Data not found");			
@@ -749,6 +778,7 @@ public class AdminController {
 				{
 				map.put("locations", list2);
 				map.put("bookings", list);
+				map.put("customers", usersService1.getAlCustomers());
 				}
 			
 			else
@@ -778,6 +808,7 @@ public class AdminController {
 		map.put("schedules", list);
 		map.put("locations", list2);
 		map.put("buses", list3);
+		map.put("drivers", usersService1.getAlDrivers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {

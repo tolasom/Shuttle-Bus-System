@@ -169,46 +169,23 @@
  </dependencies>
  
 
-<<<<<<< HEAD
+
+
 <build>
     <finalName>KITPointSystem</finalName>
     <plugins>
     <plugin>
-=======
+  <groupId>org.apache.tomcat.maven</groupId>
+  <artifactId>tomcat7-maven-plugin</artifactId>
+  <version>2.2</version>
+  <configuration>
+    <url>http://localhost:8081/manager/text</url>
+    <server>TomcatServer</server>
+    <path>/</path>
+  </configuration>
+</plugin>
+    </plugins>
+ </build>
 
-<<<<<<< HEAD
- <build>
-    <finalName>KITPointSystem</finalName>
-    <plugins>
-    <plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-war-plugin</artifactId>
-  <version>3.0.0</version>
-</plugin>
-    <plugin>
->>>>>>> 7d5e8b167a9f50a901886faaf8da4923560d4c43
-	<groupId>org.apache.tomcat.maven</groupId>
-	<artifactId>tomcat7-maven-plugin</artifactId>
-	<version>2.2</version>
-	<configuration>
-		<url>http://localhost:8081/manager/text</url>
-		<server>TomcatServer</server>
-<<<<<<< HEAD
-		<path>/</path>
-	</configuration>
-</plugin>
-    </plugins>
- </build>
-=======
-		<path>/shuttle_bus</path>
-	</configuration>
-</plugin>
-	
-    </plugins>
- </build>
-=======
->>>>>>> 7d5e8b167a9f50a901886faaf8da4923560d4c43
- 
->>>>>>> 3039625ce0b23e54ff8cf18efc91a62e6d251137
  
 </project>

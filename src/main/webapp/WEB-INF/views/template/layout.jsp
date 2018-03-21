@@ -85,6 +85,19 @@
 
 <script>
                     $(document).ready(function(){
+
+                      $.ajax({
+                            url:'getBookingRequestNotification',
+                            type:'GET',
+                            success: function(response){
+                              if(response.requests.length>0)
+                              $("#notii").text(response.requests.length);
+                            },
+                          error: function(err){
+                            console.log(JSON.stringify(err));
+                            }
+                            
+                          });
                     	
                     	$(".js-example-basic-multiple").select2();
                     	var date_input=$('input[name="date"]');
@@ -122,6 +135,7 @@
                         
                         
                     });
+                    
 </script>
 
 </body>

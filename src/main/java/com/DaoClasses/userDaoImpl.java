@@ -304,6 +304,67 @@ public class userDaoImpl implements usersDao{
     } 
 	
 	
+	
+	
+	
+	
+	public User_Info getCustomerById(int id) {
+		User_Info customer = new User_Info();
+   		Transaction trns25 = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try{
+			List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+			trns25  = session.beginTransaction();
+			String queryString  = "from User_Info where id=:id";
+ 		 	Query query = session.createQuery(queryString);
+ 		 	query.setInteger("id", id);
+ 		 	customer = (User_Info) query.uniqueResult();
+ 		 	
+		}
+		catch(RuntimeException e)
+		{
+			e.printStackTrace();			
+		}
+		finally{
+			session.flush();
+			session.close();
+		}
+        return customer;
+    } 
+
+
+
+    public User_Info getCustomerByEmail(String email) {
+        User_Info customer = new User_Info();
+        Transaction trns25 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try{
+            List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+            trns25  = session.beginTransaction();
+            String queryString  = "from User_Info where email=:email";
+            Query query = session.createQuery(queryString);
+            query.setString("email", email);
+            customer = (User_Info) query.uniqueResult();
+            
+        }
+        catch(RuntimeException e)
+        {
+            e.printStackTrace();            
+        }
+        finally{
+            session.flush();
+            session.close();
+        }
+        return customer;
+    } 
+	
+	
+	
+	
+	
+	
+	
+	
 	public List<User_Info> getAlCustomers() {
       	List<User_Info> users= new ArrayList<User_Info>();
    		Transaction trns25 = null;
@@ -1494,7 +1555,77 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
-
+	public void confirmedRequest(String email) {
+		Boolean ret=false;
+		Transaction trns = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try{
+			trns  = session.beginTransaction();
+	  	        Mail mail = new Mail();
+		        mail.setMailFrom("vkirirom_shuttlebus@gmail.com.com");
+		        mail.setMailTo(email);
+		        mail.setMailSubject("Kirirom Shuttle Bus Booking Request");
+		 
+		        Map < String, Object > model = new HashMap < String, Object > ();
+		        model.put("fullname", new userDaoImpl().getCustomerByEmail(email).getUsername());
+		        model.put("email", email);
+		        mail.setModel(model);
+		        mail.setFile_name("booking_request_confirmed_email_template.txt");
+		        
+		 
+		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		        MailService mailService = (MailService) context.getBean("mailService");
+		        mailService.sendEmail(mail);
+		        context.close();
+		        ret=true;
+		}
+		catch (RuntimeException e){
+            if (trns != null) {
+                trns.rollback();
+            }
+     	}finally {
+            session.flush();
+            session.close();
+          }
+      
+	}
+	
+	
+	
+	public void rejectedRequest(String email) {
+		Boolean ret=false;
+		Transaction trns = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try{
+			trns  = session.beginTransaction();
+	  	        Mail mail = new Mail();
+		        mail.setMailFrom("vkirirom_shuttlebus@gmail.com.com");
+		        mail.setMailTo(email);
+		        mail.setMailSubject("Kirirom Shuttle Bus Booking Request");
+		 
+		        Map < String, Object > model = new HashMap < String, Object > ();
+		        model.put("fullname", new userDaoImpl().getCustomerByEmail(email).getUsername());
+		        model.put("email", email);
+		        mail.setModel(model);
+		        mail.setFile_name("booking_request_rejected_email_template.txt");
+		        
+		 
+		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		        MailService mailService = (MailService) context.getBean("mailService");
+		        mailService.sendEmail(mail);
+		        context.close();
+		        ret=true;
+		}
+		catch (RuntimeException e){
+            if (trns != null) {
+                trns.rollback();
+            }
+     	}finally {
+            session.flush();
+            session.close();
+          }
+        
+	}
 	
 
 	
