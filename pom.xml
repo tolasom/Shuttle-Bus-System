@@ -171,7 +171,8 @@
 
 
 
-<build>
+
+ <build>
     <finalName>KITPointSystem</finalName>
     <plugins>
     <plugin>
@@ -187,5 +188,4 @@
     </plugins>
  </build>
 
- 
 </project>
