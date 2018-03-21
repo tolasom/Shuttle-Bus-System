@@ -38,7 +38,7 @@ public class AdminController {
 //=========================To sign up an account for customer================================
 	@RequestMapping(value="/signup",method=RequestMethod.GET)
 	public ModelAndView signup() {
-		return new ModelAndView("security/sign_up");
+		return new ModelAndView("security/signup");
 	}
 	
 //=========================Returns bus management view================================

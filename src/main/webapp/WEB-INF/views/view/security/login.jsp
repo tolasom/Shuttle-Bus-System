@@ -21,32 +21,7 @@
     <script src="${JSCORE}"></script>
 	
 
-<<<<<<< HEAD
-    	
-<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-<link rel="stylesheet"  type="text/css" href="https://formden.com/static/cdn/bootstrap-iso.css" />
-<!-- Bootstrap Core CSS -->	
-  <spring:url value="/resources/Bootstrap/css/bootstrap.min.css" var="bootatrapCore"/>
-  <spring:url value="/resources/Bootstrap/css/sb-admin.css" var="CustomCSS"/>
-  <spring:url value="/resources/Bootstrap/font-awesome/css/font-awesome.min.css" var="customfontCSS"/>
-  
- 		<link href="${bootatrapCore}" rel="stylesheet" type="text/css">
-   		<!-- Custom CSS -->
-    	<link href="${CustomCSS}" rel="stylesheet" type="text/css">
-    	<!-- Morris Charts CSS -->
-    	<link href="${morrisCSS }" rel="stylesheet" type="text/css">
-    	<!-- Custom Fonts -->
-   	    <link href="${customfontCSS }" rel="stylesheet" type="text/css">
-   	    
-   	    <!-- Sweet alert -->
-<!-- Sweet alert -->
-<spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
-<spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
-   	    	 
-</head>
 
-<body>
-=======
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
    	    	 
@@ -57,7 +32,6 @@
 <body>
 <script src="${alertJS}"></script>
 <link rel="stylesheet" href="${alertStyle}">
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7
 <h1 align="center">${message}</h1>
   <div class="login-page">
   <div class="form">
@@ -92,60 +66,7 @@
   <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-<<<<<<< HEAD
-$(document).ready(function(){
-	$("#myForm").on("submit",function(e){
-		e.preventDefault();
-		var text = $("#username").val().trim();
-		var formatemail = /[!#$%^&*()+\-=\[\]{};':"\\|,<>\/?]+/;
-		if(formatemail.test(text))
-			{
-			swal("Oops!", "You cannot input special characters", "error")  
-			return
-			}
-		$(this).unbind("submit").submit();
-	});
-	
-	
-	
-	
-	$("#myForm2").on("submit",function(e){
-		e.preventDefault();
-		$("#toload").addClass("loader");
-			$.ajax({
-				url:'forgetPasswordSubmit',
-				type:'GET',
-				data:{email:$("#eemail").val()},
-				success: function(response){			     
-					if(response.status=="999")
-						{
-						$("#toload").removeClass("loader");
-						swal("We cannot find you!", "Please give a valid email!", "error")
-						$('#closing').trigger('click');
-						}
-					
-					else 
-						{
-						$("#toload").removeClass("loader");
-						swal("Done!","We found you! Please check your email to reset new password!", "success")
-						$('#closing').trigger('click');
-						//alert("<div class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>")
-						}
-						
-				},
-				error: function(err){
-					console.log(JSON.stringify(err));
-				}
-			});			
-	});
-	
-	
-	
-	
-});	
 
-=======
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7
 
 var token = $('#csrfToken').val();
 var header = $('#csrfHeader').val();
@@ -177,8 +98,8 @@ function googleSignin(data){
             email: profile.getEmail(),
             password: profile.getId(),
             username:profile.getName(),
-        	  name:profile.getGivenName(),
-        	  profile:profile.getImageUrl()
+            name:profile.getGivenName(),
+            profile:profile.getImageUrl(),
           })
           .then(function (response) {
             if(response.data.status){
@@ -199,26 +120,3 @@ function googleSignin(data){
 </script>
 </html>
 
-
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-=======
- 
->>>>>>> a59e1b42b4384e4d92890131ef938bc82817d0c7
