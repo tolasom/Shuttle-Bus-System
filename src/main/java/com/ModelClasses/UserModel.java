@@ -7,8 +7,8 @@ public class UserModel {
 	private String password;
 	private String profile;
 	private String name;
-	
-	
+	private String gender;
+	private String phone;
 	public String getUsername() {
 		return username;
 	}
@@ -39,6 +39,19 @@ public class UserModel {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
 	
 	
 }

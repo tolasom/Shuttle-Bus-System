@@ -31,37 +31,6 @@ $(document).ready(function() {
 				console.log("DONE");
 			}
 	});
-//	// ======== Source Information ==========
-//	 $.ajax({
-//			async: false,
-//			cache: false,
-//			type: "GET",
-//			url: "location_data",
-//			contentType: "application/json",
-//			timeout: 100000,
-//			success: function(data) {
-//				var location= Object.keys( data.location );
-//				var l_form='';
-//				for(i=0;i<location.length;i++){
-//					console.log(location[i])
-//					l_form+='<optgroup label="'+location[i]+'">';
-//					for(j=0;j<data.location[location[i]].length;j++){
-//						console.log(data.location[location[i]][j]);
-//						l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'</option>';
-//					}
-//					l_form+='</optgroup>';		
-//				}
-//				console.log(l_form)
-//				document.getElementById('source_name').innerHTML=l_form;
-//				$('#source_name').material_select();
-//			},
-//			error: function(e) {
-//				console.log("ERROR: ", e);
-//			},
-//			done: function(e) {
-//				console.log("DONE");
-//			}
-//	});
 	// ======== Source Information ==========
 	 $.ajax({
 			async: false,
@@ -74,7 +43,7 @@ $(document).ready(function() {
 				console.log("location data:");
 				console.log(data);
 				var location= Object.keys( data.location );
-				var l_form='<option disabled selected></option>';
+				var l_form='<option disabled selected>Source Location</option>';
 				for(i=0;i<location.length;i++){
 					console.log(location[i])
 					
@@ -123,20 +92,6 @@ $(document).ready(function() {
 					$('#destination_name').material_select();
 					$('#select_dest_id').material_select();
 					
-//					var location= Object.keys( data.location );
-//					var l_form='';
-//					for(i=0;i<location.length;i++){
-//						console.log(location[i])
-//						l_form+='<optgroup label="'+location[i]+'">';
-//						for(j=0;j<data.location[location[i]].length;j++){
-//							console.log(data.location[location[i]][j]);
-//							l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'</option>';
-//						}
-//						l_form+='</optgroup>';		
-//					}
-//					console.log(l_form)
-//					document.getElementById('destination_name').innerHTML=l_form;
-//					$('#destination_name').material_select();
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -180,18 +135,48 @@ $(document).ready(function() {
 		 }, "Value must not equal arg.");
 	//============================== Request Booking ===========================//
 	 function compared_today(dept_date_time){
-		 var today = moment().format('Y-M-D, HH:mm:ss');
-		 var date = new Date(today)
-		 var current_today = date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-		 console.log(current_today)
-		 console.log(dept_date_time)
-		 if(new Date(dept_date_time) > new Date(current_today)){
+//		 var today = moment().format('Y-M-D, HH:mm:ss');
+//		 var date = new Date(today)
+//		 var current_today = date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+//		 console.log(current_today)
+//		 console.log(dept_date_time)
+//		 if(new Date(dept_date_time) > new Date(current_today)){
+//   			 return true;
+//   		 }else{
+//   			 return false;
+//   		 }
+		 
+		 var current_date;
+		 $.ajax({
+				async: false,
+				cache: false,
+				type: "GET",
+				url: "today",
+				timeout: 100000,
+				success: function(data) {
+					current_date=data.slice(0, 19);
+				},
+				error: function(e) {
+					console.log("ERROR: ", e);
+				},
+				done: function(e) {
+					console.log("DONE");
+				}
+			});
+		 var date = new Date(moment.utc(current_date, "YYYY-MM-DD  HH:mm:ss"));
+		 var today = moment.utc(date, "YYYY-MM-DD  HH:mm:ss");
+		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
+		 
+		 console.log(today);
+		 console.log(dept_dt);
+ 		 console.log(moment(dept_dt).isAfter(today));
+		 if(moment(dept_dt).isAfter(today)){
    			 return true;
    		 }else{
    			 return false;
    		 }
 	 }
-	 
+
 	 $("#form_booking_request").validate({
 	        rules: {
 	        	source_name: {
@@ -234,7 +219,7 @@ $(document).ready(function() {
 			     }
 
 	        },
-	        errorElement: 'div',
+	        errorElement: 'span',
 	        errorPlacement: function(error, element) {
 	            var placement = $(element).data('error');
 	            if (placement) {

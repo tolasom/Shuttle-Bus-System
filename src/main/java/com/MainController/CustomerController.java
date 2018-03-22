@@ -1,6 +1,8 @@
 package com.MainController;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -15,17 +17,26 @@ import com.DaoClasses.Custom_Imp;
 import com.EntityClasses.Pickup_Location_Master;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
+import com.ModelClasses.UserModel;
 
 
 @Controller
 public class CustomerController {
 	Custom_Dao customer=new Custom_Imp();
-	static Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
+	Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
 	
 	//========================= Sign Up UI================================
 	@RequestMapping(value="/sign_up")
 	public ModelAndView sign_up() {
 		return new ModelAndView("sign_up");
+	}
+	//=========================check_booking_request Information================================
+	@RequestMapping(value="/today", method=RequestMethod.GET)
+	public @ResponseBody String today() {
+		Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String today=sdf.format(cal.getTime());
+	    return today;
 	}
 	//=========================User Information================================
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
@@ -82,6 +93,13 @@ public class CustomerController {
 			String ret = customer.customer_booking(cb);
 			return ret;
 		}	
+	
+	//=========================confirm_phone_number================================
+	@RequestMapping(value="/confirm_phone_number", method=RequestMethod.GET)
+	public @ResponseBody String confirm_phone_number(UserModel cb) {
+		String ret = customer.confirm_phone_number(cb);
+		return ret;
+	}
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
 	public @ResponseBody String request_book_now(int id) {
@@ -90,11 +108,11 @@ public class CustomerController {
 		return ret;
 	}
 	//=========================Customer Request Booking Information================================
-		@RequestMapping(value="/customer_request_booking", method=RequestMethod.GET)
-		public @ResponseBody String customer_request_booking(Customer_Booking cb) {
-				String ret = customer.customer_request_booking(cb);
-				return ret;
-			}
+	@RequestMapping(value="/customer_request_booking", method=RequestMethod.GET)
+	public @ResponseBody String customer_request_booking(Customer_Booking cb) {
+			String ret = customer.customer_request_booking(cb);
+			return ret;
+	}
 	//=========================To get Booking History of User================================
 	@RequestMapping(value="/booking_history")
 	public ModelAndView booking_history() {

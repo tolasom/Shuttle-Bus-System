@@ -30,10 +30,15 @@ import com.ServiceClasses.usersService;
 public class AdminController {
 	@Autowired
 	usersService usersService1;
-//=========================To sign up an account for customer================================
+	
 	@RequestMapping(value="/customer_home")
-	public ModelAndView signup() {
+	public ModelAndView customer_home() {
 		return new ModelAndView("cusomer_home");
+	}
+//=========================To sign up an account for customer================================
+	@RequestMapping(value="/signup",method=RequestMethod.GET)
+	public ModelAndView signup() {
+		return new ModelAndView("security/sign_up");
 	}
 	
 //=========================Returns bus management view================================

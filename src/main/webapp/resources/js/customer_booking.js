@@ -1,12 +1,13 @@
 $(document).ready(function() {
 	 $('select').material_select();
-	 
+	 $('#destination_name').material_select();
 	 $("#source_loc_id[required]," +
 	 		"#select_dest_id[required]," +
-	 		"#source_name[required]," +
 	 		"#destination_name[required]," +
+	 		"#source_name[required]," +
+	 		
 	 		"#departure_time[required]").css({display: "inline", height: 0, padding: 0, width: 0});
-	 
+	 		
 	 $(".flatpickr input").flatpickr({
 			mode: "single",
 			minDate: new Date().fp_incr(1),
@@ -15,6 +16,7 @@ $(document).ready(function() {
 	});
 	 
 	 // ======== User Information ==========
+	 var phone;
 	 $.ajax({
 			async: false,
 			cache: false,
@@ -23,7 +25,9 @@ $(document).ready(function() {
 			contentType: "application/json",
 			timeout: 100000,
 			success: function(data) {
+				phone=data.phone_number;
 				document.getElementById('fullname').innerHTML=data.username;
+				
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -62,7 +66,7 @@ $(document).ready(function() {
 				console.log("location data:");
 				console.log(data);
 				var location= Object.keys( data.location );
-				var l_form='<option disabled selected></option>';
+				var l_form='<option disabled selected>Source Location</option>';
 				var custom_pl_form='<option disabled selected>Choose your main source</option>';
 				for(i=0;i<location.length;i++){
 					console.log(location[i])
@@ -98,7 +102,7 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					var location= Object.keys( data.location );
-					var l_form='';
+					var l_form='<option disabled selected>Destination Location</option>';
 					var custom_dropoff='<option disabled selected>Choose your main source</option>';
 					for(i=0;i<location.length;i++){
 						console.log(location[i])
@@ -113,8 +117,9 @@ $(document).ready(function() {
 					l_form+='<option value="custom_dropoff">Custom Drop-off Location</option>'
 					document.getElementById('destination_name').innerHTML=l_form;
 					document.getElementById('select_dest_id').innerHTML=custom_dropoff;
-					$('#destination_name').material_select();
+					
 					$('#select_dest_id').material_select();
+					$('#destination_name').material_select();
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -160,7 +165,7 @@ $(document).ready(function() {
 			success: function(data) {
 				console.log("departure_time_info");
 				console.log(data);
-				var option='<option value="" disabled selected>Departure Time</option>';
+				var option='<option value="" disabled selected>Select Departure Time</option>';
 					for(i=0;i<data.length;i++){
 						var get_time=convert_time(data[i].dept_time);
 						option+='<option value="'+data[i].dept_time+'">'+get_time+'</option>';
@@ -484,13 +489,33 @@ $(document).ready(function() {
 	}
 	 
 	 function compared_tomorrow(dept_date_time){
-		 var today = moment().format('Y-M-D, HH:mm:ss');
-		 var date = new Date(today)
+		 var current_date;
+		 $.ajax({
+				async: false,
+				cache: false,
+				type: "GET",
+				url: "today",
+				timeout: 100000,
+				success: function(data) {
+					current_date=data.slice(0, 19);
+				},
+				error: function(e) {
+					console.log("ERROR: ", e);
+				},
+				done: function(e) {
+					console.log("DONE");
+				}
+			});
+		 var date = new Date(moment.utc(current_date, "YYYY-MM-DD  HH:mm:ss"));
 		 date.setDate(date.getDate() + 1);
-		  var tomorrow = date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-		 console.log(tomorrow)
-		 console.log(dept_date_time)
-		 if(new Date(dept_date_time) > new Date(tomorrow)){
+		 var tomorrow = String(date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+		 var tmr = moment.utc(tomorrow, "YYYY-MM-DD  HH:mm:ss");
+		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
+		 
+		 console.log(tmr);
+		 console.log(dept_dt);
+ 		 console.log(moment(dept_dt).isAfter(tmr));
+		 if(moment(dept_dt).isAfter(tmr)){
    			 return true;
    		 }else{
    			 return false;
@@ -503,15 +528,23 @@ $(document).ready(function() {
 		 console.log(value);
 		  return arg !== value;
 		 }, "Value must not equal arg.");
+	 $.validator.addMethod("SourceValueNothing", function(value, element, arg){
+		  return arg !== value;
+		 }, "Source location is required");
+	 $.validator.addMethod("DestinationValueNothing", function(value, element, arg){
+		  return arg !== value;
+		 }, "Destination location is required");
 
 	//============================== Custom Source Pickup Location ===========================
 	 $("#form_book_now").validate({
 	        rules: {
 	        	source_name: {
-	        		 valueNotEquals: "none" 
+	        		 valueNotEquals: "none",
+	        		 SourceValueNothing: "custom_pickup"
 	            },
 	            destination_name: {
-	        		 valueNotEquals: "none" 
+	        		 valueNotEquals: "none",
+	        		 DestinationValueNothing: "custom_pickup",
 	            },
 	            departure_time: {
 	        		 valueNotEquals: "none" 
@@ -547,8 +580,9 @@ $(document).ready(function() {
 			     }
 
 	        },
-	        errorElement: 'div',
+	        errorElement: 'span',
 	        errorPlacement: function(error, element) {
+	        	
 	            var placement = $(element).data('error');
 	            if (placement) {
 	                $(placement).append(error)
@@ -559,15 +593,86 @@ $(document).ready(function() {
 	            }
 	        },
 	        submitHandler: function() {
+	        	console.log("ALL Correct")
+	        	
 		   		 var source = $("#source_name").val();
 		   		 var destination = $("#destination_name").val();
 		   		 var time=$("#departure_time").val();
 		   		 var date=$("#departure_date").val();
 		   		 var number_of_seat=$("#number_of_seat").val();
 		   		 var dept_dt=date+" "+time;
-		   		 console.log("dept_dt: "+dept_dt);
+		   		console.log("dept_dt: "+dept_dt);
+		   		console.log("destination: "+destination);
 		   		 if(compared_tomorrow(dept_dt)){
-			   		 $.ajax({
+		   			if(phone=='0'){
+		   				$('#confirm_phone_number_modal').modal({
+						    complete: function() {
+						    	$.ajax({
+					   				async: false,
+					   				cache: false,
+					   				type: "GET",
+					   				url: "customer_booking",
+					   				data :	{
+					   						 source:source,
+					   						 destination:destination,
+					   						 time:time,
+					   						 date:date,
+					   						 number_of_seat:number_of_seat
+					   				},
+					   				timeout: 100000,
+					   				success: function(data) {
+					   					console.log(data);
+					   					var text;
+					   					if(data=="success"){
+					   						text="You are sucessful booking";
+					   					}else if(data=="no_bus_available"){
+					   						text="No Bus is available";
+					   					}else if(data=="over_bus_available"){
+					   						text="Over bus available";
+					   					}else{
+					   						text="Process is error!!";
+					   					}
+					   					document.getElementById('confirm_text').innerHTML=text;
+					   					$('#confirm').modal({
+										    complete: function() {
+													window.location.replace("customer_home");
+											} 
+										});
+					   				    $('#confirm').modal('open');
+					   				},
+					   				error: function(e) {
+					   					console.log("ERROR: ", e);
+					   				},
+					   				done: function(e) {
+					   					console.log("DONE");
+					   				}
+						    	});
+							} 
+						});
+		   				$('#confirm_phone_number_modal').modal('open');
+		   				$('#confirm_phone_number_btn').click(function(){
+		   					var phone=$('#user_confirm_phone_number').val();
+		   					console.log('phone: '+phone)
+		   					$.ajax({
+				   				async: false,
+				   				cache: false,
+				   				type: "GET",
+				   				url: "confirm_phone_number",
+				   				data :	{phone:phone},
+				   				timeout: 100000,
+				   				success: function(data) {
+				   					console.log(data);
+				   				},
+				   				error: function(e) {
+				   					console.log("ERROR: ", e);
+				   				},
+				   				done: function(e) {
+				   					console.log("DONE");
+				   				}
+					    	});
+		   				})
+		        	}else{
+		        		$.ajax({
 			   				async: false,
 			   				cache: false,
 			   				type: "GET",
@@ -607,6 +712,8 @@ $(document).ready(function() {
 			   					console.log("DONE");
 			   				}
 			   		});
+		        	}
+			   		 
 		   		 }else{
 		   			var form="Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
 					$("#confirm" ).addClass( "confirm_error" );
@@ -700,6 +807,7 @@ $(document).ready(function() {
 							document.getElementById('source_name').innerHTML=l_form;
 							$('#source_name').material_select();
 							selected_source(id);// to retrieve destination
+							$('#coustom_source_pl').modal('close');
 						},
 						error: function(e) {
 							console.log("ERROR: ", e);

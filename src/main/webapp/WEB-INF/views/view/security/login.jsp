@@ -74,72 +74,21 @@
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
          
     </form> 
-    <form> 
-      
-    </form> 
-     
-  </div> 
-</div> 
+    
+    
+  </div>
+</div>
 
-   <input type="hidden" id="csrfToken" value="${_csrf.token}"/> 
-  <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/> 
-</body> 
-<script type="text/javascript"> 
-$(document).ready(function(){ 
- $("#myForm").on("submit",function(e){ 
-  e.preventDefault(); 
-  var text = $("#username").val().trim(); 
-  var formatemail = /[!#$%^&*()+\-=\[\]{};':"\\|,<>\/?]+/; 
-  if(formatemail.test(text)) 
-   { 
-   swal("Oops!", "You cannot input special characters", "error")   
-   return 
-   } 
-  $(this).unbind("submit").submit(); 
- }); 
-  
-  
-  
-  
- $("#myForm2").on("submit",function(e){ 
-  e.preventDefault(); 
-  $("#toload").addClass("loader"); 
-   $.ajax({ 
-    url:'forgetPasswordSubmit', 
-    type:'GET', 
-    data:{email:$("#eemail").val()}, 
-    success: function(response){         
-     if(response.status=="999") 
-      { 
-      $("#toload").removeClass("loader"); 
-      swal("We cannot find you!", "Please give a valid email!", "error") 
-      $('#closing').trigger('click'); 
-      } 
-      
-     else  
-      { 
-      $("#toload").removeClass("loader"); 
-      swal("Done!","We found you! Please check your email to reset new password!", "success") 
-      $('#closing').trigger('click'); 
-      //alert("<div class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>") 
-      } 
-       
-    }, 
-    error: function(err){ 
-     console.log(JSON.stringify(err)); 
-    } 
-   });    
- }); 
-  
-  
-  
-  
-});  
+   <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
+  <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
+</body>
+<script type="text/javascript">
 
- 
-var token = $('#csrfToken').val(); 
-var header = $('#csrfHeader').val(); 
-axios.defaults.headers.common[header] = token; 
+
+
+var token = $('#csrfToken').val();
+var header = $('#csrfHeader').val();
+axios.defaults.headers.common[header] = token;
 function googleSignin(data){ 
         axios({ 
             method: 'post', 
@@ -167,7 +116,8 @@ function googleSignin(data){
             password: profile.getId(), 
             username:profile.getName(), 
            name:profile.getGivenName(), 
-           profile:profile.getImageUrl() 
+           profile:profile.getImageUrl(),
+           phone:"0"
           }) 
           .then(function (response) { 
             if(response.data.status){ 
