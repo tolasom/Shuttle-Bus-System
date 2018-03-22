@@ -138,5 +138,8 @@ $(document).ready(function(){
 });
 
 
-	
+function getlength(number) {
+    return number.toString().length;
+}
+
 </script>

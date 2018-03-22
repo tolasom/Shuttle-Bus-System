@@ -1,8 +1,0 @@
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:17 +0700] "GET / HTTP/1.1" 404 - http-bio-8080-exec-1 0
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:25 +0700] "GET /shuttle_bus HTTP/1.1" 302 - http-bio-8080-exec-5 0
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:25 +0700] "GET /shuttle_bus/ HTTP/1.1" 302 - http-bio-8080-exec-6 57
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:26 +0700] "GET /shuttle_bus/login HTTP/1.1" 200 3471 http-bio-8080-exec-7 173
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:26 +0700] "GET /shuttle_bus/resources/Bootstrap/css/style.css HTTP/1.1" 200 2864 http-bio-8080-exec-8 33
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:26 +0700] "GET /shuttle_bus/resources/Bootstrap/js/sweetalert.min.js HTTP/1.1" 200 16995 http-bio-8080-exec-2 32
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:26 +0700] "GET /shuttle_bus/resources/Bootstrap/css/sweetalert.css HTTP/1.1" 200 22989 http-bio-8080-exec-3 32
-0:0:0:0:0:0:0:1 - - [17/Mar/2018:10:00:27 +0700] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0

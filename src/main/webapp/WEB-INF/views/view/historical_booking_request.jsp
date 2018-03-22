@@ -55,7 +55,7 @@ load = function(){
 			locations = response.locations;
 			for (var i=0;i<requests.length;i++)
 			{
-			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="historical_request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
+			var booking = '<tr class="hoverr" data-url="historical_request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
 								+'<td>'+requests[i].user_id+'</td>'
 								+'<td>'+searchLocation(requests[i].from_id,locations)+'</td>'
 								+'<td>'+searchLocation(requests[i].to_id,locations)+'</td>'

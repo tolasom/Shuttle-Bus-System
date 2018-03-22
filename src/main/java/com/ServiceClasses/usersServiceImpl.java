@@ -147,6 +147,22 @@ public class usersServiceImpl implements usersService{
 		
 		return usersDao1.updateUser(user, user_model,type);
 	}
+	public List<User_Info> getAlDrivers(){
+		return usersDao1.getAlDrivers();
+	}
+	public List<User_Info> getAlCustomers(){
+		return usersDao1.getAlCustomers();
+	}
+	public void rejectedRequest(String email){
+		 usersDao1.rejectedRequest(email);
+	}
+	public void confirmedRequest(String email){
+		usersDao1.confirmedRequest(email);
+	}
+	public User_Info getCustomerById(int id){
+		return usersDao1.getCustomerById(id);
+	}
+	
 	
 }
 

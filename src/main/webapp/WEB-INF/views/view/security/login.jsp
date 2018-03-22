@@ -19,7 +19,28 @@
 <!-- Bootstrap Core JavaScript -->
     <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
     <script src="${JSCORE}"></script>
-	
+
+<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+<link rel="stylesheet"  type="text/css" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<!-- Bootstrap Core CSS -->	
+  <spring:url value="/resources/Bootstrap/css/bootstrap.min.css" var="bootatrapCore"/>
+  <spring:url value="/resources/Bootstrap/css/sb-admin.css" var="CustomCSS"/>
+  <spring:url value="/resources/Bootstrap/font-awesome/css/font-awesome.min.css" var="customfontCSS"/>
+  
+ 		<link href="${bootatrapCore}" rel="stylesheet" type="text/css">
+   		<!-- Custom CSS -->
+    	<link href="${CustomCSS}" rel="stylesheet" type="text/css">
+    	<!-- Morris Charts CSS -->
+    	<link href="${morrisCSS }" rel="stylesheet" type="text/css">
+    	<!-- Custom Fonts -->
+   	    <link href="${customfontCSS }" rel="stylesheet" type="text/css">
+   	    
+   	    <!-- Sweet alert -->
+<!-- Sweet alert -->
+<spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
+<spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
+   	    	 
+</head>
 
 
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
@@ -66,7 +87,6 @@
   <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-
 
 var token = $('#csrfToken').val();
 var header = $('#csrfHeader').val();

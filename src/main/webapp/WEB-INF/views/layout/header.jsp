@@ -3,15 +3,10 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@page session="true"%>
 <c:url value="/logout" var="logoutUrl" />
-	<form action="${logoutUrl}" method="post" id="logoutForm">
-		<input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />
+	<form action="logout" method="post" id="logoutForm">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	</form>
-	<script>
-		function formSubmit() {
-			document.getElementById("logoutForm").submit();
-		}
-	</script>
+	
             <header class="header">
                     <div class="header-block header-block-collapse d-lg-none d-xl-none">
                         <button class="collapse-btn" id="sidebar-collapse-btn">
@@ -78,10 +73,15 @@
                                         <i class="fa fa-user icon"></i> Profile </a>
                                     
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" onclick="formSubmit" >
+                                    <a class="dropdown-item" onclick="formSubmit()" >
                                         <i class="fa fa-power-off icon" ></i> Logout </a>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </header>
+                <script>
+		function formSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+</script>

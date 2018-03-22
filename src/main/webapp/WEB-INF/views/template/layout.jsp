@@ -10,8 +10,7 @@
 
 
 
-<spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="BootJS"/>
-      <script src="${BootJS}"></script>
+
 
 
 <!--  jQuery -->
@@ -19,7 +18,11 @@
 <!--  jQuery Validation -->
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
 
-      
+<!-- App JS -->      
+<spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
+<spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
+<script src="${AppJS}"></script>
+<script src="${VendorJS}"></script>
       
 <!-- Sweet alert -->
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
@@ -39,11 +42,7 @@
       
 
 
-<!-- App JS -->      
-<spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
-<spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
-<script src="${AppJS}"></script>
-<script src="${VendorJS}"></script>
+
       
 <!-- Date Picker -->     
 <spring:url value="/resources/Bootstrap/js/date/jquery.js" var="dateJS"/>
@@ -86,6 +85,20 @@
 
 <script>
                     $(document).ready(function(){
+
+                      $.ajax({
+                            url:'getBookingRequestNotification',
+                            type:'GET',
+                            success: function(response){
+                              if(response.requests.length>0)
+                              $("#notii").text(response.requests.length);
+                            },
+                          error: function(err){
+                            console.log(JSON.stringify(err));
+                            }
+                            
+                          });
+                    	
                     	$(".js-example-basic-multiple").select2();
                     	var date_input=$('input[name="date"]');
                     	var time_input = $('input[name="time"]');
@@ -93,9 +106,13 @@
                           format: 'yyyy/mm/dd',
                           todayHighlight: true,
                           autoclose: true,
-                        };
+                        };  
+                        var slickjs = $("<link>");
+    $(slickjs).attr('rel', 'stylesheet');
+    $(slickjs).attr('href', '/resources/Bootstrap/css/calendar.css');
+    $(slickjs).appendTo('head');
                         var options2 = { now: "08:00", //hh:mm 24 hour format only, defaults to current time
-                        				 twentyFour: true, //Display 24 hour format, defaults to false 
+                        				 twentyFour: false, //Display 24 hour format, defaults to false 
                         				 upArrow: 'wickedpicker__controls__control-up', //The up arrow class selector to use, for custom CSS 
                         				 downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS 
                         				 close: 'wickedpicker__close', //The close class selector to use, for custom CSS 
@@ -118,6 +135,8 @@
                         
                         
                     });
+                    
 </script>
+
 </body>
 </html>

@@ -55,10 +55,7 @@ $(document).ready(function(){
 
 
 function assigN(){
-	var slickjs = $("<link>");
-  	$(slickjs).attr('rel', 'stylesheet');
-  	$(slickjs).attr('href', '/KIT_Point_Management_System/resources/Bootstrap/css/calendar.css');
-  	$(slickjs).appendTo('head');
+	
 	var dateNow = new Date();
 	currentDate = dateNow;
 	displayCalendar(dateNow);

@@ -67,7 +67,7 @@ load = function () {
 	var p_locations = data.p_locations;
 	console.log(data)
 	$("#code").val(booking.code);
-	$("#uname").val(booking.user_id);
+	$("#uname").val(booking.n);
 	$("#from").val(searchPLocation(booking.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
 	$("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
 	$("#dept_date").val(formatDate(booking.dept_date));
