@@ -91,14 +91,45 @@
         .abcRioButton{
             border-radius: 5px !important;
         }
+        .loader {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #7f8c8d;
+            width: 60px;
+            height: 60px;
+            top: calc(50% - 30px);
+            z-index: 2;
+            position: absolute;
+            right: calc(50% - 30px);
+
+            -webkit-animation: spin 1.5s linear infinite; /* Safari */
+            animation: spin 1.5s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-bg{
+            opacity: 0.6;
+        }
 
 
     </style>
 </head>
 <body style="background: linear-gradient(to left, #636e72, #636e72);">
+<div class="loader"></div>
 <div class="login-page">
 
     <ul class="form" style="padding: 0;padding-top:0px">
+
         <table class="switch">
             <tr>
                 <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
@@ -146,6 +177,7 @@
 
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
+
 </body>
 <script type="text/javascript">
 
@@ -166,8 +198,18 @@
         $("#devlogin").slideDown(200)
         $("#signupform").hide()
 
-
     })
+    function loading() {
+        $(".loader").css("display","block");
+        $(".login-page").css("opacity","0.6");
+        $(".login-page").click(function(){return false;});
+    }
+    function finish() {
+        $(".loader").css("display","none");
+        $(".login-page").css("opacity","1");
+        $(".login-page").click(function(){return true;});
+
+    }
     $(document).ready(function () {
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
@@ -217,6 +259,7 @@
             },
 
             submitHandler: function (form) {
+                loading()
 
                 var token = $('#csrfToken').val();
                 var header = $('#csrfHeader').val();
@@ -291,9 +334,11 @@
             data: data
         })
             .then(function (response) {
+                finish()
                 console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
+
                     window.location.replace(url);
                 }
 
@@ -305,6 +350,7 @@
         console.log(profile.getEmail())
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.disconnect();
+        loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
             password: profile.getId(),

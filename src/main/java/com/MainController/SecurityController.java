@@ -107,7 +107,7 @@ public class SecurityController {
 			 }
 		 }
 		
-		model.setViewName("security/login");
+		model.setViewName("login");
 		return model;
 
 	}
