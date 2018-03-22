@@ -75,12 +75,13 @@ load = function(){
 			var schedules = response.schedules;
 			var locations = response.locations;
 			var buses = response.buses;
+			var drivers  = response.drivers;
 			for (var i=0;i<schedules.length;i++)
 			{
 			var schedule = '<tr class="hoverr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
 								+'<td>'+schedules[i].code+'</td>'
 								+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
-								+'<td>'+schedules[i].driver_id+'</td>'
+								+'<td>'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
 								+'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
 								+'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
 								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
@@ -94,6 +95,7 @@ load = function(){
 				var s_id = parseInt($(this).attr('data-url'));
 				deleteSchedule(s_id);
 			});
+			
 			$(".hoverr").on('click', function(e) {
 				e.stopPropagation();
 		    	location.href=$(this).attr('data-url');
@@ -164,6 +166,14 @@ formatDate =function (date) {
 };
 
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchDriver(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

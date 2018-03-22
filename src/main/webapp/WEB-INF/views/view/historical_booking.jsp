@@ -56,13 +56,14 @@ load = function(){
 			console.log(response)
 			bookings = response.bookings;
 			locations = response.locations;
+			customers = response.customers;
 			
 			console.log(locations)
 			for (var i=0;i<bookings.length;i++)
 				{
 				var booking = '<tr class="hoverr search" s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
 				+'<td>'+bookings[i].code+'</td>'
-				+'<td>'+bookings[i].user_id+'</td>'
+				+'<td>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
 				+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
 				+'<td>'+searchLocation(bookings[i].to_id,locations)+'</td>'
 				+'<td>'+formatDate(bookings[i].dept_date)+'</td>'
@@ -131,6 +132,14 @@ formatDate =function (date) {
 };
 
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchCustomer(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

@@ -58,4 +58,9 @@ public interface usersDao {
 	public int moveSchedule(int arr[], int id);
 	public int saveSchedule2(Schedule_Model schedule)throws ParseException;
 	public int moveSimple(int arr[], int old_id, int new_id, int bookings);
+	public List<User_Info> getAlDrivers();
+	public List<User_Info> getAlCustomers();
+	public void rejectedRequest(String email);
+	public void confirmedRequest(String email);
+	public User_Info getCustomerById(int id);
 }

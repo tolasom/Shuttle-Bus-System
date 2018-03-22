@@ -89,12 +89,14 @@
 </body>
 <script type="text/javascript">
 var id;
+var u_id;
 load = function () {
 	var data = ${data};
 	var request = data.request;
 	var locations = data.locations;
 	var p_locations = data.p_locations;
 	id= parseInt(request.id);
+    u_id= parseInt(request.user_id);
 	console.log(data)
 	if(request.status!="Pending")
 		$("#actionn").hide();
@@ -123,6 +125,7 @@ $(document).ready(function(){
     		url:'confirmRequest',
     		type:'GET',
     		data:{	id:id,
+                    user_id:u_id,
     				provided_time:toDate($("#timeAllowance").val(),'h:m')
     			},
     		traditional: true,			
@@ -192,7 +195,8 @@ reject = function(){
 	$.ajax({
 		url:'rejectRequest',
 		type:'GET',
-		data:{	id:id	},
+		data:{	id:id,
+                user_id:u_id	},
 		traditional: true,			
 		success: function(response){
 				if(response.status=="1")
