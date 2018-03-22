@@ -225,11 +225,11 @@ load = function () {
 	
 
 
-	$( ".unhoverr2" ).hover(function(e) 
-	{
-	    e.stopPropagation();		
-		alert("User")
-  });
+	// $( ".unhoverr2" ).hover(function(e) 
+	// {
+	//     e.stopPropagation();		
+	// 	alert("User")
+ //  });
 
 
 

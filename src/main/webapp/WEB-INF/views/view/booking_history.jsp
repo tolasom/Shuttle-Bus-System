@@ -11,7 +11,7 @@
       
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
  
   
@@ -19,7 +19,7 @@
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -38,34 +38,6 @@
 	nav .brand-logo {
     	left: 15%;
     }	
-    /*
-    
-	
-	@media screen and (min-width: 401px) {
-		.booking_history1{
-				display:none;
-			}
-		
-	}
-	@media screen and (max-width: 400px) {
-		.booking_history{
-			display:none;
-		}
-	}
-	
-	.collapsible-header {
-	    display: block;
-	    cursor: pointer;
-	    min-height: 3rem;
-	    line-height: 3rem;
-	    padding: 0 1rem;
-	    background-color: #fff;
-	    border-bottom: 1px solid #ddd;
-	}
-	#list_booking_history{
-	    margin: 0rem 0 1rem 0 !important;
-   		box-shadow: none;
-	}*/
 	.cancel_booking_modal{
 		width:100%;
 	}
@@ -75,6 +47,7 @@
 	#cancel_confirm_model{
 		width: 300px;
 	}
+	
 	
   </style>
 </head>
@@ -289,13 +262,33 @@
 	
 	
 		 function compared_tomorrow(dept_date_time){
-			 var today = moment().format('Y-M-D, HH:mm:ss');
-			 var date = new Date(today)
+			 var current_date;
+			 $.ajax({
+					async: false,
+					cache: false,
+					type: "GET",
+					url: "today",
+					timeout: 100000,
+					success: function(data) {
+						current_date=data.slice(0, 19);
+					},
+					error: function(e) {
+						console.log("ERROR: ", e);
+					},
+					done: function(e) {
+						console.log("DONE");
+					}
+				});
+			 var date = new Date(moment.utc(current_date, "YYYY-MM-DD  HH:mm:ss"));
 			 date.setDate(date.getDate() + 1);
-			  var tomorrow = date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-			 console.log("tomorrow: "+tomorrow)
-			 console.log('dept_date_time: '+dept_date_time)
-			 if(new Date(dept_date_time) >new Date(tomorrow)){
+			 var tomorrow = String(date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+			 var tmr = moment.utc(tomorrow, "YYYY-MM-DD  HH:mm:ss");
+    		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
+    		 
+    		 console.log(tmr);
+    		 console.log(dept_dt);
+     		 console.log(moment(dept_dt).isAfter(tmr));
+			 if(moment(dept_dt).isAfter(tmr)){
 	   			 return true;
 	   		 }else{
 	   			 return false;

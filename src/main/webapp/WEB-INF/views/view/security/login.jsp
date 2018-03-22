@@ -47,7 +47,6 @@
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
    	    	 
 <script>
-
 </script>
   </head>
 <body>
@@ -87,7 +86,6 @@
   <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-
 var token = $('#csrfToken').val();
 var header = $('#csrfHeader').val();
 axios.defaults.headers.common[header] = token;
@@ -139,4 +137,3 @@ function googleSignin(data){
     
 </script>
 </html>
-

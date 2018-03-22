@@ -5,14 +5,10 @@ import getInfoLogin.IdUser;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +16,6 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.format.datetime.DateFormatter;
 
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
@@ -33,10 +28,11 @@ import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
+import com.ModelClasses.UserModel;
 
 public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
-	static Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
+	Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
 	Date current_date = new Date();
 	public static String TimeNow(){
 		Date d=new Date();
@@ -116,7 +112,7 @@ public class Custom_Imp implements Custom_Dao{
 		        } 
 		        return bookings; 
 		   
-		 }
+	}
 	public Map<String,Object> user_info(){
 		IdUser user= new IdUser();
 		System.out.println(user.getAuthentic());
@@ -131,7 +127,7 @@ public class Custom_Imp implements Custom_Dao{
             System.out.println(users.size());
             if (users.size() > 0) {
             	map.put("username", users.get(0).getUsername());
-            	map.put("today", current_timestamp);
+            	map.put("phone_number", users.get(0).getPhone_number());
     		}
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -416,7 +412,7 @@ public class Custom_Imp implements Custom_Dao{
 		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
 		try {
             trns1 = session.beginTransaction();
-            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? order by dept_date asc")
+            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? and enabled='true' order by dept_date asc")
             		.setParameter(0, user.getAuthentic()).setDate(1, new Date()).setTime(2, java.sql.Time.valueOf(TimeNow())).list();
             System.out.println("KK");
             System.out.println(bh.size());
@@ -433,7 +429,11 @@ public class Custom_Imp implements Custom_Dao{
             	Map<String,Object> map=new HashMap<String,Object>();
             	map.put("id", String.valueOf(bh.get(i).getId()));
             	map.put("dept_date", bh.get(i).getDept_date().toString());
-            	map.put("dept_time", bh.get(i).getDept_time().toString());
+            	if(bh.get(i).getStatus().equals("Confirmed")){
+            		map.put("dept_time", bh.get(i).getProvided_time());
+            	}else{
+            		map.put("dept_time", bh.get(i).getDept_time().toString());
+            	}
             	map.put("pick_source_id", String.valueOf(pick_source.getId()));
             	map.put("pick_source_name", String.valueOf(pick_source.getName()));
             	map.put("drop_dest_id", String.valueOf(pick_source.getId()));
@@ -647,6 +647,9 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setFrom_id(pick_source.getLocation_id());
 		    				new_booker.setDestination_id(pick_destin.getId());
 		    				new_booker.setTo_id(pick_destin.getLocation_id());
+		    				System.out.println("POPO");
+		    				System.out.println(cb.getDate());
+		    				System.out.println(cb.getTime());
 		    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
 		    				System.out.println(cb.getDate());
 		    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
@@ -860,6 +863,7 @@ public class Custom_Imp implements Custom_Dao{
           	
             book.setCreated_at(current_timestamp);
             book.setUpdated_at(current_timestamp);
+            book.setProvided_time(cb.getTime()+":00");
             book.setSource_id(cb.getSource());
             book.setFrom_id(pick_source.getLocation_id());
             book.setDestination_id(cb.getDestination());
@@ -868,6 +872,7 @@ public class Custom_Imp implements Custom_Dao{
             book.setDept_time(java.sql.Time.valueOf(cb.getTime()+":00"));
             book.setNumber_of_booking(cb.getNumber_of_seat());
             book.setUser_id(user.getAuthentic());
+            book.setEnabled(true);
             book.setStatus("Pending");
             session.save(book);
             trns1.commit();
@@ -889,17 +894,16 @@ public class Custom_Imp implements Custom_Dao{
 		try {
             trns1 = session.beginTransaction();
             Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?").setParameter(0, id).list().get(0);
-            System.out.println(br.getNumber_of_booking());
            
             cb.setDate(br.getDept_date().toString().subSequence(0, 10).toString());
-            cb.setTime(br.getDept_time().toString());
+            cb.setTime(br.getProvided_time());
             cb.setSource(br.getSource_id());
             cb.setDestination(br.getDestination_id());
             cb.setNumber_of_seat(br.getNumber_of_booking());
             
             book=cus.customer_booking(cb);
             if(book.equals("success")){
-            	Query query = session.createQuery("delete Booking_Request_Master where id = :id");
+            	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
             	query.setParameter("id", id);
             	int result = query.executeUpdate();
             	trns1.commit();
@@ -914,7 +918,26 @@ public class Custom_Imp implements Custom_Dao{
         }              
 		return book;
 	}
-	
+	public String confirm_phone_number(UserModel id){
+		Custom_Dao cus=new Custom_Imp();
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();     
+		try {
+            trns1 = session.beginTransaction();
+            Query query = session.createQuery("update User_Info set phone_number=:phone_number where id = :id");
+            query.setParameter("id", user.getAuthentic());
+            query.setParameter("phone_number", id.getPhone());
+            int result = query.executeUpdate();
+            trns1.commit();
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        	return "error";
+        }finally {
+            session.flush();
+            session.close();
+        }              
+		return "success";
+	}
 	public String cancel_booking_ticket(int id){
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();     
@@ -942,25 +965,33 @@ public class Custom_Imp implements Custom_Dao{
 	
 	public static void main(String args[]) throws ParseException{
 
-		Transaction trns1 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();   
-        List<Location_Master> locat = new ArrayList<Location_Master>();
-		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
-		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
-		Pickup_Location_Master pick= new Pickup_Location_Master();
-		try {
-            trns1 = session.beginTransaction();
-            Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
-    				" where id = :id");
-            query.setParameter("id", 43);
-            int result = query.executeUpdate();
-            trns1.commit(); 
-        } catch (RuntimeException e) {
-        	e.printStackTrace();
-        }finally{
-            session.flush();
-            session.close();
-        }              
+//		Transaction trns1 = null;
+//        Session session = HibernateUtil.getSessionFactory().openSession();   
+//        List<Location_Master> locat = new ArrayList<Location_Master>();
+//		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
+//		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
+//		Pickup_Location_Master pick= new Pickup_Location_Master();
+//		try {
+//            trns1 = session.beginTransaction();
+//            Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
+//    				" where id = :id");
+//            query.setParameter("id", 43);
+//            int result = query.executeUpdate();
+//            trns1.commit(); 
+//        } catch (RuntimeException e) {
+//        	e.printStackTrace();
+//        }finally{
+//            session.flush();
+//            session.close();
+//        }      
+		Timestamp current=new Timestamp(System.currentTimeMillis());
+		int year=current.getYear();
+		int month=current.getMonth()+1;
+		int day=current.getDate();
+		int h=current.getHours();
+		int m=current.getMinutes();
+		int s=current.getSeconds();
+		System.out.println(year+'-'+month+"-"+day+" "+h+":"+m+":"+s);
 	}
 
 }
