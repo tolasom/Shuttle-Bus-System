@@ -167,7 +167,7 @@
     <version>3.0.7</version>
   </dependency>
  </dependencies>
- 
+
  <build>
     <finalName>KITPointSystem</finalName>
     <plugins>
@@ -185,9 +185,9 @@
 		<server>TomcatServer</server>
 		<path>/</path>
 	</configuration>
+
 </plugin>
-	
     </plugins>
  </build>
- 
+
 </project>
