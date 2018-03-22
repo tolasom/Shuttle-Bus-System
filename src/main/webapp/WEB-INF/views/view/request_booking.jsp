@@ -11,7 +11,7 @@
       
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <spring:url value="/resources/css/custom_booking.css" var="custom_booking" />
   <link href="${custom_booking}" rel="stylesheet"/>
@@ -20,7 +20,7 @@
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -78,6 +78,10 @@
     	overflow-y: visible;
     	 width: 50%;
     }
+    #source_name-error,#destination_name-error,#departure_time-error,#departure_date-error,#number_of_seat-error{
+    	color:red;
+    }
+    
   </style>
 </head>
 <body>
@@ -101,21 +105,20 @@
 		<h5 class="center">Bus Booking Request</h5>
 		<div class="input-field col s12 m6">
 		    <select id="source_name" name="source_name" required></select>
-		    <label>Source</label>
 		  </div>
 		    <div class="input-field col s12 m6">
 		    <select id="destination_name" name="destination_name" required>
+		    	<option disabled selected>Destination Location</option>
 		    </select>
-		    <label>Destination</label>
 		  </div>
 		  <div class="input-field col s12 m6">
 		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Date" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
+					<input type="text" placeholder="Select Departure Time" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
 				</div>
 		  </div>
 		    <div class="input-field col s12 m6">
 		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
+					<input type="text" placeholder="Select Departure Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
 				</div>
 		  </div>
 		   <div class="input-field col s12">

@@ -1,6 +1,5 @@
 com\client_mail\MailService.class
 com\EncryptionDecryption\SecretKeyClass.class
-com\ATable\Create.class
 com\ServiceClasses\usersServiceImpl.class
 com\MainController\SecurityController.class
 com\ModelClasses\UserModel.class
@@ -48,5 +47,3 @@ com\EncryptionDecryption\Decryption.class
 com\EncryptionDecryption\Encryption.class
 com\EntityClasses\Booking_Request_Master.class
 com\ModelClasses\B_Model.class
-com\ATable\Insert_User_Info.class
-com\ATable\Insert_UserRole.class

@@ -11,7 +11,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
     <link rel="stylesheet"  type="text/css" href="${loginStyle}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
@@ -41,7 +41,37 @@
         input[type="submit"]{
             cursor: pointer;
         }
+        .switch{
+            border-spacing: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .switch td{
+            padding: 20px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
 
+            color:#7f8c8d;
+        }
+        .formdev{
+            padding: 45px;
+            padding-top: 0px;
+        }
+        .title-header{
+            color:#636e72;
+            font-size: 31px;
+            margin-top: 35px;
+        }
+        .active-btn{
+            background-color: #95a5a6;
+            color:white !important;
+            -webkit-transition: background-color 0.6s;
+            transition: background-color 0.6s;
+        }
+        .active-btn:hover{
+            background-color: #bdc3c7;
+        }
 
 
 
@@ -49,41 +79,44 @@
 </head>
 <body style="background: linear-gradient(to left, #636e72, #636e72);">
 <div class="login-page">
-    <ul class="form">
-        <h1 style="color: #636e72">Sign Up</h1>
-        <form id="signup" action="<c:url value='/signup' />" method="post">
-            <label for="email"></label>
-        <input type='text'placeholder="Email" name='email' id="email">
-            <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
-        <input type='text'placeholder="Username" name='username' id="username">
-        <input type='text'placeholder="Name" name="name" id="name">
-        <input type='text'placeholder="Phone" name="phone" id="phone">
 
-        <table style="width: 100%;margin-top: 15px">
+    <ul class="form" style="padding: 0;padding-top:0px">
+        <table class="switch">
             <tr>
-                <td>
-                    <label class="container">Male
-                        <input type="radio" checked="checked" name="gender">
-                        <span class="checkmark"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="container">Female
-                        <input type="radio" name="gender">
-                        <span class="checkmark"></span>
-                    </label>
-                </td>
+                <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
+                <td id="signup-btn" style="border-top-right-radius: 4px">SIGN UP</td>
             </tr>
         </table>
+        <div class="formdev">
+            <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
+            <form id="signup" action="<c:url value='/signup' />" method="post">
+                <label for="email"></label>
+                <input type='text'placeholder="Email" name='email' id="email">
+                <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
+                <input type='text'placeholder="Username" name='username' id="username">
+                <input type='text'placeholder="Phone" name="phone" id="phone">
 
-        <input type="submit" style="background-color: #636e72;color:white;font-size: 14px;font-weight: bold"
-               class="a" value="SIGNUP" style="color:white;">
 
 
-        <div style="font-size:15px;text-align: center">
-            <a href ="login" style="color:#0984e3">Login</a>
+                <input type="submit" style="background-color: #636e72;color:white;color:white;font-size: 14px;font-weight: bold"
+                       value="SIGNUP">
+
+            </form>
+            <form class="login-form" id="loginform" action="<c:url value='/login' />" method="post">
+                <input type='text'placeholder="Username" name='username' id="username" required>
+                <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
+                <input type="submit" value="Login"
+                       style="background-color: #636e72;color:white;color:white;font-size: 14px;font-weight: bold">
+                <div style="font-size:10px;">
+                    <a href ="signup" data-toggle="modal" data-target="#myModal">Forgot Password?</a>
+
+                </div>
+                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+            </form>
         </div>
-</form>
+
 </ul>
 
 
@@ -93,6 +126,27 @@
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
+
+    $("#signup").hide();
+    $("#signin-btn").addClass('active-btn');
+    $("#signup-btn").click(function () {
+        $("#signup-btn").addClass('active-btn');
+        $("#signin-btn").removeClass('active-btn');
+        $("#signup").slideDown(300)
+        $("#loginform").hide();
+
+
+    })
+
+    $("#signin-btn").click(function () {
+        $("#signin-btn").addClass("active-btn");
+        $("#signup-btn").removeClass("active-btn");
+        $("#loginform").slideDown(300)
+        $("#signup").hide()
+
+
+    })
+
     $(function() {
         $("#signup").validate({
 

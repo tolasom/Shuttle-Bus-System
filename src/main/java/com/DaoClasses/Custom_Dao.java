@@ -9,6 +9,7 @@ import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
+import com.ModelClasses.UserModel;
 
 public interface Custom_Dao {
 	Map<String,Object> user_info();
@@ -28,4 +29,5 @@ public interface Custom_Dao {
 	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np);
 	public String request_book_now(int id);
 	public String cancel_booking_ticket(int id);
+	public String confirm_phone_number(UserModel cb);
 }

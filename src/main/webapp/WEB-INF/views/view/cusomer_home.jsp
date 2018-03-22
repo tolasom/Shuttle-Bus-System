@@ -11,7 +11,7 @@
       
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <spring:url value="/resources/css/custom_booking.css" var="custom_booking" />
   <link href="${custom_booking}" rel="stylesheet"/>
@@ -20,7 +20,7 @@
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -66,6 +66,10 @@
 	,#source_name-error,#destination_name-error,#departure_time-error,#departure_date-error,#number_of_seat-error{
 		color:red;
 	}
+	#source_name-error,#destination_name-error,#departure_time-error{
+		color:red;
+		    margin-top: -30px;
+	}
 	.select-wrapper span.caret {
 	    margin: 15px 0!important;
     }
@@ -96,7 +100,13 @@
 	.cancel_booking_modal{
 		width:100%;
 	}
-	
+	.select-wrapper input.select-dropdown{
+		-webkit-user-select:none;
+		-moz-user-select:none;
+		-ms-user-select:none;
+		-o-user-select:none; // latest Opera versions support -webkit-
+		user-select:none;
+		}
   </style>
 </head>
 <body>
@@ -120,12 +130,11 @@
 		<h5 class="center">Shuttle Bus Booking</h5>
 		<div class="input-field col s12 m6">
 		    <select id="source_name" name="source_name" required></select>
-		    <label>Source</label>
 		  </div>
 		    <div class="input-field col s12 m6">
 		    <select id="destination_name" name="destination_name" required>
+		    <option disabled selected>Destination Location</option>
 		    </select>
-		    <label>Destination</label>
 		  </div>
 		  <div class="input-field col s12 m6">
 		    <select id="departure_time" name="departure_time" required>
@@ -133,7 +142,7 @@
 		  </div>
 		    <div class="input-field col s12 m6">
 		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
+					<input type="text" placeholder="Select Departure Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
 				</div>
 				<a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
 		  </div>
@@ -156,7 +165,8 @@
 		<p> Do you want to cancel your shuttle bus booking now?
 	</div>
 	<div class="modal-footer">
-		<span id="get_req_book_footer"></span>
+		<!-- <span id="get_req_book_footer"></span> -->
+		<span id="get_cancel_booking_footer"></span>
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
 </div>
@@ -177,6 +187,19 @@
 		<span id="get_req_book_footer"></span>
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
+</div>
+<!-- Ask for phone number while booking -->
+<div id="confirm_phone_number_modal" class="modal">
+	<div class="modal-content container">
+	   <h5 class="center">Please tell us your phone number in Cambodia!</h5>
+	   <div class="input-field col s6">
+	       <input placeholder="Enter your phone number for ctacting between you and driver!" id="user_confirm_phone_number" name="user_confirm_phone_number" type="text" class="validate">
+	   </div>
+	</div>
+	<div class="modal-footer">
+	    <a id="confirm_phone_number_btn" class="modal-action modal-close waves-effect waves-green btn-flat">Confirm</a>
+	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Skip</a>
+	</div>
 </div>
 <!-- Custom Source Pick Up Location -->
 <div id="coustom_source_pl" class="modal">

@@ -147,6 +147,7 @@ public class userDaoImpl implements usersDao{
             user_info.setEmail(user.getEmail());
             user_info.setName(user.getName());
             user_info.setUsername(user.getUsername());
+            user_info.setPhone_number(user.getPhone());
             if(type.equals("google")){
             	user_info.setGooglePassword(hashedPassword);
             	System.out.println("google");
