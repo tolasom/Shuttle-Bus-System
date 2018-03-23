@@ -31,6 +31,12 @@
             border-radius: 5px;
 
         }
+        .form {
+            margin: unset;
+        }
+        .login-page{
+            padding: 4% 0 0;
+        }
         form{
             text-align: left;
         }
@@ -74,22 +80,34 @@
         }
         .forgort{
             font-size: 14px;
-            color:#3742fa;
+            color:#E71D36;
             cursor: pointer;
             width: 80%;
             -webkit-transition: color 0.4s;
         }
         .forgort:hover{
-            color: #1e90ff;
+            color: #DE6449;
         }
         .submit-btn{
             background-color: #636e72 !important;
             color:white;
             font-size: 14px;
             font-weight: bold;
+            -webkit-transition: background-color 0.4s;
+        }
+        .submit-btn:hover{
+            background-color: #95a5a6 !important;
         }
         .abcRioButton{
             border-radius: 5px !important;
+        }
+        .googleSign{
+            margin-right: 15%;
+            margin-left: 15%;
+
+        }
+        .abcRioButtonBlue{
+            width: 100% !important;
         }
         .loader {
             display: none;
@@ -151,19 +169,26 @@
                 <form id="loginform" action="<c:url value='login' />" method="post">
                     <input type='text'placeholder="Email" name='username' required>
                     <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
-                    <input type="submit" value="Login" class="submit-btn">
+                    <input type="submit" value="LOGIN" class="submit-btn">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </form>
 
-                <table>
+                <table style="width: 100%;text-align: center !important;">
                     <tr>
+
+                        <td>
+                            <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
+                        </td>
+
+                    </tr>
+                    <tr>
+
                         <td class="forgort">
                             Forgot Password?
                         </td>
-                        <td>
-                            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-                        </td>
+
                     </tr>
+
                 </table>
             </div>
 
@@ -210,7 +235,9 @@
         $(".login-page").click(function(){return true;});
 
     }
+
     $(document).ready(function () {
+        console.log($(".abcRioButtonContents"))
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
         axios.defaults.headers.common[header] = token;
@@ -346,8 +373,8 @@
 
     }
     function onSignIn(googleUser) {
+
         var profile = googleUser.getBasicProfile();
-        console.log(profile.getEmail())
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.disconnect();
         loading()
