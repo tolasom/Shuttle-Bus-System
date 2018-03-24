@@ -54,7 +54,7 @@ public class SecurityController {
 			 }
 			 if ("[ROLE_STUDENT]".contentEquals(userRole))
 			 {
-				 return "redirect:customer_home";
+				 return "redirect:student_home";
 			 }
 		 }
 			 return "redirect:login";
@@ -102,7 +102,7 @@ public class SecurityController {
 			 }
 			 if ("[ROLE_STUDENT]".contentEquals(userRole))
 			 {
-				 model.setViewName("redirect:customer_home");
+				 model.setViewName("redirect:student_home");
 				 return model;
 			 }
 		 }

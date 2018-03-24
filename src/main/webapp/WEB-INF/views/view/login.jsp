@@ -275,15 +275,15 @@
             },
             messages: {
                 email: {
-                    required: "email is required",
+                    required: "*required",
                     email: "invalid email"
                 },
                 username: {
-                    required: "username is required",
+                    required: "*required",
                     minlength: "username must be at least 3 characters long"
                 },
                 pass: {
-                    required: "password is required",
+                    required: "*required",
                     minlength: "password must be at least 8 characters long"
                 },
                 phone: {
@@ -301,6 +301,9 @@
                 var email = $('#email').val()
                 var phone = $('#phone').val()
                 var password = $('#pass').val();
+                if(phone == ""){
+                    phone = "0"
+                }
                 isExistUser(email)
                     .then(function (value) {
                         if(value){
@@ -339,7 +342,7 @@
         $("#loginform").validate({
 
             rules: {
-                useranme: {
+                username: {
                     required: true,
                     email: true
                 },
@@ -350,12 +353,12 @@
 
             },
             messages: {
-                email: {
-                    required: "email is required",
+                username: {
+                    required: "*required",
                     email: "invalid email"
                 },
-                pass: {
-                    required: "password is required",
+                password: {
+                    required: "*required",
                     minlength: "password must be at least 8 characters long"
                 },
 

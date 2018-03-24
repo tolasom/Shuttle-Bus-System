@@ -60,12 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 	private static final String[] STUDENT_MATCHERS = {
 
-		"/customer_home",
-		"/request_booking",
-		"/booking_history"
-		
-   
+		"/student_home",
+
     };
+
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
