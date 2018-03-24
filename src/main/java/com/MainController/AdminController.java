@@ -55,6 +55,10 @@ public class AdminController {
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
 	}
+	@RequestMapping(value="/student_home", method=RequestMethod.GET)
+	public ModelAndView Student_Home() {
+		return new ModelAndView("student_home");
+	}
 //=========================Returns report view================================
 	@RequestMapping(value="/report", method=RequestMethod.GET)
 	public ModelAndView viewReport() {
