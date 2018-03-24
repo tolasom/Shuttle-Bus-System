@@ -245,7 +245,6 @@
     }
 
     $(document).ready(function () {
-        console.log($(".abcRioButtonContents"))
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
         axios.defaults.headers.common[header] = token;
@@ -393,10 +392,12 @@
 
     }
     function onSignIn(googleUser) {
-
+        console.log("ll")
         var profile = googleUser.getBasicProfile();
         var auth2 = gapi.auth2.getAuthInstance();
+        console.log(document.getElementsByClassName("abcRioButtonContents"))
         auth2.disconnect();
+
         loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
