@@ -342,7 +342,7 @@
         $("#loginform").validate({
 
             rules: {
-                useranme: {
+                username: {
                     required: true,
                     email: true
                 },
@@ -353,11 +353,11 @@
 
             },
             messages: {
-                email: {
+                username: {
                     required: "*required",
                     email: "invalid email"
                 },
-                pass: {
+                password: {
                     required: "*required",
                     minlength: "password must be at least 8 characters long"
                 },
