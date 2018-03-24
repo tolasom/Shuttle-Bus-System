@@ -159,6 +159,7 @@
             <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
                 <label for="email"></label>
                 <input type='text'placeholder="Email" name='email' id="email">
+                <label id="email-error" class="error" for="email"></label>
                 <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
                 <input type='text'placeholder="Username" name='username' id="username">
                 <input type='text'placeholder="Phone" name="phone" id="phone">
@@ -227,13 +228,20 @@
     function loading() {
         $(".loader").css("display","block");
         $(".login-page").css("opacity","0.6");
-        $(".login-page").click(function(){return false;});
+        document.getElementsByClassName(".login-page").disabled = true;
     }
     function finish() {
         $(".loader").css("display","none");
         $(".login-page").css("opacity","1");
-        $(".login-page").click(function(){return true;});
+        document.getElementsByClassName(".login-page").disabled = false;
 
+    }
+    function isExistUser(email) {
+        return axios.post('isexist', {
+            email: email,
+        }).then(function (response) {
+            return response.data.status
+        })
     }
 
     $(document).ready(function () {
@@ -288,30 +296,39 @@
             submitHandler: function (form) {
                 loading()
 
-                var token = $('#csrfToken').val();
-                var header = $('#csrfHeader').val();
+
                 var username = $('#username').val();
                 var email = $('#email').val()
                 var phone = $('#phone').val()
                 var password = $('#pass').val();
-
-                axios.post('signup', {
-                    email: email,
-                    password: password,
-                    username:username,
-                    phone:phone
-                    })
-                    .then(function (response) {
-                        if(response.data.status){
-                            data = 'username='+email + '&password='+password
-                           // window.location.replace("login")
-                            googleSignin(data)
+                isExistUser(email)
+                    .then(function (value) {
+                        if(value){
+                            finish()
+                            $("#email-error").css("display","block");
+                            document.getElementById("email-error").innerHTML = "email is existed"
                         }
+                        else {
+                            axios.post('signup', {
+                                email: email,
+                                password: password,
+                                username:username,
+                                phone:phone
+                            })
+                                .then(function (response) {
+                                    if(response.data.status){
+                                        data = 'username='+email + '&password='+password
+                                        // window.location.replace("login")
+                                        googleSignin(data)
+                                    }
 
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        }
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+
 
                 return false;
             }

@@ -128,6 +128,7 @@ public class userDaoImpl implements usersDao{
         	e.printStackTrace();
         	
         }finally{
+		    session.flush();
         	session.close();
         }
 		return null;
@@ -176,7 +177,11 @@ public class userDaoImpl implements usersDao{
           return true;
         } catch (RuntimeException e) {
         	
-        }                         
+        }
+        finally {
+		    session.flush();
+		    session.close();
+        }
 		return false;
 	}
 	public boolean updateUser(User_Info user,UserModel user_model,String type){
@@ -201,9 +206,30 @@ public class userDaoImpl implements usersDao{
           return true;
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        }                         
+        }
+        finally {
+		    session.flush();
+		    session.close();
+        }
 		return false;
 	}
+	public boolean isExistUser(){
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns1 = session.beginTransaction();
+
+            trns1.commit();
+            return true;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        finally {
+            session.flush();
+            session.close();
+        }
+        return false;
+    }
 	public int saveBus(Bus_Master bus) {
 		List <Bus_Master> buses  = new ArrayList<Bus_Master>();
     	Transaction trns7 = null;

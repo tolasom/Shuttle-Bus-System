@@ -135,10 +135,7 @@
                     </tr>
                 </table>
             </div>
-
         </div>
-
-
 </ul>
 
 
@@ -218,36 +215,39 @@
 
             submitHandler: function (form) {
 
-                var token = $('#csrfToken').val();
-                var header = $('#csrfHeader').val();
+
                 var username = $('#username').val();
                 var email = $('#email').val()
                 var phone = $('#phone').val()
                 var password = $('#pass').val();
-
-                axios.post('signup', {
-                    email: email,
-                    password: password,
-                    username:username,
-                    phone:phone
+                if(isExistUser(email)){
+                    console.log("exist")
+                }
+                else{
+                    axios.post('signup', {
+                        email: email,
+                        password: password,
+                        username:username,
+                        phone:phone
                     })
-                    .then(function (response) {
-                        if(response.data.status){
-                            data = 'username='+email + '&password='+password
-                           // window.location.replace("login")
-                            googleSignin(data)
-                        }
+                        .then(function (response) {
+                            if(response.data.status){
+                                data = 'username='+email + '&password='+password
+                                // window.location.replace("login")
+                                googleSignin(data)
+                            }
 
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+
+
 
                 return false;
             }
         });
-
-
 
         $("#loginform").validate({
 
@@ -283,6 +283,13 @@
     });
 
 
+    function isExistUser(email) {
+        return axios.post('isexist', {
+            email: email,
+        }).then(function (response) {
+                return response.data.status
+        })
+    }
 
     function googleSignin(data){
         axios({
@@ -291,7 +298,6 @@
             data: data
         })
             .then(function (response) {
-                console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
                     window.location.replace(url);
@@ -302,7 +308,7 @@
     }
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
-        console.log(profile.getEmail())
+
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.disconnect();
         axios.post('check_signup', {
