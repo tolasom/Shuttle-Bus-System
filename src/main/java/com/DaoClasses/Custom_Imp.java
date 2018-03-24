@@ -100,7 +100,7 @@ public class Custom_Imp implements Custom_Dao{
 		        Session session = HibernateUtil.getSessionFactory().openSession(); 
 		        try { 
 		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Booking_Maste"; 
+		            String queryString = "from Booking_Master"; 
 		            Query query = session.createQuery(queryString); 
 		            bookings=(List<Booking_Master>)query.list(); 
 		        } catch (RuntimeException e) { 
