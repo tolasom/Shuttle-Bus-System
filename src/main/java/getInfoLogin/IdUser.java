@@ -27,20 +27,25 @@ public class IdUser {
         Session session = HibernateUtil.getSessionFactory().openSession();
         
 		List<User_Info> users = new ArrayList<User_Info>();
-	
+		User_Info user = new User_Info();
 		try {
             trns1 = session.beginTransaction();
             System.out.println("KK: "+userDetail.getUsername());
-            users = session.createQuery("from User_Info where email=? and enabled=?").setString(0, email).setBoolean(1, true).list();
-            
-           System.out.println(users.size());
+            System.out.println("KK: "+email);
+            String str = "from User_Info where email='" + email+"'";
+            System.out.println(str);
+            //users = session.createQuery("from User_Info where email=? and enabled=?").setString(0, email).setBoolean(1, true).list();
+            Query query= session.createQuery(str);
+            //System.out.println("KK: "+users.get(0).getId());
+           System.out.println(query.list().size());
+          	user = (User_Info) query.list().get(0);
         } catch (RuntimeException e) {
         	
         }finally{
 			session.flush();
 			session.close();
 		}
-		return users.get(0).getId();
+		return user.getId();
 }
 	public static void main(String args[]){
 		Transaction trns1 = null;

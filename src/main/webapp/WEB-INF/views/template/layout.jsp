@@ -14,21 +14,20 @@
 
 
 <!--  jQuery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <!--  jQuery Validation -->
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
 
 <!-- App JS -->      
 <spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
 <spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
-<script src="${AppJS}"></script>
-<script src="${VendorJS}"></script>
+
       
 <!-- Sweet alert -->
 <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
       <link rel="stylesheet" href="${alertStyle}">
 <spring:url value="/resources/Bootstrap/js/sweetalert.min.js" var="alertJS"/>
-      <script src="${alertJS}"></script>
+      
 
 
 
@@ -48,9 +47,7 @@
 <spring:url value="/resources/Bootstrap/js/date/jquery.js" var="dateJS"/>
 <spring:url value="/resources/Bootstrap/js/date/jquery-ui.js" var="dateJS2"/>
 <spring:url value="/resources/Bootstrap/js/time/wickedpicker.js" var="TimeJS"/>
-<script src="${dateJS}"></script>
-<script src="${dateJS2}"></script>
-<script src="${TimeJS}"></script>
+
 <spring:url value="/resources/Bootstrap/css/date/jquery-ui.css" var="dateStyle"/>
 <link rel="stylesheet" href="${dateStyle}">
 <spring:url value="/resources/Bootstrap/css/time/wickedpicker.css" var="timeStyle"/>
@@ -61,8 +58,6 @@
 <!-- Multiple Select -->     
 <spring:url value="/resources/Bootstrap/js/multipleselect/select2.full.min.js" var="MultipleJS"/>
 <spring:url value="/resources/Bootstrap/js/multipleselect/en.js" var="MultipleJS2"/>
-<script src="${MultipleJS}"></script>
-<script src="${MultipleJS2}"></script>
 <spring:url value="/resources/Bootstrap/css/multipleselect/select2.min.css" var="MultipleCSS"/>
 <link rel="stylesheet" href="${MultipleCSS}">
 
@@ -77,13 +72,26 @@
   <div class="main-wrapper">
             <div class="app" id="app">
             <tiles:insertAttribute name="header" />
-			<tiles:insertAttribute name="sidebar" />
-			<tiles:insertAttribute name="body" />
-			
+      <tiles:insertAttribute name="sidebar" />
+      <tiles:insertAttribute name="body" />
+      
             </div>
   </div>
 
+
+
+<script src="${VendorJS}"></script>
+<script src="${AppJS}"></script>
+<script src="${alertJS}"></script>
+<script src="${dateJS}"></script>
+<script src="${dateJS2}"></script>
+<script src="${TimeJS}"></script>
+<script src="${MultipleJS}"></script>
+<script src="${MultipleJS2}"></script>
+
 <script>
+                    
+
                     $(document).ready(function(){
 
                       $.ajax({
@@ -98,10 +106,32 @@
                             }
                             
                           });
-                    	
-                    	$(".js-example-basic-multiple").select2();
-                    	var date_input=$('input[name="date"]');
-                    	var time_input = $('input[name="time"]');
+
+
+
+                      $.ajax({
+                              async: false,
+                              cache: false,
+                              type: "GET",
+                              url: "user_info",
+                              contentType: "application/json",
+                              timeout: 100000,
+                              success: function(data) {
+                                phone=data.phone_number;
+                                document.getElementById('fname').innerHTML=data.username;
+                                
+                              },
+                              error: function(e) {
+                                console.log("ERROR: ", e);
+                              },
+                              done: function(e) {
+                                console.log("DONE");
+                              }
+                          });
+                      
+                      $(".js-example-basic-multiple").select2();
+                      var date_input=$('input[name="date"]');
+                      var time_input = $('input[name="time"]');
                         var options={
                           format: 'yyyy/mm/dd',
                           todayHighlight: true,
@@ -112,18 +142,18 @@
     $(slickjs).attr('href', '/resources/Bootstrap/css/calendar.css');
     $(slickjs).appendTo('head');
                         var options2 = { now: "08:00", //hh:mm 24 hour format only, defaults to current time
-                        				 twentyFour: false, //Display 24 hour format, defaults to false 
-                        				 upArrow: 'wickedpicker__controls__control-up', //The up arrow class selector to use, for custom CSS 
-                        				 downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS 
-                        				 close: 'wickedpicker__close', //The close class selector to use, for custom CSS 
-                        				 hoverState: 'hover-state', //The hover state class to use, for custom CSS 
-                        				 title: 'Pick a time', //The Wickedpicker's title, 
-                        				 showSeconds: false, //Whether or not to show seconds, 
-                        				 secondsInterval: 1, //Change interval for seconds, defaults to 1  , 
-                        				 minutesInterval: 1, //Change interval for minutes, defaults to 1 
-                        				 beforeShow: null, //A function to be called before the Wickedpicker is shown 
-                        				 show: null, //A function to be called when the Wickedpicker is shown 
-                        				 clearable: false, //Make the picker's input clearable (has clickable "x")  
+                                 twentyFour: true, //Display 24 hour format, defaults to false 
+                                 upArrow: 'wickedpicker__controls__control-up', //The up arrow class selector to use, for custom CSS 
+                                 downArrow: 'wickedpicker__controls__control-down', //The down arrow class selector to use, for custom CSS 
+                                 close: 'wickedpicker__close', //The close class selector to use, for custom CSS 
+                                 hoverState: 'hover-state', //The hover state class to use, for custom CSS 
+                                 title: 'Pick a time', //The Wickedpicker's title, 
+                                 showSeconds: false, //Whether or not to show seconds, 
+                                 secondsInterval: 1, //Change interval for seconds, defaults to 1  , 
+                                 minutesInterval: 1, //Change interval for minutes, defaults to 1 
+                                 beforeShow: null, //A function to be called before the Wickedpicker is shown 
+                                 show: null, //A function to be called when the Wickedpicker is shown 
+                                 clearable: false, //Make the picker's input clearable (has clickable "x")  
                         };
                         time_input.wickedpicker(options2);
                         date_input.datepicker(options);

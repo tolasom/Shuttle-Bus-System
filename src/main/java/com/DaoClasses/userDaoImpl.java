@@ -118,7 +118,7 @@ public class userDaoImpl implements usersDao{
             	}
             	if(Username.length>1){
             		
-            		users.get(0).setUsername(username);
+            		users.get(0).setEmail(username);
             	}
     			return users.get(0);
     		} else {

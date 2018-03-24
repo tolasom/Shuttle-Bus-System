@@ -228,7 +228,7 @@ public class AdminController {
 		map.put("main_locations", usersService1.getAllLocations());
 		map.put("locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
-		map.put("drivers", usersService1.getAllUsers());
+		map.put("drivers", usersService1.getAlDrivers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -239,6 +239,26 @@ public class AdminController {
 		return new ModelAndView("create_schedule","data",json);
 	}
 	
+//=========================Returns create user view================================
+	@RequestMapping(value="/create_user", method=RequestMethod.GET)
+	public ModelAndView create_user() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("code", getScheduleSequence());
+		map.put("main_locations", usersService1.getAllLocations());
+		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("buses", usersService1.getAllBuses());
+		map.put("drivers", usersService1.getAlDrivers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("create_user","data",json);
+	}
+
+
 	
 //====================To save bus============================
 	@RequestMapping(value="/createBus", method=RequestMethod.GET)
