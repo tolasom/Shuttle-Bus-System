@@ -42,6 +42,8 @@ public class CustomerController {
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
 		public @ResponseBody Map<String,Object> user_info() {
 		Map<String, Object> map = customer.user_info();
+		System.out.println("Map User_Info:");
+		System.out.println(map);
 		return map;
 	}
 	//=========================check_booking_request Information================================

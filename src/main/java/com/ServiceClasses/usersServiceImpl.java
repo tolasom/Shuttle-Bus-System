@@ -27,7 +27,9 @@ public class usersServiceImpl implements usersService{
 
 	@Autowired
 	usersDao usersDao1;
-
+	public User_Info findByUserName(String name){
+		return usersDao1.findByUserName(name);
+	}
 	public int saveBus(Bus_Master bus) {
 		return usersDao1.saveBus(bus);
 	}

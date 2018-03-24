@@ -31,6 +31,12 @@
             border-radius: 5px;
 
         }
+        .form {
+            margin: unset;
+        }
+        .login-page{
+            padding: 4% 0 0;
+        }
         form{
             text-align: left;
         }
@@ -74,31 +80,74 @@
         }
         .forgort{
             font-size: 14px;
-            color:#3742fa;
+            color:#E71D36;
             cursor: pointer;
             width: 80%;
             -webkit-transition: color 0.4s;
         }
         .forgort:hover{
-            color: #1e90ff;
+            color: #DE6449;
         }
         .submit-btn{
             background-color: #636e72 !important;
             color:white;
             font-size: 14px;
             font-weight: bold;
+            -webkit-transition: background-color 0.4s;
+        }
+        .submit-btn:hover{
+            background-color: #95a5a6 !important;
         }
         .abcRioButton{
             border-radius: 5px !important;
+        }
+        .googleSign{
+            margin-right: 15%;
+            margin-left: 15%;
+
+        }
+        .abcRioButtonBlue{
+            width: 100% !important;
+        }
+        .loader {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #7f8c8d;
+            width: 60px;
+            height: 60px;
+            top: calc(50% - 30px);
+            z-index: 2;
+            position: absolute;
+            right: calc(50% - 30px);
+
+            -webkit-animation: spin 1.5s linear infinite; /* Safari */
+            animation: spin 1.5s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-bg{
+            opacity: 0.6;
         }
 
 
     </style>
 </head>
 <body style="background: linear-gradient(to left, #636e72, #636e72);">
+<div class="loader"></div>
 <div class="login-page">
 
     <ul class="form" style="padding: 0;padding-top:0px">
+
         <table class="switch">
             <tr>
                 <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
@@ -110,6 +159,7 @@
             <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
                 <label for="email"></label>
                 <input type='text'placeholder="Email" name='email' id="email">
+                <label id="email-error" class="error" for="email"></label>
                 <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
                 <input type='text'placeholder="Username" name='username' id="username">
                 <input type='text'placeholder="Phone" name="phone" id="phone">
@@ -120,22 +170,32 @@
                 <form id="loginform" action="<c:url value='login' />" method="post">
                     <input type='text'placeholder="Email" name='username' required>
                     <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
-                    <input type="submit" value="Login" class="submit-btn">
+                    <input type="submit" value="LOGIN" class="submit-btn">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </form>
 
-                <table>
+                <table style="width: 100%;text-align: center !important;">
                     <tr>
+
+                        <td>
+                            <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
+                        </td>
+
+                    </tr>
+                    <tr>
+
                         <td class="forgort">
                             Forgot Password?
                         </td>
-                        <td>
-                            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-                        </td>
+
                     </tr>
+
                 </table>
             </div>
+
         </div>
+
+
 </ul>
 
 
@@ -143,6 +203,7 @@
 
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
+
 </body>
 <script type="text/javascript">
 
@@ -163,9 +224,28 @@
         $("#devlogin").slideDown(200)
         $("#signupform").hide()
 
-
     })
+    function loading() {
+        $(".loader").css("display","block");
+        $(".login-page").css("opacity","0.6");
+        document.getElementsByClassName(".login-page").disabled = true;
+    }
+    function finish() {
+        $(".loader").css("display","none");
+        $(".login-page").css("opacity","1");
+        document.getElementsByClassName(".login-page").disabled = false;
+
+    }
+    function isExistUser(email) {
+        return axios.post('isexist', {
+            email: email,
+        }).then(function (response) {
+            return response.data.status
+        })
+    }
+
     $(document).ready(function () {
+        console.log($(".abcRioButtonContents"))
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
         axios.defaults.headers.common[header] = token;
@@ -214,40 +294,47 @@
             },
 
             submitHandler: function (form) {
+                loading()
 
 
                 var username = $('#username').val();
                 var email = $('#email').val()
                 var phone = $('#phone').val()
                 var password = $('#pass').val();
-                if(isExistUser(email)){
-                    console.log("exist")
-                }
-                else{
-                    axios.post('signup', {
-                        email: email,
-                        password: password,
-                        username:username,
-                        phone:phone
+                isExistUser(email)
+                    .then(function (value) {
+                        if(value){
+                            finish()
+                            $("#email-error").css("display","block");
+                            document.getElementById("email-error").innerHTML = "email is existed"
+                        }
+                        else {
+                            axios.post('signup', {
+                                email: email,
+                                password: password,
+                                username:username,
+                                phone:phone
+                            })
+                                .then(function (response) {
+                                    if(response.data.status){
+                                        data = 'username='+email + '&password='+password
+                                        // window.location.replace("login")
+                                        googleSignin(data)
+                                    }
+
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        }
                     })
-                        .then(function (response) {
-                            if(response.data.status){
-                                data = 'username='+email + '&password='+password
-                                // window.location.replace("login")
-                                googleSignin(data)
-                            }
-
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-
 
 
                 return false;
             }
         });
+
+
 
         $("#loginform").validate({
 
@@ -283,13 +370,6 @@
     });
 
 
-    function isExistUser(email) {
-        return axios.post('isexist', {
-            email: email,
-        }).then(function (response) {
-                return response.data.status
-        })
-    }
 
     function googleSignin(data){
         axios({
@@ -298,8 +378,11 @@
             data: data
         })
             .then(function (response) {
+                finish()
+                console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
+
                     window.location.replace(url);
                 }
 
@@ -307,10 +390,11 @@
 
     }
     function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
 
+        var profile = googleUser.getBasicProfile();
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.disconnect();
+        loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
             password: profile.getId(),

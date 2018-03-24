@@ -123,12 +123,13 @@ public class Custom_Imp implements Custom_Dao{
 		Map<String,Object> map=new HashMap<String,Object>();
 		try {
             trns1 = session.beginTransaction();
-            users = session.createQuery("from User_Info where id=? and enabled=?").setParameter(0, user.getAuthentic()).setBoolean(1, true).list();
-            System.out.println(users.size());
-            if (users.size() > 0) {
-            	map.put("username", users.get(0).getUsername());
-            	map.put("phone_number", users.get(0).getPhone_number());
-    		}
+            int user_id=user.getAuthentic();          
+            User_Info us = (User_Info) session.load(User_Info.class,user_id);
+                
+           // System.out.println("PP: "+users.size());
+            //System.out.println("username: "+us.getUsername());
+            map.put("username", us.getUsername());
+            map.put("phone_number", us.getPhone_number());
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }    

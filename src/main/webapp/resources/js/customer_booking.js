@@ -25,6 +25,8 @@ $(document).ready(function() {
 			contentType: "application/json",
 			timeout: 100000,
 			success: function(data) {
+				console.log("KK");
+				console.log(data);
 				phone=data.phone_number;
 				document.getElementById('fullname').innerHTML=data.username;
 				
@@ -635,7 +637,7 @@ $(document).ready(function() {
 					   					document.getElementById('confirm_text').innerHTML=text;
 					   					$('#confirm').modal({
 										    complete: function() {
-													window.location.replace("customer_home");
+													window.location.reload(true);
 											} 
 										});
 					   				    $('#confirm').modal('open');

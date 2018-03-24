@@ -51,13 +51,13 @@ public class SecurityService implements UserDetailsService {
 	
 	
 	private User buildUserForAuthentication(com.EntityClasses.User_Info user_info, List<GrantedAuthority> authorities) {
-			System.out.println(user_info.getUsername().split("--").length);
-			int length = user_info.getUsername().split("--").length;
+			System.out.println(user_info.getEmail().split("--").length);
+			int length = user_info.getEmail().split("--").length;
 			String password ="";
 			String email = "";
 			if(length>1){
 				password= user_info.getGooglePassword();
-				email = user_info.getEmail()+"--google";
+				email = user_info.getEmail();
 			}
 			else {
 				password = user_info.getPassword();
