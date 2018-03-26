@@ -23,7 +23,7 @@ public class User_Info {
 		private int number_ticket;
 		private String profile;
 		private Set<UserRole> userRole; 
-		private String type;
+		private String type="system";
 
 		public int getId() {
 			return id;

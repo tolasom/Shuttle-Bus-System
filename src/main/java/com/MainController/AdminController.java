@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.EntityClasses.*;
 import com.ModelClasses.UserModel;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.DaoClasses.userDaoImpl;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.User_Info;
 import com.ModelClasses.B_Model;
 import com.ModelClasses.Schedule_Model;
 import com.ServiceClasses.usersService;
@@ -40,14 +34,18 @@ public class AdminController {
 		User_Info user = usersService1.findByUserName(userModel.getEmail());
 		boolean status = false;
 		Map<String,Object> map = new HashMap<String,Object>();
-		System.out.println(userModel.getEmail());
+		String role = "";
 		if(user != null){
-			System.out.println(user.getPassword()!=null);
+
 			if(user.getPassword()!=null){
 				status = true;
 			}
+			for(UserRole Role : user.getUserRole()){
+				role = Role.getRole();
+			}
 		}
 		map.put("status",status);
+		map.put("role",role);
 		return map;
 	}
 //=========================Returns bus management view================================

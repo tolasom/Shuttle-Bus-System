@@ -213,23 +213,6 @@ public class userDaoImpl implements usersDao{
         }
 		return false;
 	}
-	public boolean isExistUser(){
-        Transaction trns1 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            trns1 = session.beginTransaction();
-
-            trns1.commit();
-            return true;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        finally {
-            session.flush();
-            session.close();
-        }
-        return false;
-    }
 	public int saveBus(Bus_Master bus) {
 		List <Bus_Master> buses  = new ArrayList<Bus_Master>();
     	Transaction trns7 = null;
