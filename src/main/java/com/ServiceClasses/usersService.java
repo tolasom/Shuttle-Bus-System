@@ -65,4 +65,6 @@ public interface usersService {
 	public void rejectedRequest(String email);
 	public void confirmedRequest(String email);
 	public User_Info getCustomerById(int id);
+	public int createUserr(User_Info user);
+	public int changePass(User_Info user);
 }

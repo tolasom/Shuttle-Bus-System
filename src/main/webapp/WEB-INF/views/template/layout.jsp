@@ -17,7 +17,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <!--  jQuery Validation -->
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
-
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- App JS -->      
 <spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
 <spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
@@ -91,7 +91,7 @@
 
 <script>
                     
-
+var eee;
                     $(document).ready(function(){
 
                       $.ajax({
@@ -117,8 +117,9 @@
                               contentType: "application/json",
                               timeout: 100000,
                               success: function(data) {
-                                phone=data.phone_number;
+                                console.log(data);
                                 document.getElementById('fname').innerHTML=data.username;
+                                eee=data.email;
                                 
                               },
                               error: function(e) {

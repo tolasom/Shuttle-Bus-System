@@ -261,7 +261,97 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 	}
+
+
+
+    public int createUserr(User_Info user) {
+        List <User_Info> users  = new ArrayList<User_Info>();
+        Transaction transaction = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            transaction = session.beginTransaction();
+            String queryString = "FROM User_Info where email=:email";
+            Query query = session.createQuery(queryString);
+            query.setString("email",user.getEmail());
+            users=(List<User_Info>)query.list();
+         
+                if(users.size()>0)
+                    return 0;
+                Timestamp created_at = new Timestamp(System.currentTimeMillis());
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String hashedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(hashedPassword);
+                user.setEnabled(true); 
+                user.setCreated_at(created_at);
+                user.setBatch_id(0);
+                UserRole user_role= new UserRole();
+                user_role.setRole(user.getProfile());
+                user_role.setCreated_at(created_at);
+                user_role.setUser_info(user);
+                Set<UserRole> userrole= new HashSet<UserRole>();
+                userrole.add(user_role);
+                user.setUserRole(userrole);
+                user.setProfile("");
+                session.save(user);
+                transaction.commit();
+                transaction = session.beginTransaction();
+                session.save(user_role);  
+                session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
 	
+
+    
+     public int changePass(User_Info user) {
+        List <User_Info> users  = new ArrayList<User_Info>();
+        Transaction transaction = null;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            transaction = session.beginTransaction();
+            String queryString = "FROM User_Info where email=:email";
+            Query query = session.createQuery(queryString);
+            query.setString("email",user.getEmail());
+            users=(List<User_Info>)query.list();
+            User_Info u = users.get(0);
+         
+                if(passwordEncoder.matches(user.getPassword(), u.getPassword()))
+                {
+                    Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+                    String encryptedPassword = passwordEncoder.encode(user.getProfile());
+                    u.setPassword(encryptedPassword);
+                    u.setUpdated_at(updated_at);
+                    u.setProfile("");
+                    session.update(u);
+                    session.getTransaction().commit();
+                }
+                else
+                    return 0;
+        } catch (RuntimeException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
+
 	
 	public List<User_Info> getAllUsers() {
       	List<User_Info> users= new ArrayList<User_Info>();

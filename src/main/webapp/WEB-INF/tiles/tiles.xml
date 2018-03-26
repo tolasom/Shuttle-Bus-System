@@ -50,6 +50,10 @@
 		<put-attribute name="title" value="Bookings" />
 		<put-attribute name="body" value="/WEB-INF/views/view/historical_booking.jsp" />		
 	</definition>
+	<definition name="admin_profile" extends="base.definition">
+		<put-attribute name="title" value="Profile" />
+		<put-attribute name="body" value="/WEB-INF/views/view/admin_profile.jsp" />		
+	</definition>
 	<definition name="booking_detail" extends="base.definition">
 		<put-attribute name="title" value="Booking Details" />
 		<put-attribute name="body" value="/WEB-INF/views/view/booking_detail.jsp" />		

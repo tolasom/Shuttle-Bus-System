@@ -50,10 +50,62 @@ public class AdminController {
 		map.put("status",status);
 		return map;
 	}
+
+//=========================To sign up an account for admin and driver================================
+	@RequestMapping(value="/createUserr",method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> createUserr(@RequestBody User_Info user) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check  = usersService1.createUserr(user);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Email already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","User has just been created successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+	}
+
+//=========================To change password for admin================================
+	@RequestMapping(value="/changePass",method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> changePass(@RequestBody User_Info user) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check  = usersService1.changePass(user);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Current password is incorrect!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","You have just changed it successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs!");
+		}
+		return map;
+	}
+
+
 //=========================Returns bus management view================================
 	@RequestMapping(value="/bus_management", method=RequestMethod.GET)
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
+	}
+	@RequestMapping(value="/admin_profile", method=RequestMethod.GET)
+	public ModelAndView admin_profile() {
+		return new ModelAndView("admin_profile");
 	}
 	@RequestMapping(value="/student_home", method=RequestMethod.GET)
 	public ModelAndView Student_Home() {

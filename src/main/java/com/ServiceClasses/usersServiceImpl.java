@@ -164,7 +164,12 @@ public class usersServiceImpl implements usersService{
 	public User_Info getCustomerById(int id){
 		return usersDao1.getCustomerById(id);
 	}
-	
+	public int createUserr(User_Info user){
+		return usersDao1.createUserr(user);
+	}
+	public int changePass(User_Info user){
+		return usersDao1.changePass(user);
+	}
 	
 }
 
