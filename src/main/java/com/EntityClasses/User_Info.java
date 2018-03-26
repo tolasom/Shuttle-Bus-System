@@ -23,7 +23,8 @@ public class User_Info {
 		private int number_ticket;
 		private String profile;
 		private Set<UserRole> userRole; 
-		
+		private String type="system";
+
 		public int getId() {
 			return id;
 		}
@@ -121,9 +122,12 @@ public class User_Info {
 		public void setUserRole(Set<UserRole> userRole) {
 			this.userRole = userRole;
 		}
-		
-		
-		
-		
-		
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
 }

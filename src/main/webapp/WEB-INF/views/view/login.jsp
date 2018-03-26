@@ -138,8 +138,12 @@
         .loading-bg{
             opacity: 0.6;
         }
+        .login-error{
+            color: #ea534a;
+            font-size: 17px;
+            display: none;
 
-
+        }
     </style>
 </head>
 <body style="background: linear-gradient(to left, #636e72, #636e72);">
@@ -156,6 +160,7 @@
         </table>
         <div class="formdev">
             <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
+
             <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
                 <label for="email"></label>
                 <input type='text'placeholder="Email" name='email' id="email">
@@ -167,8 +172,9 @@
 
             </form>
             <div id="devlogin">
+                <p class="login-error" id="login-error"></p>
                 <form id="loginform" action="<c:url value='login' />" method="post">
-                    <input type='text'placeholder="Email" name='username' required>
+                    <input type='text'placeholder="Email" name='username' id="login-username" required>
                     <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
                     <input type="submit" value="LOGIN" class="submit-btn">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -240,15 +246,19 @@
         return axios.post('isexist', {
             email: email,
         }).then(function (response) {
-            return response.data.status
+            return response.data
         })
     }
 
     $(document).ready(function () {
-        console.log($(".abcRioButtonContents"))
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
         axios.defaults.headers.common[header] = token;
+        var url = window.location.href;
+        if(url.includes("login?error")){
+            $("#login-error").css("display","inline");
+            document.getElementById("login-error").innerHTML = "email or password is incorrect";
+        }
     })
 
     $(function() {
@@ -306,7 +316,7 @@
                 }
                 isExistUser(email)
                     .then(function (value) {
-                        if(value){
+                        if(value.status){
                             finish()
                             $("#email-error").css("display","block");
                             document.getElementById("email-error").innerHTML = "email is existed"
@@ -320,8 +330,7 @@
                             })
                                 .then(function (response) {
                                     if(response.data.status){
-                                        data = 'username='+email + '&password='+password
-                                        // window.location.replace("login")
+                                        data = 'username='+email+"--google" + '&password='+password
                                         googleSignin(data)
                                     }
 
@@ -366,8 +375,28 @@
             },
 
             submitHandler: function (form) {
+                var username = $("#login-username").val();
+                isExistUser(username).then(function (data) {
+                    console.log(data)
+                    if(data.status){
+                        if(data.role=="ROLE_DRIVER"){
+                            $("#login-error").css("display","inline");
+                            document.getElementById("login-error").innerHTML = "driver can not login";
+                            return false
+                        }
+                        else{
+                            form.submit();
+                        }
 
-                form.submit();
+
+                    }
+                    else{
+                        return false;
+                    }
+
+                }
+            )
+
             }
         });
     });
@@ -393,10 +422,12 @@
 
     }
     function onSignIn(googleUser) {
-
+        console.log("ll")
         var profile = googleUser.getBasicProfile();
         var auth2 = gapi.auth2.getAuthInstance();
+        console.log(document.getElementsByClassName("abcRioButtonContents"))
         auth2.disconnect();
+
         loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
@@ -407,7 +438,7 @@
         })
             .then(function (response) {
                 if(response.data.status){
-                    data = 'username='+profile.getEmail()+"--google" + '&password='+profile.getId()
+                    data = 'username='+profile.getEmail()+"--google"+ '&password='+profile.getId()
                 }
                 googleSignin(data);
             })
