@@ -109,16 +109,16 @@ public class userDaoImpl implements usersDao{
 		try {
             trns1 = session.beginTransaction();
             users = session.createQuery("from User_Info where email=?").setParameter(0, Username[0]).list();
-            		//setParameter(0, username).list();
             
            
             if (users.size() > 0) {
             	for( UserRole us: users.get(0).getUserRole()){
             		System.out.println(us.getRole());
             	}
+            	System.out.println(Username.length);
             	if(Username.length>1){
             		
-            		users.get(0).setEmail(username);
+            		users.get(0).setType("google");
             	}
     			return users.get(0);
     		} else {

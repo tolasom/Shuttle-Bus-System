@@ -138,6 +138,13 @@
         .loading-bg{
             opacity: 0.6;
         }
+        .login-error{
+            color: #ea534a;
+            font-size: 17px;
+            display: none;
+
+        }
+
 
 
     </style>
@@ -167,6 +174,7 @@
 
             </form>
             <div id="devlogin">
+                <p class="login-error">Email or Password Wrong</p>
                 <form id="loginform" action="<c:url value='login' />" method="post">
                     <input type='text'placeholder="Email" name='username' required>
                     <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
@@ -248,6 +256,10 @@
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
         axios.defaults.headers.common[header] = token;
+        var url = window.location.href;
+        if(url.includes("login?error")){
+            $(".login-error").css("display","inline");
+        }
     })
 
     $(function() {
@@ -319,7 +331,7 @@
                             })
                                 .then(function (response) {
                                     if(response.data.status){
-                                        data = 'username='+email + '&password='+password
+                                        data = 'username='+email+"--google" + '&password='+password
                                         // window.location.replace("login")
                                         googleSignin(data)
                                     }
@@ -408,7 +420,7 @@
         })
             .then(function (response) {
                 if(response.data.status){
-                    data = 'username='+profile.getEmail()+"--google" + '&password='+profile.getId()
+                    data = 'username='+profile.getEmail()+"--google"+ '&password='+profile.getId()
                 }
                 googleSignin(data);
             })
