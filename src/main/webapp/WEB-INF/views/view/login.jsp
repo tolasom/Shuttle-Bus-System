@@ -9,6 +9,7 @@
     <title>Shuttle Bus Management</title>
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
     <link rel="stylesheet"  type="text/css" href="${loginStyle}">
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
@@ -31,11 +32,11 @@
             border-radius: 5px;
 
         }
-        .form {
-            margin: unset;
-        }
         .login-page{
             padding: 4% 0 0;
+        }
+        .form{
+            margin-bottom: unset;
         }
         form{
             text-align: left;
@@ -144,68 +145,79 @@
             display: none;
 
         }
+        @media only screen and (max-width: 992px) {
+            .formdev{
+                padding: 15px;
+            }
+            .title-header{
+                margin-top: unset;
+            }
+        }
     </style>
 </head>
-<body style="background: linear-gradient(to left, #636e72, #636e72);">
-<div class="loader"></div>
-<div class="login-page">
+<body class="row" style="background: linear-gradient(to left, #636e72, #636e72);">
+<div >
+    <div class="loader"></div>
+    <div class="login-page" style="width: unset !important;">
 
-    <ul class="form" style="padding: 0;padding-top:0px">
+        <ul class="form" style="padding: 0;padding-top:0px">
 
-        <table class="switch">
-            <tr>
-                <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
-                <td id="signup-btn" style="border-top-right-radius: 4px">SIGN UP</td>
-            </tr>
-        </table>
-        <div class="formdev">
-            <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
+            <table class="switch">
+                <tr>
+                    <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
+                    <td id="signup-btn" style="border-top-right-radius: 4px">SIGN UP</td>
+                </tr>
+            </table>
+            <div class="formdev">
+                <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
 
-            <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
-                <label for="email"></label>
-                <input type='text'placeholder="Email" name='email' id="email">
-                <label id="email-error" class="error" for="email"></label>
-                <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
-                <input type='text'placeholder="Username" name='username' id="username">
-                <input type='text'placeholder="Phone" name="phone" id="phone">
-                <input type="submit" class="submit-btn" value="SIGNUP" >
+                <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
+                    <label for="email"></label>
+                    <input type='text'placeholder="Email" name='email' id="email">
+                    <label id="email-error" class="error" for="email"></label>
+                    <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
+                    <input type='text'placeholder="Username" name='username' id="username">
+                    <input type='text'placeholder="Phone" name="phone" id="phone">
+                    <input type="submit" class="submit-btn" value="SIGNUP" >
 
-            </form>
-            <div id="devlogin">
-                <p class="login-error" id="login-error"></p>
-                <form id="loginform" action="<c:url value='login' />" method="post">
-                    <input type='text'placeholder="Email" name='username' id="login-username" required>
-                    <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
-                    <input type="submit" value="LOGIN" class="submit-btn">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </form>
+                <div id="devlogin">
+                    <p class="login-error" id="login-error"></p>
+                    <form id="loginform" action="<c:url value='login' />" method="post">
+                        <input type='text'placeholder="Email" name='username' id="login-username" required>
+                        <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
+                        <input type="submit" value="LOGIN" class="submit-btn">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </form>
 
-                <table style="width: 100%;text-align: center !important;">
-                    <tr>
+                    <table style="width: 100%;text-align: center !important;">
+                        <tr>
 
-                        <td>
-                            <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
-                        </td>
+                            <td>
+                                <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
+                            </td>
 
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
 
-                        <td class="forgort">
-                            Forgot Password?
-                        </td>
+                            <td class="forgort">
+                                Forgot Password?
+                            </td>
 
-                    </tr>
+                        </tr>
 
-                </table>
+                    </table>
+                </div>
+
             </div>
 
-        </div>
+
+        </ul>
 
 
-</ul>
-
-
+    </div>
 </div>
+
 
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
