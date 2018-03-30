@@ -114,6 +114,8 @@ function searchBus(id, myArray){
 }
 
 function searchDriver(id, myArray){
+    if(id==0)
+        return"";
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

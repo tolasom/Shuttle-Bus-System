@@ -72,7 +72,25 @@
         .active-btn:hover{
             background-color: #bdc3c7;
         }
-
+        .forgort{
+            font-size: 14px;
+            color:#3742fa;
+            cursor: pointer;
+            width: 80%;
+            -webkit-transition: color 0.4s;
+        }
+        .forgort:hover{
+            color: #1e90ff;
+        }
+        .submit-btn{
+            background-color: #636e72 !important;
+            color:white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .abcRioButton{
+            border-radius: 5px !important;
+        }
 
 
     </style>
@@ -89,34 +107,35 @@
         </table>
         <div class="formdev">
             <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
-            <form id="signup" action="<c:url value='/signup' />" method="post">
+            <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
                 <label for="email"></label>
                 <input type='text'placeholder="Email" name='email' id="email">
                 <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
                 <input type='text'placeholder="Username" name='username' id="username">
                 <input type='text'placeholder="Phone" name="phone" id="phone">
-
-
-
-                <input type="submit" style="background-color: #636e72;color:white;color:white;font-size: 14px;font-weight: bold"
-                       value="SIGNUP">
+                <input type="submit" class="submit-btn" value="SIGNUP" >
 
             </form>
-            <form class="login-form" id="loginform" action="<c:url value='/login' />" method="post">
-                <input type='text'placeholder="Username" name='username' id="username" required>
-                <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
-                <input type="submit" value="Login"
-                       style="background-color: #636e72;color:white;color:white;font-size: 14px;font-weight: bold">
-                <div style="font-size:10px;">
-                    <a href ="signup" data-toggle="modal" data-target="#myModal">Forgot Password?</a>
+            <div id="devlogin">
+                <form id="loginform" action="<c:url value='login' />" method="post">
+                    <input type='text'placeholder="Email" name='username' required>
+                    <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
+                    <input type="submit" value="Login" class="submit-btn">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </form>
 
-                </div>
-                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-            </form>
+                <table>
+                    <tr>
+                        <td class="forgort">
+                            Forgot Password?
+                        </td>
+                        <td>
+                            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-
 </ul>
 
 
@@ -127,13 +146,13 @@
 </body>
 <script type="text/javascript">
 
-    $("#signup").hide();
+    $("#signupform").hide();
     $("#signin-btn").addClass('active-btn');
     $("#signup-btn").click(function () {
         $("#signup-btn").addClass('active-btn');
         $("#signin-btn").removeClass('active-btn');
-        $("#signup").slideDown(300)
-        $("#loginform").hide();
+        $("#signupform").slideDown(200)
+        $("#devlogin").hide();
 
 
     })
@@ -141,14 +160,19 @@
     $("#signin-btn").click(function () {
         $("#signin-btn").addClass("active-btn");
         $("#signup-btn").removeClass("active-btn");
-        $("#loginform").slideDown(300)
-        $("#signup").hide()
+        $("#devlogin").slideDown(200)
+        $("#signupform").hide()
 
 
     })
+    $(document).ready(function () {
+        var token = $('#csrfToken').val();
+        var header = $('#csrfHeader').val();
+        axios.defaults.headers.common[header] = token;
+    })
 
     $(function() {
-        $("#signup").validate({
+        $("#signupform").validate({
 
             rules: {
                 email: {
@@ -164,12 +188,7 @@
                     required: true,
                     minlength: 3
                 },
-                name: {
-                    required: true,
-                    minlength: 3
-                },
                 phone: {
-                    required: true,
                     minlength: 9,
                     number:true
                 }
@@ -178,7 +197,8 @@
                 email: {
                     required: "email is required",
                     email: "invalid email"
-                },username: {
+                },
+                username: {
                     required: "username is required",
                     minlength: "username must be at least 3 characters long"
                 },
@@ -186,12 +206,8 @@
                     required: "password is required",
                     minlength: "password must be at least 8 characters long"
                 },
-                name: {
-                    required: "name is required",
-                    minlength: "name must be at least 3 characters long"
-                },
                 phone: {
-                    required: "phone is required",
+                    number: "number only",
                     minlength: "invalid phone number"
                 },
 
@@ -199,42 +215,81 @@
 
             submitHandler: function (form) {
 
-                var token = $('#csrfToken').val();
-                var header = $('#csrfHeader').val();
+
                 var username = $('#username').val();
-                var name = $('#name').val()
                 var email = $('#email').val()
                 var phone = $('#phone').val()
                 var password = $('#pass').val();
-                var gender = $("input[name='gender']:checked").val();
-                console.log(password)
-                axios.defaults.headers.common[header] = token;
-                axios.post('signup', {
-                    email: email,
-                    password: password,
-                    username:username,
-                    gender:gender,
-                    name:name,
-                    phone:phone
-                })
-                    .then(function (response) {
-                        if(response.data.status){
-                            window.location.replace("login")
-                        }
-
+                if(isExistUser(email)){
+                    console.log("exist")
+                }
+                else{
+                    axios.post('signup', {
+                        email: email,
+                        password: password,
+                        username:username,
+                        phone:phone
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                        .then(function (response) {
+                            if(response.data.status){
+                                data = 'username='+email + '&password='+password
+                                // window.location.replace("login")
+                                googleSignin(data)
+                            }
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+
 
 
                 return false;
-                //form.submit();
+            }
+        });
+
+        $("#loginform").validate({
+
+            rules: {
+                useranme: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                }
+
+            },
+            messages: {
+                email: {
+                    required: "email is required",
+                    email: "invalid email"
+                },
+                pass: {
+                    required: "password is required",
+                    minlength: "password must be at least 8 characters long"
+                },
+
+
+            },
+
+            submitHandler: function (form) {
+
+                form.submit();
             }
         });
     });
 
 
+    function isExistUser(email) {
+        return axios.post('isexist', {
+            email: email,
+        }).then(function (response) {
+                return response.data.status
+        })
+    }
 
     function googleSignin(data){
         axios({
@@ -243,20 +298,17 @@
             data: data
         })
             .then(function (response) {
-                console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
                     window.location.replace(url);
                 }
 
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+
     }
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
-        console.log(profile.getEmail())
+
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.disconnect();
         axios.post('check_signup', {
@@ -270,12 +322,8 @@
                 if(response.data.status){
                     data = 'username='+profile.getEmail()+"--google" + '&password='+profile.getId()
                 }
-
                 googleSignin(data);
             })
-            .catch(function (error) {
-                console.log(error);
-            });
 
     };
 

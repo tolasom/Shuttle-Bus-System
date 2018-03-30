@@ -60,12 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 	private static final String[] STUDENT_MATCHERS = {
 
-		"/customer_home",
-		"/request_booking",
-		"/booking_history"
-		
-   
+		"/student_home",
+
     };
+
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -88,6 +86,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		   .and().logout().logoutSuccessUrl("/login?logout")
 		   .and().csrf()
 		   .and().exceptionHandling().accessDeniedPage("/403");
+        http.authorizeRequests()
+                .antMatchers(STUDENT_MATCHERS).access("hasRole('ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .and().logout().logoutSuccessUrl("/login?logout")
+                .and().csrf()
+                .and().exceptionHandling().accessDeniedPage("/403");
 	}
 	
 	@Bean

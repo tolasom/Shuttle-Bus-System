@@ -20,6 +20,8 @@ $(document).ready(function() {
 			contentType: "application/json",
 			timeout: 100000,
 			success: function(data) {
+				console.log("KK");
+				console.log(data);
 				phone=data.phone_number;
 				document.getElementById('fullname').innerHTML=data.username;
 				

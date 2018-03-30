@@ -109,16 +109,16 @@ public class userDaoImpl implements usersDao{
 		try {
             trns1 = session.beginTransaction();
             users = session.createQuery("from User_Info where email=?").setParameter(0, Username[0]).list();
-            		//setParameter(0, username).list();
             
            
             if (users.size() > 0) {
             	for( UserRole us: users.get(0).getUserRole()){
             		System.out.println(us.getRole());
             	}
+            	System.out.println(Username.length);
             	if(Username.length>1){
             		
-            		users.get(0).setUsername(username);
+            		users.get(0).setType("google");
             	}
     			return users.get(0);
     		} else {
@@ -128,6 +128,7 @@ public class userDaoImpl implements usersDao{
         	e.printStackTrace();
         	
         }finally{
+		    session.flush();
         	session.close();
         }
 		return null;
@@ -176,7 +177,11 @@ public class userDaoImpl implements usersDao{
           return true;
         } catch (RuntimeException e) {
         	
-        }                         
+        }
+        finally {
+		    session.flush();
+		    session.close();
+        }
 		return false;
 	}
 	public boolean updateUser(User_Info user,UserModel user_model,String type){
@@ -201,7 +206,11 @@ public class userDaoImpl implements usersDao{
           return true;
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        }                         
+        }
+        finally {
+		    session.flush();
+		    session.close();
+        }
 		return false;
 	}
 	public int saveBus(Bus_Master bus) {

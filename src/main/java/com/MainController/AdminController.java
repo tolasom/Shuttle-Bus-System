@@ -6,23 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.EntityClasses.*;
+import com.ModelClasses.UserModel;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.DaoClasses.userDaoImpl;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.User_Info;
 import com.ModelClasses.B_Model;
 import com.ModelClasses.Schedule_Model;
 import com.ServiceClasses.usersService;
@@ -37,15 +29,33 @@ public class AdminController {
 		return new ModelAndView("cusomer_home");
 	}
 //=========================To sign up an account for customer================================
-	@RequestMapping(value="/signup",method=RequestMethod.GET)
-	public ModelAndView signup() {
-		return new ModelAndView("security/signup");
+	@RequestMapping(value="/isexist",method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> isExistUser(@RequestBody UserModel userModel) {
+		User_Info user = usersService1.findByUserName(userModel.getEmail());
+		boolean status = false;
+		Map<String,Object> map = new HashMap<String,Object>();
+		String role = "";
+		if(user != null){
+
+			if(user.getPassword()!=null){
+				status = true;
+			}
+			for(UserRole Role : user.getUserRole()){
+				role = Role.getRole();
+			}
+		}
+		map.put("status",status);
+		map.put("role",role);
+		return map;
 	}
-	
 //=========================Returns bus management view================================
 	@RequestMapping(value="/bus_management", method=RequestMethod.GET)
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
+	}
+	@RequestMapping(value="/student_home", method=RequestMethod.GET)
+	public ModelAndView Student_Home() {
+		return new ModelAndView("student_home");
 	}
 //=========================Returns report view================================
 	@RequestMapping(value="/report", method=RequestMethod.GET)
@@ -216,7 +226,7 @@ public class AdminController {
 		map.put("main_locations", usersService1.getAllLocations());
 		map.put("locations", usersService1.getAllPickUpLocations());
 		map.put("buses", usersService1.getAllBuses());
-		map.put("drivers", usersService1.getAllUsers());
+		map.put("drivers", usersService1.getAlDrivers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -227,6 +237,26 @@ public class AdminController {
 		return new ModelAndView("create_schedule","data",json);
 	}
 	
+//=========================Returns create user view================================
+	@RequestMapping(value="/create_user", method=RequestMethod.GET)
+	public ModelAndView create_user() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("code", getScheduleSequence());
+		map.put("main_locations", usersService1.getAllLocations());
+		map.put("locations", usersService1.getAllPickUpLocations());
+		map.put("buses", usersService1.getAllBuses());
+		map.put("drivers", usersService1.getAlDrivers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("create_user","data",json);
+	}
+
+
 	
 //====================To save bus============================
 	@RequestMapping(value="/createBus", method=RequestMethod.GET)
