@@ -30,4 +30,8 @@ public interface Custom_Dao {
 	public String request_book_now(int id);
 	public String cancel_booking_ticket(int id);
 	public String confirm_phone_number(UserModel cb);
+	public List<Map<String,Object>> get_qrcode(int id);
+	public List<Map<String,Object>> get_request_booking_id(int id);
+	public List<Map<String,Object>> get_sch_bus_info(int id);
+	public List<Map<String,Object>> get_sch_driver_info(int id);
 }

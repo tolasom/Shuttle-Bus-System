@@ -2,16 +2,20 @@ package com.DaoClasses;
 
 import getInfoLogin.IdUser;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.glxn.qrgen.QRCode;
+import net.glxn.qrgen.image.ImageType;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,9 +38,16 @@ public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
 	Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
 	Date current_date = new Date();
-	public static String TimeNow(){
+	public String TimeNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("HH:mm:ss");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+	}
+	public String DateNow(){
+		Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
@@ -93,14 +104,14 @@ public class Custom_Imp implements Custom_Dao{
 		  else  
 		   return "B"+scode; 
 		   
-		 }
+	}
 	 public List <Booking_Master> getAllBookings(){ 
 		  List <Booking_Master> bookings  = new ArrayList<Booking_Master>(); 
 		        Transaction trns19 = null; 
 		        Session session = HibernateUtil.getSessionFactory().openSession(); 
 		        try { 
 		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Booking_Maste"; 
+		            String queryString = "from Booking_Master"; 
 		            Query query = session.createQuery(queryString); 
 		            bookings=(List<Booking_Master>)query.list(); 
 		        } catch (RuntimeException e) { 
@@ -329,6 +340,7 @@ public class Custom_Imp implements Custom_Dao{
             	
             	Map<String,Object> map=new HashMap<String,Object>();
             	map.put("id", cr.get(i).getId());
+            	map.put("booking_code", cr.get(i).getCode());
             	map.put("dept_date", cr.get(i).getDept_date().toString());
             	map.put("dept_time", cr.get(i).getDept_time().toString());
             	map.put("scource", source.getName());
@@ -410,11 +422,105 @@ public class Custom_Imp implements Custom_Dao{
         Session session = HibernateUtil.getSessionFactory().openSession();      
 		List<Booking_Request_Master> bh = new ArrayList<Booking_Request_Master>();	
 		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		Custom_Imp c=new Custom_Imp();
 		try {
             trns1 = session.beginTransaction();
-            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and dept_time>? and enabled='true' order by dept_date asc")
-            		.setParameter(0, user.getAuthentic()).setDate(1, new Date()).setTime(2, java.sql.Time.valueOf(TimeNow())).list();
+            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and enabled='true' order by dept_date asc")
+            		.setParameter(0, user.getAuthentic()).setDate(1, java.sql.Date.valueOf(c.DateNow())).list();
             System.out.println("KK");
+            System.out.println("KK");
+            System.out.println("KK");
+            System.out.println("KK");
+            System.out.println("KK");
+            System.out.println("KK");
+            
+            System.out.println(bh.size());
+            for(int i=0; i<bh.size();i++){
+            	System.out.println("KK time: "+java.sql.Time.valueOf(c.TimeNow()));
+                System.out.println("KK time: "+bh.get(i).getDept_time());
+            	if(bh.get(i).getDept_date().after(new Date())){
+            		Pickup_Location_Master pick_source=new Pickup_Location_Master();
+                	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getSource_id()).list().get(0);
+                	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+                	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getDestination_id()).list().get(0);
+                	
+                	Location_Master source=new Location_Master();
+                	source = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getFrom_id()).list().get(0);
+                	Location_Master destin=new Location_Master();
+                	destin = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getTo_id()).list().get(0);
+                	Map<String,Object> map=new HashMap<String,Object>();
+                	map.put("id", String.valueOf(bh.get(i).getId()));
+                	map.put("dept_date", bh.get(i).getDept_date().toString());
+                	if(bh.get(i).getStatus().equals("Confirmed")){
+                		map.put("dept_time", bh.get(i).getProvided_time());
+                	}else{
+                		map.put("dept_time", bh.get(i).getDept_time().toString());
+                	}
+                	map.put("pick_source_id", String.valueOf(pick_source.getId()));
+                	map.put("pick_source_name", String.valueOf(pick_source.getName()));
+                	map.put("drop_dest_id", String.valueOf(pick_destin.getId()));
+                	map.put("drop_dest_name", String.valueOf(pick_destin.getName()));
+                	map.put("scource", source.getName());
+                	map.put("scource_id", String.valueOf(source.getId()));
+                	map.put("destination", destin.getName());
+                	map.put("destination_id", String.valueOf(destin.getId()));
+                	map.put("number_of_ticket", String.valueOf(bh.get(i).getNumber_of_booking()));
+                	map.put("provided_time", bh.get(i).getProvided_time());
+                	map.put("status", bh.get(i).getStatus());
+                	
+                	list.add(map);
+            	}else if(bh.get(i).getDept_time().after(java.sql.Time.valueOf(c.TimeNow()))){
+            		Pickup_Location_Master pick_source=new Pickup_Location_Master();
+                	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getSource_id()).list().get(0);
+                	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+                	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getDestination_id()).list().get(0);
+                	
+                	Location_Master source=new Location_Master();
+                	source = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getFrom_id()).list().get(0);
+                	Location_Master destin=new Location_Master();
+                	destin = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getTo_id()).list().get(0);
+                	Map<String,Object> map=new HashMap<String,Object>();
+                	map.put("id", String.valueOf(bh.get(i).getId()));
+                	map.put("dept_date", bh.get(i).getDept_date().toString());
+                	if(bh.get(i).getStatus().equals("Confirmed")){
+                		map.put("dept_time", bh.get(i).getProvided_time());
+                	}else{
+                		map.put("dept_time", bh.get(i).getDept_time().toString());
+                	}
+                	map.put("pick_source_id", String.valueOf(pick_source.getId()));
+                	map.put("pick_source_name", String.valueOf(pick_source.getName()));
+                	map.put("drop_dest_id", String.valueOf(pick_destin.getId()));
+                	map.put("drop_dest_name", String.valueOf(pick_destin.getName()));
+                	map.put("scource", source.getName());
+                	map.put("scource_id", String.valueOf(source.getId()));
+                	map.put("destination", destin.getName());
+                	map.put("destination_id", String.valueOf(destin.getId()));
+                	map.put("number_of_ticket", String.valueOf(bh.get(i).getNumber_of_booking()));
+                	map.put("provided_time", bh.get(i).getProvided_time());
+                	map.put("status", bh.get(i).getStatus());
+                	
+                	list.add(map);
+            	}
+            }
+            System.out.println(list);
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+		return list;
+	}
+	public List<Map<String,Object>> get_request_booking_id(int id){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+		List<Booking_Request_Master> bh = new ArrayList<Booking_Request_Master>();	
+		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		try {
+            trns1 = session.beginTransaction();
+            bh = session.createQuery("from Booking_Request_Master where user_id=? and id=?")
+            		.setParameter(0, user.getAuthentic()).setParameter(1, id).list();
             System.out.println(bh.size());
             for(int i=0; i<bh.size();i++){
             	Pickup_Location_Master pick_source=new Pickup_Location_Master();
@@ -436,8 +542,8 @@ public class Custom_Imp implements Custom_Dao{
             	}
             	map.put("pick_source_id", String.valueOf(pick_source.getId()));
             	map.put("pick_source_name", String.valueOf(pick_source.getName()));
-            	map.put("drop_dest_id", String.valueOf(pick_source.getId()));
-            	map.put("drop_dest_name", String.valueOf(pick_source.getName()));
+            	map.put("drop_dest_id", String.valueOf(pick_destin.getId()));
+            	map.put("drop_dest_name", String.valueOf(pick_destin.getName()));
             	map.put("scource", source.getName());
             	map.put("scource_id", String.valueOf(source.getId()));
             	map.put("destination", destin.getName());
@@ -458,7 +564,80 @@ public class Custom_Imp implements Custom_Dao{
         }
 		return list;
 	}
-	
+	public List<Map<String,Object>> get_sch_bus_info(int id){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+		List<Booking_Master> bh = new ArrayList<Booking_Master>();	
+		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		try {
+            trns1 = session.beginTransaction();
+            bh = session.createQuery("from Booking_Master where user_id=? and id=?")
+            		.setParameter(0, user.getAuthentic()).setParameter(1, id).list();
+            System.out.println(bh.size());
+            for(int i=0;i<bh.size();i++){
+            	List<Schedule_Master> sch = new ArrayList<Schedule_Master>();	
+            	sch = session.createQuery("from Schedule_Master where id=?")
+                		.setParameter(0, bh.get(i).getSchedule_id()).list();
+            	
+            	List<Bus_Master> bus = new ArrayList<Bus_Master>();	
+            	bus = session.createQuery("from Bus_Master where id=?")
+                		.setParameter(0, sch.get(0).getBus_id()).list();
+            	
+            	Map<String,Object> map=new HashMap<String,Object>();
+            	map.put("id", bus.get(0).getId());
+            	map.put("bus_model", bus.get(0).getModel());
+            	map.put("plate_number", bus.get(0).getPlate_number());
+            	map.put("number_of_seat", bus.get(0).getNumber_of_seat());
+            	
+            	list.add(map);
+            } 	
+            System.out.println(list);
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+		return list;
+	}
+	public List<Map<String,Object>> get_sch_driver_info(int id){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+		List<Booking_Master> bh = new ArrayList<Booking_Master>();	
+		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		try {
+            trns1 = session.beginTransaction();
+            bh = session.createQuery("from Booking_Master where user_id=? and id=?")
+            		.setParameter(0, user.getAuthentic()).setParameter(1, id).list();
+            System.out.println(bh.size());
+            for(int i=0;i<bh.size();i++){
+            	List<Schedule_Master> sch = new ArrayList<Schedule_Master>();	
+            	sch = session.createQuery("from Schedule_Master where id=?")
+                		.setParameter(0, bh.get(i).getSchedule_id()).list();
+            	
+            	List<User_Info> bus = new ArrayList<User_Info>();	
+            	bus = session.createQuery("from User_Info where id=?")
+                		.setParameter(0, sch.get(0).getDriver_id()).list();
+            	
+            	Map<String,Object> map=new HashMap<String,Object>();
+            	map.put("id", bus.get(0).getId());
+            	map.put("name", bus.get(0).getName());
+            	map.put("email", bus.get(0).getEmail());
+            	map.put("phone_number", bus.get(0).getPhone_number());
+            	
+            	list.add(map);
+            } 	
+            System.out.println(list);
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+		return list;
+	}
 	//======================== combination for choosing bus till ============================
 	static List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
 	static List<Integer> total_choosen_bus_list=new ArrayList<Integer>();
@@ -963,35 +1142,121 @@ public class Custom_Imp implements Custom_Dao{
         }
 	}
 	
-	public static void main(String args[]) throws ParseException{
+	public List<Map<String,Object>> get_qrcode(int id){
+			Transaction trns1 = null;
+	        Session session = HibernateUtil.getSessionFactory().openSession();   
+	        List<Booking_Master> cr = new ArrayList<Booking_Master>();	
+			
+			List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+			try {
+	            trns1 = session.beginTransaction();
+	            cr = session.createQuery("from Booking_Master where id=:id").setParameter("id", id).list();
+	            if(cr.get(0).getUser_id()==user.getAuthentic()&&cr.size()>0){
+	            	Pickup_Location_Master pick_source=new Pickup_Location_Master();
+	            	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cr.get(0).getSource_id()).list().get(0);
+	            	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+	            	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cr.get(0).getDestination_id()).list().get(0);
+	            	Location_Master source=new Location_Master();
+	            	source = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, pick_source.getLocation_id()).list().get(0);
+	            	Location_Master destin=new Location_Master();
+	            	destin = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, pick_destin.getLocation_id()).list().get(0);
+	            	Schedule_Master sch_ma=new Schedule_Master();
+	            	sch_ma = (Schedule_Master) session.createQuery("from Schedule_Master where id=?").setParameter(0, cr.get(0).getSchedule_id()).list().get(0);
 
-//		Transaction trns1 = null;
-//        Session session = HibernateUtil.getSessionFactory().openSession();   
-//        List<Location_Master> locat = new ArrayList<Location_Master>();
-//		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
-//		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
-//		Pickup_Location_Master pick= new Pickup_Location_Master();
-//		try {
-//            trns1 = session.beginTransaction();
-//            Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
-//    				" where id = :id");
-//            query.setParameter("id", 43);
-//            int result = query.executeUpdate();
-//            trns1.commit(); 
-//        } catch (RuntimeException e) {
-//        	e.printStackTrace();
-//        }finally{
-//            session.flush();
-//            session.close();
-//        }      
-		Timestamp current=new Timestamp(System.currentTimeMillis());
-		int year=current.getYear();
-		int month=current.getMonth()+1;
-		int day=current.getDate();
-		int h=current.getHours();
-		int m=current.getMinutes();
-		int s=current.getSeconds();
-		System.out.println(year+'-'+month+"-"+day+" "+h+":"+m+":"+s);
+	            	Bus_Master bus=new Bus_Master();
+	            	bus = (Bus_Master) session.createQuery("from Bus_Master where id=?").setParameter(0, sch_ma.getBus_id()).list().get(0);
+	            	
+	            	Map<String,Object> map=new HashMap<String,Object>();
+	            	ByteArrayOutputStream out = QRCode.from(cr.get(0).getQr().toString()).to(ImageType.PNG).stream();  
+					byte[] test = out.toByteArray();
+					String encodedImage = Base64.getEncoder().encodeToString(test);
+					
+	            	map.put("id", cr.get(0).getId());
+	            	map.put("dept_date", cr.get(0).getDept_date().toString().substring(0, 10));
+	            	map.put("dept_time", cr.get(0).getDept_time().toString());
+	            	map.put("scource", source.getName());
+	            	map.put("pick_up", pick_source.getName());
+	            	map.put("destination", destin.getName());
+	            	map.put("drop_off", pick_destin.getName());
+	            	map.put("number_of_ticket", String.valueOf(cr.get(0).getNumber_booking()));
+	            	map.put("bus_model", bus.getModel());
+	            	map.put("plate_number", bus.getPlate_number());
+	            	map.put("notification", cr.get(0).getNotification());
+	            	map.put("qrcode", encodedImage);
+	            	if(sch_ma.getDriver_id()==0){
+	            		map.put("diver_name", "no_driver");
+	                	map.put("diver_phone_number", 0);
+	            	}	
+	            	else{
+	            		User_Info driver=new User_Info();
+	                	driver = (User_Info) session.createQuery("from User_Info where id=?").setParameter(0, sch_ma.getDriver_id()).list().get(0);
+	                	map.put("diver_name", driver.getName());
+	                	map.put("diver_phone_number", driver.getPhone_number());
+	            	}
+	            	list.add(map);
+	            }	            
+	            System.out.println(list);
+	        } catch (RuntimeException e) {
+	        	e.printStackTrace();
+	        }    
+			finally {
+	            session.flush();
+	            session.close();
+	        }
+			return list;
+	}
+	public static void main(String args[]){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+		List<Booking_Request_Master> bh = new ArrayList<Booking_Request_Master>();	
+		List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+		try {
+            trns1 = session.beginTransaction();
+            bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date>=? and enabled='true' order by dept_date asc")
+            		.setParameter(0, 16).setDate(1, new Date()).list();
+            System.out.println("KK");
+            System.out.println(new Date().getTime());
+            System.out.println(bh.size());
+            for(int i=0; i<bh.size();i++){
+            	Pickup_Location_Master pick_source=new Pickup_Location_Master();
+            	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getSource_id()).list().get(0);
+            	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+            	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, bh.get(i).getDestination_id()).list().get(0);
+            	
+            	Location_Master source=new Location_Master();
+            	source = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getFrom_id()).list().get(0);
+            	Location_Master destin=new Location_Master();
+            	destin = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, bh.get(i).getTo_id()).list().get(0);
+            	Map<String,Object> map=new HashMap<String,Object>();
+            	map.put("id", String.valueOf(bh.get(i).getId()));
+            	map.put("dept_date", bh.get(i).getDept_date().toString());
+            	if(bh.get(i).getStatus().equals("Confirmed")){
+            		map.put("dept_time", bh.get(i).getProvided_time());
+            	}else{
+            		map.put("dept_time", bh.get(i).getDept_time().toString());
+            	}
+            	map.put("pick_source_id", String.valueOf(pick_source.getId()));
+            	map.put("pick_source_name", String.valueOf(pick_source.getName()));
+            	map.put("drop_dest_id", String.valueOf(pick_destin.getId()));
+            	map.put("drop_dest_name", String.valueOf(pick_destin.getName()));
+            	map.put("scource", source.getName());
+            	map.put("scource_id", String.valueOf(source.getId()));
+            	map.put("destination", destin.getName());
+            	map.put("destination_id", String.valueOf(destin.getId()));
+            	map.put("number_of_ticket", String.valueOf(bh.get(i).getNumber_of_booking()));
+            	map.put("provided_time", bh.get(i).getProvided_time());
+            	map.put("status", bh.get(i).getStatus());
+            	
+            	list.add(map);
+            }
+            System.out.println(list);
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
 	}
 
 }

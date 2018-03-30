@@ -11,7 +11,7 @@
       
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <spring:url value="/resources/css/custom_booking.css" var="custom_booking" />
   <link href="${custom_booking}" rel="stylesheet"/>
@@ -20,7 +20,7 @@
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -81,60 +81,92 @@
     #source_name-error,#destination_name-error,#departure_time-error,#departure_date-error,#number_of_seat-error{
     	color:red;
     }
-    
+    @media screen and (max-width: 350px) {
+		.flatpickr-calendar.animate.open{
+			top: 12%!important;
+			left: 2%!important;
+		}
+		.flatpickr-calendar.open {
+		    z-index: 995!important;
+		}
+	}
+	.rb{
+		margin-bottom: 0px!important;
+	}
+	.select-wrapper .caret {
+	    margin: 10px 0!important;
+    }
   </style>
 </head>
 <body>
   
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-  <li class="booking_history1"><a href="booking_history">History</a></li>
-  <li><a href="#!">Profile</a></li>
-  <li><a href="#!">Logout</a></li>
+  	<li class="booking_history1 hide-on-med-and-up"><a href="booking_history">History</a></li>
+ 	<li><a href="#!">Profile</a></li>
+  <li><a href="#!" onclick="formSubmit()">Logout</a></li>
 </ul>
 <nav>
   <div class="nav-wrapper">
     <a href="customer_home" class="brand-logo">Logo</a>
       <ul class="right">
-      <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
+      <li><a class="dropdown-button" href="#!" data-target='dropdown1'><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
 </nav>
+<div class="container">
 <form id="form_booking_request" class="col s12">
-	<div class="row container">
 		<h5 class="center">Bus Booking Request</h5>
-		<div class="input-field col s12 m6">
-		    <select id="source_name" name="source_name" required></select>
+		<div class="row rb">
+			<div class="input-field col s12 m6">
+			    <select id="source_name" name="source_name" required></select>
+			    <span id="source_name_error" class="red-text" hidden>*Required</span>
+			  </div>
+			    <div class="input-field col s12 m6">
+			    <select id="destination_name" name="destination_name" required>
+			    	<option disabled selected>Destination Location</option>
+			    </select>
+			    <span id="destination_name_error" class="red-text" hidden>*Required</span>
+			  </div>
+		</div>
+		<div class="row rb">
+			  <div class="input-field col s12 m6">
+			    	<div class="input-field s6 flatpickr">
+						<input type="text" placeholder="Select Departure Time" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
+					</div>
+			  </div>
+			    <div class="input-field col s12 m6">
+			    	<div class="input-field s6 flatpickr">
+						<input type="text" placeholder="Select Departure Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
+					</div>
+			  </div>
 		  </div>
-		    <div class="input-field col s12 m6">
-		    <select id="destination_name" name="destination_name" required>
-		    	<option disabled selected>Destination Location</option>
-		    </select>
-		  </div>
-		  <div class="input-field col s12 m6">
-		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Departure Time" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
-				</div>
-		  </div>
-		    <div class="input-field col s12 m6">
-		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Departure Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
-				</div>
-		  </div>
-		   <div class="input-field col s12">
-		       <input id="number_of_seat" type="text" class="validate" name="number_of_seat" >
-		       <label for="last_name">Number of Ticket</label>
-		  </div> 
-		  <div class="input-field col s12">
-		    <button id="book_now" class="btn" type="submit" name="action">Request Now</button>
-		  </div>
-	</div>
+		  <div class="row rb">
+			   <div class="input-field col s12">
+			       <input id="number_of_seat" type="text" class="validate" name="number_of_seat" >
+			       <label for="last_name">Number of Ticket</label>
+			  </div> 
+			  <div class="input-field col s12">
+			    <button id="book_now" class="btn" name="action">Request Now</button>
+			  </div>
+		</div>
 	</form>
+</div>
+
 	<!-- Confirm Modal -->
 	<div id="confirm" class="modal">
 	    <div class="modal-content center">
 	      <p id="confirm_text"></p>
 	    </div>
 	</div>
+	<form action="logout" method="post" id="logoutForm">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	</form>
   </body>
+  </body>
+  <script>
+		function formSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+</script>
 </html>

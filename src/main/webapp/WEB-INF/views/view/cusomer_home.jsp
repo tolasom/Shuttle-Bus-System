@@ -11,7 +11,7 @@
       
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <spring:url value="/resources/css/custom_booking.css" var="custom_booking" />
   <link href="${custom_booking}" rel="stylesheet"/>
@@ -20,7 +20,7 @@
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -88,8 +88,11 @@
     	overflow-y: visible;
     	 width: 50%;
     }
-	#confirm_booking_request,#cancel_confirm_model{
+	#cancel_confirm_model{
 		width: 300px;
+	}
+	#confirm_booking_request,#bus_info_modal,#driver_info_modal{
+	    width: 340px;
 	}
 	.content_confirm{
 		padding: 0px!important;
@@ -97,23 +100,66 @@
 	.confirm_booking_request_model{
 		width:100%
 	}
-	.cancel_booking_modal{
-		width:100%;
+	.cancel_booking_modal,.view_qrcode{
+		width:100%!important;
 	}
-	.select-wrapper input.select-dropdown{
-		-webkit-user-select:none;
-		-moz-user-select:none;
-		-ms-user-select:none;
-		-o-user-select:none; // latest Opera versions support -webkit-
-		user-select:none;
+	.img_rqcode{
+		width: 250px;
+    	height: 230px;
+	}
+	.h5_qr{
+		line-height: 100%!important;
+   		margin:0!important;
+	}
+	#rqcodeForm{
+		width: 320px;
+   		height: 425px;
+	}
+	.collapsible-header {
+		display: block!important;
+	}
+	input.select-dropdown {
+	    -webkit-user-select:none;
+	    -moz-user-select:none;
+	    -ms-user-select:none;
+	    -o-user-select:none;
+	    user-select:none;
+	}
+	.bk {
+	    margin-bottom: 0px!important;
+	}
+	@media screen and (max-width: 350px) {
+		.flatpickr-calendar.animate.open{
+			top: 12%!important;
+			left: 2%!important;
 		}
+		.flatpickr-calendar.open {
+		    z-index: 995!important;
+		}
+	}
+	.history_icon,.confirmed_request{
+		color: green;
+	}
+	.future_icon{
+		color:#fbc02d ;
+	}
+	.rejected{
+		color:red;
+	}
+	tr {
+	    border-bottom: 0px!important;
+	}
+
+	.confirm_h6{
+		padding: 15px!important;
+	}
   </style>
 </head>
 <body>
   
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-  <li class="booking_history1 hide-on-med-and-up"><a href="booking_history">History</a></li>
+  <li class="booking_history1 show-on-small"><a href="booking_history">History</a></li>
   <li><a href="#!">Profile</a></li>
   <li><a onclick="formSubmit()">Logout</a></li>
 </ul>
@@ -121,43 +167,62 @@
   <div class="nav-wrapper">
     <a href="customer_home" class="brand-logo">Logo</a>
       <ul class="right">
-      <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
+      <li><a class="dropdown-button" href="#!" data-target='dropdown1'><span id="fullname"></span><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
 </nav>
-<form id="form_book_now" class="col s12">
-	<div class="row container">
-		<h5 class="center">Shuttle Bus Booking</h5>
-		<div class="input-field col s12 m6">
-		    <select id="source_name" name="source_name" required></select>
-		  </div>
-		    <div class="input-field col s12 m6">
-		    <select id="destination_name" name="destination_name" required>
-		    <option disabled selected>Destination Location</option>
-		    </select>
-		  </div>
-		  <div class="input-field col s12 m6">
-		    <select id="departure_time" name="departure_time" required>
-		    </select>
-		  </div>
-		    <div class="input-field col s12 m6">
-		    	<div class="input-field s6 flatpickr">
-					<input type="text" placeholder="Select Departure Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
-				</div>
-				<a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
-		  </div>
-		   <div class="input-field col s12">
-		       <input id="number_of_seat" name="number_of_seat" type="text" class="validate" required> 
-		       <label for="last_name">Number of Ticket</label>
-		  </div> 
-		  <div class="input-field col s12">
-		    <button id="book_now" class="btn" type="submit" name="action">Book Now</button>
-		  </div>  
-	</div>
-</form>
-
-<div id="get_booking_request" class="row container"></div> 
+<div class="container">
+	<form id="form_book_now" class="col s12">
+			<h5 class="center">Shuttle Bus Booking</h5>
+			  <div class="row bk">
+				<div class="input-field col s12 m6">
+				    <select id="source_name" name="source_name" required></select>
+				    <span id="source_name_error" class="red-text" hidden>*Required</span>
+				  </div>
+				    <div class="input-field col s12 m6">
+				    <select id="destination_name" name="destination_name" required>
+				    <option disabled selected>Destination Location</option>
+				    </select>
+				    <span id="destination_name_error" class="red-text" hidden>*Required</span>
+				  </div>
+			  </div>
+			  <div class="row bk">
+				  <div class="input-field col s12 m6">
+				    <select id="departure_time" name="departure_time" required></select>
+				    <span id="departure_time_error" class="red-text" hidden>*Required</span>
+				  </div>
+				  <div class="input-field col s12 m6">
+				    	<div class="input-field s6 flatpickr">
+							<input type="text" placeholder="Select Departure Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
+						</div>
+						<a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
+				  </div>
+			  </div>
+			  <div class="row bk">
+				   <div class="input-field col s12">
+				       <input id="number_of_seat" name="number_of_seat" type="text" class="validate" required> 
+				       <label for="last_name">Number of Ticket</label>
+				  </div> 
+				  <div class="input-field col s12">
+				    <button id="book_now" class="btn" name="action">Book Now</button>
+				  </div>  
+			  </div>
+			  
+	
+	</form>
+</div>
+<div id="get_booking_request" class="row container hide-on-small-only"></div> 
 <div id="all_booking_history" class="row container hide-on-small-only"></div> 
+<!-- View Ticket Modal-->
+<div id="rqcodeForm" class="modal modal-fixed-footer ">
+	<div class="modal-content center">
+		<h6 class="h5_qr center light-blue-text">Bus Ticket QR-Code</h6>
+		<div id="rqcode"></div>
+	</div>
+  <div class="modal-footer">
+	<a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+  </div>
+</div>
 <!-- Ask for confirm booking request -->
 <div id="cancel_confirm_model" class="modal">
     <div class="modal-content container center">
@@ -170,7 +235,6 @@
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
 </div>
-
 <!-- Confirm Modal -->
 <div id="confirm" class="modal">
     <div class="modal-content center content_confirm">
@@ -179,14 +243,28 @@
 </div>
 <!-- Ask for confirm booking request -->
 <div id="confirm_booking_request" class="modal">
-    <div class="modal-content container center">
-	    <h5 class="center">Confirm</h5>
-		<p> Do you want to book ticket now?
+    <div class="modal-content center">
+	    <h6 class="center light-blue-text confirm_h6">Confirm Booking Information</h6>
+		<table id="get_request_detail"></table>
 	</div>
 	<div class="modal-footer">
 		<span id="get_req_book_footer"></span>
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
 	 </div>
+</div>
+<!-- Driver Info -->
+<div id="driver_info_modal" class="modal">
+    <div class="modal-content center">
+	    <h6 class="center light-blue-text">Driver Information</h6>
+		<table id="get_driver_info"></table>
+	</div>
+</div>
+<!-- Bus Info -->
+<div id="bus_info_modal" class="modal">
+    <div class="modal-content center">
+	    <h6 class="center light-blue-text">Bus Information</h6>
+		<table id="get_bus_info"></table>
+	</div>
 </div>
 <!-- Ask for phone number while booking -->
 <div id="confirm_phone_number_modal" class="modal">
@@ -201,6 +279,7 @@
 	    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Skip</a>
 	</div>
 </div>
+
 <!-- Custom Source Pick Up Location -->
 <div id="coustom_source_pl" class="modal">
 	<form id="form_coustom_source_pl">
