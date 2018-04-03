@@ -135,7 +135,7 @@ $(document).ready(function(){
                                 text: response.data.message,
                                 type: "success"
                             }, function() {
-                                window.location = "admin_profile";
+                                formSubmit();
                             });
                         }, 10);
                         

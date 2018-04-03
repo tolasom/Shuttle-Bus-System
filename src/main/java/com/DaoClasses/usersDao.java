@@ -3,13 +3,7 @@ package com.DaoClasses;
 
 import java.util.List;
 
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.User_Info;
+import com.EntityClasses.*;
 import com.ModelClasses.Schedule_Model;
 import com.ModelClasses.UserModel;
 
@@ -65,4 +59,7 @@ public interface usersDao {
 	public User_Info getCustomerById(int id);
 	public int createUserr(User_Info user);
 	public int changePass(User_Info user);
+	public List<Dept_Time_Master> getAllTimes();
+	public int saveTime(Schedule_Model schedule) throws ParseException;
+	public int deleteTime(int id);
 }

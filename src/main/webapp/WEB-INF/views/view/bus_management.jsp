@@ -231,7 +231,7 @@ swal({
 
     	          else 
     	           {
-    	           swal("Oops!","It is not deleted", "error")
+    	           swal("Oops!",response.message, "error")
 
     	           } 
     	     },

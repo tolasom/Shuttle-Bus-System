@@ -13,13 +13,15 @@
     <link rel="stylesheet"  type="text/css" href="${loginStyle}">
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-
     <!-- Bootstrap Core JavaScript -->
     <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
     <script src="${JSCORE}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+
+    
+ 
+  
 
 
     <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
@@ -145,8 +147,12 @@
 
         }
     </style>
+   
 </head>
 <body style="background: linear-gradient(to left, #636e72, #636e72);">
+
+
+
 <div class="loader"></div>
 <div class="login-page">
 
@@ -210,6 +216,7 @@
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 
+  
 </body>
 <script type="text/javascript">
 

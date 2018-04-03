@@ -44,7 +44,6 @@
 
       
 <!-- Date Picker -->     
-<spring:url value="/resources/Bootstrap/js/date/jquery.js" var="dateJS"/>
 <spring:url value="/resources/Bootstrap/js/date/jquery-ui.js" var="dateJS2"/>
 <spring:url value="/resources/Bootstrap/js/time/wickedpicker.js" var="TimeJS"/>
 
@@ -81,19 +80,19 @@
 
 
 <script src="${VendorJS}"></script>
-<script src="${AppJS}"></script>
 <script src="${alertJS}"></script>
-<script src="${dateJS}"></script>
-<script src="${dateJS2}"></script>
 <script src="${TimeJS}"></script>
 <script src="${MultipleJS}"></script>
 <script src="${MultipleJS2}"></script>
+<script src="${dateJS2}"></script>
+<script src="${AppJS}"></script>
 
 <script>
                     
 var eee;
                     $(document).ready(function(){
 
+                      
                       $.ajax({
                             url:'getBookingRequestNotification',
                             type:'GET',
@@ -106,6 +105,7 @@ var eee;
                             }
                             
                           });
+
 
 
 
