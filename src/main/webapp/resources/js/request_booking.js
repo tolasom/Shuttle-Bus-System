@@ -178,7 +178,8 @@ $(document).ready(function() {
    		 }
 	 }
 
-	 $('#book_now').click(function(){
+	 $('#book_now').click(function(event){
+		 event.preventDefault();
 		 console.log("kk mm");
 		 var source = $("#source_name").val();
    		 var destination = $("#destination_name").val();
@@ -208,12 +209,6 @@ $(document).ready(function() {
 	 });
 	 $("#form_booking_request").validate({
 	        rules: {
-//	        	source_name: {
-//	        		 valueNotEquals: "none" 
-//	            },
-//	            destination_name: {
-//	        		 valueNotEquals: "none" 
-//	            },
 	            departure_time: {
 	        		 valueNotEquals: "none" 
 	            },
@@ -228,13 +223,6 @@ $(document).ready(function() {
 
 	        },
 	        messages: {
-//	          
-//	            source_name: {
-//	            	required: "*Required"
-//	            },
-//	            destination_name: {
-//	            	required: "*Required" 
-//	            },
 	            departure_time: {
 	            	required: "*Required" 
 	            },

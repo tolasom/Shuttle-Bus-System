@@ -59,10 +59,10 @@ $(document).ready(function() {
 					l_form+='</optgroup>';		
 				}
 				l_form+='<option value="custom_pickup"><span class="red">Custom Pick Up Location</span></option>'
-//				console.log(l_form)
-//				document.getElementById('source_name').innerHTML=l_form;
-//				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
-//				$('#source_name').formSelect();
+				console.log(l_form)
+				document.getElementById('source_name').innerHTML=l_form;
+				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
+				$('#source_name').formSelect();
 //				var elem = document.querySelector('#source_name');
 //				var instance = M.FormSelect.getInstance(elem);
 //				console.log("instance")
@@ -535,7 +535,8 @@ $(document).ready(function() {
 			}
 		});
 		
-		$('#confirm_booking_request_btn').click(function(){
+		$('#confirm_booking_request_btn').click(function(event){
+			event.preventDefault();
 			var id1=$(this).attr("request") ;
 			console.log(id1);
 			$.ajax({
@@ -617,6 +618,7 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					current_date=data.slice(0, 19);
+					console.log("Current Date:"+current_date);
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -631,8 +633,9 @@ $(document).ready(function() {
 		 var tmr = moment.utc(tomorrow, "YYYY-MM-DD  HH:mm:ss");
 		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
 		 
-		 console.log(tmr);
-		 console.log(dept_dt);
+		 console.log("Current Date:"+current_date);
+		 console.log("TMR Date: "+tmr);
+		 console.log("Dept DT: "+dept_dt);
  		 console.log(moment(dept_dt).isAfter(tmr));
 		 if(moment(dept_dt).isAfter(tmr)){
    			 return true;
@@ -655,7 +658,8 @@ $(document).ready(function() {
 		 }, "*Required");
 
 	//============================== Booking ===========================
-	 $('#book_now').click(function(){
+	 $('#book_now').click(function(event){
+		 event.preventDefault();
 		 console.log("kk mm");
 		 var source = $("#source_name").val();
    		 var destination = $("#destination_name").val();
@@ -710,17 +714,6 @@ $(document).ready(function() {
 	 });
 	 $("#form_book_now").validate({
 	        rules: {
-//	        	source_name: {
-//	        		 valueNotEquals: "none",
-//	        		 SourceValueNothing: "custom_pickup"
-//	            },
-//	            destination_name: {
-//	        		 valueNotEquals: "none",
-//	        		 DestinationValueNothing: "custom_pickup",
-//	            },
-//	            departure_time: {
-//	        		 valueNotEquals: "none" 
-//	            },
 	            departure_date: {
 	        		 valueNotEquals: "none" 
 	            },
@@ -732,22 +725,12 @@ $(document).ready(function() {
 
 	        },
 	        messages: {
-	          
-//	            source_name: {
-//	            	required: "*Required"
-//	            },
-//	            destination_name: {
-//	            	required: "*Required" 
-//	            },
-//	            departure_time: {
-//	            	required: "*Required" 
-//	            },
 	            departure_date: {
 	            	required: "*Required" 
 	            },
 	            number_of_seat: {
 			         required: "*Required",
-			         min: "Manimun 1 tickets each time booking",
+			         min: "Manimun 1 ticket each time booking",
 			         max: "Maximun 10 tickets each time booking"
 			     }
 
@@ -776,7 +759,9 @@ $(document).ready(function() {
 		   		 if(time!=="undefined"&&time!==null&&destination!=="undefined"
 		   			 &&destination!==null&&destination!=="custom_pickup"
 		   			 &&source!=="undefined"&&source!==null&&source!=="custom_pickup"){
+		   			 console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK1")
 					 if(compared_tomorrow(dept_dt)){
+					 		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK2")
 				   			if(phone=='0'){
 				   				$('#confirm_phone_number_modal').modal({
 				   					onCloseEnd: function() {
@@ -845,6 +830,7 @@ $(document).ready(function() {
 							    	});
 				   				})
 				        	}else{
+				        		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK3")
 				        		$.ajax({
 					   				async: false,
 					   				cache: false,
@@ -888,10 +874,14 @@ $(document).ready(function() {
 				        	}
 					   		 
 				   		 }else{
-				   			var form="Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
-							$("#confirm" ).addClass( "confirm_error" );
-								
-								document.getElementById('confirm_text').innerHTML=form;
+				   		 	console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK4")
+				   			var form='<i class="material-icons large error">highlight_off</i>'
+				   					 +'<h6>Sorry, Booking Not Allow!</h6>'
+				   					 +'<p>Please cantact to +855967969927 for more information or click <a href="request_booking">here</a> to Request Booking</p>'
+				   				//"Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
+				   				//$("#confirm" ).addClass( "confirm_error" );
+				   				//document.getElementById('confirm_text').innerHTML=form;
+								document.getElementById('content_confirm').innerHTML=form;
 								$('#confirm').modal({
 									onCloseEnd: function() {
 											window.location.replace("customer_home");

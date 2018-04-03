@@ -1,6 +1,7 @@
 package com.MainController;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -86,7 +87,7 @@ public class CustomerController {
 	}
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
-	public @ResponseBody String customer_booking(Customer_Booking cb) {
+	public @ResponseBody String customer_booking(Customer_Booking cb) throws ParseException {
 			System.out.println(cb.getDate());
 			System.out.println(cb.getTime());
 			System.out.println(cb.getNumber_of_seat());
@@ -104,7 +105,7 @@ public class CustomerController {
 	}
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
-	public @ResponseBody String request_book_now(int id) {
+	public @ResponseBody String request_book_now(int id) throws ParseException {
 		String ret = customer.request_book_now(id);
 		System.out.println(id);
 		return ret;

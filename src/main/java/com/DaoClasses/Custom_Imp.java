@@ -2,8 +2,9 @@ package com.DaoClasses;
 
 import getInfoLogin.IdUser;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream; 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -36,8 +37,6 @@ import com.ModelClasses.UserModel;
 
 public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
-	Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
-	Date current_date = new Date();
 	public String TimeNow(){
 		Date d=new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("HH:mm:ss");
@@ -48,6 +47,13 @@ public class Custom_Imp implements Custom_Dao{
 	public String DateNow(){
 		Date d=new Date();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+	}
+	public String DateTimeNow(){
+		Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
@@ -185,6 +191,7 @@ public class Custom_Imp implements Custom_Dao{
 		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
 		Pickup_Location_Master pick= new Pickup_Location_Master();
 		List<Pickup_Location_Master> all_pick=new ArrayList<Pickup_Location_Master>();
+		Custom_Imp c=new Custom_Imp();
 		Boolean assign=true;
 		try {
             trns1 = session.beginTransaction();
@@ -192,8 +199,8 @@ public class Custom_Imp implements Custom_Dao{
             pick.setLocation_id(np.getLocation_id());
             pick.setEnabled(true);
             pick.setPermanent(false);
-            pick.setCreated_at(current_timestamp);
-            pick.setUpdated_at(current_timestamp);
+            pick.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+            pick.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             session.save(pick);
             
             trns1.commit();
@@ -226,14 +233,16 @@ public class Custom_Imp implements Custom_Dao{
         Session session = HibernateUtil.getSessionFactory().openSession();
 		Pickup_Location_Master drop= new Pickup_Location_Master();
 		Map<String, Object> map=new HashMap<String, Object>();
+		Custom_Imp c=new Custom_Imp();
+//		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		try {
             trns1 = session.beginTransaction();
             drop.setName(np.getDropoff_name());
             drop.setLocation_id(np.getLocation_id());
             drop.setEnabled(true);
             drop.setPermanent(false);
-            drop.setCreated_at(current_timestamp);
-            drop.setUpdated_at(current_timestamp);
+            drop.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+            drop.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             session.save(drop);
             
             Location_Master locat = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, np.getLocation_id()).list().get(0);
@@ -646,7 +655,7 @@ public class Custom_Imp implements Custom_Dao{
 	static int total_bus=0;			// permanent use (value will never change)
 	static List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>();	
 		
-	public String customer_booking(Customer_Booking cb){	
+	public String customer_booking(Customer_Booking cb) throws ParseException{	
 		System.out.println("customer_booking");
 		Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession(); 
@@ -654,7 +663,9 @@ public class Custom_Imp implements Custom_Dao{
         int number_of_passenger=0;
         List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();
         List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();  
+        List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
         Custom_Dao custom_imp=new Custom_Imp();
+        Custom_Imp c=new Custom_Imp();
 		try {
             trns = session.beginTransaction();
             
@@ -663,82 +674,131 @@ public class Custom_Imp implements Custom_Dao{
           	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
           	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
             
-            //1. query list of all available bus (result must be in order number of seat for small to big )
-            all_bus= custom_imp.get_all_bus(session);
-            //2. get all bookers
-            all_booker1=custom_imp.get_all_booker(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());
-            //3. Find out number of total passengers in DB 
-            for(int p=0;p<all_booker1.size();p++){
-	            number_of_passenger+=all_booker1.get(p).getNumber_booking();
-	        }
-	        number_of_passenger+=cb.getNumber_of_seat();
-	        
-	        //4. if have bus or have no bus
-            if(all_bus.size()>0){
-            	//5. Fins total seat of all bus
-            	for(int i=0;i<all_bus.size();i++){
-   	             	total_seat_of_all_bus+=Integer.valueOf((String) all_bus.get(i).get("number_of_seat")); 
-            	}
-            	//check whether people is over all available bus seat or not
-            	if(number_of_passenger<=total_seat_of_all_bus){
-            		//6. create new schedule
-                	Map<Object, List<Booking_Master>> sch_with_users=custom_imp.create_schedule(session,all_bus,all_booker1,pick_source,pick_destin,cb,total_seat_of_all_bus,number_of_passenger); 			// 6. Set/Reset New Schedule 
-                	if(sch_with_users.size()==0){
-                		return "over_bus_available";
-                	}else{
-                		//7.Delete Schedule
-                    	int delete=delete_Schedule(session,pick_source.getLocation_id(),pick_destin.getLocation_id(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
-                		
-                    	System.out.println(list_bus_choosen);
-                    	for(int h=0;h<sch_with_users.size();h++){
-                    		int num_booking=0;
-                    		Schedule_Master sch=new Schedule_Master();
-                    		sch.setBus_id(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("id")));
-                    		sch.setSource_id(pick_source.getId());
-                    		sch.setDestination_id(pick_destin.getId());
-                    		sch.setFrom_id(pick_source.getLocation_id());
-                    		sch.setTo_id(pick_destin.getLocation_id());
-                    		sch.setDept_date(java.sql.Date.valueOf(cb.getDate()));
-                    		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
-                    		sch.setCreated_at(current_timestamp);
-                    		sch.setUpdated_at(current_timestamp);
-                    		sch.setCode(Custom_Imp.getScheduleSequence());
-                    		session.save(sch);
-                    		for(int y=0;y<sch_with_users.get(h).size();y++){
-                    			System.out.println("kkkkk");
-                    			num_booking+=sch_with_users.get(h).get(y).getNumber_booking();
-                    			Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
-                        				" where id = :id");
-			                    query.setParameter("sch_id", sch.getId());
-			                    query.setParameter("qr", pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
-			                    query.setParameter("id", sch_with_users.get(h).get(y).getId());
-			                    int result = query.executeUpdate();
-                			}
-                    		
-                    		sch.setNumber_booking(num_booking);
-                    		sch.setRemaining_seat(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
-                    		sch.setNumber_customer(num_booking);
-                    		sch.setNumber_staff(0);
-                    		sch.setNumber_student(0);
-                			for(int y=0;y<sch_with_users.get(h).size();y++){
-                				System.out.print(sch_with_users.get(h).get(y).getId()+" ");
-                			}
-                			System.out.println(" ");
-                			for(int y=0;y<sch_with_users.get(h).size();y++){
-                				System.out.print(sch_with_users.get(h).get(y).getNumber_booking()+" ");
-                			}
-                			System.out.println(" ");
-                		}
+          	schedule=session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+					.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+					.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+					.setParameter("to", pick_destin.getLocation_id())
+					.setParameter("from", pick_source.getLocation_id()).list();
+          	
+          	Boolean check_ass=true; // Check whether we can assign this passenger to existing schedule or not
+          	for(int i=0;i<schedule.size();i++){
+          		if(schedule.get(i).getRemaining_seat()>=cb.getNumber_of_seat()){
+          			//Assign New Passenger here
+    				Booking_Master new_booker=new Booking_Master();
+    				new_booker.setSource_id(pick_source.getId());
+    				new_booker.setFrom_id(pick_source.getLocation_id());
+    				new_booker.setDestination_id(pick_destin.getId());
+    				new_booker.setTo_id(pick_destin.getLocation_id());
+    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+    				new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+    				new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+    				new_booker.setUser_id(user.getAuthentic());
+    				new_booker.setNumber_booking(cb.getNumber_of_seat());
+    				new_booker.setNotification("Booked");
+    				new_booker.setCode(Custom_Imp.getBookingSequence());
+    				new_booker.setSchedule_id(schedule.get(i).getId());
+    				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
+    				session.save(new_booker);
+    				
+    				
+    				Query query = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
+            				" where id = :id");
+                    query.setParameter("num_booking", schedule.get(i).getNumber_booking()+cb.getNumber_of_seat());
+                    query.setParameter("remain_seat", schedule.get(i).getRemaining_seat()-cb.getNumber_of_seat());
+                    query.setParameter("number_customer", schedule.get(i).getNumber_customer()+cb.getNumber_of_seat());
+                    query.setParameter("id", schedule.get(i).getId());
+                    System.out.println(query);
+                    int result = query.executeUpdate();
+                                     
+                    check_ass=false;
+                    break;
+          		}
+          	}
+          	
+          	if(check_ass){
+          		//1. query list of all available bus (result must be in order number of seat for small to big )
+                all_bus= custom_imp.get_all_bus(session,cb,pick_source.getLocation_id(),pick_destin.getLocation_id());
+                //2. get all bookers
+                all_booker1=custom_imp.get_all_booker(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());
+                //3. Find out number of total passengers in DB 
+                for(int p=0;p<all_booker1.size();p++){
+    	            number_of_passenger+=all_booker1.get(p).getNumber_booking();
+    	        }
+    	        number_of_passenger+=cb.getNumber_of_seat();
+    	        
+    	        //4. if have bus or have no bus
+                if(all_bus.size()>0){
+                	//5. Fins total seat of all bus
+                	for(int i=0;i<all_bus.size();i++){
+       	             	total_seat_of_all_bus+=Integer.valueOf((String) all_bus.get(i).get("number_of_seat")); 
+       	             	System.out.println("LLLL kkk");
                 	}
-            	}else{
-            		System.out.println("Over All Bus available seat!!!");
-            		return "over_bus_available";
-            	}
-            	
-            }else{
-	      	  System.out.println("No Bus available!!!");
-	      	  return "no_bus_available";
-	        }
+                	System.out.println("LLLL");
+                	System.out.println("number_of_passenger:  "+number_of_passenger);
+                	System.out.println("LLLL:   "+total_seat_of_all_bus);
+                	//check whether people is over all available bus seat or not
+                	if(number_of_passenger<=total_seat_of_all_bus){
+                		//6. create new schedule
+                    	Map<Object, List<Booking_Master>> sch_with_users=custom_imp.create_schedule(session,all_bus,all_booker1,pick_source,pick_destin,cb,total_seat_of_all_bus,number_of_passenger); 			// 6. Set/Reset New Schedule 
+                    	if(sch_with_users.size()==0){
+                    		return "over_bus_available";
+                    	}else{
+                    		//7.Delete Schedule
+                        	int delete=delete_Schedule(session,pick_source.getLocation_id(),pick_destin.getLocation_id(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
+                    		
+                        	System.out.println(list_bus_choosen);
+                        	for(int h=0;h<sch_with_users.size();h++){
+                        		int num_booking=0;
+                        		Schedule_Master sch=new Schedule_Master();
+                        		sch.setBus_id(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("id")));
+                        		sch.setSource_id(pick_source.getId());
+                        		sch.setDestination_id(pick_destin.getId());
+                        		sch.setFrom_id(pick_source.getLocation_id());
+                        		sch.setTo_id(pick_destin.getLocation_id());
+                        		sch.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+                        		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+                        		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+                        		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+                        		sch.setCode(Custom_Imp.getScheduleSequence());
+                        		session.save(sch);
+                        		for(int y=0;y<sch_with_users.get(h).size();y++){
+                        			System.out.println("kkkkk");
+                        			num_booking+=sch_with_users.get(h).get(y).getNumber_booking();
+                        			Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
+                            				" where id = :id");
+    			                    query.setParameter("sch_id", sch.getId());
+    			                    query.setParameter("qr", pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
+    			                    query.setParameter("id", sch_with_users.get(h).get(y).getId());
+    			                    int result = query.executeUpdate();
+                    			}
+                        		
+                        		sch.setNumber_booking(num_booking);
+                        		sch.setRemaining_seat(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
+                        		sch.setNumber_customer(num_booking);
+                        		sch.setNumber_staff(0);
+                        		sch.setNumber_student(0);
+                    			for(int y=0;y<sch_with_users.get(h).size();y++){
+                    				System.out.print(sch_with_users.get(h).get(y).getId()+" ");
+                    			}
+                    			System.out.println(" ");
+                    			for(int y=0;y<sch_with_users.get(h).size();y++){
+                    				System.out.print(sch_with_users.get(h).get(y).getNumber_booking()+" ");
+                    			}
+                    			System.out.println(" ");
+                    		}
+                    	}
+                	}else{
+                		System.out.println("Over All Bus available seat 1!!!");
+                		return "over_bus_available";
+                	}
+                	
+                }else{
+    	      	  System.out.println("No Bus available!!!");
+    	      	  return "no_bus_available";
+    	        }
+          	}
+            
             trns.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -756,6 +816,8 @@ public class Custom_Imp implements Custom_Dao{
 		List<Booking_Master> user_sch_assign=new ArrayList<Booking_Master>();
         Map<Object,List<Booking_Master>> sch_with_users=new HashMap<Object,List<Booking_Master>>();
         Custom_Dao custom_imp=new Custom_Imp();  
+        Custom_Imp c=new Custom_Imp();
+//		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		while(recursive){
 			int ib=0; //index of passenger
 			Boolean last_bus_choosing=true;
@@ -833,8 +895,8 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
 		    				System.out.println(cb.getDate());
 		    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
-		    				new_booker.setCreated_at(current_timestamp);
-		    				new_booker.setUpdated_at(current_timestamp);
+		    				new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+		    				new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
 		    				new_booker.setUser_id(user.getAuthentic());
 		    				new_booker.setNumber_booking(cb.getNumber_of_seat());
 		    				new_booker.setNotification("Booked");
@@ -926,13 +988,29 @@ public class Custom_Imp implements Custom_Dao{
 		return all_booker1;
 	}
 	
-	public List<Map<String,Object>> get_all_bus(Session session){
+	public List<Map<String,Object>> get_all_bus(Session session,Customer_Booking cb,int from, int to) throws ParseException{
 		System.out.println("get_all_bus");
 		List<Bus_Master> query_all_bus=new ArrayList<Bus_Master>();
 		List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> same_date_route =new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> same_date_diff_route =new ArrayList<Map<String,Object>>();
+		Custom_Dao custom_imp=new Custom_Imp();
 		try {
-            query_all_bus = session.createQuery("from Bus_Master where enabled=? order by number_of_seat asc").setBoolean(0, true).list();
-            
+			same_date_route=custom_imp.same_date_same_route(session, cb, from, to);
+			List<Integer> unava1= (List<Integer>) same_date_route.get(0).get("unavailable_bus");
+			same_date_diff_route=custom_imp.same_date_differ_route(session, cb, from, to);
+			List<Integer> unava2= (List<Integer>) same_date_diff_route.get(0).get("unavailable_bus");
+			String excep="";
+			for(int i=0;i<unava1.size();i++){
+				excep+=" and id!="+unava1.get(i);
+			}
+			for(int i=0;i<unava2.size();i++){
+				excep+=" and id!="+unava2.get(i);
+			}
+            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+            System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+            System.out.println("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc");
+            System.out.println("query_all_bus size: "+ query_all_bus.size());
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	                  Map<String,Object> map =new HashMap<String,Object>();				
@@ -948,7 +1026,86 @@ public class Custom_Imp implements Custom_Dao{
         }    
 		return all_bus;
 	}
+	//Check Bus Available and not from the same route 
 	
+	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+		List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
+		List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+		List<Integer> ava_bus=new ArrayList<Integer>();
+		List<Integer> una_bus=new ArrayList<Integer>();
+		try {
+			
+			sch=session.createQuery("from Schedule_Master where dept_date=:date and dept_time!=:time and to_id=:to and from_id=:from")
+					.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+					.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+					.setParameter("to", to)
+					.setParameter("from", from).list();
+			
+			for(int i=0;i<sch.size();i++){
+				if(time_same_date(sch.get(i).getDept_time().toString(),cb.getTime(),8)){
+					ava_bus.add(sch.get(i).getBus_id());
+				}else{
+					una_bus.add(sch.get(i).getBus_id());
+				}
+			}
+			Map<String, Object> map=new HashMap<String , Object>();
+			map.put("unavailable_bus", una_bus);
+			map.put("available_bus", ava_bus);
+			all_bus.add(map);
+			System.out.println("same_date_same_route:  ");
+			System.out.println(all_bus);
+	              
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		return all_bus;
+	}
+	//Check Bus Available and not from the same route 
+	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+			List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
+			List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+			List<Integer> ava_bus=new ArrayList<Integer>();
+			List<Integer> una_bus=new ArrayList<Integer>();
+			try {	
+				sch=session.createQuery("from Schedule_Master where dept_date=:date and from_id!=:from")
+						.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+						.setParameter("from", from).list();
+				
+				for(int i=0;i<sch.size();i++){
+					if(time_same_date(sch.get(i).getDept_time().toString(),cb.getTime(),4)){
+						ava_bus.add(sch.get(i).getBus_id());
+					}else{
+						una_bus.add(sch.get(i).getBus_id());
+					}
+				}
+				Map<String, Object> map=new HashMap<String , Object>();
+				map.put("unavailable_bus", una_bus);
+				map.put("available_bus", ava_bus);
+				all_bus.add(map);
+				System.out.println("same_date_differ_route:  ");
+				System.out.println(all_bus);
+		              
+	        } catch (RuntimeException e) {
+	        	e.printStackTrace();
+	        }    
+			return all_bus;
+		}
+	public Boolean time_same_date(String user_time, String time,long time_dura) throws ParseException{
+ 
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+		Date date1 = format.parse(user_time);
+		Date date2 = format.parse(time);
+		long difference = date2.getTime() - date1.getTime();
+		long duration =difference/(1000*60*60);
+		System.out.println("PLPL");
+		System.out.println("duration: "+duration);
+		System.out.println("time_dura: "+time_dura);
+		if(duration>=time_dura||duration<=-time_dura){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date){
 		System.out.println("delete_Schedule");
 		try {
@@ -1033,6 +1190,8 @@ public class Custom_Imp implements Custom_Dao{
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();       
         Booking_Request_Master book = new Booking_Request_Master();
+        Custom_Imp c=new Custom_Imp();
+//		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		try {
             trns1 = session.beginTransaction();
             Pickup_Location_Master pick_source=new Pickup_Location_Master();
@@ -1041,8 +1200,8 @@ public class Custom_Imp implements Custom_Dao{
           	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
             
           	
-            book.setCreated_at(current_timestamp);
-            book.setUpdated_at(current_timestamp);
+            book.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+            book.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             book.setProvided_time(cb.getTime()+":00");
             book.setSource_id(cb.getSource());
             book.setFrom_id(pick_source.getLocation_id());
@@ -1065,7 +1224,7 @@ public class Custom_Imp implements Custom_Dao{
         }
 		return "success";
 	}
-	public String request_book_now(int id){
+	public String request_book_now(int id) throws ParseException{
 		Custom_Dao cus=new Custom_Imp();
 		Transaction trns1 = null;
 		 Customer_Booking cb=new Customer_Booking();
@@ -1121,16 +1280,35 @@ public class Custom_Imp implements Custom_Dao{
 	public String cancel_booking_ticket(int id){
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();     
+        List<Booking_Master> bo=new ArrayList<Booking_Master>();
+        List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();  
+        List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
         String book;
 		try {
             trns1 = session.beginTransaction();
-            Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
-    				" where id = :id");
-            query.setParameter("id", id);
-            int result = query.executeUpdate();
-            trns1.commit();  
-            if(result>0){
-            	return "success";
+            
+            bo=session.createQuery("from Booking_Master where id=:id")
+					.setParameter("id", id).list();
+            
+            if(bo.size()>0){
+            	schedule=session.createQuery("from Schedule_Master where id=:id")
+    					.setParameter("id", bo.get(0).getSchedule_id()).list();
+            	
+            	Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
+        				" where id = :id");
+                query.setParameter("id", id);
+                int result = query.executeUpdate();
+                
+                Query query1 = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
+        				" where id = :id");
+                query1.setParameter("num_booking", schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking());
+                query1.setParameter("remain_seat", schedule.get(0).getRemaining_seat()+bo.get(0).getNumber_booking());
+                query1.setParameter("number_customer", schedule.get(0).getNumber_customer()-bo.get(0).getNumber_booking());
+                query1.setParameter("id", schedule.get(0).getId());
+                int result1 = query1.executeUpdate();
+                
+
+                trns1.commit();  
             }else{
             	return "no_record";
             }
@@ -1141,6 +1319,7 @@ public class Custom_Imp implements Custom_Dao{
             session.flush();
             session.close();
         }
+		return "success";
 	}
 	
 	public List<Map<String,Object>> get_qrcode(int id){
