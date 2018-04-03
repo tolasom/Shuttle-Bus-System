@@ -9,19 +9,18 @@
     <title>Shuttle Bus Management</title>
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
     <link rel="stylesheet"  type="text/css" href="${loginStyle}">
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
-    <script src="${JSCORE}"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
-    
- 
-  
+    <!-- Bootstrap Core JavaScript -->
+    <spring:url value="/resources/Bootstrap/js/bootstrap.min.js" var="JSCORE"/>
+    <script src="${JSCORE}"></script>
+
 
 
     <spring:url value="/resources/Bootstrap/css/sweetalert.css" var="alertStyle"/>
@@ -31,13 +30,12 @@
     <style>
         .form input,.form{
             border-radius: 5px;
-
-        }
-        .form {
-            margin: unset;
         }
         .login-page{
             padding: 4% 0 0;
+        }
+        .form{
+            margin-bottom: unset;
         }
         form{
             text-align: left;
@@ -59,7 +57,6 @@
             font-size: 17px;
             font-weight: bold;
             cursor: pointer;
-
             color:#7f8c8d;
         }
         .formdev{
@@ -106,7 +103,6 @@
         .googleSign{
             margin-right: 15%;
             margin-left: 15%;
-
         }
         .abcRioButtonBlue{
             width: 100% !important;
@@ -122,17 +118,14 @@
             z-index: 2;
             position: absolute;
             right: calc(50% - 30px);
-
             -webkit-animation: spin 1.5s linear infinite; /* Safari */
             animation: spin 1.5s linear infinite;
         }
-
         /* Safari */
         @-webkit-keyframes spin {
             0% { -webkit-transform: rotate(0deg); }
             100% { -webkit-transform: rotate(360deg); }
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -144,82 +137,86 @@
             color: #ea534a;
             font-size: 17px;
             display: none;
-
+        }
+        @media only screen and (max-width: 992px) {
+            .formdev{
+                padding: 15px;
+            }
+            .title-header{
+                margin-top: unset;
+            }
         }
     </style>
-   
 </head>
-<body style="background: linear-gradient(to left, #636e72, #636e72);">
+<body class="row" style="background: linear-gradient(to left, #636e72, #636e72);">
+<div >
+    <div class="loader"></div>
+    <div class="login-page" style="width: unset !important;">
 
+        <ul class="form" style="padding: 0;padding-top:0px">
 
+            <table class="switch">
+                <tr>
+                    <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
+                    <td id="signup-btn" style="border-top-right-radius: 4px">SIGN UP</td>
+                </tr>
+            </table>
+            <div class="formdev">
+                <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
 
-<div class="loader"></div>
-<div class="login-page">
+                <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
+                    <label for="email"></label>
+                    <input type='text'placeholder="Email" name='email' id="email">
+                    <label id="email-error" class="error" for="email"></label>
+                    <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
+                    <input type='text'placeholder="Username" name='username' id="username">
+                    <input type='text'placeholder="Phone" name="phone" id="phone">
+                    <input type="submit" class="submit-btn" value="SIGNUP" >
 
-    <ul class="form" style="padding: 0;padding-top:0px">
-
-        <table class="switch">
-            <tr>
-                <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
-                <td id="signup-btn" style="border-top-right-radius: 4px">SIGN UP</td>
-            </tr>
-        </table>
-        <div class="formdev">
-            <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
-
-            <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
-                <label for="email"></label>
-                <input type='text'placeholder="Email" name='email' id="email">
-                <label id="email-error" class="error" for="email"></label>
-                <input type="password" placeholder="Password" name="pass"  id="pass" autocomplete="new-password">
-                <input type='text'placeholder="Username" name='username' id="username">
-                <input type='text'placeholder="Phone" name="phone" id="phone">
-                <input type="submit" class="submit-btn" value="SIGNUP" >
-
-            </form>
-            <div id="devlogin">
-                <p class="login-error" id="login-error"></p>
-                <form id="loginform" action="<c:url value='login' />" method="post">
-                    <input type='text'placeholder="Email" name='username' id="login-username" required>
-                    <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
-                    <input type="submit" value="LOGIN" class="submit-btn">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </form>
+                <div id="devlogin">
+                    <p class="login-error" id="login-error"></p>
+                    <form id="loginform" action="<c:url value='login' />" method="post">
+                        <input type='text'placeholder="Email" name='username' id="login-username" required>
+                        <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
+                        <input type="submit" value="LOGIN" class="submit-btn">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </form>
 
-                <table style="width: 100%;text-align: center !important;">
-                    <tr>
+                    <table style="width: 100%;text-align: center !important;">
+                        <tr>
 
-                        <td>
-                            <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
-                        </td>
+                            <td>
+                                <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
+                            </td>
 
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
 
-                        <td class="forgort">
-                            Forgot Password?
-                        </td>
+                            <td class="forgort">
+                                Forgot Password?
+                            </td>
 
-                    </tr>
+                        </tr>
 
-                </table>
+                    </table>
+                </div>
+
             </div>
 
-        </div>
+
+        </ul>
 
 
-</ul>
-
-
+    </div>
 </div>
+
 
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 
-  
 </body>
 <script type="text/javascript">
-
     $("#signupform").hide();
     $("#signin-btn").addClass('active-btn');
     $("#signup-btn").click(function () {
@@ -227,16 +224,12 @@
         $("#signin-btn").removeClass('active-btn');
         $("#signupform").slideDown(200)
         $("#devlogin").hide();
-
-
     })
-
     $("#signin-btn").click(function () {
         $("#signin-btn").addClass("active-btn");
         $("#signup-btn").removeClass("active-btn");
         $("#devlogin").slideDown(200)
         $("#signupform").hide()
-
     })
     function loading() {
         $(".loader").css("display","block");
@@ -247,7 +240,6 @@
         $(".loader").css("display","none");
         $(".login-page").css("opacity","1");
         document.getElementsByClassName(".login-page").disabled = false;
-
     }
     function isExistUser(email) {
         return axios.post('isexist', {
@@ -256,7 +248,6 @@
             return response.data
         })
     }
-
     $(document).ready(function () {
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
@@ -267,14 +258,11 @@
             document.getElementById("login-error").innerHTML = "email or password is incorrect";
         }
     })
-
     $(function() {
         $("#signupform").validate({
-
             rules: {
                 email: {
                     required: true,
-
                     email: true
                 },
                 pass: {
@@ -307,13 +295,9 @@
                     number: "number only",
                     minlength: "invalid phone number"
                 },
-
             },
-
             submitHandler: function (form) {
                 loading()
-
-
                 var username = $('#username').val();
                 var email = $('#email').val()
                 var phone = $('#phone').val()
@@ -340,23 +324,16 @@
                                         data = 'username='+email+"--google" + '&password='+password
                                         googleSignin(data)
                                     }
-
                                 })
                                 .catch(function (error) {
                                     console.log(error);
                                 });
                         }
                     })
-
-
                 return false;
             }
         });
-
-
-
         $("#loginform").validate({
-
             rules: {
                 username: {
                     required: true,
@@ -366,7 +343,6 @@
                     required: true,
                     minlength: 8
                 }
-
             },
             messages: {
                 username: {
@@ -377,10 +353,7 @@
                     required: "*required",
                     minlength: "password must be at least 8 characters long"
                 },
-
-
             },
-
             submitHandler: function (form) {
                 var username = $("#login-username").val();
                 isExistUser(username).then(function (data) {
@@ -394,22 +367,15 @@
                         else{
                             form.submit();
                         }
-
-
                     }
                     else{
                         return false;
                     }
-
                 }
             )
-
             }
         });
     });
-
-
-
     function googleSignin(data){
         axios({
             method: 'post',
@@ -421,12 +387,9 @@
                 console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
-
                     window.location.replace(url);
                 }
-
             })
-
     }
     function onSignIn(googleUser) {
         console.log("ll")
@@ -434,7 +397,6 @@
         var auth2 = gapi.auth2.getAuthInstance();
         console.log(document.getElementsByClassName("abcRioButtonContents"))
         auth2.disconnect();
-
         loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
@@ -449,12 +411,6 @@
                 }
                 googleSignin(data);
             })
-
     };
-
-
-
-
 </script>
 </html>
-

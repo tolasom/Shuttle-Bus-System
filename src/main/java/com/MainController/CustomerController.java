@@ -1,6 +1,7 @@
 package com.MainController;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -46,12 +47,12 @@ public class CustomerController {
 		System.out.println(map);
 		return map;
 	}
-	//=========================check_booking_request Information================================
-		@RequestMapping(value="/check_booking_request", method=RequestMethod.GET)
-			public @ResponseBody Map<String,Object> check_booking_request() {
-			Map<String, Object> map = customer.user_info();
-			return map;
-		}
+//	//=========================check_booking_request Information================================
+//		@RequestMapping(value="/check_booking_request", method=RequestMethod.GET)
+//			public @ResponseBody Map<String,Object> check_booking_request() {
+//			Map<String, Object> map = customer.user_info();
+//			return map;
+//		}
 	//=========================Location Information================================
 		@RequestMapping(value="/location_data", method=RequestMethod.GET)
 			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
@@ -86,7 +87,7 @@ public class CustomerController {
 	}
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
-	public @ResponseBody String customer_booking(Customer_Booking cb) {
+	public @ResponseBody String customer_booking(Customer_Booking cb) throws ParseException {
 			System.out.println(cb.getDate());
 			System.out.println(cb.getTime());
 			System.out.println(cb.getNumber_of_seat());
@@ -104,7 +105,7 @@ public class CustomerController {
 	}
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
-	public @ResponseBody String request_book_now(int id) {
+	public @ResponseBody String request_book_now(int id) throws ParseException {
 		String ret = customer.request_book_now(id);
 		System.out.println(id);
 		return ret;
@@ -137,11 +138,34 @@ public class CustomerController {
 		List<Map<String, Object>> map = customer.get_request_booking();
 		return map;
 	}	
-		
+	//======================== Get Booking Request Information base id================================
+	@RequestMapping(value="/get_request_booking_id", method=RequestMethod.GET)
+		public @ResponseBody List<Map<String,Object>> get_request_booking_id(int id) {
+		List<Map<String, Object>> map = customer.get_request_booking_id(id);
+		return map;
+	}	
+	//======================== Get Sch Bus Information base id================================
+		@RequestMapping(value="/get_sch_bus_info", method=RequestMethod.GET)
+			public @ResponseBody List<Map<String,Object>> get_sch_bus_info(int id) {
+			List<Map<String, Object>> map = customer.get_sch_bus_info(id);
+			return map;
+		}	
+		//======================== Get Sch Driver Information base id================================
+		@RequestMapping(value="/get_sch_driver_info", method=RequestMethod.GET)
+			public @ResponseBody List<Map<String,Object>> get_sch_driver_info(int id) {
+			List<Map<String, Object>> map = customer.get_sch_driver_info(id);
+			return map;
+		}	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.GET)
 		public @ResponseBody String cancel_booking_ticket(int id) {
 		String ret = customer.cancel_booking_ticket(id);
+		return ret;
+	}
+	//=========================To Cancel Booking Ticket================================
+	@RequestMapping(value="/get_qrcode", method=RequestMethod.GET)
+		public @ResponseBody List<Map<String, Object>> get_qrcode(int id) {
+		List<Map<String, Object>> ret = customer.get_qrcode(id);
 		return ret;
 	}
 }

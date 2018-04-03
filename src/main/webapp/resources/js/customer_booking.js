@@ -1,12 +1,7 @@
 $(document).ready(function() {
-	 $('select').material_select();
-	 $('#destination_name').material_select();
-	 $("#source_loc_id[required]," +
-	 		"#select_dest_id[required]," +
-	 		"#destination_name[required]," +
-	 		"#source_name[required]," +
-	 		
-	 		"#departure_time[required]").css({display: "inline", height: 0, padding: 0, width: 0});
+	 $('select').formSelect();
+	 $('#destination_name').formSelect();
+	 $('.dropdown-button').dropdown();
 	 		
 	 $(".flatpickr input").flatpickr({
 			mode: "single",
@@ -38,24 +33,7 @@ $(document).ready(function() {
 				console.log("DONE");
 			}
 	});
-	// ======== Check Booking Request ==========
-	 $.ajax({
-			async: false,
-			cache: false,
-			type: "GET",
-			url: "check_booking_request",
-			contentType: "application/json",
-			timeout: 100000,
-			success: function(data) {
-				document.getElementById('fullname').innerHTML=data.username;
-			},
-			error: function(e) {
-				console.log("ERROR: ", e);
-			},
-			done: function(e) {
-				console.log("DONE");
-			}
-	});
+
 	// ======== Source Information ==========
 	 $.ajax({
 			async: false,
@@ -69,7 +47,7 @@ $(document).ready(function() {
 				console.log(data);
 				var location= Object.keys( data.location );
 				var l_form='<option disabled selected>Source Location</option>';
-				var custom_pl_form='<option disabled selected>Choose your main source</option>';
+				var custom_pl_form='<option disabled selected>Source Location</option>';
 				for(i=0;i<location.length;i++){
 					console.log(location[i])
 					custom_pl_form+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
@@ -80,11 +58,17 @@ $(document).ready(function() {
 					}
 					l_form+='</optgroup>';		
 				}
-				l_form+='<option value="custom_pickup">Custom Pick Up Location</option>'
+				l_form+='<option value="custom_pickup"><span class="red">Custom Pick Up Location</span></option>'
 				console.log(l_form)
 				document.getElementById('source_name').innerHTML=l_form;
 				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
-				$('#source_name').material_select();
+				$('#source_name').formSelect();
+//				var elem = document.querySelector('#source_name');
+//				var instance = M.FormSelect.getInstance(elem);
+//				console.log("instance")
+//				var n=instance.$selectOptions.length-1;
+//				console.log(instance.$selectOptions[n])
+//				console.log(instance)
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -104,8 +88,8 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					var location= Object.keys( data.location );
-					var l_form='<option disabled selected>Destination Location</option>';
-					var custom_dropoff='<option disabled selected>Choose your main source</option>';
+					var l_form='';
+					var custom_dropoff='<option disabled selected>Destination Location</option>';
 					for(i=0;i<location.length;i++){
 						console.log(location[i])
 						l_form+='<optgroup label="'+location[i]+'">';
@@ -120,8 +104,8 @@ $(document).ready(function() {
 					document.getElementById('destination_name').innerHTML=l_form;
 					document.getElementById('select_dest_id').innerHTML=custom_dropoff;
 					
-					$('#select_dest_id').material_select();
-					$('#destination_name').material_select();
+					$('#select_dest_id').formSelect();
+					$('#destination_name').formSelect();
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -139,7 +123,7 @@ $(document).ready(function() {
 			if(id=="custom_dropoff"){
 				$('#coustom_dropoff').modal();
 				$('#coustom_dropoff').modal('open');
-				$('#select_dest_id').material_select();
+				$('#select_dest_id').formSelect();
 			}
 	});
 	 
@@ -150,7 +134,7 @@ $(document).ready(function() {
 			if(id=="custom_pickup"){
 				$('#coustom_source_pl').modal();
 				$('#coustom_source_pl').modal('open');
-				$('#source_loc_id').material_select();
+				$('#source_loc_id').formSelect();
 			}else{
 				selected_source(id);
 			}
@@ -173,7 +157,7 @@ $(document).ready(function() {
 						option+='<option value="'+data[i].dept_time+'">'+get_time+'</option>';
 					}
 				document.getElementById('departure_time').innerHTML=option;
-				$('#departure_time').material_select();
+				$('#departure_time').formSelect();
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -192,77 +176,87 @@ $(document).ready(function() {
 			contentType: "application/json",
 			timeout: 100000,
 			success: function(data) {
-				console.log("departure_time_info");
-				console.log(data);
 				
 				var bh_form='';
 				if(data.length>0){
 					bh_form+='<h5 class="center">Booking History</h5>'
-						+'<ul class="collapsible" data-collapsible="accordion">';
+						+'<ul id="bh_collapsible" class="collapsible" data-collapsible="accordion">';
 					for(i=0;i<data.length;i++){
 						var dept_date_time=convert_date(data[i].dept_date)+' '+data[i].dept_time;
 						console.log("dept_date_time: "+dept_date_time)
 						if(data[i].notification=="Cancelled"){
-							bh_form+='<li><div class="collapsible-header"><i class="material-icons">cancel</i>&nbsp&nbsp'
-								+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
-								+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
-						        +'<div class="collapsible-body">'
-						        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
+								bh_form+='<li><div class="collapsible-header"><i class="material-icons">cancel</i>&nbsp&nbsp'
+									+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
+									+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+									+' to '+data[i].destination+'</span>'
+									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'	
+								+'<div class="collapsible-body">'
+								+'<table><col width="50%"><col width="50%"><tr><th>Booking Code</th><td><b>:</b>&nbsp&nbsp'+data[i].booking_code+'</td></tr>'
+						        +'<tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'  
 						        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
 						        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
 						        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
 						        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
 						        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 						        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-						        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
-						        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+						        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+//						        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+//						        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 						        if(data[i].diver_name=="no_driver"){
 								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 								 }else{
-								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
-								    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+									 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
 								 } 
 						}else{
 							if(compared_tomorrow(dept_date_time)){
-								bh_form+='<li><div class="collapsible-header"><i class="material-icons">schedule</i>&nbsp&nbsp'
-									+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
-									+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
-							        +'<div class="collapsible-body">'
-							        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
-							        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
-							        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
-							        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
-							        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
-							        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
-							        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
-							        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+				
+									bh_form+='<li><div class="collapsible-header"><i class="material-icons future_icon">schedule</i>&nbsp&nbsp'
+										+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
+										+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+										+' to '+data[i].destination+'</span>'
+										+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'	
+										+'<div class="collapsible-body">'
+										+'<table><col width="50%"><col width="50%"><tr><th>Booking Code</th><td><b>:</b>&nbsp&nbsp'+data[i].booking_code+'</td></tr>'
+								        +'<tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'  
+								        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
+								        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
+								        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
+								        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
+								        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
+								        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
+								        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+//								        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+//								        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 							        if(data[i].diver_name=="no_driver"){
 									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 									 }else{
-									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
-									    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
 									 } 
-								bh_form+='<tr><th colspan="2"><a href="#!" class="btn cancel_booking_modal" booking="'+data[i].id +'">Cancel</a></th></tr>'
+								bh_form+='<tr><td><a href="#!" class="btn red lighten-3 cancel_booking_modal" booking="'+data[i].id +'">Cancel</a></td>'
+										+'<td><a href="#!" class="view_qrcode btn green lighten-1" value="' 
+										+ data[i].id  + '">Ticket QR-Code</a></td></tr>'
 							}else{
-								bh_form+='<li><div class="collapsible-header"><i class="material-icons">history</i>&nbsp&nbsp'
-									+ convert_date(data[i].dept_date)+';  '+convert_time(data[i].dept_time)
-									+'<span class="right"><i class="material-icons">directions_bus</i>&nbsp&nbsp'+data[i].scource+' to '+data[i].destination +'</span></div>'
+								bh_form+='<li><div class="collapsible-header"><i class="material-icons history_icon">history</i>&nbsp&nbsp'
+									+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
+									+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+									+' to '+data[i].destination+'</span>'
+									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
 							        +'<div class="collapsible-body">'
-							        +'<table><tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'
+							        +'<table><col width="50%"><col width="50%"><tr><th>Booking Code</th><td><b>:</b>&nbsp&nbsp'+data[i].booking_code+'</td></tr>'
+							        +'<tr><th>Departure Date</th><td><b>:</b>&nbsp&nbsp'+convert_date(data[i].dept_date)+' </td></tr>'  
 							        +'<tr><th>Departure Time</th><td><b>:</b>&nbsp&nbsp'+convert_time(data[i].dept_time)+'</td></tr>'
 							        +'<tr><th>Source</th><td><b>:</b>&nbsp&nbsp'+data[i].scource+'</td></tr>'
 							        +'<tr><th>Pickup Location</th><td><b>:</b>&nbsp&nbsp'+data[i].pick_up+'</td></tr>'
 							        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
 							        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 							        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
-							        +'<tr><th>Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
+							        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+//							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
+//							        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 							        if(data[i].diver_name=="no_driver"){
 									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 									 }else{
-									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp'+ data[i].diver_name+'</td></tr>'
-									    		+'<tr><th>Driver\'s Phone Number</th><td><b>:</b>&nbsp&nbsp'+data[i].diver_phone_number +'</td></tr>'
+										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
 									 }  
 							}
 						}   
@@ -271,6 +265,7 @@ $(document).ready(function() {
 				}
 				bh_form+='</ul>'
 				document.getElementById('all_booking_history').innerHTML=bh_form;
+				
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -279,6 +274,101 @@ $(document).ready(function() {
 				console.log("DONE");
 			}
 	});
+	 $(".driver_info").click(function(){
+		 console.log("KK");
+		 var id=$(this).attr('data');
+		 console.log(id);
+		 $.ajax({
+				async: false,
+				cache: false,
+				type: "GET",
+				url: "get_sch_driver_info",
+				data :{'id':id},
+				timeout: 100000,
+				success: function(data) {
+					console.log(data);
+					var data='<tr><th>Driver\'s Name</th><td><b>:</b>  &nbsp&nbsp '+data[0].name+'</td></tr>'
+					  +'<tr><th>Phone Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].phone_number+'</td></tr>'
+					  +'<tr><th>Email</th><td><b>:</b> &nbsp&nbsp '+data[0].email +'</td></tr>'
+					  document.getElementById('get_driver_info').innerHTML=data;
+					$('#driver_info_modal').modal();
+					$('#driver_info_modal').modal('open');
+					
+				},
+				error: function(e) {
+					console.log("ERROR: ", e);
+				},
+				done: function(e) {
+					console.log("DONE");
+				}
+			});
+	 });
+	 $(".bus_info").click(function(){
+		 console.log("KK");
+		 var id=$(this).attr('data');
+		 console.log(id);
+		 $.ajax({
+				async: false,
+				cache: false,
+				type: "GET",
+				url: "get_sch_bus_info",
+				data :{'id':id},
+				timeout: 100000,
+				success: function(data) {
+					console.log(data);
+					var data='<tr><th>Bus Model</th><td><b>:</b>  &nbsp&nbsp '+data[0].bus_model+'</td></tr>'
+					  +'<tr><th>Bus Plate Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].plate_number+'</td></tr>'
+					  +'<tr><th>Total Seats</th><td><b>:</b> &nbsp&nbsp '+data[0].number_of_seat +'</td></tr>'
+					  document.getElementById('get_bus_info').innerHTML=data;
+					$('#bus_info_modal').modal();
+					$('#bus_info_modal').modal('open');
+					
+				},
+				error: function(e) {
+					console.log("ERROR: ", e);
+				},
+				done: function(e) {
+					console.log("DONE");
+				}
+			});
+	 });
+	 // View QR-Code 
+	 $('.view_qrcode').click(function() {
+		$('#rqcodeForm').modal();
+		$('#rqcodeForm').modal('open');
+		var qrcode = $(this).attr('value');
+		console.log(qrcode);
+		$.ajax({
+			async: false,
+			cache: false,
+			type: "GET",
+			url: "get_qrcode",
+			data :{'id':qrcode},
+			timeout: 100000,
+			success: function(data) {
+				console.log(data);
+				
+				var qrcode_form = '<br><label>Date of travel: ' 
+				+ data[0].scource 
+				+ ',</label>' + '&nbsp&nbsp&nbsp&nbsp<label>' 
+				+ data[0].destination
+				+ '</label><br>'
+				+ '<img class="img_rqcode center" src="data:image/png;base64,' 
+				+ data[0].qrcode + '"/><br><label>Departure Date: ' 
+				+ data[0].dept_date+'; '+ data[0].dept_time+ '</label>' 
+				document.getElementById('rqcode').innerHTML = qrcode_form;
+				
+			},
+			error: function(e) {
+				console.log("ERROR: ", e);
+			},
+			done: function(e) {
+				console.log("DONE");
+			}
+		});
+		
+
+	})
 
 	//Cancel Booking
 	$('.cancel_booking_modal').click(function(){
@@ -317,7 +407,7 @@ $(document).ready(function() {
 						document.getElementById('confirm_text').innerHTML=form;
 						$('#cancel_confirm_model').modal('close');
 						$('#confirm').modal({
-						    complete: function() {
+							onCloseEnd: function() {
 									window.location.replace("customer_home");
 							} 
 						});
@@ -346,60 +436,60 @@ $(document).ready(function() {
 			success: function(data) {
 				console.log("get_request_booking");
 				console.log(data);
-				var mobile='<ul class="collapsible hide-on-med-and-up" data-collapsible="accordion">';
+				var mobile='<h5 class="center">Booking Request</h5>'
+							+'<ul id="rb_collapsible" class="collapsible" data-collapsible="accordion">';
 				var bh_form='';
-				if(data.length>0){
-					bh_form+='<h5 class="center">Booking Request</h5>'
-							+'<table class="bordered centered hide-on-small-only"><thead><tr>'
-							+'<th>No.</th>'
-							+'<th>Departure Date & Time</th>'
-							+'<th>Route</th>'
-							+'<th>Number of Ticket</th>'
-							+'<th>Status</th>'
-							+'<th>Option</th>'
-							+'</tr></thead><tbody>';
-					
+				if(data.length>0){					
 					for(i=0;i<data.length;i++){
-						bh_form+='<tr><td>'+(i+1)+'</td>'
-								 +'<td>'+convert_date(data[i].dept_date)+'; '+convert_time(data[i].dept_time)+'</td>'
-								 +'<td>'+data[i].scource+' to '+data[i].destination +'</td>'
-								 +'<td>'+data[i].number_of_ticket+'</td>'
-								 +'<td>'+data[i].status+'</td>';
 						if(data[i].status=='Confirmed'){
-							bh_form+='<td><a href="#!" class="btn confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></td>'
 							
-							mobile+='<li><div class="collapsible-header"><i class="material-icons">book</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)+'</div>'
+							mobile+='<li><div class="collapsible-header"><i class="material-icons confirmed_request">beenhere</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
 								+'<div class="collapsible-body"><table>'
 						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
-						        +'<tr><th>Departure Time</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
 						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
 						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
 						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
 						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
-						        +'<tr><th colspan="2"><a href="#!" class="btn confirm_booking_request_model" request="'+data[i].id +'">Book Now</a></th></tr>'
+						        +'<tr><th colspan="2"><a href="#!" class="btn confirm_booking_request_model green lighten-1" request="'+data[i].id +'">Book Now</a></th></tr>'
 								+'</table></div></li>'
 							
-						}else{
-							bh_form+='<td></td>';
+						}else if(data[i].status=='Pending'){
 							
-							mobile+='<li><div class="collapsible-header"><i class="material-icons">book</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)+'</div>'
+							mobile+='<li><div class="collapsible-header"><i class="material-icons future_icon">schedule</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
 								+'<div class="collapsible-body"><table>'
 						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
-						        +'<tr><th>Departure Time</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+								+'</table></div></li>'
+						}else{
+							
+							mobile+='<li><div class="collapsible-header"><i class="material-icons rejected">cancel</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
+								+'<div class="collapsible-body"><table>'
+						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+						        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
 						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
 						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
 						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
 						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
 								+'</table></div></li>'
 						}
+						
    
 					}
-					bh_form+='</tbody></table>';
 					mobile+='</ul>';
-					bh_form+=mobile;
+				}else{
+					mobile='';
 				}
-				document.getElementById('get_booking_request').innerHTML=bh_form;
-				$('.collapsible').collapsible();
+				document.getElementById('get_booking_request').innerHTML=mobile;
+//				$('.collapsible').collapsible();
+
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -413,12 +503,40 @@ $(document).ready(function() {
 	$('.confirm_booking_request_model').click(function(){
 		var id=$(this).attr("request") ;
 		console.log(id);
-		$('#confirm_booking_request').modal();
-		$('#confirm_booking_request').modal('open');
-		var form='<button id="confirm_booking_request_btn" request="'+id
-					+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
-		document.getElementById('get_req_book_footer').innerHTML=form;
-		$('#confirm_booking_request_btn').click(function(){
+		$.ajax({
+			async: false,
+			cache: false,
+			type: "GET",
+			url: "get_request_booking_id",
+			data :{'id':id},
+			timeout: 100000,
+			success: function(data) {
+				console.log(data)
+				 var data='<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[0].dept_date)+'</td></tr>'
+						  +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[0].dept_time)+'</td></tr>'
+						  +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[0].scource +'</td></tr>'
+						  //+'<tr><th>Pick-up</th><td><b>:</b> &nbsp&nbsp '+data[0].pick_source_name +'</td></tr>'
+						  +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[0].destination +'</td></tr>'
+						  //+'<tr><th>Drop-off</th><td><b>:</b> &nbsp&nbsp '+ data[0].drop_dest_name +'</td></tr>'
+						  +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[0].number_of_ticket +'</td></tr>'
+				document.getElementById('get_request_detail').innerHTML=data;
+				var form='<button id="confirm_booking_request_btn" request="'+id
+							+'" class="modal-action waves-effect waves-green btn-flat">Confirm</button>';
+				document.getElementById('get_req_book_footer').innerHTML=form;
+				$('#confirm_booking_request').modal();
+				$('#confirm_booking_request').modal('open');
+				
+			},
+			error: function(e) {
+				console.log("ERROR: ", e);
+			},
+			done: function(e) {
+				console.log("DONE");
+			}
+		});
+		
+		$('#confirm_booking_request_btn').click(function(event){
+			event.preventDefault();
 			var id1=$(this).attr("request") ;
 			console.log(id1);
 			$.ajax({
@@ -449,7 +567,7 @@ $(document).ready(function() {
 					document.getElementById('confirm_text').innerHTML=form;
 					$('#confirm_booking_request').modal('close');
 					$('#confirm').modal({
-					    complete: function() {
+						onCloseEnd: function() {
 								window.location.replace("customer_home");
 						} 
 					});
@@ -500,6 +618,7 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					current_date=data.slice(0, 19);
+					console.log("Current Date:"+current_date);
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -514,8 +633,9 @@ $(document).ready(function() {
 		 var tmr = moment.utc(tomorrow, "YYYY-MM-DD  HH:mm:ss");
 		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
 		 
-		 console.log(tmr);
-		 console.log(dept_dt);
+		 console.log("Current Date:"+current_date);
+		 console.log("TMR Date: "+tmr);
+		 console.log("Dept DT: "+dept_dt);
  		 console.log(moment(dept_dt).isAfter(tmr));
 		 if(moment(dept_dt).isAfter(tmr)){
    			 return true;
@@ -532,25 +652,68 @@ $(document).ready(function() {
 		 }, "Value must not equal arg.");
 	 $.validator.addMethod("SourceValueNothing", function(value, element, arg){
 		  return arg !== value;
-		 }, "Source location is required");
+		 }, "*Required");
 	 $.validator.addMethod("DestinationValueNothing", function(value, element, arg){
 		  return arg !== value;
-		 }, "Destination location is required");
+		 }, "*Required");
 
-	//============================== Custom Source Pickup Location ===========================
+	//============================== Booking ===========================
+	 $('#book_now').click(function(event){
+		 event.preventDefault();
+		 console.log("kk mm");
+		 var source = $("#source_name").val();
+   		 var destination = $("#destination_name").val();
+   		 var time=$("#departure_time").val();
+   		 console.log("source: "+source)
+   		 console.log("destination: "+destination)
+   		 console.log("time: "+time)
+   		 //Validation select tag
+   		if(source=="undefined"||source==null||source=="custom_pickup"){
+	   		console.log(1);
+	   			 //source *Required
+	   			$("#source_name_error").show();
+	   			 if(destination=="undefined"||destination==null||destination=="custom_pickup"){
+	   				 //destination *Required
+	   				$("#destination_name_error").show();
+	   				console.log(11)
+	   			 }else{
+	   				$("#destination_name_error").hide();
+	   			 }
+	   			 if(time=="undefined"||time==null){
+	   				 //time *Required
+	   				$("#departure_time_error").show();
+	   				console.log(12)
+	   			 }else{
+	   				$("#departure_time_error").hide();
+	   			 }
+	   	}else if(destination=="undefined"||destination==null||destination=="custom_pickup"){
+	   			console.log(2);
+	   			$("#source_name_error").hide();
+	   			$("#destination_name_error").show();
+	   			 //destination *Required
+	   			if(time=="undefined"||time==null){
+	   				 //time *Required
+	   				$("#departure_time_error").show();
+	   				console.log(21)
+	   			 }else{
+	   				$("#departure_time_error").hide();
+	   			 }
+	   	}else if(time=="undefined"||time==null){
+	   		console.log(3);
+	   			$("#source_name_error").hide();
+	   			$("#destination_name_error").hide();
+	   			$("#departure_time_error").show();
+				//time *Required
+		}else{
+			$("#source_name_error").hide();
+	   		$("#destination_name_error").hide();
+	   		$("#departure_time_error").hide();
+		}
+	   	$('#form_book_now').valid();
+	   	console.log("finsish");
+	 });
 	 $("#form_book_now").validate({
 	        rules: {
-	        	source_name: {
-	        		 valueNotEquals: "none",
-	        		 SourceValueNothing: "custom_pickup"
-	            },
-	            destination_name: {
-	        		 valueNotEquals: "none",
-	        		 DestinationValueNothing: "custom_pickup",
-	            },
-	            departure_time: {
-	        		 valueNotEquals: "none" 
-	            },
 	            departure_date: {
 	        		 valueNotEquals: "none" 
 	            },
@@ -562,22 +725,12 @@ $(document).ready(function() {
 
 	        },
 	        messages: {
-	          
-	            source_name: {
-	            	required: "Source location is required"
-	            },
-	            destination_name: {
-	            	required: "Destination location is required" 
-	            },
-	            departure_time: {
-	            	required: "Departure time is required" 
-	            },
 	            departure_date: {
-	            	required: "Departure date is required" 
+	            	required: "*Required" 
 	            },
 	            number_of_seat: {
-			         required: "Number of ticket is required",
-			         min: "Manimun 1 tickets each time booking",
+			         required: "*Required",
+			         min: "Manimun 1 ticket each time booking",
 			         max: "Maximun 10 tickets each time booking"
 			     }
 
@@ -603,13 +756,82 @@ $(document).ready(function() {
 		   		 var date=$("#departure_date").val();
 		   		 var number_of_seat=$("#number_of_seat").val();
 		   		 var dept_dt=date+" "+time;
-		   		console.log("dept_dt: "+dept_dt);
-		   		console.log("destination: "+destination);
-		   		 if(compared_tomorrow(dept_dt)){
-		   			if(phone=='0'){
-		   				$('#confirm_phone_number_modal').modal({
-						    complete: function() {
-						    	$.ajax({
+		   		 if(time!=="undefined"&&time!==null&&destination!=="undefined"
+		   			 &&destination!==null&&destination!=="custom_pickup"
+		   			 &&source!=="undefined"&&source!==null&&source!=="custom_pickup"){
+		   			 console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK1")
+					 if(compared_tomorrow(dept_dt)){
+					 		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK2")
+				   			if(phone=='0'){
+				   				$('#confirm_phone_number_modal').modal({
+				   					onCloseEnd: function() {
+								    	$.ajax({
+							   				async: false,
+							   				cache: false,
+							   				type: "GET",
+							   				url: "customer_booking",
+							   				data :	{
+							   						 source:source,
+							   						 destination:destination,
+							   						 time:time,
+							   						 date:date,
+							   						 number_of_seat:number_of_seat
+							   				},
+							   				timeout: 100000,
+							   				success: function(data) {
+							   					console.log(data);
+							   					var text;
+							   					if(data=="success"){
+							   						text="You are sucessful booking";
+							   					}else if(data=="no_bus_available"){
+							   						text="No Bus is available";
+							   					}else if(data=="over_bus_available"){
+							   						text="Over bus available";
+							   					}else{
+							   						text="Process is error!!";
+							   					}
+							   					document.getElementById('confirm_text').innerHTML=text;
+							   					$('#confirm').modal({
+							   						onCloseEnd: function() {
+															window.location.replace("customer_home");
+													} 
+												});
+							   				    $('#confirm').modal('open');
+							   				},
+							   				error: function(e) {
+							   					console.log("ERROR: ", e);
+							   				},
+							   				done: function(e) {
+							   					console.log("DONE");
+							   				}
+								    	});
+									} 
+								});
+				   				$('#confirm_phone_number_modal').modal('open');
+				   				$('#confirm_phone_number_btn').click(function(){
+				   					var phone=$('#user_confirm_phone_number').val();
+				   					console.log('phone: '+phone)
+				   					$.ajax({
+						   				async: false,
+						   				cache: false,
+						   				type: "GET",
+						   				url: "confirm_phone_number",
+						   				data :	{phone:phone},
+						   				timeout: 100000,
+						   				success: function(data) {
+						   					console.log(data);
+						   				},
+						   				error: function(e) {
+						   					console.log("ERROR: ", e);
+						   				},
+						   				done: function(e) {
+						   					console.log("DONE");
+						   				}
+							    	});
+				   				})
+				        	}else{
+				        		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK3")
+				        		$.ajax({
 					   				async: false,
 					   				cache: false,
 					   				type: "GET",
@@ -636,8 +858,8 @@ $(document).ready(function() {
 					   					}
 					   					document.getElementById('confirm_text').innerHTML=text;
 					   					$('#confirm').modal({
-										    complete: function() {
-													window.location.reload(true);
+					   						onCloseEnd: function() {
+													window.location.replace("customer_home");
 											} 
 										});
 					   				    $('#confirm').modal('open');
@@ -648,86 +870,26 @@ $(document).ready(function() {
 					   				done: function(e) {
 					   					console.log("DONE");
 					   				}
-						    	});
-							} 
-						});
-		   				$('#confirm_phone_number_modal').modal('open');
-		   				$('#confirm_phone_number_btn').click(function(){
-		   					var phone=$('#user_confirm_phone_number').val();
-		   					console.log('phone: '+phone)
-		   					$.ajax({
-				   				async: false,
-				   				cache: false,
-				   				type: "GET",
-				   				url: "confirm_phone_number",
-				   				data :	{phone:phone},
-				   				timeout: 100000,
-				   				success: function(data) {
-				   					console.log(data);
-				   				},
-				   				error: function(e) {
-				   					console.log("ERROR: ", e);
-				   				},
-				   				done: function(e) {
-				   					console.log("DONE");
-				   				}
-					    	});
-		   				})
-		        	}else{
-		        		$.ajax({
-			   				async: false,
-			   				cache: false,
-			   				type: "GET",
-			   				url: "customer_booking",
-			   				data :	{
-			   						 source:source,
-			   						 destination:destination,
-			   						 time:time,
-			   						 date:date,
-			   						 number_of_seat:number_of_seat
-			   				},
-			   				timeout: 100000,
-			   				success: function(data) {
-			   					console.log(data);
-			   					var text;
-			   					if(data=="success"){
-			   						text="You are sucessful booking";
-			   					}else if(data=="no_bus_available"){
-			   						text="No Bus is available";
-			   					}else if(data=="over_bus_available"){
-			   						text="Over bus available";
-			   					}else{
-			   						text="Process is error!!";
-			   					}
-			   					document.getElementById('confirm_text').innerHTML=text;
-			   					$('#confirm').modal({
-								    complete: function() {
+					   		});
+				        	}
+					   		 
+				   		 }else{
+				   		 	console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK4")
+				   			var form='<i class="material-icons large error">highlight_off</i>'
+				   					 +'<h6>Sorry, Booking Not Allow!</h6>'
+				   					 +'<p>Please cantact to +855967969927 for more information or click <a href="request_booking">here</a> to Request Booking</p>'
+				   				//"Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
+				   				//$("#confirm" ).addClass( "confirm_error" );
+				   				//document.getElementById('confirm_text').innerHTML=form;
+								document.getElementById('content_confirm').innerHTML=form;
+								$('#confirm').modal({
+									onCloseEnd: function() {
 											window.location.replace("customer_home");
 									} 
 								});
-			   				    $('#confirm').modal('open');
-			   				},
-			   				error: function(e) {
-			   					console.log("ERROR: ", e);
-			   				},
-			   				done: function(e) {
-			   					console.log("DONE");
-			   				}
-			   		});
-		        	}
-			   		 
-		   		 }else{
-		   			var form="Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
-					$("#confirm" ).addClass( "confirm_error" );
-						
-						document.getElementById('confirm_text').innerHTML=form;
-						$('#confirm').modal({
-						    complete: function() {
-									window.location.replace("customer_home");
-							} 
-						});
-						$('#confirm').modal('open');
-		   		 }
+								$('#confirm').modal('open');
+				   		 }
+				 }
 
 	            return false;
 	        }
@@ -748,10 +910,10 @@ $(document).ready(function() {
 	        },
 	        messages: {
 	        	source_loc_id: {
-	                required: "Main location is required"
+	                required: "*Required"
 	            },
 	            new_source_pickup_name: {
-			         required: "Pick up location is required",
+			         required: "*Required",
 			         minlength: "Minimum one digit",
 			         maxlength: "Maximum 30 digits"
 			     }
@@ -807,7 +969,7 @@ $(document).ready(function() {
 								l_form+='</optgroup>';		
 							}
 							document.getElementById('source_name').innerHTML=l_form;
-							$('#source_name').material_select();
+							$('#source_name').formSelect();
 							selected_source(id);// to retrieve destination
 							$('#coustom_source_pl').modal('close');
 						},
@@ -836,10 +998,10 @@ $(document).ready(function() {
 	        },
 	        messages: {
 	        	select_dest_id: {
-	                required: "Main location is required"
+	                required: "*Required"
 	            },
 	            new_dropoff_name: {
-			         required: "Pick up location is required",
+			         required: "*Required",
 			         minlength: "Minimum one digit",
 			         maxlength: "Maximum 30 digits"
 			     }
@@ -885,7 +1047,7 @@ $(document).ready(function() {
 					var form_dropoff='<option value="'+data.id+'">'+data.drop_off_name+'  ('+ data.location_name+')</option>';
 					
 					document.getElementById('destination_name').innerHTML=form_dropoff;
-					$('#destination_name').material_select();
+					$('#destination_name').formSelect();
 					$('#coustom_dropoff').modal('close');
 				},
 				error: function(e) {
@@ -897,4 +1059,73 @@ $(document).ready(function() {
 		});
 	 }
 	 
+	 var elem = document.querySelector('#rb_collapsible');
+	 var instance = M.Collapsible.init(elem, {
+	      onOpenEnd: function(el){
+	        console.log("onOpenEnd");
+	        //console.log(this)
+	        for(i=0;i<this.el.children.length;i++){
+	          if(this.el.children[i].className=='active'){
+	            for(j=0;j<this.el.children[i].children.length;j++){
+	              if(this.el.children[i].children[j].className=='collapsible-header'){
+	            	var n=this.el.children[i].children[j].children.length-1;
+	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_right</i>';
+	                break;
+	              }
+	            }
+	            break;
+	          }
+	        }
+	      },
+	      onCloseEnd: function(){
+	        console.log("onCloseEnd");
+	        for(i=0;i<this.el.children.length;i++){
+	          if(this.el.children[i].className!='active'){
+	            for(j=0;j<this.el.children[i].children.length;j++){
+	              if(this.el.children[i].children[j].className=='collapsible-header'){
+	            	  var n=this.el.children[i].children[j].children.length-1;
+	                  this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_down</i>';
+	                  break;
+	              }
+	            }
+	          }
+	        }
+	      }
+	    });
+	 
+	 var elem1 = document.querySelector('#bh_collapsible');
+	 var instance = M.Collapsible.init(elem1, {
+	      onOpenEnd: function(el){
+	        console.log("onOpenEnd");
+	        //console.log(this)
+	        for(i=0;i<this.el.children.length;i++){
+	          if(this.el.children[i].className=='active'){
+	            for(j=0;j<this.el.children[i].children.length;j++){
+	              if(this.el.children[i].children[j].className=='collapsible-header'){
+	            	var n=this.el.children[i].children[j].children.length-1;
+	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_right</i>';
+	                break;
+	              }
+	            }
+	            break;
+	          }
+	        }
+	      },
+	      onCloseEnd: function(){
+	        console.log("onCloseEnd");
+	        for(i=0;i<this.el.children.length;i++){
+	          if(this.el.children[i].className!='active'){
+	            for(j=0;j<this.el.children[i].children.length;j++){
+	              if(this.el.children[i].children[j].className=='collapsible-header'){
+	            	  var n=this.el.children[i].children[j].children.length-1;
+	                  this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_down</i>';
+	                  break;
+	              }
+	            }
+	          }
+	        }
+	      }
+	    });
+	 
+
 });
