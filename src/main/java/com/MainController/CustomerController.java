@@ -136,6 +136,8 @@ public class CustomerController {
 		@RequestMapping(value="/get_request_booking", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String,Object>> get_request_booking() {
 		List<Map<String, Object>> map = customer.get_request_booking();
+		System.out.println("KKKKKKKKKKKKKKK5555555555555");
+        System.out.println(map);
 		return map;
 	}	
 	//======================== Get Booking Request Information base id================================
