@@ -6,7 +6,14 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 
 Copyright (c) 2015 Daniel Eden
 */
-
+.tocc{
+    width: 50px;
+} 
+input[toreadonly]{
+  background-color:transparent;
+  border: 0;
+  font-size: 1em;
+}
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;

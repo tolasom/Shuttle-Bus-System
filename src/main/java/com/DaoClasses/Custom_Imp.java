@@ -147,6 +147,7 @@ public class Custom_Imp implements Custom_Dao{
             //System.out.println("username: "+us.getUsername());
             map.put("username", us.getUsername());
             map.put("phone_number", us.getPhone_number());
+            map.put("email",us.getEmail());
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }    
