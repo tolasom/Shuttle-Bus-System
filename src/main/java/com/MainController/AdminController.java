@@ -1,13 +1,20 @@
 package com.MainController;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.EntityClasses.*;
 import com.ModelClasses.UserModel;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,10 +55,75 @@ public class AdminController {
 		map.put("role",role);
 		return map;
 	}
+
+//=========================To sign up an account for admin and driver================================
+	@RequestMapping(value="/createUserr",method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> createUserr(@RequestBody User_Info user) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check  = usersService1.createUserr(user);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Email already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","User has just been created successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+	}
+
+//=========================To change password for admin================================
+	@RequestMapping(value="/changePass",method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> changePass(@RequestBody User_Info user) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check  = usersService1.changePass(user);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Current password is incorrect!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","You have just changed it successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs!");
+		}
+		return map;
+	}
+
+
 //=========================Returns bus management view================================
 	@RequestMapping(value="/bus_management", method=RequestMethod.GET)
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
+	}
+	@RequestMapping(value="/departure_time", method=RequestMethod.GET)
+	public ModelAndView departure_time() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("times", usersService1.getAllTimes());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("departure_time","data",json);
+	}
+	@RequestMapping(value="/admin_profile", method=RequestMethod.GET)
+	public ModelAndView admin_profile() {
+		return new ModelAndView("admin_profile");
 	}
 	@RequestMapping(value="/student_home", method=RequestMethod.GET)
 	public ModelAndView Student_Home() {
@@ -199,9 +271,16 @@ public class AdminController {
 	
 //=========================Returns schedule detail view================================
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
-	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
+	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) throws ParseException {
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("schedule", usersService1.getScheduleById(id));
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date d1 = null;
+		Date d2 = null;
+        Schedule_Master schedule = usersService1.getScheduleById(id);
+        String screen = "schedule_detail";
+		map.put("schedule", schedule);
 		map.put("schedules", usersService1.getAllSchedules());
 		map.put("locations", usersService1.getAllLocations());
 		map.put("p_locations", usersService1.getAllPickUpLocations());
@@ -209,6 +288,18 @@ public class AdminController {
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
 		map.put("drivers", usersService1.getAlDrivers());
 		map.put("customers", usersService1.getAlCustomers());
+		d1 = format.parse(dtf.format(now));
+		d1.setHours(0);
+		d1.setMinutes(0);
+		d1.setSeconds(0);
+		d2 = format.parse(schedule.getDept_date().toString());
+        long diff = d2.getTime() - d1.getTime();
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+		if (diffDays>=2)
+			screen+="2";
+		System.out.println("OUTTTTTTTT "+screen);
+		System.out.println(schedule.getDept_date());
+		System.out.println(diffDays);
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -216,7 +307,7 @@ public class AdminController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ModelAndView("schedule_detail","data",json);
+		return new ModelAndView(screen,"data",json);
 	}
 //=========================Returns create schedule view================================
 	@RequestMapping(value="/create_schedule", method=RequestMethod.GET)
@@ -304,6 +395,27 @@ public class AdminController {
 		}
 		return map;
 		}
+	@RequestMapping(value="/createTime", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> toSaveTime(Schedule_Model schedule) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.saveTime(schedule);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Departure time already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","New departure time has just been created successfully");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+		}
 	
 	//====================To getBookingByScheduleId by admin============================
 		@RequestMapping(value="/getBookingByScheduleId", method=RequestMethod.GET)
@@ -348,6 +460,28 @@ public class AdminController {
 				}
 			return map;
 			}
+
+
+@RequestMapping(value="/deleteTime", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> deleteTime(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			int check =usersService1.deleteTime(id);
+			if(check==1)
+					{
+						map.put("status", "1");
+						map.put("message","This departure time has just been deleted successfully!");
+					}
+				else
+					{
+						map.put("status", "0");
+						map.put("message","This departure time has not been deleted!");
+					}
+			return map;
+			}
+
+
+
+
 //====================To save schedule by admin============================
 	@RequestMapping(value="/updateSchedule", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toUpdateSchedule(Schedule_Model schedule) throws Exception{
@@ -565,10 +699,20 @@ public class AdminController {
 			int status = 0;
 			status= usersService1.deleteBus(id);
 			if(status==1)
-				map.put("status", "200");
+				{
+					map.put("status", "200");
+					map.put("message","OK");
+				}
+			else if(status==5)
+				{
+					map.put("status", "500");
+					map.put("message","Cannot be deleted, This bus has been assigned to either current or future schedule!");
+				}
 			else 	
-				map.put("status", "300");
-			
+				{
+					map.put("status", "300");
+					map.put("message","Technical problem occurs");
+				}
 			return map;
 			}
 //====================To delete location============================
@@ -907,7 +1051,7 @@ public class AdminController {
 		for(Schedule_Master s : schedules)
 			System.out.println(s.getId());
 		if(schedules.size()>0){
-			code = 1000000+schedules.get(schedules.size()-1).getId()+1;
+			code = 1000000+(int)schedules.size()+1;
 			scode = Integer.toString(code);
 			scode = scode.substring(1);
 			return "S"+scode;
@@ -925,7 +1069,7 @@ public class AdminController {
 		for(Booking_Master s : bookings)
 			System.out.println(s.getId());
 		if(bookings.size()>0){
-			code = 1000000+bookings.get(bookings.size()-1).getId()+1;
+			code = 1000000+(int)bookings.size()+1;
 			scode = Integer.toString(code);
 			scode = scode.substring(1);
 			return "B"+scode;

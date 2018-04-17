@@ -59,10 +59,10 @@ $(document).ready(function() {
 					l_form+='</optgroup>';		
 				}
 				l_form+='<option value="custom_pickup"><span class="red">Custom Pick Up Location</span></option>'
-//				console.log(l_form)
-//				document.getElementById('source_name').innerHTML=l_form;
-//				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
-//				$('#source_name').formSelect();
+				console.log(l_form)
+				document.getElementById('source_name').innerHTML=l_form;
+				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
+				$('#source_name').formSelect();
 //				var elem = document.querySelector('#source_name');
 //				var instance = M.FormSelect.getInstance(elem);
 //				console.log("instance")
@@ -185,9 +185,9 @@ $(document).ready(function() {
 						var dept_date_time=convert_date(data[i].dept_date)+' '+data[i].dept_time;
 						console.log("dept_date_time: "+dept_date_time)
 						if(data[i].notification=="Cancelled"){
-								bh_form+='<li><div class="collapsible-header"><i class="material-icons">cancel</i>&nbsp&nbsp'
-									+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
-									+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+								bh_form+='<li><div class="collapsible-header"><i class="material-icons rejected">cancel</i>&nbsp&nbsp'
+									+ '<span class="rejected">'+convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)
+									+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
 									+' to '+data[i].destination+'</span>'
 									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'	
 								+'<div class="collapsible-body">'
@@ -199,20 +199,20 @@ $(document).ready(function() {
 						        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
 						        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 						        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-						        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+						        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">'+data[i].bus_model +'</a></td></tr>'
 //						        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
 //						        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 						        if(data[i].diver_name=="no_driver"){
 								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 								 }else{
-									 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
+									 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">'+data[i].diver_name +'</a></td></tr>'
 								 } 
 						}else{
 							if(compared_tomorrow(dept_date_time)){
 				
 									bh_form+='<li><div class="collapsible-header"><i class="material-icons future_icon">schedule</i>&nbsp&nbsp'
-										+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
-										+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+										+'<span class="future_icon">'+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)
+										+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
 										+' to '+data[i].destination+'</span>'
 										+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'	
 										+'<div class="collapsible-body">'
@@ -224,21 +224,21 @@ $(document).ready(function() {
 								        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
 								        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 								        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-								        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+								        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">'+data[i].bus_model +'</a></td></tr>'
 //								        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
 //								        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 							        if(data[i].diver_name=="no_driver"){
 									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 									 }else{
-										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
+										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">'+data[i].diver_name +'</a></td></tr>'
 									 } 
 								bh_form+='<tr><td><a href="#!" class="btn red lighten-3 cancel_booking_modal" booking="'+data[i].id +'">Cancel</a></td>'
 										+'<td><a href="#!" class="view_qrcode btn green lighten-1" value="' 
 										+ data[i].id  + '">Ticket QR-Code</a></td></tr>'
 							}else{
 								bh_form+='<li><div class="collapsible-header"><i class="material-icons history_icon">history</i>&nbsp&nbsp'
-									+ convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)+'  &nbsp'
-									+'<span>;&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+									+ '<span class="history_icon">'+convert_date(data[i].dept_date)+',  '+convert_time(data[i].dept_time)
+									+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
 									+' to '+data[i].destination+'</span>'
 									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
 							        +'<div class="collapsible-body">'
@@ -250,13 +250,13 @@ $(document).ready(function() {
 							        +'<tr><th>Destination</th><td><b>:</b>&nbsp&nbsp'+data[i].destination +'</td></tr>'
 							        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 							        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
-							        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">Bus Info</a></td></tr>'
+							        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">'+data[i].bus_model +'</a></td></tr>'
 //							        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
 //							        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 							        if(data[i].diver_name=="no_driver"){
 									    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 									 }else{
-										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">Driver Info</a></td></tr>'
+										 bh_form+='<tr><th>Driver Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="driver_info" data="'+data[i].id +'">'+data[i].diver_name +'</a></td></tr>'
 									 }  
 							}
 						}   
@@ -389,22 +389,36 @@ $(document).ready(function() {
 					url: "cancel_booking_ticket",
 					data :{'id':id1},
 					timeout: 100000,
-					success: function(data) {
+					success: function(data) {										
 						
-						var form=''
-						if(data=="success"){
-							form+="You have cancelled";
-							$("#confirm" ).addClass( "confirm_success" );
-						}else if(data=="no_record"){
-							form+="Sorry, there is no schedule";
-							$("#confirm" ).addClass( "confirm_error" );
-						}else{
-							form+="Sorry, there is internal problem";
-							$("#confirm" ).addClass( "confirm_error" );
-						}
-						console.log(data);
-						
-						document.getElementById('confirm_text').innerHTML=form;
+						var text;
+	   					if(data=="success"){
+	   						text='<div class="modal-content center-align">'
+			   					+'<i class="material-icons large success_icon">done</i>'
+			   					+'<h6><b>Congrats!</b></h6>'
+			   					+'<p>You have just cancelled successfully.</p></div>'
+			   					+'<div class="modal-footer">'
+						   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+						   	    +'</div>';
+			   				
+	   					}else if(data=="no_record"){
+	   						text='<div class="modal-content center-align">'
+			   					+'<i class="material-icons large error_icon">highlight_off</i>'
+			   					+'<h6><b>Sorry, No record available!</b></h6>'
+			   					+'<p>Please Try Again!</p></div>'
+			   					+'<div class="modal-footer">'
+						   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+						   	    +'</div>';
+	   					}else{
+	   						text='<div class="modal-content center-align">'
+			   					+'<i class="material-icons large error_icon">highlight_off</i>'
+			   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+			   					+'<p>Please refresh the page and try again!</p></div>'
+			   					+'<div class="modal-footer">'
+						   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+						   	    +'</div>';
+	   					}
+	   					document.getElementById('confirm').innerHTML=text;
 						$('#cancel_confirm_model').modal('close');
 						$('#confirm').modal({
 							onCloseEnd: function() {
@@ -441,35 +455,60 @@ $(document).ready(function() {
 				var bh_form='';
 				if(data.length>0){					
 					for(i=0;i<data.length;i++){
-						if(data[i].status=='Confirmed'){
-							
-							mobile+='<li><div class="collapsible-header"><i class="material-icons confirmed_request">beenhere</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
-								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
-								+'<div class="collapsible-body"><table>'
-						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
-						        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
-						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
-						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
-						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
-						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
-						        +'<tr><th colspan="2"><a href="#!" class="btn confirm_booking_request_model green lighten-1" request="'+data[i].id +'">Book Now</a></th></tr>'
-								+'</table></div></li>'
-							
-						}else if(data[i].status=='Pending'){
-							
-							mobile+='<li><div class="collapsible-header"><i class="material-icons future_icon">schedule</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
-								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
-								+'<div class="collapsible-body"><table>'
-						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
-						        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
-						        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
-						        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
-						        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
-						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
-								+'</table></div></li>'
-						}else{
-							
-							mobile+='<li><div class="collapsible-header"><i class="material-icons rejected">cancel</i>&nbsp&nbsp'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+						if(data[i].time_status=='future'){
+							if(data[i].status=='Confirmed'){
+								
+								mobile+='<li><div class="collapsible-header"><i class="material-icons confirmed_request">beenhere</i>&nbsp&nbsp'
+									+'<span class="confirmed_request">'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+									+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+										+' to '+data[i].destination+';&nbsp&nbsp '+data[i].status+'</span>'
+									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
+									+'<div class="collapsible-body"><table>'
+							        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+							        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+							        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+							        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+							        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+							        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+							        +'<tr><th colspan="2"><a href="#!" class="btn confirm_booking_request_model green lighten-1" request="'+data[i].id +'">Book Now</a></th></tr>'
+									+'</table></div></li>'
+								
+							}else if(data[i].status=='Pending'){
+								
+								mobile+='<li><div class="collapsible-header"><i class="material-icons future_icon">schedule</i>&nbsp&nbsp'
+									+'<span class="future_icon">'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+									+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+									+' to '+data[i].destination+';&nbsp&nbsp '+data[i].status+'</span>'
+									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
+									+'<div class="collapsible-body"><table>'
+							        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+							        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+							        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+							        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+							        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+							        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+									+'</table></div></li>'
+							}else{
+								
+								mobile+='<li><div class="collapsible-header"><i class="material-icons rejected">cancel</i>&nbsp&nbsp'
+									+'<span class="rejected">'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+									+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+									+' to '+data[i].destination+';&nbsp&nbsp '+data[i].status+'</span>'
+									+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
+									+'<div class="collapsible-body"><table>'
+							        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
+							        +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[i].dept_time)+'</td></tr>'
+							        +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[i].scource +'</td></tr>'
+							        +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[i].destination +'</td></tr>'
+							        +'<tr><th>Number of Ticket</th><td><b>:</b> &nbsp&nbsp '+data[i].number_of_ticket +'</td></tr>'
+							        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
+									+'</table></div></li>'
+							}
+						}else if(data[i].time_status="past"){
+							mobile+='<li><div class="collapsible-header"><i class="material-icons rejected">history</i>&nbsp&nbsp'
+								+'<span class="rejected">'+convert_date(data[i].dept_date)+'; '+ convert_time(data[i].dept_time)
+								+';&nbsp&nbsp&nbsp&nbsp&nbsp'+data[i].scource
+								+' to '+data[i].destination+';&nbsp&nbsp '+data[i].status+'</span>'
 								+'<span class="right"><i class="material-icons">keyboard_arrow_down</i></span></div>'
 								+'<div class="collapsible-body"><table>'
 						        +'<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[i].dept_date)+'</td></tr>'
@@ -480,8 +519,7 @@ $(document).ready(function() {
 						        +'<tr><th>Status</th><td><b>:</b> &nbsp&nbsp '+data[i].status +'</td></tr>'
 								+'</table></div></li>'
 						}
-						
-   
+
 					}
 					mobile+='</ul>';
 				}else{
@@ -513,7 +551,7 @@ $(document).ready(function() {
 			success: function(data) {
 				console.log(data)
 				 var data='<tr><th>Departure Date</th><td><b>:</b>  &nbsp&nbsp '+convert_date(data[0].dept_date)+'</td></tr>'
-						  +'<tr><th>Time Allowance</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[0].dept_time)+'</td></tr>'
+						  +'<tr><th>Departure Time</th><td><b>:</b>  &nbsp&nbsp '+ convert_time(data[0].dept_time)+'</td></tr>'
 						  +'<tr><th>Source</th><td><b>:</b> &nbsp&nbsp '+data[0].scource +'</td></tr>'
 						  //+'<tr><th>Pick-up</th><td><b>:</b> &nbsp&nbsp '+data[0].pick_source_name +'</td></tr>'
 						  +'<tr><th>Destination</th><td><b>:</b> &nbsp&nbsp '+ data[0].destination +'</td></tr>'
@@ -535,7 +573,8 @@ $(document).ready(function() {
 			}
 		});
 		
-		$('#confirm_booking_request_btn').click(function(){
+		$('#confirm_booking_request_btn').click(function(event){
+			event.preventDefault();
 			var id1=$(this).attr("request") ;
 			console.log(id1);
 			$.ajax({
@@ -547,23 +586,43 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					
-					var form=''
-					if(data=="success"){
-						form+="You booking have done.";
-						$("#confirm" ).addClass( "confirm_success" );
-					}else if(data=="no_bus_available"){
-						form+="Sorry, No Bus Available on that day.";
-						$("#confirm" ).addClass( "confirm_error" );
-					}else if(data=="over_bus_available"){
-						form+="Sorry, No more ticket available.";
-						$("#confirm" ).addClass( "confirm_error" );
-					}else{
-						form+="Sorry, there is internal problem";
-						$("#confirm" ).addClass( "confirm_error" );
-					}
-					console.log(data);
-					
-					document.getElementById('confirm_text').innerHTML=form;
+					var text;
+   					if(data=="success"){
+   						text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large success_icon">done</i>'
+		   					+'<h6><b>Congrats!</b></h6>'
+		   					+'<p>You have just booked successfully.</p>'
+		   					+'<p>Enjoy your trip! </p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+		   				
+   					}else if(data=="no_bus_available"){
+   						text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large error_icon">highlight_off</i>'
+		   					+'<h6><b>Sorry, No bus available!</b></h6>'
+		   					+'<p>Please try another departure date or time! </p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+   					}else if(data=="over_bus_available"){
+   						text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large error_icon">highlight_off</i>'
+		   					+'<h6><b>Sorry, No bus available!</b></h6>'
+		   					+'<p>Please try another departure date or time! </p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+   					}else{
+   						text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large error_icon">highlight_off</i>'
+		   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+		   					+'<p>Please refresh the page and try again!</p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+   					}
+   					document.getElementById('confirm').innerHTML=text;
 					$('#confirm_booking_request').modal('close');
 					$('#confirm').modal({
 						onCloseEnd: function() {
@@ -591,7 +650,7 @@ $(document).ready(function() {
 		  var m=time_input.slice(3, 5);
 		  var format=null;
 		  if(h>=12){
-		    h-=12;
+		    h=h-12;
 		    format='PM';
 		    if(h<10){
 		      h='0'+h;
@@ -617,6 +676,7 @@ $(document).ready(function() {
 				timeout: 100000,
 				success: function(data) {
 					current_date=data.slice(0, 19);
+					console.log("Current Date:"+current_date);
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -625,14 +685,17 @@ $(document).ready(function() {
 					console.log("DONE");
 				}
 			});
-		 var date = new Date(moment.utc(current_date, "YYYY-MM-DD  HH:mm:ss"));
+		 var date = new Date(moment(current_date, "YYYY-MM-DD  HH:mm:ss"));
+		 console.log("1 Date:"+date);
 		 date.setDate(date.getDate() + 1);
+		 console.log("2 Date:"+date);
 		 var tomorrow = String(date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
-		 var tmr = moment.utc(tomorrow, "YYYY-MM-DD  HH:mm:ss");
-		 var dept_dt = moment.utc(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
-		 
-		 console.log(tmr);
-		 console.log(dept_dt);
+		 var tmr = moment(tomorrow, "YYYY-MM-DD  HH:mm:ss");
+		 var dept_dt = moment(dept_date_time, "YYYY-MM-DD  HH:mm:ss");
+		 console.log("tomorrow Date:"+tomorrow);
+		 console.log("dept_date_time Date:"+dept_date_time);
+		 console.log("TMR Date: "+tmr);
+		 console.log("Dept DT: "+dept_dt);
  		 console.log(moment(dept_dt).isAfter(tmr));
 		 if(moment(dept_dt).isAfter(tmr)){
    			 return true;
@@ -655,7 +718,8 @@ $(document).ready(function() {
 		 }, "*Required");
 
 	//============================== Booking ===========================
-	 $('#book_now').click(function(){
+	 $('#book_now').click(function(event){
+		 
 		 console.log("kk mm");
 		 var source = $("#source_name").val();
    		 var destination = $("#destination_name").val();
@@ -710,17 +774,6 @@ $(document).ready(function() {
 	 });
 	 $("#form_book_now").validate({
 	        rules: {
-//	        	source_name: {
-//	        		 valueNotEquals: "none",
-//	        		 SourceValueNothing: "custom_pickup"
-//	            },
-//	            destination_name: {
-//	        		 valueNotEquals: "none",
-//	        		 DestinationValueNothing: "custom_pickup",
-//	            },
-//	            departure_time: {
-//	        		 valueNotEquals: "none" 
-//	            },
 	            departure_date: {
 	        		 valueNotEquals: "none" 
 	            },
@@ -732,22 +785,12 @@ $(document).ready(function() {
 
 	        },
 	        messages: {
-	          
-//	            source_name: {
-//	            	required: "*Required"
-//	            },
-//	            destination_name: {
-//	            	required: "*Required" 
-//	            },
-//	            departure_time: {
-//	            	required: "*Required" 
-//	            },
 	            departure_date: {
 	            	required: "*Required" 
 	            },
 	            number_of_seat: {
 			         required: "*Required",
-			         min: "Manimun 1 tickets each time booking",
+			         min: "Manimun 1 ticket each time booking",
 			         max: "Maximun 10 tickets each time booking"
 			     }
 
@@ -777,7 +820,8 @@ $(document).ready(function() {
 		   			 &&destination!==null&&destination!=="custom_pickup"
 		   			 &&source!=="undefined"&&source!==null&&source!=="custom_pickup"){
 					 if(compared_tomorrow(dept_dt)){
-				   			if(phone=='0'){
+						 event.preventDefault();
+					 	if(phone=='0'){
 				   				$('#confirm_phone_number_modal').modal({
 				   					onCloseEnd: function() {
 								    	$.ajax({
@@ -797,15 +841,43 @@ $(document).ready(function() {
 							   					console.log(data);
 							   					var text;
 							   					if(data=="success"){
-							   						text="You are sucessful booking";
+							   						text='<div class="modal-content center-align">'
+									   					+'<i class="material-icons large success_icon">done</i>'
+									   					+'<h6><b>Congrats!</b></h6>'
+									   					+'<p>You have just booked successfully.</p>'
+									   					+'<p>Enjoy your trip! </p></div>'
+									   					+'<div class="modal-footer">'
+												   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+												   	    +'</div>';
+									   				
 							   					}else if(data=="no_bus_available"){
-							   						text="No Bus is available";
+							   						text='<div class="modal-content center-align">'
+									   					+'<i class="material-icons large error_icon">highlight_off</i>'
+									   					+'<h6><b>Sorry, No bus available!</b></h6>'
+									   					+'<p>Please click green button below to make a request. '
+									   					+'We will get back to you very soon. </p></div>'
+									   					+'<div class="modal-footer">'
+												   	    +'<a href="#!" id="confirm_request_booking" class="modal-action modal-close btn green lighten-1">Request Now</a>'
+												   	    +'</div>';
 							   					}else if(data=="over_bus_available"){
-							   						text="Over bus available";
+							   						text='<div class="modal-content center-align">'
+									   					+'<i class="material-icons large error_icon">highlight_off</i>'
+									   					+'<h6><b>Sorry, No bus available!</b></h6>'
+									   					+'<p>Please click green button below to make a request. '
+									   					+'We will get back to you very soon. </p></div>'
+									   					+'<div class="modal-footer">'
+												   	    +'<a href="#!" id="confirm_request_booking" class="modal-action modal-close btn green lighten-1">Request Now</a>'
+												   	    +'</div>';
 							   					}else{
-							   						text="Process is error!!";
+							   						text='<div class="modal-content center-align">'
+									   					+'<i class="material-icons large error_icon">highlight_off</i>'
+									   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+									   					+'<p>Please refresh the page and try again!</p></div>'
+									   					+'<div class="modal-footer">'
+												   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+												   	    +'</div>';
 							   					}
-							   					document.getElementById('confirm_text').innerHTML=text;
+							   					document.getElementById('confirm').innerHTML=text;
 							   					$('#confirm').modal({
 							   						onCloseEnd: function() {
 															window.location.replace("customer_home");
@@ -845,6 +917,7 @@ $(document).ready(function() {
 							    	});
 				   				})
 				        	}else{
+				        		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK3")
 				        		$.ajax({
 					   				async: false,
 					   				cache: false,
@@ -862,15 +935,43 @@ $(document).ready(function() {
 					   					console.log(data);
 					   					var text;
 					   					if(data=="success"){
-					   						text="You are sucessful booking";
+					   						text='<div class="modal-content center-align">'
+							   					+'<i class="material-icons large success_icon">done</i>'
+							   					+'<h6><b>Congrats!</b></h6>'
+							   					+'<p>You have just booked successfully.</p>'
+							   					+'<p>Enjoy your trip! </p></div>'
+							   					+'<div class="modal-footer">'
+										   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+										   	    +'</div>';
+							   				
 					   					}else if(data=="no_bus_available"){
-					   						text="No Bus is available";
+					   						text='<div class="modal-content center-align">'
+							   					+'<i class="material-icons large error_icon">highlight_off</i>'
+							   					+'<h6><b>Sorry, No bus available!</b></h6>'
+							   					+'<p>Please click green button below to make a request. '
+							   					+'We will get back to you very soon. </p></div>'
+							   					+'<div class="modal-footer">'
+										   	    +'<a href="#!" id="confirm_request_booking" class="modal-action modal-close btn green lighten-1">Request Now</a>'
+										   	    +'</div>';
 					   					}else if(data=="over_bus_available"){
-					   						text="Over bus available";
+					   						text='<div class="modal-content center-align">'
+							   					+'<i class="material-icons large error_icon">highlight_off</i>'
+							   					+'<h6><b>Sorry, No bus available!</b></h6>'
+							   					+'<p>Please click green button below to make a request. '
+							   					+'We will get back to you very soon. </p></div>'
+							   					+'<div class="modal-footer">'
+										   	    +'<a href="#!" id="confirm_request_booking" class="modal-action modal-close btn green lighten-1">Request Now</a>'
+										   	    +'</div>';
 					   					}else{
-					   						text="Process is error!!";
+					   						text='<div class="modal-content center-align">'
+							   					+'<i class="material-icons large error_icon">highlight_off</i>'
+							   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+							   					+'<p>Please refresh the page and try again!</p></div>'
+							   					+'<div class="modal-footer">'
+										   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+										   	    +'</div>';
 					   					}
-					   					document.getElementById('confirm_text').innerHTML=text;
+					   					document.getElementById('confirm').innerHTML=text;
 					   					$('#confirm').modal({
 					   						onCloseEnd: function() {
 													window.location.replace("customer_home");
@@ -888,10 +989,15 @@ $(document).ready(function() {
 				        	}
 					   		 
 				   		 }else{
-				   			var form="Please book ticket before departure time 24 hours otherwise please click <a href=\"request_booking\">Here</a> to request booking ";
-							$("#confirm" ).addClass( "confirm_error" );
-								
-								document.getElementById('confirm_text').innerHTML=form;
+				   			var form='<div class="modal-content center-align">'
+				   					+'<i class="material-icons large error_icon">highlight_off</i>'
+				   					+'<h6><b>Sorry, No bus available!</b></h6>'
+				   					+'<p>Please click green button below to make a request. '
+				   					+'We will get back to you very soon. </p></div>'
+				   					+'<div class="modal-footer">'
+							   	    +'<a href="#!" id="confirm_request_booking" class="modal-action modal-close btn green lighten-1">Request Now</a>'
+							   	    +'</div>';
+				   				document.getElementById('confirm').innerHTML=form;
 								$('#confirm').modal({
 									onCloseEnd: function() {
 											window.location.replace("customer_home");
@@ -1079,7 +1185,7 @@ $(document).ready(function() {
 	            for(j=0;j<this.el.children[i].children.length;j++){
 	              if(this.el.children[i].children[j].className=='collapsible-header'){
 	            	var n=this.el.children[i].children[j].children.length-1;
-	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_right</i>';
+	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_up</i>';
 	                break;
 	              }
 	            }
@@ -1113,7 +1219,7 @@ $(document).ready(function() {
 	            for(j=0;j<this.el.children[i].children.length;j++){
 	              if(this.el.children[i].children[j].className=='collapsible-header'){
 	            	var n=this.el.children[i].children[j].children.length-1;
-	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_right</i>';
+	                this.el.children[i].children[j].children[n].outerHTML='<i class="material-icons right">keyboard_arrow_up</i>';
 	                break;
 	              }
 	            }

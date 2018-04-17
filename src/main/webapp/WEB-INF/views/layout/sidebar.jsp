@@ -3,10 +3,10 @@
 <aside class="sidebar">
                     <div class="sidebar-container">
                         <div class="sidebar-header">
-                            <div class="brand">
-                                <div class="logo">
-                                    
-                                </div> SBS </div>
+                            <div class="brand2">
+                
+                                Shuttle Bus System
+                            </div>
                         </div>
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
@@ -44,8 +44,8 @@
                                     <a href="create_user">
                                         <i class="fa fa-users"></i> Create User </a>
                                 </li>
-                                <li class="irr ir">
-                                    <a href="depttimeMng">
+                                <li id="depttimeMng" class="irr ir">
+                                    <a href="departure_time">
                                         <i class="fa fa-clock-o"></i> Manage Departure Time </a>
                                 </li>
                                 

@@ -22,9 +22,10 @@
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                     
                                     <span class="name" id="fname"></span>
+                                    
                                 </a>
                                 <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="admin_profile">
                                         <i class="fa fa-user icon"></i> Profile </a>
                                     
                                     <div class="dropdown-divider"></div>
