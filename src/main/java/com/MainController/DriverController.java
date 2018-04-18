@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,9 +102,7 @@ public class DriverController {
         Session session = HibernateUtil.getSessionFactory().openSession(); 
         try { 
             trns =  session.beginTransaction(); 
-            String queryString = "from Schedule_Master order by id asc"; 
-            Query query = session.createQuery(queryString); 
-            schedules=(List<Schedule_Master>)query.list(); 
+            schedules = session.createQuery("from Schedule_Master where driver_id=? and dept_date>=? order by dept_date asc").setParameter(0, userId).setDate(1, new Date()).list();
             System.out.println("Schedules: "+schedules);
             
             for(int i=0;i<schedules.size();i++){
@@ -113,7 +113,7 @@ public class DriverController {
             	des_to = (Location_Master) session.createQuery("from Location_Master where id=?").setParameter(0, schedules.get(i).getTo_id()).list().get(0);
             	
             	map1.put("id", schedules.get(i).getId());
-            	map1.put("dep_date", schedules.get(i).getDept_date());
+            	map1.put("dep_date", DateFormat(schedules.get(i).getDept_date()));
             	map1.put("dep_time", schedules.get(i).getDept_time());
             	map1.put("des_from", des_from.getName());
             	map1.put("des_to", des_to.getName());
@@ -162,6 +162,14 @@ public class DriverController {
         
 		return list_schedules;
 		
+	}
+	
+	public String DateFormat(Date date){
+//		Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
+        String currentDateTimeString = sdf.format(date);
+        System.out.println("DateFormat: "+ currentDateTimeString);
+        return currentDateTimeString;
 	}
 	
 	
