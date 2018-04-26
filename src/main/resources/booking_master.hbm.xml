@@ -24,6 +24,7 @@
     <property name="description" column="description"/>
     <property name="created_at" column="created_at"/>
     <property name="updated_at" column="updated_at"/>
+    <property name="qr_status" column="qr_status"/>
     
     
  	</class>

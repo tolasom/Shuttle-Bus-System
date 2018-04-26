@@ -40,14 +40,32 @@
 	nav .brand-logo {
     	left: 15%;
     }	
+	 .modal-content .input-field .select-wrapper input.select-dropdown {
+	    margin: 0!important;
+	}
+    .confirm_success{
+    	color:white;
+    	background-color: green;
+    }
+    .confirm_error{
+    	color:white;
+    	background-color: red;
+    }
+    #confirm {
+	    width: 350px;
+	    height: 300px;
+	}
+	#confirm .modal-footer{
+	    border-top: 1px solid rgba(0,0,0,0.1)!important;
+	    position: absolute;
+	    bottom: 0;
+	  }  
+
 	#cancel_confirm_model{
 		width: 300px;
 	}
 	#confirm_booking_request,#bus_info_modal,#driver_info_modal{
 	    width: 340px;
-	}
-	.content_confirm{
-		padding: 0px!important;
 	}
 	.confirm_booking_request_model{
 		width:100%
@@ -105,6 +123,12 @@
 	.confirm_h6{
 		padding: 15px!important;
 	}
+	.error_icon{
+		color:red!important;
+	}
+	.success_icon{
+		color:green!important;
+	}
   </style>
 </head>
 <body>
@@ -129,9 +153,6 @@
 </div>
 <!-- Confirm Modal -->
 <div id="confirm" class="modal">
-    <div class="modal-content center content_confirm">
-      <p id="confirm_text"></p>
-    </div>
 </div>
  <!-- View Ticket Modal-->
 	<div id="rqcodeForm" class="modal modal-fixed-footer ">

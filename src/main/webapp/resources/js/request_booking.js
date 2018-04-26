@@ -179,7 +179,6 @@ $(document).ready(function() {
 	 }
 
 	 $('#book_now').click(function(event){
-		 
 		 console.log("kk mm");
 		 var source = $("#source_name").val();
    		 var destination = $("#destination_name").val();
@@ -257,6 +256,7 @@ $(document).ready(function() {
 		   		 console.log("dept_dt: "+dept_dt);
 		   		 if(source!=="undefined"&&source!==null&&destination!=="undefined"&&destination!==null){
 		   			if(compared_today(dept_dt)){
+		   				 event.preventDefault();
 			   			 $.ajax({
 							async: false,
 							cache: false,
@@ -271,18 +271,27 @@ $(document).ready(function() {
 							},
 							timeout: 100000,
 							success: function(data) {
-								console.log(data);
 								var text;
-								if(data=="success"){
-									text="You are sucessful booking";
-								}else if(data=="no_bus_available"){
-									text="No Bus is available";
-								}else if(data=="over_bus_available"){
-									text="Over bus available";
-								}else{
-									text="Process is error!!";
-								}
-								document.getElementById('confirm_text').innerHTML=text;
+			   					if(data=="success"){
+			   						text='<div class="modal-content center-align">'
+					   					+'<i class="material-icons large success_icon">done</i>'
+					   					+'<h6><b>Congrats!</b></h6>'
+					   					+'<p>You have just requested successfully.</p>'
+					   					+'<p>We will get back to you very soon! </p></div>'
+					   					+'<div class="modal-footer">'
+								   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+								   	    +'</div>';
+					   				
+			   					}else{
+			   						text='<div class="modal-content center-align">'
+					   					+'<i class="material-icons large error_icon">highlight_off</i>'
+					   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+					   					+'<p>Please refresh the page and try again!</p></div>'
+					   					+'<div class="modal-footer">'
+								   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+								   	    +'</div>';
+			   					}
+			   					document.getElementById('confirm').innerHTML=text;
 								$('#confirm').modal({
 									onCloseEnd: function() {
 											window.location.replace("customer_home");
@@ -298,12 +307,17 @@ $(document).ready(function() {
 							}
 			   			 });
 			   		 }else{
-			   			var form="Please ask your booking request before departure time";
-						$("#confirm" ).addClass( "confirm_error" );
-						document.getElementById('confirm_text').innerHTML=form;
+			   			text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large error_icon">highlight_off</i>'
+		   					+'<h6><b>Sorry, Time Was Over!</b></h6>'
+		   					+'<p>Please request before departure time!</p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+			   			document.getElementById('confirm').innerHTML=text;
 						$('#confirm').modal({
 							onCloseEnd: function() {
-										window.location.replace("request_booking");
+										window.location.replace("customer_home");
 								} 
 						});
 						$('#confirm').modal('open');

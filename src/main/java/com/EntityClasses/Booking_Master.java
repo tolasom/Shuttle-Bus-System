@@ -23,9 +23,9 @@ public class Booking_Master {
 		private String description;
 		private Timestamp created_at;
 		private Timestamp updated_at;
+		private Boolean qr_status;
 		
-		
-		
+	
 		public int getFrom_id() {
 			return from_id;
 		}
@@ -134,6 +134,12 @@ public class Booking_Master {
 		}
 		public void setUpdated_at(Timestamp updated_at) {
 			this.updated_at = updated_at;
+		}
+		public Boolean getQr_status() {
+			return qr_status;
+		}
+		public void setQr_status(Boolean qr_status) {
+			this.qr_status = qr_status;
 		}
 		
 }

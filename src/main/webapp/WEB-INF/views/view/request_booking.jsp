@@ -74,10 +74,7 @@
     	color:white;
     	background-color: red;
     }
-    #confirm{
-    	overflow-y: visible;
-    	 width: 50%;
-    }
+
     #source_name-error,#destination_name-error,#departure_time-error,#departure_date-error,#number_of_seat-error{
     	color:red;
     }
@@ -96,6 +93,21 @@
 	.select-wrapper .caret {
 	    margin: 10px 0!important;
     }
+    #confirm {
+	    width: 350px;
+	    height: 300px;
+	}
+	#confirm .modal-footer{
+	    border-top: 1px solid rgba(0,0,0,0.1)!important;
+	    position: absolute;
+	    bottom: 0;
+	  }  
+	  	.error_icon{
+		color:red!important;
+	}
+	.success_icon{
+		color:green!important;
+	}
   </style>
 </head>
 <body>
@@ -143,7 +155,7 @@
 		  </div>
 		  <div class="row rb">
 			   <div class="input-field col s12">
-			       <input id="number_of_seat" type="text" class="validate" name="number_of_seat" >
+			       <input id="number_of_seat" type="number" class="validate" name="number_of_seat" >
 			       <label for="last_name">Number of Ticket</label>
 			  </div> 
 			  <div class="input-field col s12">
@@ -155,9 +167,6 @@
 
 	<!-- Confirm Modal -->
 	<div id="confirm" class="modal">
-	    <div class="modal-content center">
-	      <p id="confirm_text"></p>
-	    </div>
 	</div>
 	<form action="logout" method="post" id="logoutForm">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
