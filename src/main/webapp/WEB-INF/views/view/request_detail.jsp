@@ -95,12 +95,13 @@ load = function () {
 	var request = data.request;
 	var locations = data.locations;
 	var p_locations = data.p_locations;
+    var customers = data.customers;
 	id= parseInt(request.id);
     u_id= parseInt(request.user_id);
 	console.log(data)
 	if(request.status!="Pending")
 		$("#actionn").hide();
-	$("#uname").val(request.user_id);
+	$("#uname").val(searchCustomer(request.user_id,customers));
 	$("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
 	$("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
 	$("#dept_date").val(formatDate(request.dept_date));
@@ -225,6 +226,16 @@ reject = function(){
 			});	
 	
 }
+
+
+function searchCustomer(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
 
 
 function toDate(dStr,format) {

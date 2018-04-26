@@ -62,6 +62,7 @@
                                                             <th>No</th>
                                                             <th>Code</th>
                                                             <th>Name</th>
+                                                            <th>Phone Number</th>
                                                             <th>Number of bookings</th>
                                                             
                                                         </tr>
@@ -217,6 +218,7 @@ load = function () {
     					+'<td>'+(i+1)+'</td>'
     					+'<td>'+bookings[i].code+'</td>'
 						+'<td class="unhoverr2" style="color:blue" data-url="'+bookings[i].id+'">'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
+						+'<td>'+searchPhone(bookings[i].user_id,all_customer)+'</td>'
 						+'<td>'+bookings[i].number_booking+'</td></tr>';
 	$("#allBooking").append(booking);				
 	}
@@ -569,6 +571,16 @@ function searchCustomer(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;
+        }
+    }
+}
+function searchPhone(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+        	if(myArray[i].phone_number==null||myArray[i].phone_number=="")
+        		return "";
+
+            return myArray[i].phone_number;
         }
     }
 }

@@ -65,9 +65,10 @@ load = function () {
 	var booking = data.booking;
 	var locations = data.locations;
 	var p_locations = data.p_locations;
+    var customers = data.customers;
 	console.log(data)
 	$("#code").val(booking.code);
-	$("#uname").val(booking.n);
+	$("#uname").val(searchCustomer(booking.user_id,customers));
 	$("#from").val(searchPLocation(booking.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
 	$("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
 	$("#dept_date").val(formatDate(booking.dept_date));
@@ -109,6 +110,17 @@ function searchPLocation(id, myArray){
         }
     }
 }
+
+
+
+function searchCustomer(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
 
 
 

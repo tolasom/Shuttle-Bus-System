@@ -19,6 +19,7 @@ public class Booking_Master {
 		private String notification;
 		private String qr;
 		private String code;
+		private String status;
 		private String description;
 		private Timestamp created_at;
 		private Timestamp updated_at;
@@ -109,6 +110,12 @@ public class Booking_Master {
 		}
 		public void setQr(String qr) {
 			this.qr = qr;
+		}
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
 		}
 		public String getDescription() {
 			return description;

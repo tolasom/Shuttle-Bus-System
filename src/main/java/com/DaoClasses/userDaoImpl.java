@@ -44,6 +44,8 @@ import org.springframework.stereotype.Repository;
 
 
 
+
+
 //import org.springframework.stereotype.Service;
 import com.EncryptionDecryption.Decryption;
 import com.EncryptionDecryption.Encryption;
@@ -59,6 +61,8 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.UserRole;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
+import com.ModelClasses.B_Model;
+import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.IdentifyTypeUser;
 import com.ModelClasses.Mail;
 import com.ModelClasses.Project_Model;
@@ -483,7 +487,7 @@ public class userDaoImpl implements usersDao{
  		 		User_Info user1 = new User_Info();
  		 		User_Info user = roles.get(i).getUser_info();
  		 		user1.setId(user.getId());
- 		 		user1.setName(user.getName());
+ 		 		user1.setName(user.getUsername());
  		 		user1.setPhone_number(user.getPhone_number());
  		 		user1.setEmail(user.getEmail());
  		 		users.add(user1);
@@ -1606,6 +1610,51 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
+//	public String customer_booking2(Customer_Booking cb) throws ParseException{	
+//		System.out.println("customer_booking2");
+//		Transaction trns = null;
+//        Session session = HibernateUtil.getSessionFactory().openSession(); 
+//        List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();  
+//        List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
+//        Custom_Dao custom_imp=new Custom_Imp();
+//		try {
+//            trns = session.beginTransaction();
+//            Pickup_Location_Master pick_source=new Pickup_Location_Master();
+//          	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getSource()).list().get(0);
+//          	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+//          	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
+//            
+//          	schedule=session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+//					.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+//					.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+//					.setParameter("to", pick_destin.getLocation_id())
+//					.setParameter("from", pick_source.getLocation_id()).list();
+//          	
+//          	Boolean check_ass=true; // Check whether we can assign this passenger to existing schedule or not
+//          	for(int i=0;i<schedule.size();i++){
+//          		if(schedule.get(i).getRemaining_seat()>=cb.getNumber_of_seat())
+//          			return "Confirm";
+//          	}          	
+//          	if(check_ass)
+//          		{
+//          		all_bus= custom_imp.get_all_bus(session,cb,pick_source.getLocation_id(),pick_destin.getLocation_id());
+//          		//extract buses in schedule from all_bus
+//          		//after extracting, if no buses left just not confirm, if yes check number seats
+//          		}
+//		} catch (RuntimeException e) {
+//        	e.printStackTrace();
+//        	trns.rollback();
+//        	return "error";
+//        }finally {
+//            session.flush();
+//            session.close();
+//        }           
+//		return "Confirm";
+//	}
+//	
+	
+	
+	
 	
 	public List <Schedule_Master> getAllCurrentSchedules(){
 		List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>();
@@ -1678,6 +1727,58 @@ public class userDaoImpl implements usersDao{
         }
         return schedules;
 		
+	}
+	
+	
+	public List<Booking_Master> getBookingReporting(B_Model booking) throws ParseException {
+		List<Booking_Master> bookings= null;
+		int from = booking.getFrom_id();
+		int to = booking.getTo_id();
+		System.out.println("Date "+booking.getDept_date());
+		System.out.println("Time "+booking.getN());
+		String query = "from Booking_Master where id>0";
+   		if(from!=0)
+   			query=query+" and from_id=:from";
+   		if(to!=0)
+   			query=query+" and to_id=:to";
+   		if(!booking.getDept_date().equals("nth"))
+   			query=query+" and dept_date=:date";
+   		if(!booking.getN().toString().equals("nth"))
+   	    	query=query+" and dept_time=:time";
+        if(!booking.getNotification().equals("nth"))
+            query=query+" and notification=:notification";
+   		System.out.println("Query "+query);
+		Transaction trns25 = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try{
+			List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+			trns25  = session.beginTransaction();
+  		 	Query q = session.createQuery(query);
+  		 	if(from!=0)
+  		 		q.setInteger("from", from );
+  	   		if(to!=0)
+  	   			q.setInteger("to", to);
+  	   		if(!booking.getDept_date().equals("nth"))
+  	   			q.setDate("date", new SimpleDateFormat("MM/dd/yyyy").parse(booking.getDept_date()));
+  	   		if(!booking.getN().toString().equals("nth"))
+  	   			q.setTime("time",java.sql.Time.valueOf(booking.getN()));
+            if(!booking.getNotification().equals("nth"))
+            	q.setString("notification",booking.getNotification());
+  	   		System.out.println("Q "+q);
+  	   		bookings = q.list();
+  	   		System.out.println("Size "+bookings.size());
+ 		 	
+		}
+		catch(RuntimeException e)
+		{
+			e.printStackTrace();
+			return bookings;
+		}
+		finally{
+			session.flush();
+			session.close();
+		}
+		return bookings;
 	}
 	
 	

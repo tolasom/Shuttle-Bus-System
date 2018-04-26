@@ -179,7 +179,7 @@ $(document).ready(function() {
 	 }
 
 	 $('#book_now').click(function(event){
-		 event.preventDefault();
+		 
 		 console.log("kk mm");
 		 var source = $("#source_name").val();
    		 var destination = $("#destination_name").val();
