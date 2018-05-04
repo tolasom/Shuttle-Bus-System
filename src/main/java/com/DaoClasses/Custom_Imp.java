@@ -349,6 +349,10 @@ public class Custom_Imp implements Custom_Dao{
             	Bus_Master bus=new Bus_Master();
             	bus = (Bus_Master) session.createQuery("from Bus_Master where id=?").setParameter(0, sch_ma.getBus_id()).list().get(0);
             	
+            	ByteArrayOutputStream out = QRCode.from(cr.get(i).getQr().toString()).to(ImageType.PNG).stream();  
+				byte[] test = out.toByteArray();
+				String encodedImage = Base64.getEncoder().encodeToString(test);
+            	
             	Map<String,Object> map=new HashMap<String,Object>();
             	map.put("id", cr.get(i).getId());
             	map.put("booking_code", cr.get(i).getCode());
@@ -362,6 +366,7 @@ public class Custom_Imp implements Custom_Dao{
             	map.put("bus_model", bus.getModel());
             	map.put("plate_number", bus.getPlate_number());
             	map.put("notification", cr.get(i).getNotification());
+            	map.put("qr", encodedImage);
             	if(sch_ma.getDriver_id()==0){
             		map.put("diver_name", "no_driver");
                 	map.put("diver_phone_number", 0);
@@ -394,16 +399,24 @@ public class Custom_Imp implements Custom_Dao{
                 	Bus_Master bus=new Bus_Master();
                 	bus = (Bus_Master) session.createQuery("from Bus_Master where id=?").setParameter(0, sch_ma.getBus_id()).list().get(0);
                 	
+                	ByteArrayOutputStream out = QRCode.from(cr.get(i).getQr().toString()).to(ImageType.PNG).stream();  
+    				byte[] test = out.toByteArray();
+    				String encodedImage = Base64.getEncoder().encodeToString(test);
+                	
                 	Map<String,Object> map=new HashMap<String,Object>();
+                	map.put("booking_code", cr.get(i).getCode());
                 	map.put("id", bh.get(i).getId());
                 	map.put("dept_date", bh.get(i).getDept_date().toString());
                 	map.put("dept_time", bh.get(i).getDept_time().toString());
                 	map.put("scource", source.getName());
+                	map.put("pick_up", pick_source.getName());
                 	map.put("destination", destin.getName());
+                	map.put("drop_off", pick_destin.getName());
                 	map.put("number_of_ticket", String.valueOf(bh.get(i).getNumber_booking()));
                 	map.put("bus_model", bus.getModel());
                 	map.put("plate_number", bus.getPlate_number());
                 	map.put("notification", bh.get(i).getNotification());
+                	map.put("qr", encodedImage);
                 	if(sch_ma.getDriver_id()==0){
                 		map.put("diver_name", "no_driver");
                     	map.put("diver_phone_number", 0);
@@ -719,11 +732,11 @@ public class Custom_Imp implements Custom_Dao{
 		return list;
 	}
 	//======================== combination for choosing bus till ============================
-	static List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
-	static List<Integer> total_choosen_bus_list=new ArrayList<Integer>();
-	static int number_of_bus=0;		// temporary use (value will always change)
-	static int total_bus=0;			// permanent use (value will never change)
-	static List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>();	
+	List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
+	List<Integer> total_choosen_bus_list=new ArrayList<Integer>();
+	int number_of_bus=0;		// temporary use (value will always change)
+	int total_bus=0;			// permanent use (value will never change)
+	List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>();	
 		
 	public String customer_booking(Customer_Booking cb) throws ParseException{	
 		System.out.println("customer_booking");
@@ -736,6 +749,12 @@ public class Custom_Imp implements Custom_Dao{
         List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
         Custom_Dao custom_imp=new Custom_Imp();
         Custom_Imp c=new Custom_Imp();
+        Custom_Imp booking=new Custom_Imp();
+        booking.list=new ArrayList<List<Map<String,Object>>>();
+        booking.total_choosen_bus_list=new ArrayList<Integer>();
+        booking.list_bus_choosen=new ArrayList<List<Map<String,Object>>>();
+        booking.number_of_bus=0;
+        booking.total_bus=0;
 		try {
             trns = session.beginTransaction();
             
@@ -768,6 +787,9 @@ public class Custom_Imp implements Custom_Dao{
     				new_booker.setNotification("Booked");
     				new_booker.setCode(Custom_Imp.getBookingSequence());
     				new_booker.setSchedule_id(schedule.get(i).getId());
+    				new_booker.setAdult(cb.getAdult());
+    				new_booker.setChild(cb.getChild());
+    				new_booker.setDescription("customer");
     				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
     				session.save(new_booker);
     				
@@ -802,26 +824,26 @@ public class Custom_Imp implements Custom_Dao{
                 	//5. Fins total seat of all bus
                 	for(int i=0;i<all_bus.size();i++){
        	             	total_seat_of_all_bus+=Integer.valueOf((String) all_bus.get(i).get("number_of_seat")); 
-       	             	System.out.println("LLLL kkk");
                 	}
-                	System.out.println("LLLL");
-                	System.out.println("number_of_passenger:  "+number_of_passenger);
-                	System.out.println("LLLL:   "+total_seat_of_all_bus);
                 	//check whether people is over all available bus seat or not
                 	if(number_of_passenger<=total_seat_of_all_bus){
                 		//6. create new schedule
-                    	Map<Object, List<Booking_Master>> sch_with_users=custom_imp.create_schedule(session,all_bus,all_booker1,pick_source,pick_destin,cb,total_seat_of_all_bus,number_of_passenger); 			// 6. Set/Reset New Schedule 
+                    	Map<Object, List<Booking_Master>> sch_with_users=custom_imp.create_schedule(booking,session,all_bus,all_booker1,pick_source,pick_destin,cb,total_seat_of_all_bus,number_of_passenger); 			// 6. Set/Reset New Schedule 
                     	if(sch_with_users.size()==0){
-                    		return "over_bus_available";
+                    		custom_imp.create_unassigned_booking(session,cb,pick_source,pick_destin);
+                    		//return "over_bus_available";
                     	}else{
+                    		//Get List Existing Driver Assign match with Bus
+                    		List<Integer> existing_bus_driver= custom_imp.get_existing_bus_and_driver(booking,session,cb,pick_source.getLocation_id(),pick_destin.getLocation_id());
                     		//7.Delete Schedule
                         	int delete=delete_Schedule(session,pick_source.getLocation_id(),pick_destin.getLocation_id(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
                     		
-                        	System.out.println(list_bus_choosen);
+                        	System.out.println(booking.list_bus_choosen);
                         	for(int h=0;h<sch_with_users.size();h++){
                         		int num_booking=0;
                         		Schedule_Master sch=new Schedule_Master();
-                        		sch.setBus_id(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("id")));
+                        		sch.setBus_id(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("id")));
+                        		sch.setDriver_id(existing_bus_driver.get(h));
                         		sch.setSource_id(pick_source.getId());
                         		sch.setDestination_id(pick_destin.getId());
                         		sch.setFrom_id(pick_source.getLocation_id());
@@ -844,7 +866,7 @@ public class Custom_Imp implements Custom_Dao{
                     			}
                         		
                         		sch.setNumber_booking(num_booking);
-                        		sch.setRemaining_seat(Integer.valueOf((String) list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
+                        		sch.setRemaining_seat(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
                         		sch.setNumber_customer(num_booking);
                         		sch.setNumber_staff(0);
                         		sch.setNumber_student(0);
@@ -860,12 +882,15 @@ public class Custom_Imp implements Custom_Dao{
                     	}
                 	}else{
                 		System.out.println("Over All Bus available seat 1!!!");
-                		return "over_bus_available";
+                		custom_imp.create_unassigned_booking(session,cb,pick_source,pick_destin);
+                		//return "over_bus_available";
+                		
                 	}
                 	
                 }else{
-    	      	  System.out.println("No Bus available!!!");
-    	      	  return "no_bus_available";
+    	      	    System.out.println("No Bus available!!!");
+    	      	    custom_imp.create_unassigned_booking(session,cb,pick_source,pick_destin);
+    	      	    //return "no_bus_available";
     	        }
           	}
             
@@ -880,7 +905,33 @@ public class Custom_Imp implements Custom_Dao{
         }           
 		return "success";
 	}	
-	public Map<Object, List<Booking_Master>> create_schedule(Session session, List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus,int number_of_passenger){	
+	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin){
+		Custom_Imp c=new Custom_Imp();
+		try{
+			// Record Booking of customer but haven't assign schedule yet
+    		Booking_Master new_booker=new Booking_Master();
+			new_booker.setSource_id(pick_source.getId());
+			new_booker.setFrom_id(pick_source.getLocation_id());
+			new_booker.setDestination_id(pick_destin.getId());
+			new_booker.setTo_id(pick_destin.getLocation_id());
+			new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+			new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+			new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+			new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+			new_booker.setUser_id(user.getAuthentic());
+			new_booker.setNumber_booking(cb.getNumber_of_seat());
+			new_booker.setNotification("Unassigned");
+			new_booker.setCode(Custom_Imp.getBookingSequence());
+			new_booker.setAdult(cb.getAdult());
+			new_booker.setChild(cb.getChild());
+			new_booker.setDescription("customer");
+			new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
+			session.save(new_booker);
+		} catch (RuntimeException e) {
+	    	e.printStackTrace();
+	    }        
+	}
+	public Map<Object, List<Booking_Master>> create_schedule(Custom_Imp booking,Session session, List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus,int number_of_passenger){	
 		System.out.println("create_schedule");
 		Boolean recursive=true;
 		List<Booking_Master> user_sch_assign=new ArrayList<Booking_Master>();
@@ -892,8 +943,7 @@ public class Custom_Imp implements Custom_Dao{
 			int ib=0; //index of passenger
 			Boolean last_bus_choosing=true;
 			Boolean current_pass_assign=true;
-			sch_with_users=new HashMap<Object,List<Booking_Master>>();
-			list_bus_choosen =new ArrayList<List<Map<String,Object>>>();
+			booking.list_bus_choosen =new ArrayList<List<Map<String,Object>>>();
 			user_sch_assign=new ArrayList<Booking_Master>();
 			int total_seat_of_bus_chosen = number_of_passenger; //for recursive purpose to increase passenger in order to extend more bus
 			int next_total_seat_of_bus_chosen = 0; 
@@ -906,28 +956,28 @@ public class Custom_Imp implements Custom_Dao{
 		        }
 	            
 				//Final Bus Chosen the correct bus because people always accept even 1
-	            list_bus_choosen=custom_imp.choose_correct_bus(all_bus,pick_source,pick_destin,total_seat_of_bus_chosen,total_seat_of_all_bus);   //total_seat_of_bus_chosen==number_of_passenger
+	            booking.list_bus_choosen=custom_imp.choose_correct_bus(booking,all_bus,pick_source,pick_destin,total_seat_of_bus_chosen,total_seat_of_all_bus);   //total_seat_of_bus_chosen==number_of_passenger
 	            
-	            if(list_bus_choosen.size()>0){
-	            	List<Map<String, Object>> sort_bus =new ArrayList<Map<String, Object>>(list_bus_choosen.get(0));
+	            if(booking.list_bus_choosen.size()>0){
+	            	List<Map<String, Object>> sort_bus =new ArrayList<Map<String, Object>>(booking.list_bus_choosen.get(0));
 			        Collections.sort(sort_bus, new Comparator<Map<String,Object>> () {
 				         public int compare(Map<String, Object> m1, Map<String, Object> m2) {
 				             return (Integer.valueOf((String) m2.get("number_of_seat"))).compareTo(Integer.valueOf((String) m1.get("number_of_seat"))); //descending order
 				         }
 				     });
-			        list_bus_choosen=new ArrayList<List<Map<String,Object>>>();
-			        list_bus_choosen.add(sort_bus);
-			        System.out.println("list_bus_choosen: "+list_bus_choosen);
+			        booking.list_bus_choosen=new ArrayList<List<Map<String,Object>>>();
+			        booking.list_bus_choosen.add(sort_bus);
+			        System.out.println("list_bus_choosen: "+booking.list_bus_choosen);
 			        System.out.println("all_booker1 size: "+all_booker1.size());
 			        List<Integer> tem_pass_assign=new ArrayList<Integer>();
 			        next_total_seat_of_bus_chosen=0;  //for recursive purpose
 			        
-		            for(int i=0;i<list_bus_choosen.get(0).size();i++){
-		            	System.out.println("Number of toal seat: "+list_bus_choosen.get(0).get(i).get("number_of_seat"));
+		            for(int i=0;i<booking.list_bus_choosen.get(0).size();i++){
+		            	System.out.println("Number of toal seat: "+booking.list_bus_choosen.get(0).get(i).get("number_of_seat"));
 		            	List<Booking_Master> user_each_bus=new ArrayList<Booking_Master>();
-		            	next_total_seat_of_bus_chosen+=Integer.valueOf((String) list_bus_choosen.get(0).get(i).get("number_of_seat"));
+		            	next_total_seat_of_bus_chosen+=Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"));
 		            	int total_pass_each_sch=0;
-		        		for(int j=0;j<all_booker1.size()&&total_pass_each_sch<Integer.valueOf((String) list_bus_choosen.get(0).get(i).get("number_of_seat"));j++){
+		        		for(int j=0;j<all_booker1.size()&&total_pass_each_sch<Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"));j++){
 		        			Boolean status_assign=true;
 		        			for(int k=0;k<user_sch_assign.size();k++){
 		        				System.out.println(user_sch_assign.get(k).getId()+"  &&  "+all_booker1.get(j).getId());
@@ -937,12 +987,12 @@ public class Custom_Imp implements Custom_Dao{
 		        			}
 		        			System.out.println(status_assign);
 		        			if(status_assign){
-		        				if(total_pass_each_sch+all_booker1.get(j).getNumber_booking()<Integer.valueOf((String) list_bus_choosen.get(0).get(i).get("number_of_seat"))){
+		        				if(total_pass_each_sch+all_booker1.get(j).getNumber_booking()<Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		        					user_sch_assign.add(all_booker1.get(j)); 
 		        					user_each_bus.add(all_booker1.get(j));
 		        					tem_pass_assign.add(j);
 		        					total_pass_each_sch+=all_booker1.get(j).getNumber_booking();
-		        				}else if(total_pass_each_sch+all_booker1.get(j).getNumber_booking()==Integer.valueOf((String) list_bus_choosen.get(0).get(i).get("number_of_seat"))){
+		        				}else if(total_pass_each_sch+all_booker1.get(j).getNumber_booking()==Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		        					user_sch_assign.add(all_booker1.get(j)); 
 		        					tem_pass_assign.add(j);
 		        					user_each_bus.add(all_booker1.get(j)); 
@@ -952,18 +1002,14 @@ public class Custom_Imp implements Custom_Dao{
 		        			}
 		        		}
 		        		
-		        		if(current_pass_assign&&total_pass_each_sch+cb.getNumber_of_seat()<=Integer.valueOf((String) list_bus_choosen.get(0).get(i).get("number_of_seat"))){
+		        		if(current_pass_assign&&total_pass_each_sch+cb.getNumber_of_seat()<=Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		    				//Assign New Passenger here
 		    				Booking_Master new_booker=new Booking_Master();
 		    				new_booker.setSource_id(pick_source.getId());
 		    				new_booker.setFrom_id(pick_source.getLocation_id());
 		    				new_booker.setDestination_id(pick_destin.getId());
 		    				new_booker.setTo_id(pick_destin.getLocation_id());
-		    				System.out.println("POPO");
-		    				System.out.println(cb.getDate());
-		    				System.out.println(cb.getTime());
 		    				new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
-		    				System.out.println(cb.getDate());
 		    				new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
 		    				new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
 		    				new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
@@ -971,14 +1017,15 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setNumber_booking(cb.getNumber_of_seat());
 		    				new_booker.setNotification("Booked");
 		    				new_booker.setCode(Custom_Imp.getBookingSequence());
+		    				new_booker.setAdult(cb.getAdult());
+		    				new_booker.setChild(cb.getChild());
+		    				new_booker.setDescription("customer");
 		    				session.save(new_booker);
 		    				
 		    				
 		    				current_pass_assign=false;
 		    				total_pass_each_sch+=cb.getNumber_of_seat();
 		    				user_each_bus.add(new_booker);
-		    				System.out.println("current_pass_assign: "+current_pass_assign);
-		    				System.out.println("============= New Booker Assign =============");
 		    			}
 		        		System.out.println("total_pass_each_sch: "+total_pass_each_sch);
 		        		sch_with_users.put(i, user_each_bus);
@@ -1012,29 +1059,29 @@ public class Custom_Imp implements Custom_Dao{
 		  
 		return sch_with_users;
 	}
-	public List<List<Map<String,Object>>> choose_correct_bus(List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus){ 
+	public List<List<Map<String,Object>>> choose_correct_bus(Custom_Imp booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus){ 
 		System.out.println("choose_correct_bus");
 		List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>(); 
-		total_bus = all_bus.size();											
-  	    number_of_bus=all_bus.size();
+		booking.total_bus = all_bus.size();											
+		booking.number_of_bus=all_bus.size();
   	    // Reset old data to empty
-  	    total_choosen_bus_list=new ArrayList<Integer>();
-  	    list =new ArrayList<List<Map<String,Object>>>();     
+		booking.total_choosen_bus_list=new ArrayList<Integer>();
+		booking.list =new ArrayList<List<Map<String,Object>>>();     
 		try {	  
             
 		         //=========3. Start The Process of choosing the correct total bus
-		         for(int i=1;i<=total_bus;i++){
-		             printCombination(all_bus, all_bus.size(), i,number_of_passenger, total_seat_of_all_bus);
+		         for(int i=1;i<=booking.total_bus;i++){
+		             printCombination(booking,all_bus, all_bus.size(), i,number_of_passenger, total_seat_of_all_bus);
 		         }
 		         //=========4. After choosing the correct total bus
-		         Collections.sort(total_choosen_bus_list);							
-		         for(int i=0;i<list.size();i++){
+		         Collections.sort(booking.total_choosen_bus_list);							
+		         for(int i=0;i<booking.list.size();i++){
 		            int sum_each_bus=0;
-		            for(int j=0;j<list.get(i).size();j++){
-		                sum_each_bus+=Integer.valueOf((String) list.get(i).get(j).get("number_of_seat"));
+		            for(int j=0;j<booking.list.get(i).size();j++){
+		                sum_each_bus+=Integer.valueOf((String) booking.list.get(i).get(j).get("number_of_seat"));
 		            }
-		            if(sum_each_bus==total_choosen_bus_list.get(0)){ 
-		               list_bus_choosen.add(list.get(i));
+		            if(sum_each_bus==booking.total_choosen_bus_list.get(0)){ 
+		               list_bus_choosen.add(booking.list.get(i));
 		               break;
 		            }
 		         } 
@@ -1042,7 +1089,7 @@ public class Custom_Imp implements Custom_Dao{
         } catch (RuntimeException e) {
         	e.printStackTrace();
         } 
-		System.out.println("List :      "+list.size());
+		System.out.println("List :      "+booking.list.size());
 		return list_bus_choosen;
 	}
 	public List<Booking_Master> get_all_booker(Session session,int from_id, int to_id, String time, String date){  
@@ -1192,7 +1239,7 @@ public class Custom_Imp implements Custom_Dao{
         }    
 	}
 	
-    static void combinationUtil(List<Map<String,Object>> all_bus, List<Map<String,Object>> data, int start,
+    static void combinationUtil(Custom_Imp booking,List<Map<String,Object>> all_bus, List<Map<String,Object>> data, int start,
                                 int end, int index, int r,int all_p,int all_bus_seat)
     {
         if (index == r)
@@ -1214,13 +1261,13 @@ public class Custom_Imp implements Custom_Dao{
            System.out.println(total_current_bus_seat);
            System.out.println(" ");
             if(total_current_bus_seat>=all_p){
-            	if(bus_choosen.size()<number_of_bus){
-            		number_of_bus=bus_choosen.size();
-            		list.add(bus_choosen);
-                	total_choosen_bus_list.add(total_current_bus_seat);
-            	} else if(bus_choosen.size()==total_bus){
-            		list.add(bus_choosen);
-                	total_choosen_bus_list.add(total_current_bus_seat);
+            	if(bus_choosen.size()<booking.number_of_bus){
+            		booking.number_of_bus=bus_choosen.size();
+            		booking.list.add(bus_choosen);
+            		booking.total_choosen_bus_list.add(total_current_bus_seat);
+            	} else if(bus_choosen.size()==booking.total_bus){
+            		booking.list.add(bus_choosen);
+            		booking.total_choosen_bus_list.add(total_current_bus_seat);
             	}
             }else{
             	System.out.println("Over available bus");
@@ -1240,20 +1287,91 @@ public class Custom_Imp implements Custom_Dao{
              map.put("id", all_bus.get(i).get("id"));
         	data.add(index,map);
         	
-            combinationUtil(all_bus, data, i+1, end, index+1, r,all_p, all_bus_seat);
+            combinationUtil(booking,all_bus, data, i+1, end, index+1, r,all_p, all_bus_seat);
         }
     }
 
-    static void printCombination(List<Map<String,Object>> all_bus, int n, int r,int all_p,int all_bus_seat)
+    static void printCombination(Custom_Imp booking,List<Map<String,Object>> all_bus, int n, int r,int all_p,int all_bus_seat)
     {
         // A temporary array to store all combination one by one
         ///int data[]=new int[r];
     	List<Map<String,Object>> data=new ArrayList<Map<String,Object>>();
 
         // Print all combination using temprary array 'data[]'
-        combinationUtil(all_bus, data, 0, n-1, 0, r,all_p,all_bus_seat);
+        combinationUtil(booking,all_bus, data, 0, n-1, 0, r,all_p,all_bus_seat);
     }
-  //======================== combination for choosing bus till here ============================
+  
+    public List<Integer> get_existing_bus_and_driver(Custom_Imp booking,Session session,Customer_Booking cb,int from, int to){
+    	List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
+    	List<Integer> final_driver_list=new ArrayList<Integer>();
+		try {
+			
+			sch=session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+					.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+					.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+					.setParameter("to", to)
+					.setParameter("from", from).list();
+			
+			// Find driver list and assign driver
+			List<Integer> driver_list=new ArrayList<Integer>();
+			List<Integer> assign_driver=new ArrayList<Integer>();
+			for(int i=0; i<booking.list_bus_choosen.get(0).size();i++){
+				Boolean status=true;
+				for(int j=0;j<sch.size();j++){
+					if(sch.get(j).getBus_id()==Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("id"))){
+						driver_list.add(sch.get(j).getDriver_id());
+						status=false;
+						assign_driver.add(j);
+						break;
+					}
+				}
+				if(status){
+					driver_list.add(0);
+				}
+			}
+			
+			// Find un-assign diver
+			List<Integer> unassign_driver=new ArrayList<Integer>();
+			for(int i=0;i<sch.size();i++){
+				Boolean status=true;
+				if(assign_driver.size()>0){
+					for(int j=0;j<assign_driver.size();j++){
+						if(i==assign_driver.get(j)){
+							status=false;
+							break;
+						}
+					}
+					if(status){
+						unassign_driver.add(sch.get(i).getDriver_id());
+					}
+				}else{
+					//not assign at all
+					unassign_driver.add(sch.get(i).getDriver_id());
+				}
+			}
+			
+			// Add unassign driver to driver list
+			int un_assign=0;
+			for(int i=0;i<driver_list.size();i++){
+				if(driver_list.get(i)==0){
+					if(un_assign<unassign_driver.size()){
+						final_driver_list.add(unassign_driver.get(un_assign));
+						un_assign++;
+					}else{
+						final_driver_list.add(0);
+					}
+				}else{
+					final_driver_list.add(driver_list.get(i));
+				}
+			}
+			
+	              
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		return final_driver_list;
+    }
+    //======================== combination for choosing bus till here ============================
 
 	public String customer_request_booking(Customer_Booking cb){
 		IdUser user= new IdUser();
@@ -1312,17 +1430,18 @@ public class Custom_Imp implements Custom_Dao{
             cb.setNumber_of_seat(br.getNumber_of_booking());
             
             book=cus.customer_booking(cb);
-            if(book.equals("success")){
+            if(book.equals("success")||book.equals("over_bus_available")||book.equals("no_bus_available")){
             	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
             	query.setParameter("id", id);
             	int result = query.executeUpdate();
             	trns1.commit();
-            }else if(book.equals("over_bus_available")||book.equals("no_bus_available")){
-            	Query query = session.createQuery("update Booking_Request_Master set status='Rejected' where id = :id");
-            	query.setParameter("id", id);
-            	int result = query.executeUpdate();
-            	trns1.commit();
             }
+//            else if(book.equals("over_bus_available")||book.equals("no_bus_available")){
+//            	Query query = session.createQuery("update Booking_Request_Master set status='Rejected' where id = :id");
+//            	query.setParameter("id", id);
+//            	int result = query.executeUpdate();
+//            	trns1.commit();
+//            }
             
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -1461,6 +1580,20 @@ public class Custom_Imp implements Custom_Dao{
 	        }
 			return list;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
 	public static void main(String args[]){
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();      

@@ -24,8 +24,8 @@ public interface Custom_Dao {
 	public List<Booking_Master> get_all_booker(Session session,int from_id, int to_id, String time, String date);
 	public List<Map<String,Object>> get_all_bus(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date);
-	public Map<Object, List<Booking_Master>> create_schedule(Session session,List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus, int number_of_passenger);
-	public List<List<Map<String,Object>>> choose_correct_bus(List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus);
+	public Map<Object, List<Booking_Master>> create_schedule(Custom_Imp booking,Session session,List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus, int number_of_passenger);
+	public List<List<Map<String,Object>>> choose_correct_bus(Custom_Imp booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus);
 	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np);
 	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np);
 	public String request_book_now(int id) throws ParseException;
@@ -37,4 +37,6 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> get_sch_driver_info(int id);
 	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
+	public List<Integer> get_existing_bus_and_driver(Custom_Imp booking,Session session,Customer_Booking cb,int from, int to);
+	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin);
 }

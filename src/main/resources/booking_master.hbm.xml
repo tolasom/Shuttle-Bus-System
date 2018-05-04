@@ -17,6 +17,8 @@
     <property name="dept_date" column="dept_date"/>
     <property name="dept_time" column="dept_time"/>
     <property name="number_booking" column="number_booking"/>
+    <property name="adult" column="adult"/>
+    <property name="child" column="child"/>
     <property name="notification" column="notification"/>
     <property name="qr" column="qr"/>
     <property name="code" column="code"/>

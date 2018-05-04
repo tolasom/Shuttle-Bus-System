@@ -7,12 +7,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.EntityClasses.Pickup_Location_Master;
@@ -31,6 +31,13 @@ public class CustomerController {
 	public ModelAndView sign_up() {
 		return new ModelAndView("sign_up");
 	}
+	
+	//========================= Sign Up UI================================
+		@RequestMapping(value="/customer/**")
+		public ModelAndView customer() {
+			return new ModelAndView("customer_mobile");
+		}
+		
 	//=========================check_booking_request Information================================
 	@RequestMapping(value="/today", method=RequestMethod.GET)
 	public @ResponseBody String today() {
@@ -170,4 +177,8 @@ public class CustomerController {
 		List<Map<String, Object>> ret = customer.get_qrcode(id);
 		return ret;
 	}
+//	@Scheduled(cron="*/5 * * * * *")
+//    public void updateEmployeeInventory(){
+//        System.out.println("Started cron job 1");
+//    }
 }

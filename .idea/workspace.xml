@@ -2,65 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4ddbbf0-7636-4424-be02-bf0b54da5f26" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.classpath" afterPath="$PROJECT_DIR$/.classpath" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/SpringRegister3.iml" afterPath="$PROJECT_DIR$/SpringRegister3.iml" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/booking_history.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/booking_history.jsp" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/cusomer_home.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/cusomer_home.jsp" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/request_booking.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/request_booking.jsp" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/request_booking.js" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/request_booking.js" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/Config/SecurityConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/Config/SecurityConfig.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DaoClasses/Custom_Dao.class" afterPath="$PROJECT_DIR$/target/classes/com/DaoClasses/Custom_Dao.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DaoClasses/Custom_Imp.class" afterPath="$PROJECT_DIR$/target/classes/com/DaoClasses/Custom_Imp.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DaoClasses/Mailer.class" afterPath="$PROJECT_DIR$/target/classes/com/DaoClasses/Mailer.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DaoClasses/test.class" afterPath="$PROJECT_DIR$/target/classes/com/DaoClasses/test.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/DaoClasses/userDaoImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/DaoClasses/userDaoImpl.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/Decryption.class" afterPath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/Decryption.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/Encryption.class" afterPath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/Encryption.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/SecretKeyClass.class" afterPath="$PROJECT_DIR$/target/classes/com/EncryptionDecryption/SecretKeyClass.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/Batch_Master.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/Batch_Master.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/Dept_Time_Master.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/Dept_Time_Master.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/Location_Master.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/Location_Master.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/Pickup_Location_Master.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/Pickup_Location_Master.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/Schedule_Master.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/Schedule_Master.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/EntityClasses/driver_bus_assigned.class" afterPath="$PROJECT_DIR$/target/classes/com/EntityClasses/driver_bus_assigned.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/HibernateUtil/HibernateUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/HibernateUtil/HibernateUtil.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/LoginFilter/LoginGoogle.class" afterPath="$PROJECT_DIR$/target/classes/com/LoginFilter/LoginGoogle.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/MainController/AdminController.class" afterPath="$PROJECT_DIR$/target/classes/com/MainController/AdminController.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/MainController/CustomerController.class" afterPath="$PROJECT_DIR$/target/classes/com/MainController/CustomerController.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/Customer_Booking.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/Customer_Booking.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/IdentifyTypeUser.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/IdentifyTypeUser.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/Mail.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/Mail.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/Project_Model.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/Project_Model.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/Reset_Password.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/Reset_Password.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/Schedule_Model.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/Schedule_Model.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ModelClasses/UserModel.class" afterPath="$PROJECT_DIR$/target/classes/com/ModelClasses/UserModel.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ServiceClasses/Customer_Service.class" afterPath="$PROJECT_DIR$/target/classes/com/ServiceClasses/Customer_Service.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ServiceClasses/Customer_Service_Imp.class" afterPath="$PROJECT_DIR$/target/classes/com/ServiceClasses/Customer_Service_Imp.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ServiceClasses/SecurityService.class" afterPath="$PROJECT_DIR$/target/classes/com/ServiceClasses/SecurityService.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ServiceClasses/usersService.class" afterPath="$PROJECT_DIR$/target/classes/com/ServiceClasses/usersService.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ServiceClasses/usersServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/ServiceClasses/usersServiceImpl.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/client_mail/ApplicationConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/client_mail/ApplicationConfig.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/client_mail/MailService.class" afterPath="$PROJECT_DIR$/target/classes/com/client_mail/MailService.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/client_mail/MailServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/client_mail/MailServiceImpl.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/getInfoLogin/IdUser.class" afterPath="$PROJECT_DIR$/target/classes/getInfoLogin/IdUser.class" />
-      <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/.gitignore" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF" afterPath="" />
       <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.properties" afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.properties" />
-      <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.xml" afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/logs/access_log.2018-03-22" afterPath="$PROJECT_DIR$/target/tomcat/logs/access_log.2018-03-22" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/booking_005fhistory_jsp.class" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/booking_005fhistory_jsp.class" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/booking_005fhistory_jsp.java" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/booking_005fhistory_jsp.java" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/cusomer_005fhome_jsp.class" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/cusomer_005fhome_jsp.class" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/cusomer_005fhome_jsp.java" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/cusomer_005fhome_jsp.java" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/request_005fbooking_jsp.class" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/request_005fbooking_jsp.class" />
-      <change beforePath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/request_005fbooking_jsp.java" afterPath="$PROJECT_DIR$/target/tomcat/work/Tomcat/localhost/_/org/apache/jsp/WEB_002dINF/views/view/request_005fbooking_jsp.java" />
     </list>
     <ignored path="KIT-Point-System.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,7 +27,7 @@
     <favorites_list name="KIT-Point-System" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -131,11 +78,11 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -253,43 +200,48 @@
       <updated>1498118295228</updated>
       <workItem from="1498118305671" duration="252000" />
       <workItem from="1522174406155" duration="800000" />
+      <workItem from="1524625906261" duration="635000" />
+      <workItem from="1524781052083" duration="204000" />
+      <workItem from="1524781283729" duration="61000" />
+      <workItem from="1524781385610" duration="32000" />
+      <workItem from="1524781479701" duration="18000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1052000" />
+    <option name="totallyTimeSpent" value="2002000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="10" y="20" width="1346" height="688" extended-state="0" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24285714" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.24285714" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" x="521" y="76" width="323" height="575" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
   </component>

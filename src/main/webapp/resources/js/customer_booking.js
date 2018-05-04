@@ -50,19 +50,23 @@ $(document).ready(function() {
 				var custom_pl_form='<option disabled selected>Source Location</option>';
 				for(i=0;i<location.length;i++){
 					console.log(location[i])
-					custom_pl_form+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
-					l_form+='<optgroup label="'+location[i]+'">';
-					for(j=0;j<data.location[location[i]].length;j++){
-						console.log(data.location[location[i]][j]);
-						l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'   ('+location[i]+')</option>';
-					}
-					l_form+='</optgroup>';		
+					if(data.location[location[i]].length!=0){
+						custom_pl_form+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
+						l_form+='<optgroup label="'+location[i]+'">';
+						for(j=0;j<data.location[location[i]].length;j++){
+							console.log(data.location[location[i]][j]);
+							l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'   ('+location[i]+')</option>';
+						}
+						l_form+='</optgroup>';	
+					}	
 				}
-				l_form+='<option value="custom_pickup"><span class="red">Custom Pick Up Location</span></option>'
+				l_form+='<option value="custom_pickup"><span class="red">**Custom Pick Up Location</span></option>'
 				console.log(l_form)
 				document.getElementById('source_name').innerHTML=l_form;
 				document.getElementById('source_loc_id').innerHTML=custom_pl_form;
 				$('#source_name').formSelect();
+				var element = $( "span:contains('Custom Pick Up Location')" );
+				element.css("color","#000000");
 //				var elem = document.querySelector('#source_name');
 //				var instance = M.FormSelect.getInstance(elem);
 //				console.log("instance")
@@ -92,13 +96,15 @@ $(document).ready(function() {
 					var custom_dropoff='<option disabled selected>Destination Location</option>';
 					for(i=0;i<location.length;i++){
 						console.log(location[i])
-						l_form+='<optgroup label="'+location[i]+'">';
-						custom_dropoff+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
-						for(j=0;j<data.location[location[i]].length;j++){
-							console.log(data.location[location[i]][j]);
-							l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'   ('+location[i]+')</option>';
-						}
-						l_form+='</optgroup>';		
+						if(data.location[location[i]].length>0){
+							l_form+='<optgroup label="'+location[i]+'">';
+							custom_dropoff+='<option value="'+data.location[location[i]][0].location_id+'">'+location[i]+'</option>';
+							for(j=0;j<data.location[location[i]].length;j++){
+								console.log(data.location[location[i]][j]);
+								l_form+='<option value="'+data.location[location[i]][j].id+'">'+data.location[location[i]][j].name+'   ('+location[i]+')</option>';
+							}
+							l_form+='</optgroup>';	
+						}	
 					}
 					l_form+='<option value="custom_dropoff">Custom Drop-off Location</option>'
 					document.getElementById('destination_name').innerHTML=l_form;
@@ -106,6 +112,8 @@ $(document).ready(function() {
 					
 					$('#select_dest_id').formSelect();
 					$('#destination_name').formSelect();
+					var element = $( "span:contains('Custom Pick Up Location')" );
+					element.css("color","#000000");
 				},
 				error: function(e) {
 					console.log("ERROR: ", e);
@@ -176,7 +184,8 @@ $(document).ready(function() {
 			contentType: "application/json",
 			timeout: 100000,
 			success: function(data) {
-				
+				console.log("KKK")
+				console.log(data)
 				var bh_form='';
 				if(data.length>0){
 					bh_form+='<h5 class="center">Booking History</h5>'
@@ -200,8 +209,6 @@ $(document).ready(function() {
 						        +'<tr><th>Drop-off Location</th><td><b>:</b>&nbsp&nbsp'+data[i].drop_off+'</td></tr>'
 						        +'<tr><th>Number of Ticket</th><td><b>:</b>&nbsp&nbsp'+data[i].number_of_ticket +'</td></tr>'
 						        +'<tr><th>Bus Information</th><td><b>:</b>&nbsp&nbsp<a href="#!" class="bus_info" data="'+data[i].id +'">'+data[i].bus_model +'</a></td></tr>'
-//						        +'<tr><th>Bus Model</th><td><b>:</b>&nbsp&nbsp'+data[i].bus_model +'</td></tr>'
-//						        +'<tr><th>Bus Plate Number</th><td><b>:</b>&nbsp&nbsp'+data[i].plate_number +'</td></tr>'
 						        if(data[i].diver_name=="no_driver"){
 								    bh_form+='<tr><th>Driver\'s Name</th><td><b>:</b>&nbsp&nbsp To be decided</td></tr>'
 								 }else{
@@ -815,6 +822,8 @@ $(document).ready(function() {
 		   		 var time=$("#departure_time").val();
 		   		 var date=$("#departure_date").val();
 		   		 var number_of_seat=$("#number_of_seat").val();
+		   		 var adult=number_of_seat-1;
+		   		 var child=1;
 		   		 var dept_dt=date+" "+time;
 		   		 if(time!=="undefined"&&time!==null&&destination!=="undefined"
 		   			 &&destination!==null&&destination!=="custom_pickup"
@@ -917,7 +926,7 @@ $(document).ready(function() {
 							    	});
 				   				})
 				        	}else{
-				        		console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK3")
+				        		
 				        		$.ajax({
 					   				async: false,
 					   				cache: false,
@@ -928,7 +937,9 @@ $(document).ready(function() {
 					   						 destination:destination,
 					   						 time:time,
 					   						 date:date,
-					   						 number_of_seat:number_of_seat
+					   						 number_of_seat:number_of_seat,
+					   						 adult:adult,
+					   						 child:child
 					   				},
 					   				timeout: 100000,
 					   				success: function(data) {
