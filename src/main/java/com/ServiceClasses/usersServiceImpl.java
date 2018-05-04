@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.DaoClasses.usersDao;
 import com.EntityClasses.*;
+import com.ModelClasses.B_Model;
 import com.ModelClasses.Schedule_Model;
 import com.ModelClasses.UserModel;
 
@@ -172,6 +173,9 @@ public class usersServiceImpl implements usersService{
 	}
 	public int deleteTime(int id){
 		return usersDao1.deleteTime(id);	
+	}
+	public List<Booking_Master> getBookingReporting(B_Model booking) throws ParseException{
+		return usersDao1.getBookingReporting(booking);
 	}
 }
 

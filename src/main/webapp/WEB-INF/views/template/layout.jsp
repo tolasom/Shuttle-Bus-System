@@ -91,7 +91,7 @@
                     
 var eee;
                     $(document).ready(function(){
-
+            
                       
                       $.ajax({
                             url:'getBookingRequestNotification',
@@ -129,6 +129,20 @@ var eee;
                                 console.log("DONE");
                               }
                           });
+
+
+                        $( "#settingMng" ).on( "click", function() {
+                        $(".ir").slideToggle();
+                        $("#dds1").toggleClass("irr");
+                        $("#dds2").toggleClass("irr");
+                      });
+
+                        $( "#reportMng" ).on( "click", function() {
+                        $(".ir2").slideToggle();
+                        $("#ddr1").toggleClass("irr");
+                        $("#ddr2").toggleClass("irr");
+                      });
+                
                       
                       $(".js-example-basic-multiple").select2();
                       var date_input=$('input[name="date"]');

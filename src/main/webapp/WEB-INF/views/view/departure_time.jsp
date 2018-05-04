@@ -67,6 +67,7 @@
     load = function(){  
     var ad = ${data};
     var data = ad.times;
+    console.log(data)
     $(".wickedpicker").css('z-index',"1050");
     for(var i=0;i<data.length;i++)
     {

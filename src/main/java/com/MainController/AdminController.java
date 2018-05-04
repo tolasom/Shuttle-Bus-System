@@ -108,19 +108,7 @@ public class AdminController {
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
 	}
-	@RequestMapping(value="/departure_time", method=RequestMethod.GET)
-	public ModelAndView departure_time() {
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("times", usersService1.getAllTimes());
-		ObjectMapper mapper = new ObjectMapper();
-		String json="";
-		try {
-			json = mapper.writeValueAsString(map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ModelAndView("departure_time","data",json);
-	}
+	
 	@RequestMapping(value="/admin_profile", method=RequestMethod.GET)
 	public ModelAndView admin_profile() {
 		return new ModelAndView("admin_profile");
@@ -132,12 +120,39 @@ public class AdminController {
 //=========================Returns report view================================
 	@RequestMapping(value="/report", method=RequestMethod.GET)
 	public ModelAndView viewReport() {
-		return new ModelAndView("report");
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("locations",usersService1.getAllLocations());
+		map.put("times",usersService1.getAllTimes());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("report","data",json);
 	}
+
 //=========================Returns admin booking view================================
 	@RequestMapping(value="/admin_booking", method=RequestMethod.GET)
 	public ModelAndView admin_booking() {
 		return new ModelAndView("admin_booking");
+	}
+	@RequestMapping(value="/bookingReport2", method=RequestMethod.GET)
+	public ModelAndView bookingReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("bookings", data);
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("bookingReport2","data",json);
 	}
 //=========================Returns historical_booking_requestt view================================
 	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
@@ -217,6 +232,7 @@ public class AdminController {
 		map.put("booking", model);
 		map.put("locations", usersService1.getAllLocations());
 		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -238,6 +254,7 @@ public class AdminController {
 		map.put("request", request);
 		map.put("p_locations", usersService1.getAllPickUpLocations());
 		map.put("locations", usersService1.getAllLocations());
+		map.put("customers", usersService1.getAlCustomers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -258,6 +275,7 @@ public class AdminController {
 		map.put("request", request);
 		map.put("locations", usersService1.getAllLocations());
 		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -395,6 +413,20 @@ public class AdminController {
 		}
 		return map;
 		}
+
+
+
+	@RequestMapping(value="/reportSubmit", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> reportSubmit(B_Model booking) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(booking.getFrom_id()+"  "+booking.getTo_id()+"  "+booking.getDept_date()+"  "+booking.getN()+"  "+booking.getNotification());
+		map.put("message",usersService1.getBookingReporting(booking));
+		return map;
+		}
+
+
+
+
 	@RequestMapping(value="/createTime", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSaveTime(Schedule_Model schedule) throws Exception{
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -768,9 +800,34 @@ public class AdminController {
 	@RequestMapping(value="/bookingReport", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> bookingReport(){
 		Map<String,Object> map = new HashMap<String,Object>();
-			map.put("locations",usersService1.getAllLocations());
-		return map;
+		Map<String,Object> map2 = new HashMap<String,Object>();
+		map.put("locations",usersService1.getAllLocations());
+		map.put("times",usersService1.getAllTimes());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		map2.put("data", json);
+		return map2;
+		}
+	
+	@RequestMapping(value="/departure_time", method=RequestMethod.GET)
+	public ModelAndView departure_time() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("times", usersService1.getAllTimes());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("departure_time","data",json);
+	}
+	
 //====================To save location============================
 	@RequestMapping(value="/createPickUpLocation", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSavePickUpLocation(Pickup_Location_Master p_location) throws Exception{
@@ -846,6 +903,7 @@ public class AdminController {
 			{
 			map.put("locations", list2);
 			map.put("requests", list);
+			map.put("customers", usersService1.getAlCustomers());
 			}
 			else
 				map.put("message","Data not found");			
@@ -886,6 +944,7 @@ public class AdminController {
 			{
 			map.put("locations", list2);
 			map.put("requests", list);
+			map.put("customers", usersService1.getAlCustomers());
 			}
 			else
 				map.put("message","Data not found");			

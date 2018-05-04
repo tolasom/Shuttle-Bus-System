@@ -21,12 +21,13 @@ public class Booking_Master {
 		private String notification;
 		private String qr;
 		private String code;
+		private String status;
 		private String description;
 		private Timestamp created_at;
 		private Timestamp updated_at;
+		private Boolean qr_status;
 		
-		
-		
+	
 		public int getFrom_id() {
 			return from_id;
 		}
@@ -112,6 +113,12 @@ public class Booking_Master {
 		public void setQr(String qr) {
 			this.qr = qr;
 		}
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
 		public String getDescription() {
 			return description;
 		}
@@ -141,6 +148,12 @@ public class Booking_Master {
 		}
 		public void setAdult(int adult) {
 			this.adult = adult;
+		}
+		public Boolean getQr_status() {
+			return qr_status;
+		}
+		public void setQr_status(Boolean qr_status) {
+			this.qr_status = qr_status;
 		}
 		
 }
