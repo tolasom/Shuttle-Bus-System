@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 	private static final String[] STUDENT_MATCHERS = {
 
-		"/student_home",
+		"/student/**",
 
     };
 

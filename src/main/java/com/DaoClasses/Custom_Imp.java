@@ -151,7 +151,8 @@ public class Custom_Imp implements Custom_Dao{
             locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
             System.out.println(locat.get(0).getId());
             for(int i=0;i<locat.size();i++){
-            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?").setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2,true).list();
+            	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?")
+						.setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2,true).list();
             	System.out.println(pick.size());
             	list.put(locat.get(i).getName().toString(), pick);
             }

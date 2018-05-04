@@ -144,4 +144,11 @@ public class CustomerController {
 		String ret = customer.cancel_booking_ticket(id);
 		return ret;
 	}
+
+	@RequestMapping(value="/customer/**")
+	public ModelAndView customer_mobile() {
+		return new ModelAndView("customer_mobile");
+	}
+
+
 }
