@@ -17,7 +17,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <!--  jQuery Validation -->
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
-
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- App JS -->      
 <spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
 <spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
@@ -44,7 +44,6 @@
 
       
 <!-- Date Picker -->     
-<spring:url value="/resources/Bootstrap/js/date/jquery.js" var="dateJS"/>
 <spring:url value="/resources/Bootstrap/js/date/jquery-ui.js" var="dateJS2"/>
 <spring:url value="/resources/Bootstrap/js/time/wickedpicker.js" var="TimeJS"/>
 
@@ -81,19 +80,19 @@
 
 
 <script src="${VendorJS}"></script>
-<script src="${AppJS}"></script>
 <script src="${alertJS}"></script>
-<script src="${dateJS}"></script>
-<script src="${dateJS2}"></script>
 <script src="${TimeJS}"></script>
 <script src="${MultipleJS}"></script>
 <script src="${MultipleJS2}"></script>
+<script src="${dateJS2}"></script>
+<script src="${AppJS}"></script>
 
 <script>
                     
-
+var eee;
                     $(document).ready(function(){
-
+            
+                      
                       $.ajax({
                             url:'getBookingRequestNotification',
                             type:'GET',
@@ -109,6 +108,7 @@
 
 
 
+
                       $.ajax({
                               async: false,
                               cache: false,
@@ -117,8 +117,9 @@
                               contentType: "application/json",
                               timeout: 100000,
                               success: function(data) {
-                                phone=data.phone_number;
+                                console.log(data);
                                 document.getElementById('fname').innerHTML=data.username;
+                                eee=data.email;
                                 
                               },
                               error: function(e) {
@@ -128,6 +129,20 @@
                                 console.log("DONE");
                               }
                           });
+
+
+                        $( "#settingMng" ).on( "click", function() {
+                        $(".ir").slideToggle();
+                        $("#dds1").toggleClass("irr");
+                        $("#dds2").toggleClass("irr");
+                      });
+
+                        $( "#reportMng" ).on( "click", function() {
+                        $(".ir2").slideToggle();
+                        $("#ddr1").toggleClass("irr");
+                        $("#ddr2").toggleClass("irr");
+                      });
+                
                       
                       $(".js-example-basic-multiple").select2();
                       var date_input=$('input[name="date"]');

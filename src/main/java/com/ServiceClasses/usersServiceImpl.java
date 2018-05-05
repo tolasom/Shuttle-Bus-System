@@ -8,14 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.DaoClasses.usersDao;
-import com.EntityClasses.Batch_Master;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.User_Info;
+import com.EntityClasses.*;
+import com.ModelClasses.B_Model;
 import com.ModelClasses.Schedule_Model;
 import com.ModelClasses.UserModel;
 
@@ -164,8 +158,25 @@ public class usersServiceImpl implements usersService{
 	public User_Info getCustomerById(int id){
 		return usersDao1.getCustomerById(id);
 	}
+	public int createUserr(User_Info user){
+		return usersDao1.createUserr(user);
+	}
+	public int changePass(User_Info user){
+		return usersDao1.changePass(user);
+	}
 	
-	
+	public List<Dept_Time_Master> getAllTimes(){
+		return usersDao1.getAllTimes();
+	}
+	public int saveTime(Schedule_Model schedule) throws ParseException{
+		return usersDao1.saveTime(schedule);	
+	}
+	public int deleteTime(int id){
+		return usersDao1.deleteTime(id);	
+	}
+	public List<Booking_Master> getBookingReporting(B_Model booking) throws ParseException{
+		return usersDao1.getBookingReporting(booking);
+	}
 }
 
 

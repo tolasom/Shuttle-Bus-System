@@ -2626,7 +2626,7 @@ pre {
                 left: 0;
                 color: #fff; }
 
-.sidebar-header .brand {
+.sidebar-header  {
   color: #fff;
   text-align: left;
   padding-left: 25px;
@@ -2636,6 +2636,15 @@ pre {
     .sidebar-header .brand {
       line-height: 50px;
       font-size: 16px; } }
+
+.brand2{
+  font-size: 1.2em;
+    /* margin-bottom: 10px; */
+    text-transform: uppercase;
+    font-weight: bold; */
+    color: white;
+    text-shadow: 0 1px 2px rgba(black,.15);
+}
 
 .header .header-block-nav .notifications {
   font-size: 16px; }

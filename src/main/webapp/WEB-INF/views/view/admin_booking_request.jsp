@@ -44,7 +44,7 @@
                 
 </body>
 <script>
-var requests, locations;
+var requests, locations,customers;
 load = function(){	
 	$.ajax({
 		url:'getAllCurrentBookingRequests',
@@ -53,10 +53,11 @@ load = function(){
 			console.log(response)
 			requests = response.requests;
 			locations = response.locations;
+            customers = response.customers;
 			for (var i=0;i<requests.length;i++)
 			{
 			var booking = '<tr class="hoverr" style="background-color:#f9cdad;" data-url="request_detail?id='+requests[i].id+'"><td>'+(i+1)+'</td>'
-								+'<td>'+requests[i].user_id+'</td>'
+								+'<td>'+searchCustomer(requests[i].user_id,customers)+'</td>'
 								+'<td>'+searchLocation(requests[i].from_id,locations)+'</td>'
 								+'<td>'+searchLocation(requests[i].to_id,locations)+'</td>'
 								+'<td>'+formatDate(requests[i].dept_date)+'</td>'
@@ -99,6 +100,13 @@ formatDate =function (date) {
 };
 
 function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+function searchCustomer(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

@@ -1,8 +1,9 @@
 package com.MainController;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.stereotype.Controller;
 import com.DaoClasses.StudentDao;
 import com.DaoClasses.StudentDaoImpl;
 
@@ -15,36 +16,46 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class StudentController {
     StudentDao studentDao = new StudentDaoImpl();
-    @RequestMapping(value="/student/**")
+
+    @RequestMapping(value = "/student/**")
     public String customer_home() {
         return "student/home";
     }
 
-    @RequestMapping(value="/student_info",method=RequestMethod.GET)
-    @ResponseBody public Map<String,Object> studentInfo() {
+    @RequestMapping(value = "/student_info", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> studentInfo() {
         return studentDao.student_info();
     }
 
-    @RequestMapping(value="/location_info",method=RequestMethod.GET)
-    @ResponseBody public List<Map<String,Object>> location_Info() {
+    @RequestMapping(value = "/location_info", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> location_Info() {
         return studentDao.location_info();
     }
 
-    @RequestMapping(value="/student_booking",method=RequestMethod.POST)
-    @ResponseBody public Map<String,Object> student_booking(@RequestBody Student_Booking book_data) {
+    @RequestMapping(value = "/student_booking", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> student_booking(@RequestBody Student_Booking book_data) {
         return studentDao.student_booking(book_data);
     }
 
 
-    @RequestMapping(value="/list_booking_date",method=RequestMethod.GET)
-    @ResponseBody public List<Object> list_booking_date() {
+    @RequestMapping(value = "/list_booking_date", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Object> list_booking_date() {
         return studentDao.list_booking_date();
     }
 
-    @RequestMapping(value="/list_history",method=RequestMethod.GET)
-    @ResponseBody public List<Map<String,Object>> getHistory() {
+    @RequestMapping(value = "/list_history", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getHistory() {
         return studentDao.getHistory();
     }
 
+    //@Scheduled(cron="*/5 * * * * *")
+    public void updateEmployeeInventory() {
+        System.out.println("Started cron job 1");
+    }
 
 }

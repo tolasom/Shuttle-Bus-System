@@ -3,10 +3,10 @@
 <aside class="sidebar">
                     <div class="sidebar-container">
                         <div class="sidebar-header">
-                            <div class="brand">
-                                <div class="logo">
-                                    
-                                </div> SBS </div>
+                            <div class="brand2">
+                
+                                Shuttle Bus System
+                            </div>
                         </div>
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
@@ -32,8 +32,16 @@
                                         <i class="fa fa-institution"></i> Manage Locations </a>
                                 </li>
                                 <li id="reportMng" class="re">
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart"></i> Reports <span id="ddr1" style="margin-top:3px;margin-right: 3px;" class="pull-right"><i class="fa fa-angle-right "></i></span>    <span id="ddr2" style="margin-top:3px;margin-right: 3px;" class="irr pull-right"><i class="fa fa-angle-down "></i></span></a>
+                                </li>
+                                <li id="breport" class="irr ir2">
                                     <a href="report">
-                                        <i class="fa fa-bar-chart"></i> Reports </a>
+                                        <i class="fa fa-bar-chart"></i> Bookings Report </a>
+                                </li>
+                                <li id="sreport" class="irr ir2">
+                                    <a href="#">
+                                        <i class="fa fa-bar-chart"></i> Schedules Report </a>
                                 </li>
                                 
                                 <li id="settingMng">
@@ -44,8 +52,8 @@
                                     <a href="create_user">
                                         <i class="fa fa-users"></i> Create User </a>
                                 </li>
-                                <li class="irr ir">
-                                    <a href="depttimeMng">
+                                <li id="depttimeMng" class="irr ir">
+                                    <a href="departure_time">
                                         <i class="fa fa-clock-o"></i> Manage Departure Time </a>
                                 </li>
                                 
@@ -78,12 +86,5 @@
                 <div class="sidebar-mobile-menu-handle" id="sidebar-mobile-menu-handle"></div>
                 <div class="mobile-menu-handle"></div>
                 <script>
-                    $(document).ready(function(){
-
-                      $( "#settingMng" ).on( "click", function() {
-                        $(".ir").slideToggle();
-                        $("#dds1").toggleClass("irr");
-                        $("#dds2").toggleClass("irr");
-                      });
-                  });
+                    
                  </script>

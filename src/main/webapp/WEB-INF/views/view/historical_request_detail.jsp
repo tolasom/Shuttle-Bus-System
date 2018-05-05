@@ -92,9 +92,10 @@ load = function () {
 	var request = data.request;
 	var locations = data.locations;
 	var p_locations = data.p_locations;
+    var all_customer = data.customers;
 	id= parseInt(request.id);
 	console.log(data)
-	$("#uname").val(request.user_id);
+	$("#uname").val(searchCustomer(request.user_id,all_customer));
 	$("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
 	$("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
 	$("#dept_date").val(formatDate(request.dept_date));
@@ -149,7 +150,13 @@ function searchPLocation(id, myArray){
     }
 }
 
-
+function searchCustomer(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
 
 
 

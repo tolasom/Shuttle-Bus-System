@@ -31,7 +31,6 @@
     <style>
         .form input,.form{
             border-radius: 5px;
-
         }
         .login-page{
             padding: 4% 0 0;
@@ -59,7 +58,6 @@
             font-size: 17px;
             font-weight: bold;
             cursor: pointer;
-
             color:#7f8c8d;
         }
         .formdev{
@@ -106,7 +104,6 @@
         .googleSign{
             margin-right: 15%;
             margin-left: 15%;
-
         }
         .abcRioButtonBlue{
             width: 100% !important;
@@ -141,7 +138,6 @@
             color: #ea534a;
             font-size: 17px;
             display: none;
-
         }
         @media only screen and (max-width: 992px) {
             .formdev{
@@ -204,7 +200,6 @@
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-
     $("#signupform").hide();
     $("#signin-btn").addClass('active-btn');
     $("#signup-btn").click(function () {
@@ -212,16 +207,12 @@
         $("#signin-btn").removeClass('active-btn');
         $("#signupform").slideDown(200)
         $("#devlogin").hide();
-
-
     })
-
     $("#signin-btn").click(function () {
         $("#signin-btn").addClass("active-btn");
         $("#signup-btn").removeClass("active-btn");
         $("#devlogin").slideDown(200)
         $("#signupform").hide()
-
     })
     function loading() {
         $(".loader").css("display","block");
@@ -232,7 +223,6 @@
         $(".loader").css("display","none");
         $(".login-page").css("opacity","1");
         document.getElementsByClassName(".login-page").disabled = false;
-
     }
     function isExistUser(email) {
         return axios.post('isexist', {
@@ -241,7 +231,6 @@
             return response.data
         })
     }
-
     $(document).ready(function () {
         var token = $('#csrfToken').val();
         var header = $('#csrfHeader').val();
@@ -252,14 +241,11 @@
             document.getElementById("login-error").innerHTML = "email or password is incorrect";
         }
     })
-
     $(function() {
         $("#signupform").validate({
-
             rules: {
                 email: {
                     required: true,
-
                     email: true
                 },
                 pass: {
@@ -292,13 +278,9 @@
                     number: "number only",
                     minlength: "invalid phone number"
                 },
-
             },
-
             submitHandler: function (form) {
                 loading()
-
-
                 var username = $('#username').val();
                 var email = $('#email').val()
                 var phone = $('#phone').val()
@@ -325,23 +307,16 @@
                                         data = 'username='+email+"--google" + '&password='+password
                                         googleSignin(data)
                                     }
-
                                 })
                                 .catch(function (error) {
                                     console.log(error);
                                 });
                         }
                     })
-
-
                 return false;
             }
         });
-
-
-
         $("#loginform").validate({
-
             rules: {
                 username: {
                     required: true,
@@ -351,7 +326,6 @@
                     required: true,
                     minlength: 8
                 }
-
             },
             messages: {
                 username: {
@@ -362,10 +336,7 @@
                     required: "*required",
                     minlength: "password must be at least 8 characters long"
                 },
-
-
             },
-
             submitHandler: function (form) {
                 var username = $("#login-username").val();
                 isExistUser(username).then(function (data) {
@@ -379,22 +350,15 @@
                         else{
                             form.submit();
                         }
-
-
                     }
                     else{
                         return false;
                     }
-
                 }
             )
-
             }
         });
     });
-
-
-
     function googleSignin(data){
         axios({
             method: 'post',
@@ -406,12 +370,9 @@
                 console.log(response)
                 var url = response.request.responseURL;
                 if(!url.includes("login")){
-
                     window.location.replace(url);
                 }
-
             })
-
     }
     function onSignIn(googleUser) {
         console.log("ll")
@@ -419,7 +380,6 @@
         var auth2 = gapi.auth2.getAuthInstance();
         console.log(document.getElementsByClassName("abcRioButtonContents"))
         auth2.disconnect();
-
         loading()
         axios.post('check_signup', {
             email: profile.getEmail(),
@@ -434,12 +394,6 @@
                 }
                 googleSignin(data);
             })
-
     };
-
-
-
-
 </script>
 </html>
-

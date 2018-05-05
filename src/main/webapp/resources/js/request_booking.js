@@ -1,6 +1,7 @@
 $(document).ready(function() {
-	 $('select').material_select();
-	 $("#source_name[required],#destination_name[required]").css({display: "inline", height: 0, padding: 0, width: 0});
+	 $('select').formSelect();
+	 $('.dropdown-button').dropdown();
+
 	 $("#departure_date").flatpickr({
 			mode: "single",
 			minDate: "today",
@@ -56,7 +57,7 @@ $(document).ready(function() {
 				}
 				console.log(l_form)
 				document.getElementById('source_name').innerHTML=l_form;
-				$('#source_name').material_select();
+				$('#source_name').formSelect();
 			},
 			error: function(e) {
 				console.log("ERROR: ", e);
@@ -89,8 +90,8 @@ $(document).ready(function() {
 						l_form+='</optgroup>';		
 					}
 					document.getElementById('destination_name').innerHTML=l_form;
-					$('#destination_name').material_select();
-					$('#select_dest_id').material_select();
+					$('#destination_name').formSelect();
+					$('#select_dest_id').formSelect();
 					
 				},
 				error: function(e) {
@@ -177,14 +178,36 @@ $(document).ready(function() {
    		 }
 	 }
 
+	 $('#book_now').click(function(event){
+		 console.log("kk mm");
+		 var source = $("#source_name").val();
+   		 var destination = $("#destination_name").val();
+   		 var time=$("#departure_time").val();
+   		 //Validation select tag
+   		if(source=="undefined"||source==null){
+	   		console.log(1);
+	   		//source *Required
+	   		$("#source_name_error").show();
+	   		if(destination=="undefined"||destination==null){
+	   			//destination *Required
+	   			$("#destination_name_error").show();
+	   			console.log(11)
+	   		}else{
+	   			$("#destination_name_error").hide();
+	   		}
+	   	}else if(destination=="undefined"||destination==null){
+	   		console.log(2);
+	   		$("#source_name_error").hide();
+	   		$("#destination_name_error").show();
+	   	}else{
+			$("#source_name_error").hide();
+	   		$("#destination_name_error").hide();
+		}
+	   	$('#form_booking_request').valid();
+	   	console.log("finsish");
+	 });
 	 $("#form_booking_request").validate({
 	        rules: {
-	        	source_name: {
-	        		 valueNotEquals: "none" 
-	            },
-	            destination_name: {
-	        		 valueNotEquals: "none" 
-	            },
 	            departure_time: {
 	        		 valueNotEquals: "none" 
 	            },
@@ -199,21 +222,14 @@ $(document).ready(function() {
 
 	        },
 	        messages: {
-	          
-	            source_name: {
-	            	required: "Source location is required"
-	            },
-	            destination_name: {
-	            	required: "Destination location is required" 
-	            },
 	            departure_time: {
-	            	required: "Departure time is required" 
+	            	required: "*Required" 
 	            },
 	            departure_date: {
-	            	required: "Departure date is required" 
+	            	required: "*Required" 
 	            },
 	            number_of_seat: {
-			         required: "Number of ticket is required",
+			         required: "*Required",
 			         min: "Manimun 1 tickets each time booking",
 			         max: "Maximun 10 tickets each time booking"
 			     }
@@ -238,58 +254,76 @@ $(document).ready(function() {
 		   		 var number_of_seat=$("#number_of_seat").val();
 		   		 var dept_dt=date+" "+time;
 		   		 console.log("dept_dt: "+dept_dt);
-		   		 if(compared_today(dept_dt)){
-		   			 $.ajax({
-						async: false,
-						cache: false,
-						type: "GET",
-						url: "customer_request_booking",
-						data :	{
-								 source:source,
-								 destination:destination,
-								 time:time,
-								 date:date,
-								 number_of_seat:number_of_seat
-						},
-						timeout: 100000,
-						success: function(data) {
-							console.log(data);
-							var text;
-							if(data=="success"){
-								text="You are sucessful booking";
-							}else if(data=="no_bus_available"){
-								text="No Bus is available";
-							}else if(data=="over_bus_available"){
-								text="Over bus available";
-							}else{
-								text="Process is error!!";
+		   		 if(source!=="undefined"&&source!==null&&destination!=="undefined"&&destination!==null){
+		   			if(compared_today(dept_dt)){
+		   				 event.preventDefault();
+			   			 $.ajax({
+							async: false,
+							cache: false,
+							type: "GET",
+							url: "customer_request_booking",
+							data :	{
+									 source:source,
+									 destination:destination,
+									 time:time,
+									 date:date,
+									 number_of_seat:number_of_seat
+							},
+							timeout: 100000,
+							success: function(data) {
+								var text;
+			   					if(data=="success"){
+			   						text='<div class="modal-content center-align">'
+					   					+'<i class="material-icons large success_icon">done</i>'
+					   					+'<h6><b>Congrats!</b></h6>'
+					   					+'<p>You have just requested successfully.</p>'
+					   					+'<p>We will get back to you very soon! </p></div>'
+					   					+'<div class="modal-footer">'
+								   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+								   	    +'</div>';
+					   				
+			   					}else{
+			   						text='<div class="modal-content center-align">'
+					   					+'<i class="material-icons large error_icon">highlight_off</i>'
+					   					+'<h6><b>Sorry, Connection Error!</b></h6>'
+					   					+'<p>Please refresh the page and try again!</p></div>'
+					   					+'<div class="modal-footer">'
+								   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+								   	    +'</div>';
+			   					}
+			   					document.getElementById('confirm').innerHTML=text;
+								$('#confirm').modal({
+									onCloseEnd: function() {
+											window.location.replace("customer_home");
+									} 
+								});
+							    $('#confirm').modal('open');
+							},
+							error: function(e) {
+								console.log("ERROR: ", e);
+							},
+							done: function(e) {
+								console.log("DONE");
 							}
-							document.getElementById('confirm_text').innerHTML=text;
-							$('#confirm').modal({
-							    complete: function() {
-										window.location.replace("request_booking");
+			   			 });
+			   		 }else{
+			   			text='<div class="modal-content center-align">'
+		   					+'<i class="material-icons large error_icon">highlight_off</i>'
+		   					+'<h6><b>Sorry, Time Was Over!</b></h6>'
+		   					+'<p>Please request before departure time!</p></div>'
+		   					+'<div class="modal-footer">'
+					   	    +'<a href="#!" class="modal-action modal-close btn green lighten-1">OK</a>'
+					   	    +'</div>';
+			   			document.getElementById('confirm').innerHTML=text;
+						$('#confirm').modal({
+							onCloseEnd: function() {
+										window.location.replace("customer_home");
 								} 
-							});
-						    $('#confirm').modal('open');
-						},
-						error: function(e) {
-							console.log("ERROR: ", e);
-						},
-						done: function(e) {
-							console.log("DONE");
-						}
-		   			 });
-		   		 }else{
-		   			var form="Please ask your booking request before departure time";
-					$("#confirm" ).addClass( "confirm_error" );
-					document.getElementById('confirm_text').innerHTML=form;
-					$('#confirm').modal({
-						    complete: function() {
-									window.location.replace("request_booking");
-							} 
-					});
-					$('#confirm').modal('open');
+						});
+						$('#confirm').modal('open');
+			   		 }
 		   		 }
+		   		 
 
 	            return false;
 	        }

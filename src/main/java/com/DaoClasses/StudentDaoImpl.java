@@ -73,13 +73,15 @@ public class StudentDaoImpl implements StudentDao{
         Map<String,Object> map = new HashMap<String, Object>();
 
         try {
-
-
             Booking_Master booking_master = new Booking_Master();
             booking_master.setUser_id(id.getAuthentic());
             booking_master.setDestination_id(book_data.getDestination());
             booking_master.setSource_id(book_data.getSource());
             booking_master.setDept_date(java.sql.Date.valueOf(book_data.getDeparture_date()));
+            booking_master.setDescription("student");
+            booking_master.setNumber_booking(1);
+            booking_master.setAdult(1);
+            booking_master.setChild(0);
             session.save(booking_master);
             if(book_data.getChoice()==2){
                 Booking_Master booking_return = new Booking_Master();
@@ -87,6 +89,10 @@ public class StudentDaoImpl implements StudentDao{
                 booking_return.setDestination_id(book_data.getSource());
                 booking_return.setSource_id(book_data.getDestination());
                 booking_return.setDept_date(java.sql.Date.valueOf(book_data.getReturn_date()));
+                booking_return.setDescription("student");
+                booking_return.setChild(0);
+                booking_return.setAdult(0);
+                booking_return.setNumber_booking(1);
                 session.save(booking_return);
             }
             session.beginTransaction().commit();
@@ -157,7 +163,6 @@ public class StudentDaoImpl implements StudentDao{
                      map.put("schedule",true);
                  }
                  list_history.add(map);
-
              }
          }
          catch (RuntimeException e) {

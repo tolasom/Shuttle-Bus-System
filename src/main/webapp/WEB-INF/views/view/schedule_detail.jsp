@@ -8,32 +8,32 @@
                                     <div class="title-block">
                                         <h3 class="title"> Schedule Detail </h3>
                                     </div>
-                                    <form class="form-inline" id="myForm">
-                                       <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                    <form class="form-inline clearfix" style="display:block;" id="myForm" >
+                                       <div class="form-group col-md-4" style="margin-bottom:2%; float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Code</label>
                                             <input type="text" class="form-control" id="scode" style="width: inherit;" placeholder=Code required disabled> </div>
-                                       <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                       <div class="form-group col-md-4" style="margin-bottom:2%; float:left;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Driver</label>
                                             <select class="form-control" style="width: inherit;" id="sdriver"><option></option></select> </div>
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%; float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Bus</label>
                                             <select class="form-control" style="width: inherit;" id="sbus" required><option></option></select> </div>                                     
-										<div class="form-group col-md-4" style="margin-bottom:2%;">
+										<div class="form-group col-md-4" style="margin-bottom:2%; float:left;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">From</label>
                                             <select class="form-control" style="width: inherit;" id="sfrom" required disabled><option></option></select> </div>
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">To</label>
                                             <select class="form-control" style="width: inherit;" id="sto" required disabled><option></option></select> </div>     
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Number of booking</label>
                                             <input type="text" class="form-control" id="snumberbooking" style="width: inherit;" placeholder="Number of booking" required disabled> </div>                                       
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;float:left;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Departure Date</label>
                                             <input type="text" class="form-control" id="sdeptdate" style="width: inherit;" placeholder="Departure Date" required disabled> </div>
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Departure Time</label>
                                             <input type="text" class="form-control" id="sdepttime" style="width: inherit;" placeholder="Departure Time" required disabled> </div>
-                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
+                                        <div class="form-group col-md-4" style="margin-bottom:2%;float:left;">
                                             <label for="exampleInputPassword3"  style="margin-right:4%;">Remaining seats</label>
                                             <input type="text" class="form-control" id="sremaining" style="width: inherit;" placeholder="Remaining seats" required disabled> </div>
                                         <div class="form-group col-md-12" style="margin-bottom:2%;">
@@ -62,6 +62,7 @@
                                                             <th>No</th>
                                                             <th>Code</th>
                                                             <th>Name</th>
+                                                            <th>Phone Number</th>
                                                             <th>Number of bookings</th>
                                                             
                                                         </tr>
@@ -173,9 +174,10 @@ var idd;
 var all_booking;
 var s_code;
 load = function () {
+	$('.sameheight-item').attr( "style", "" );
 	var bootstrapjs = $("<script>");
   	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
-  	$(bootstrapjs).appendTo('body');
+ 	$(bootstrapjs).appendTo('body');
 	var data = ${data};
 	var bookings = data.bookings;
 	var buses  = data.buses;
@@ -216,6 +218,7 @@ load = function () {
     					+'<td>'+(i+1)+'</td>'
     					+'<td>'+bookings[i].code+'</td>'
 						+'<td class="unhoverr2" style="color:blue" data-url="'+bookings[i].id+'">'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
+						+'<td>'+searchPhone(bookings[i].user_id,all_customer)+'</td>'
 						+'<td>'+bookings[i].number_booking+'</td></tr>';
 	$("#allBooking").append(booking);				
 	}
@@ -250,7 +253,7 @@ load = function () {
 
 $(document).ready(function(){
 	$("#scheduleMng").addClass("active");
-	
+	$('.sameheight-item').attr( "style", "" );
 	
 	
 	$("#myForm").on('submit',function(e){
@@ -568,6 +571,16 @@ function searchCustomer(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;
+        }
+    }
+}
+function searchPhone(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+        	if(myArray[i].phone_number==null||myArray[i].phone_number=="")
+        		return "";
+
+            return myArray[i].phone_number;
         }
     }
 }
