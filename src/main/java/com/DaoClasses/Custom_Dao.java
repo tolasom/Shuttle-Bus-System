@@ -16,7 +16,7 @@ public interface Custom_Dao {
 	Map<String,Object> user_info();
 	public Map<String, Map<String, List<Pickup_Location_Master>>> location();
 	public Map<String, Map<String, List<Pickup_Location_Master>>> check_location(int id);
-	public String customer_booking(Customer_Booking cb) throws ParseException;
+	public String customer_booking(Customer_Booking[] cb) throws ParseException;
 	public List<Map<String,Object>> departure_time_info();
 	public List<Map<String,Object>> cusomer_booking_history();
 	public String customer_request_booking(Customer_Booking cb);

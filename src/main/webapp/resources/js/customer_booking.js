@@ -926,21 +926,33 @@ $(document).ready(function() {
 							    	});
 				   				})
 				        	}else{
+				        		var submit;
+									submit = {
+											"source":source,
+					   						'destination':destination,
+					   						 'time':time,
+					   						 'date':date,
+					   						 'number_of_seat':number_of_seat,
+					   						 'adult':adult,
+					   						 'child':child
+										
+									};
+//									submit[1]={'source':destination,
+//					   						 'destination':source,
+//					   						 'time':time,
+//					   						 'date':"2018-05-26",
+//					   						 'number_of_seat':number_of_seat,
+//					   						 'adult':adult,
+//					   						 'child':child}
+									console.log(submit)
 				        		
 				        		$.ajax({
 					   				async: false,
 					   				cache: false,
-					   				type: "GET",
+					   				type: "POST",
 					   				url: "customer_booking",
-					   				data :	{
-					   						 source:source,
-					   						 destination:destination,
-					   						 time:time,
-					   						 date:date,
-					   						 number_of_seat:number_of_seat,
-					   						 adult:adult,
-					   						 child:child
-					   				},
+					   				contentType : "application/json",
+					   				data :	JSON.stringify(submit),
 					   				timeout: 100000,
 					   				success: function(data) {
 					   					console.log(data);

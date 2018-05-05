@@ -9,10 +9,12 @@ import java.util.Map;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.EntityClasses.Pickup_Location_Master;
@@ -95,13 +97,9 @@ public class CustomerController {
 	//=========================Customer Booking Information================================
 	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
 	public @ResponseBody String customer_booking(Customer_Booking cb) throws ParseException {
-			System.out.println(cb.getDate());
-			System.out.println(cb.getTime());
-			System.out.println(cb.getNumber_of_seat());
-			System.out.println(cb.getSource());
-			System.out.println(cb.getDestination());
-			String ret = customer.customer_booking(cb);
-			return ret;
+			System.out.println("PLPLPPPPPPPPPPPPPPP: "+cb);
+			//String ret = customer.customer_booking(cb);
+			return null;
 		}	
 	
 	//=========================confirm_phone_number================================
@@ -143,7 +141,6 @@ public class CustomerController {
 		@RequestMapping(value="/get_request_booking", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String,Object>> get_request_booking() {
 		List<Map<String, Object>> map = customer.get_request_booking();
-		System.out.println("KKKKKKKKKKKKKKK5555555555555");
         System.out.println(map);
 		return map;
 	}	
