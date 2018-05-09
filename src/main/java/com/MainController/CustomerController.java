@@ -7,19 +7,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import com.ModelClasses.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.EntityClasses.Pickup_Location_Master;
-import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.New_Pickup_Location;
-import com.ModelClasses.UserModel;
 
 
 @Controller
@@ -163,12 +158,12 @@ public class CustomerController {
 			return map;
 		}	
 	//=========================To Cancel Booking Ticket================================
-	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.GET)
-		public @ResponseBody String cancel_booking_ticket(int id) {
-		String ret = customer.cancel_booking_ticket(id);
+	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
+		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Delete id_delete) {
+
+		String ret = customer.cancel_booking_ticket(id_delete.getId());
 		return ret;
 	}
-
 
 	@RequestMapping(value="/customer/**")
 	public ModelAndView customer_mobile() {

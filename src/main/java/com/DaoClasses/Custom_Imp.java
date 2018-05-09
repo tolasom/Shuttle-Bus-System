@@ -399,11 +399,11 @@ public class Custom_Imp implements Custom_Dao{
                 	System.out.println("LL: "+bh.get(i).getSchedule_id());
                 	Bus_Master bus=new Bus_Master();
                 	bus = (Bus_Master) session.createQuery("from Bus_Master where id=?").setParameter(0, sch_ma.getBus_id()).list().get(0);
-                	
-                	ByteArrayOutputStream out = QRCode.from(cr.get(i).getQr().toString()).to(ImageType.PNG).stream();  
+
+                	ByteArrayOutputStream out = QRCode.from(cr.get(i).getQr().toString()).to(ImageType.PNG).stream();
     				byte[] test = out.toByteArray();
     				String encodedImage = Base64.getEncoder().encodeToString(test);
-                	
+
                 	Map<String,Object> map=new HashMap<String,Object>();
                 	map.put("booking_code", cr.get(i).getCode());
                 	map.put("id", bh.get(i).getId());

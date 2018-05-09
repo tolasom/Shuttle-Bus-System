@@ -12,4 +12,5 @@ public interface StudentDao {
     public Map<String,Object> student_booking(Student_Booking book_data);
     public List<Object> list_booking_date();
     public List<Map<String,Object>>getHistory();
+    public Map<String,Object> customerHistory();
 }

@@ -42,16 +42,18 @@ public class StudentController {
 
 
     @RequestMapping(value = "/list_booking_date", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Object> list_booking_date() {
+    @ResponseBody public List<Object> list_booking_date() {
         return studentDao.list_booking_date();
     }
 
-    @RequestMapping(value = "/list_history", method = RequestMethod.GET)
-    @ResponseBody
+
+    @RequestMapping(value = "/student_history", method = RequestMethod.GET)
     public List<Map<String, Object>> getHistory() {
         return studentDao.getHistory();
     }
+
+    @RequestMapping(value = "/customer_history_all", method = RequestMethod.GET)
+    @ResponseBody public Map<String,Object> customerHistory(){ return studentDao.customerHistory(); }
 
     //@Scheduled(cron="*/5 * * * * *")
     public void updateEmployeeInventory() {

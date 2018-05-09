@@ -54,6 +54,7 @@ com/DaoClasses/Student_Dao.class
 com/MainController/AdminController.class
 com/LoginFilter/LoginFilterClass.class
 com/Config/Core/SpringSecurityInitializer.class
+com/ModelClasses/ID_Delete.class
 com/EncryptionDecryption/Decryption.class
 com/EncryptionDecryption/Encryption.class
 com/ServiceClasses/Customer_Service_Imp.class
