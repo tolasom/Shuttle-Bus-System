@@ -926,8 +926,8 @@ $(document).ready(function() {
 							    	});
 				   				})
 				        	}else{
-				        		var submit;
-									submit = {
+				        		var submit=[];
+									submit[0] = {
 											"source":source,
 					   						'destination':destination,
 					   						 'time':time,
@@ -945,8 +945,13 @@ $(document).ready(function() {
 //					   						 'adult':adult,
 //					   						 'child':child}
 									console.log(submit)
-				        		
-				        		$.ajax({
+									axios.defaults.headers.common[window.headerName]=window.token
+					        		axios.post('customer_booking',submit)
+									  .then(res =>{
+									    console.log(res);
+									  })
+									  
+				        		/*$.ajax({
 					   				async: false,
 					   				cache: false,
 					   				type: "POST",
@@ -1008,7 +1013,7 @@ $(document).ready(function() {
 					   				done: function(e) {
 					   					console.log("DONE");
 					   				}
-					   		});
+					   		});*/
 				        	}
 					   		 
 				   		 }else{

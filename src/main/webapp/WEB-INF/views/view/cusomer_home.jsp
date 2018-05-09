@@ -19,6 +19,7 @@
   
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -324,7 +325,12 @@
 	    </div>
 	</form>
 </div>
-
+	<input type="hidden" id="csrfToken" value="${_csrf.token}"/>
+        <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
+        <script>
+             window.token = document.getElementById("csrfToken").value
+             window.headerName = document.getElementById("csrfHeader").value
+        </script>
 	<form action="logout" method="post" id="logoutForm">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	</form>

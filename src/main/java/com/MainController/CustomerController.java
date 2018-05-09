@@ -4,10 +4,10 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +35,6 @@ public class CustomerController {
 	}
 	
 	//========================= Sign Up UI================================
-		@RequestMapping(value="/customer/**")
-		public ModelAndView customer() {
-			return new ModelAndView("customer_mobile");
-		}
 		
 	//=========================check_booking_request Information================================
 	@RequestMapping(value="/today", method=RequestMethod.GET)
@@ -95,11 +91,16 @@ public class CustomerController {
 			return ret;
 	}
 	//=========================Customer Booking Information================================
-	@RequestMapping(value="/customer_booking", method=RequestMethod.GET)
-	public @ResponseBody String customer_booking(Customer_Booking cb) throws ParseException {
-			System.out.println("PLPLPPPPPPPPPPPPPPP: "+cb);
-			//String ret = customer.customer_booking(cb);
-			return null;
+
+	@RequestMapping(value="/customer_booking", method=RequestMethod.POST)
+	public @ResponseBody String customer_booking(@RequestBody Customer_Booking[] cb) throws ParseException {
+			System.out.println("KKKKKKKKKKKKKKKKKKKKKKK: "+cb[0].getDate());
+			for(int i=0;i<cb.length;i++){
+				cb[i].setStatus("book");
+			}
+			String ret = customer.customer_booking(cb);
+			return ret;
+
 		}	
 	
 	//=========================confirm_phone_number================================
@@ -168,14 +169,32 @@ public class CustomerController {
 		String ret = customer.cancel_booking_ticket(id);
 		return ret;
 	}
+
+
+	@RequestMapping(value="/customer/**")
+	public ModelAndView customer_mobile() {
+		return new ModelAndView("customer_mobile");
+	}
+
+
+
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/get_qrcode", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String, Object>> get_qrcode(int id) {
 		List<Map<String, Object>> ret = customer.get_qrcode(id);
 		return ret;
 	}
+
+	@RequestMapping(value="/date_time")
+	public String DateTime(){
+		Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+	}
 //	@Scheduled(cron="*/5 * * * * *")
-//    public void updateEmployeeInventory(){
-//        System.out.println("Started cron job 1");
-//    }
+//  public void updateEmployeeInventory(){
+//      System.out.println("Started cron job 1");
+//  }
 }

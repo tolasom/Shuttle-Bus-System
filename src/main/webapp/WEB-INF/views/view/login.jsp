@@ -4,6 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="934878702971-vhv1inbu6cg8m4cggh4itr8mfuuidoo9.apps.googleusercontent.com">
     <title>Shuttle Bus Management</title>
@@ -152,9 +153,7 @@
 <div >
     <div class="loader"></div>
     <div class="login-page" style="width: unset !important;">
-
         <ul class="form" style="padding: 0;padding-top:0px">
-
             <table class="switch">
                 <tr>
                     <td id="signin-btn" style="border-top-left-radius: 4px">SIGN IN</td>
@@ -163,7 +162,6 @@
             </table>
             <div class="formdev">
                 <h1 class="title-header">vKIRIROM SHUTTLE BUS</h1>
-
                 <form id="signupform" action="<c:url value='signup' />" onsubmit="return false" method="post">
                     <label for="email"></label>
                     <input type='text'placeholder="Email" name='email' id="email">
@@ -172,7 +170,6 @@
                     <input type='text'placeholder="Username" name='username' id="username">
                     <input type='text'placeholder="Phone" name="phone" id="phone">
                     <input type="submit" class="submit-btn" value="SIGNUP" >
-
                 </form>
                 <div id="devlogin">
                     <p class="login-error" id="login-error"></p>
@@ -182,39 +179,25 @@
                         <input type="submit" value="LOGIN" class="submit-btn">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     </form>
-
                     <table style="width: 100%;text-align: center !important;">
                         <tr>
-
                             <td>
                                 <div class="g-signin2 googleSign" data-onsuccess="onSignIn" data-theme="dark"></div>
                             </td>
-
                         </tr>
                         <tr>
-
                             <td class="forgort">
                                 Forgot Password?
                             </td>
-
                         </tr>
-
                     </table>
                 </div>
-
             </div>
-
-
         </ul>
-
-
     </div>
 </div>
-
-
 <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
-
 </body>
 <script type="text/javascript">
     $("#signupform").hide();
