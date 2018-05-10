@@ -125,6 +125,12 @@ public class CustomerController {
 			String ret = customer.customer_request_booking(cb);
 			return ret;
 	}
+	//=========================Customer Request Booking Information================================
+	@RequestMapping(value="/cancel_request_booking", method=RequestMethod.GET)
+	public @ResponseBody String cancel_request_booking(int id) {
+		String ret = customer.cancel_request_booking(id);
+			return ret;
+	}
 	//=========================To get Booking History of User================================
 	@RequestMapping(value="/booking_history")
 	public ModelAndView booking_history() {
