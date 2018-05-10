@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
+import com.DaoClasses.Request_Booking;
+import com.DaoClasses.Request_Booking_Dao;
 import com.EntityClasses.Pickup_Location_Master;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
@@ -112,7 +114,8 @@ public class CustomerController {
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
 	public @ResponseBody String request_book_now(int id) throws ParseException {
-		String ret = customer.request_book_now(id);
+		Request_Booking_Dao req=new Request_Booking();
+		String ret = req.request_book_now(id);
 		System.out.println(id);
 		return ret;
 	}

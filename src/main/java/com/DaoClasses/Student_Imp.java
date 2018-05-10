@@ -154,8 +154,10 @@ public class Student_Imp implements Student_Dao{
 //        	>  Query time
     		List<Time> list_time=stu.getAvailableTime(tmr_dt, session);
 //        	>  Query from, Query to -----> permutation of from and to --> list of round
+    		System.out.println("list_time: ");
     		System.out.println(list_time);
     		List<int[]> list_round= stu.getListRound(session);  
+    		System.out.println("list_round: " );
     		System.out.println(list_round);
 //        	-----> Loop time and round ---> Assign with schedule function base on list>0
     		for(int i=0;i<list_time.size();i++){
@@ -179,7 +181,7 @@ public class Student_Imp implements Student_Dao{
         				cb.setDestination(list_round.get(j)[1]);
         				Student_Imp booking=stu.student_schedule(session, cb);
         				System.out.println("PPLLLL");
-        				System.out.println(booking.total_bus);
+        				System.out.println(booking.list_bus_choosen);
     				}
     				
     			}
@@ -323,11 +325,12 @@ public class Student_Imp implements Student_Dao{
 	          	if(passenger_seat<=existing_bus_seat){
 	          		//Assign student with existing schedule
 	          		stu.asign_to_existing_schedule(session, list_stu, schedule);
+	          		System.out.println("asign_to_existing_schedule--------->");
 	          	}//Else re-create schedule
 	          	else{
 	          	//query list of all available bus (result must be in order number of seat for small to big )
 	                all_bus= student_Imp.get_all_bus(session,cb,cb.getSource(),cb.getDestination());
-    	        
+	                System.out.println("Get ALL Buses--------->: "+all_bus.size());
 	    	        //if have bus or have no bus
 	                if(all_bus.size()>0){
 	                	//5. Fins total seat of all bus
