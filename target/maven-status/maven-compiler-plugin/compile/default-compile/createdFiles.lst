@@ -15,14 +15,12 @@ com\DaoClasses\Student_Imp.class
 com\DaoClasses\Student_Dao.class
 com\EntityClasses\Location_Master.class
 com\EntityClasses\Bus_Master.class
-com\MainController\CustomerController.class
 com\ModelClasses\New_Pickup_Location.class
 com\EntityClasses\Dept_Time_Master.class
 com\EntityClasses\UserRole.class
 com\LoginFilter\LoginFilterClass.class
 com\ModelClasses\Project_Model.class
 com\ModelClasses\Customer_Booking.class
-com\DaoClasses\Custom_Dao.class
 com\client_mail\ApplicationConfig.class
 com\DaoClasses\usersDao.class
 getInfoLogin\IdUser.class

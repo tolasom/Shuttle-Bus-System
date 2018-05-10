@@ -3,6 +3,7 @@ package com.DaoClasses;
 import getInfoLogin.IdUser;
 
 import java.io.ByteArrayOutputStream; 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,10 +32,9 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
 
-public class Request_Booking implements Request_Booking_Dao{
+public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	IdUser user=new IdUser();
 	public String TimeNow(){
 		Date d=new Date();
@@ -67,7 +67,7 @@ public class Request_Booking implements Request_Booking_Dao{
 	}
 	public static String getScheduleSequence(){ 
 		  List<Schedule_Master> schedules = new ArrayList<Schedule_Master>(); 
-		  schedules = new Request_Booking().getAllSchedules(); 
+		  schedules = new Set_Student_Schedule().getAllSchedules(); 
 		  int code; 
 		  String scode= "000001"; 
 		  for(Schedule_Master s : schedules) 
@@ -103,7 +103,7 @@ public class Request_Booking implements Request_Booking_Dao{
 		 }
 	 public static String getBookingSequence(){ 
 		  List<Booking_Master> bookings = new ArrayList<Booking_Master>(); 
-		  bookings = new Request_Booking().getAllBookings(); 
+		  bookings = new Set_Student_Schedule().getAllBookings(); 
 		  int code; 
 		  String scode= "000001"; 
 		  for(Booking_Master s : bookings) 
@@ -145,7 +145,133 @@ public class Request_Booking implements Request_Booking_Dao{
 	int total_bus=0;			// permanent use (value will never change)
 	List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>();	
 		
-	public String customer_booking(Customer_Booking[] customer_booking) throws ParseException{	
+	public void createSchedule() throws ParseException{
+		System.out.println("  createSchedule() ");
+		Set_Student_Schedule_Dao stu=new Set_Student_Schedule();
+		Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession(); 
+        try {
+        	trns = session.beginTransaction();
+        	Set_Student_Schedule s=new Set_Student_Schedule();
+    		String tmr_dt=s.TomorrowDateTime();
+    		String tmr_date=tmr_dt.split(" ")[0];
+    		String tmr_time=tmr_dt.split(" ")[1];
+//        	>  Query time
+    		List<Time> list_time=stu.getAvailableTime(tmr_dt, session);
+//        	>  Query from, Query to -----> permutation of from and to --> list of round
+    		System.out.println("list_time: ");
+    		System.out.println(list_time);
+    		List<int[]> list_round= stu.getListRound(session);  
+    		System.out.println("list_round: " );
+    		System.out.println(list_round);
+//        	-----> Loop time and round ---> Assign with schedule function base on list>0
+    		for(int i=0;i<list_time.size();i++){
+    			for(int j=0; j<list_round.size();j++){
+    				List<Booking_Master> booked=session.createQuery("from Booking_Master where description='student' and dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+    						.setDate("date",java.sql.Date.valueOf(tmr_date))
+    						.setTime("time", java.sql.Time.valueOf(list_time.get(i).toString()))
+    						.setParameter("to", list_round.get(j)[0])
+    						.setParameter("from", list_round.get(j)[1]).list();
+    				
+    				if(booked.size()>0){
+    					System.out.println(booked.get(0).getDept_time());
+        				System.out.println(booked.get(0).getDept_date());
+        				System.out.println(booked.get(0).getSchedule_id());
+        				System.out.println();
+    					Customer_Booking cb=new Customer_Booking();
+        				cb.setDate(tmr_date);
+        				cb.setTime(list_time.get(i).toString());
+        				cb.setNumber_of_seat(1);
+        				cb.setSource(list_round.get(j)[0]);
+        				cb.setDestination(list_round.get(j)[1]);
+        				String booking=stu.student_schedule(session, cb);
+        				System.out.println("PPLLLL");
+    				}
+    				
+    			}
+    		}
+        	//trns.commit();
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        	trns.rollback();
+        }finally {
+            session.flush();
+            session.close();
+        } 
+	}
+	
+	public List <Schedule_Master> get_schedules(Session session,Customer_Booking cb){ 
+	  	  List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>(); 
+
+	  	        try { 
+	  	        	schedules=session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+							.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+							.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+							.setParameter("to", cb.getDestination())
+							.setParameter("from", cb.getSource()).list();
+	  	        } catch (RuntimeException e) { 
+	  	            e.printStackTrace(); 
+	  	            return schedules; 
+	  	        } 
+	  	        return schedules; 
+	  	   
+	  	 }
+	public List<Time> getAvailableTime(String tmr_dt, Session session){
+		List<Time> list_time=new ArrayList<Time>();   
+        try {
+        	Student_Imp s=new Student_Imp();
+    		String tmr_date=tmr_dt.split(" ")[0];
+    		String tmr_time=tmr_dt.split(" ")[1];
+    		List<Time> list_time1=new ArrayList<Time>();   
+    		List<Time> list_time2=new ArrayList<Time>();   
+    		list_time1 = session.createQuery("select dept_time from Booking_Master where dept_date=? "
+        			+ "and description='student' and schedule_id='0' group by dept_date, "
+        			+ "dept_time, from_id, to_id ").setDate(0, java.sql.Date.valueOf(s.DateNow())).list();
+    		
+        	list_time2 = session.createQuery("select dept_time from Booking_Master where dept_date=? "
+        			+ "and description='student' and schedule_id='0' group by dept_date, "
+        			+ "dept_time, from_id, to_id ").setDate(0, java.sql.Date.valueOf(tmr_date)).list();
+            for(int i=0;i<list_time1.size();i++){
+            	Time time=list_time1.get(i);
+            	System.out.println(time.after(java.sql.Time.valueOf(tmr_time)));
+            	if(time.after(java.sql.Time.valueOf(tmr_time))){
+            		list_time.add(time);
+            	}
+            }
+            for(int i=0;i<list_time2.size();i++){
+            	Time time=list_time2.get(i);
+            	System.out.println(time.before(java.sql.Time.valueOf(tmr_time)));
+            	if(time.before(java.sql.Time.valueOf(tmr_time))){
+            		list_time.add(time);
+            	}
+            }
+            
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }  
+		return list_time;
+		
+	}
+	public List<int[]> getListRound(Session session){
+		List<int[]> list_round=new ArrayList<int[]>();  
+        try {
+        	List<Location_Master> locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
+        	for(int i=0;i<locat.size();i++){
+        		for(int j=0;j<locat.size();j++){
+        			if(locat.get(i).getId()!=locat.get(j).getId()){
+        				int[] li={locat.get(i).getId(),locat.get(j).getId()};
+        				list_round.add(li);
+        			}
+        		}
+        	}
+            
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }  
+		return list_round;
+		
+	}
+	public String student_schedule(Customer_Booking cb) throws ParseException{	
 		System.out.println("customer_booking");
 		Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession(); 
@@ -153,18 +279,15 @@ public class Request_Booking implements Request_Booking_Dao{
 		try {
             trns = session.beginTransaction();
             
-            //======================== Start loop create schedule ====================================
-            for(int x=0;x<customer_booking.length;x++){
-            	System.out.println("cb.length...");
-            	Customer_Booking cb=customer_booking[x];
+            	//======================== Start loop create schedule ====================================
             	int total_seat_of_all_bus=0;
                 int number_of_passenger=0;
                 List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();
                 List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();  
                 List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
-                Request_Booking_Dao custom_imp=new Request_Booking();
-                Request_Booking c=new Request_Booking();
-                Request_Booking booking=new Request_Booking();
+                Set_Student_Schedule_Dao custom_imp=new Set_Student_Schedule();
+                Set_Student_Schedule c=new Set_Student_Schedule();
+                Set_Student_Schedule booking=new Set_Student_Schedule();
                 booking.list=new ArrayList<List<Map<String,Object>>>();
                 booking.total_choosen_bus_list=new ArrayList<Integer>();
                 booking.list_bus_choosen=new ArrayList<List<Map<String,Object>>>();
@@ -198,7 +321,7 @@ public class Request_Booking implements Request_Booking_Dao{
         				new_booker.setUser_id(user.getAuthentic());
         				new_booker.setNumber_booking(cb.getNumber_of_seat());
         				new_booker.setNotification("Booked");
-        				new_booker.setCode(Request_Booking.getBookingSequence());
+        				new_booker.setCode(Set_Student_Schedule.getBookingSequence());
         				new_booker.setSchedule_id(schedule.get(i).getId());
         				new_booker.setAdult(cb.getAdult());
         				new_booker.setChild(cb.getChild());
@@ -267,7 +390,7 @@ public class Request_Booking implements Request_Booking_Dao{
                             		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                             		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                             		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                            		sch.setCode(Request_Booking.getScheduleSequence());
+                            		sch.setCode(Set_Student_Schedule.getScheduleSequence());
                             		session.save(sch);
                             		for(int y=0;y<sch_with_users.get(h).size();y++){
                             			System.out.println("kkkkk1122");
@@ -317,8 +440,7 @@ public class Request_Booking implements Request_Booking_Dao{
         	      	    //return "no_bus_available";
         	        }
               	}
-            }
-            //======================== End loop create schedule ====================================        
+
             trns.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -331,7 +453,7 @@ public class Request_Booking implements Request_Booking_Dao{
 		return "success";
 	}	
 	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin){
-		Request_Booking c=new Request_Booking();
+		Set_Student_Schedule c=new Set_Student_Schedule();
 		try{
 			// Record Booking of customer but haven't assign schedule yet
     		Booking_Master new_booker=new Booking_Master();
@@ -346,7 +468,7 @@ public class Request_Booking implements Request_Booking_Dao{
 			new_booker.setUser_id(user.getAuthentic());
 			new_booker.setNumber_booking(cb.getNumber_of_seat());
 			new_booker.setNotification("Unassigned");
-			new_booker.setCode(Request_Booking.getBookingSequence());
+			new_booker.setCode(Set_Student_Schedule.getBookingSequence());
 			new_booker.setAdult(cb.getAdult());
 			new_booker.setChild(cb.getChild());
 			new_booker.setDescription("customer");
@@ -356,13 +478,13 @@ public class Request_Booking implements Request_Booking_Dao{
 	    	e.printStackTrace();
 	    }        
 	}
-	public Map<Object, List<Booking_Master>> create_schedule(Request_Booking booking,Session session, List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus,int number_of_passenger){	
+	public Map<Object, List<Booking_Master>> create_schedule(Set_Student_Schedule booking,Session session, List<Map<String,Object>> all_bus, List<Booking_Master> all_booker1, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, Customer_Booking cb, int total_seat_of_all_bus,int number_of_passenger){	
 		System.out.println("create_schedule");
 		Boolean recursive=true;
 		List<Booking_Master> user_sch_assign=new ArrayList<Booking_Master>();
         Map<Object,List<Booking_Master>> sch_with_users=new HashMap<Object,List<Booking_Master>>();
-        Request_Booking_Dao custom_imp=new Request_Booking();  
-        Request_Booking c=new Request_Booking();
+        Set_Student_Schedule_Dao custom_imp=new Set_Student_Schedule();  
+        Set_Student_Schedule c=new Set_Student_Schedule();
 //		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		while(recursive){
 			int ib=0; //index of passenger
@@ -438,7 +560,7 @@ public class Request_Booking implements Request_Booking_Dao{
 		    				new_booker.setUser_id(user.getAuthentic());
 		    				new_booker.setNumber_booking(cb.getNumber_of_seat());
 		    				new_booker.setNotification("Booked");
-		    				new_booker.setCode(Request_Booking.getBookingSequence());
+		    				new_booker.setCode(Set_Student_Schedule.getBookingSequence());
 		    				new_booker.setAdult(cb.getAdult());
 		    				new_booker.setChild(cb.getChild());
 		    				new_booker.setDescription("customer");
@@ -481,7 +603,7 @@ public class Request_Booking implements Request_Booking_Dao{
 		  
 		return sch_with_users;
 	}
-	public List<List<Map<String,Object>>> choose_correct_bus(Request_Booking booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus){ 
+	public List<List<Map<String,Object>>> choose_correct_bus(Set_Student_Schedule booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus){ 
 		System.out.println("choose_correct_bus");
 		List<List<Map<String,Object>>> list_bus_choosen =new ArrayList<List<Map<String,Object>>>(); 
 		booking.total_bus = all_bus.size();											
@@ -533,7 +655,7 @@ public class Request_Booking implements Request_Booking_Dao{
 		List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> same_date_route =new ArrayList<Map<String,Object>>();
 		List<Map<String,Object>> same_date_diff_route =new ArrayList<Map<String,Object>>();
-		Request_Booking_Dao custom_imp=new Request_Booking();
+		Set_Student_Schedule_Dao custom_imp=new Set_Student_Schedule();
 		try {
 			same_date_route=custom_imp.same_date_same_route(session, cb, from, to);
 			List<Integer> unava1= (List<Integer>) same_date_route.get(0).get("unavailable_bus");
@@ -661,7 +783,7 @@ public class Request_Booking implements Request_Booking_Dao{
         }    
 	}
 	
-    static void combinationUtil(Request_Booking booking,List<Map<String,Object>> all_bus, List<Map<String,Object>> data, int start,
+    static void combinationUtil(Set_Student_Schedule booking,List<Map<String,Object>> all_bus, List<Map<String,Object>> data, int start,
                                 int end, int index, int r,int all_p,int all_bus_seat)
     {
         if (index == r)
@@ -713,7 +835,7 @@ public class Request_Booking implements Request_Booking_Dao{
         }
     }
 
-    static void printCombination(Request_Booking booking,List<Map<String,Object>> all_bus, int n, int r,int all_p,int all_bus_seat)
+    static void printCombination(Set_Student_Schedule booking,List<Map<String,Object>> all_bus, int n, int r,int all_p,int all_bus_seat)
     {
         // A temporary array to store all combination one by one
         ///int data[]=new int[r];
@@ -723,7 +845,7 @@ public class Request_Booking implements Request_Booking_Dao{
         combinationUtil(booking,all_bus, data, 0, n-1, 0, r,all_p,all_bus_seat);
     }
   
-    public List<Integer> get_existing_bus_and_driver(Request_Booking booking,Session session,Customer_Booking cb,int from, int to){
+    public List<Integer> get_existing_bus_and_driver(Set_Student_Schedule booking,Session session,Customer_Booking cb,int from, int to){
     	List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
     	List<Integer> final_driver_list=new ArrayList<Integer>();
 		try {
@@ -795,8 +917,49 @@ public class Request_Booking implements Request_Booking_Dao{
     }
     //======================== combination for choosing bus till here ============================
 
+	public String customer_request_booking(Customer_Booking cb){
+		IdUser user= new IdUser();
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();       
+        Booking_Request_Master book = new Booking_Request_Master();
+        Set_Student_Schedule c=new Set_Student_Schedule();
+		try {
+            trns1 = session.beginTransaction();
+            Pickup_Location_Master pick_source=new Pickup_Location_Master();
+          	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getSource()).list().get(0);
+          	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+          	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
+            
+          	
+            book.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+            book.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+            book.setDescription(cb.getDescription());
+            book.setSource_id(cb.getSource());
+            book.setFrom_id(pick_source.getLocation_id());
+            book.setDestination_id(cb.getDestination());
+            book.setTo_id(pick_destin.getLocation_id());
+            book.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+            book.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+            book.setNumber_of_booking(cb.getNumber_of_seat());
+            book.setAdult(cb.getAdult());
+            book.setChild(cb.getChild());
+            book.setUser_id(user.getAuthentic());
+            book.setEnabled(true);
+            book.setStatus("Pending");
+            session.save(book);
+            trns1.commit();
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        	return "error";
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+		return "success";
+	}
 	public String request_book_now(int id) throws ParseException{
-		Request_Booking_Dao cus=new Request_Booking();
+		Set_Student_Schedule_Dao cus=new Set_Student_Schedule();
 		Transaction trns1 = null;
 		Customer_Booking cb=new Customer_Booking();
 		Customer_Booking[] arr_cb=new Customer_Booking[1];
@@ -811,19 +974,13 @@ public class Request_Booking implements Request_Booking_Dao{
             cb.setSource(br.getSource_id());
             cb.setDestination(br.getDestination_id());
             cb.setNumber_of_seat(br.getNumber_of_booking());
-            arr_cb[0]=cb;
-            System.out.println();
-            System.out.println(arr_cb[0].getDate());
-            System.out.println(arr_cb[0].getTime());
-            System.out.println(arr_cb[0].getSource());
-            System.out.println(arr_cb[0].getDestination());
-            book=cus.customer_booking(arr_cb);
-            if(book.equals("success")||book.equals("over_bus_available")||book.equals("no_bus_available")){
-            	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-            	query.setParameter("id", id);
-            	int result = query.executeUpdate();
-            	trns1.commit();
-            }
+            book=cus.student_schedule(session,cb);
+           // if(book.equals("success")||book.equals("over_bus_available")||book.equals("no_bus_available")){
+//            	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
+//            	query.setParameter("id", id);
+//            	int result = query.executeUpdate();
+//            	trns1.commit();
+//            }
 //            else if(book.equals("over_bus_available")||book.equals("no_bus_available")){
 //            	Query query = session.createQuery("update Booking_Request_Master set status='Rejected' where id = :id");
 //            	query.setParameter("id", id);
@@ -841,12 +998,6 @@ public class Request_Booking implements Request_Booking_Dao{
 		return book;
 	}
 
-	
-	
-	
-	
-	
-	
 	
 	
 	

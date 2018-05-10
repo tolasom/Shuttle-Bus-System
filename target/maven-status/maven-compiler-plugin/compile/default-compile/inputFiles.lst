@@ -10,6 +10,8 @@ C:\workspace\Shuttle-Bus-System\src\main\java\com\MainController\StudentControll
 C:\workspace\Shuttle-Bus-System\src\main\java\com\EntityClasses\Batch_Master.java
 C:\workspace\Shuttle-Bus-System\src\main\java\com\HibernateUtil\HibernateUtil.java
 C:\workspace\Shuttle-Bus-System\src\main\java\com\DaoClasses\Request_Booking_Dao.java
+C:\workspace\Shuttle-Bus-System\src\main\java\com\DaoClasses\Set_Student_Schedule.java
+C:\workspace\Shuttle-Bus-System\src\main\java\com\DaoClasses\Set_Student_Schedule_Dao.java
 C:\workspace\Shuttle-Bus-System\src\main\java\com\DaoClasses\usersDao.java
 C:\workspace\Shuttle-Bus-System\src\main\java\com\LoginFilter\LoginGoogle.java
 C:\workspace\Shuttle-Bus-System\src\main\java\com\EntityClasses\Schedule_Master.java
