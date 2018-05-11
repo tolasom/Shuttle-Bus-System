@@ -1,6 +1,6 @@
 package com.ModelClasses;
 
-public class ID_Delete {
+public class ID_Class {
 
     private int id;
 

@@ -4,16 +4,20 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.ModelClasses.*;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
+import com.DaoClasses.Request_Booking;
+import com.DaoClasses.Request_Booking_Dao;
 import com.EntityClasses.Pickup_Location_Master;
 
 
@@ -85,15 +89,16 @@ public class CustomerController {
 			return ret;
 	}
 	//=========================Customer Booking Information================================
+
 	@RequestMapping(value="/customer_booking", method=RequestMethod.POST)
-	public @ResponseBody String customer_booking(@RequestBody Customer_Booking cb) throws ParseException {
-			System.out.println(cb.getDate());
-			System.out.println(cb.getTime());
-			System.out.println(cb.getNumber_of_seat());
-			System.out.println(cb.getSource());
-			System.out.println(cb.getDestination());
+	public @ResponseBody String customer_booking(@RequestBody Customer_Booking[] cb) throws ParseException {
+			System.out.println("KKKKKKKKKKKKKKKKKKKKKKK: "+cb[0].getDate());
+			for(int i=0;i<cb.length;i++){
+				cb[i].setStatus("book");
+			}
 			String ret = customer.customer_booking(cb);
 			return ret;
+
 		}	
 	
 	//=========================confirm_phone_number================================
@@ -103,10 +108,11 @@ public class CustomerController {
 		return ret;
 	}
 	//=========================Request Book Now================================
-	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
-	public @ResponseBody String request_book_now(int id) throws ParseException {
-		String ret = customer.request_book_now(id);
-		System.out.println(id);
+	@RequestMapping(value="/request_book_now", method=RequestMethod.POST)
+	public @ResponseBody String request_book_now(@RequestBody ID_Class id_class) throws ParseException {
+		Request_Booking_Dao req=new Request_Booking();
+		String ret = req.request_book_now(id_class.getId());
+		System.out.println(id_class.getId());
 		return ret;
 	}
 	//=========================Customer Request Booking Information================================
@@ -135,7 +141,6 @@ public class CustomerController {
 		@RequestMapping(value="/get_request_booking", method=RequestMethod.GET)
 		public @ResponseBody List<Map<String,Object>> get_request_booking() {
 		List<Map<String, Object>> map = customer.get_request_booking();
-		System.out.println("KKKKKKKKKKKKKKK5555555555555");
         System.out.println(map);
 		return map;
 	}	
@@ -159,7 +164,7 @@ public class CustomerController {
 		}	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
-		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Delete id_delete) {
+		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Class id_delete) {
 
 		String ret = customer.cancel_booking_ticket(id_delete.getId());
 		return ret;
@@ -178,8 +183,17 @@ public class CustomerController {
 		List<Map<String, Object>> ret = customer.get_qrcode(id);
 		return ret;
 	}
+
+	@RequestMapping(value="/date_time")
+	public String DateTime(){
+		Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+	}
 //	@Scheduled(cron="*/5 * * * * *")
-//    public void updateEmployeeInventory(){
-//        System.out.println("Started cron job 1");
-//    }
+//  public void updateEmployeeInventory(){
+//      System.out.println("Started cron job 1");
+//  }
 }

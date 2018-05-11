@@ -12,6 +12,8 @@ public class Booking_Request_Master {
 	private Time dept_time;
 	private Date dept_date;
 	private int number_of_booking;
+	private int child;
+	private int adult;
 	private String provided_date;
 	private String provided_time;
 	private String description;
@@ -119,4 +121,17 @@ public class Booking_Request_Master {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
+	public int getChild() {
+		return child;
+	}
+	public void setChild(int child) {
+		this.child = child;
+	}
+	public int getAdult() {
+		return adult;
+	}
+	public void setAdult(int adult) {
+		this.adult = adult;
+	}
+	
 }

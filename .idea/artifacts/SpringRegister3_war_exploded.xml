@@ -13,7 +13,7 @@
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-jdk14:1.7.5" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.5" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
-          <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.2.1" />
+          <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.2.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context-support:4.2.6.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.2.6.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context:4.2.6.RELEASE" />
@@ -90,7 +90,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/.settings/target/KITPointSystem/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/KITPointSystem/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="SpringRegister3/web/Web" />
     </root>

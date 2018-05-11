@@ -14,6 +14,8 @@
     <property name="from_id" column="from_id"/>
     <property name="to_id" column="to_id"/>
     <property name="number_of_booking" column="number_of_booking"/>
+    <property name="adult" column="adult"/>
+    <property name="child" column="child"/>
     <property name="description" column="description"/>
     <property name="user_id"  column="user_id"/>
     <property name="provided_time"  column="provided_time"/>

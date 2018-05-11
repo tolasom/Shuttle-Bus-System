@@ -263,7 +263,8 @@ public class StudentDaoImpl implements StudentDao{
         try {
             String current = "From Booking_Master where dept_date >= current_date() and user_id="+id.getAuthentic();
             String history = "From Booking_Master where dept_date < current_date() and user_id="+id.getAuthentic();
-            String request = "From Booking_Request_Master where dept_date >= current_date() and user_id="+id.getAuthentic();
+            String request = "From Booking_Request_Master where " +
+                    "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);
             Query query1 = session.createQuery(history);
             Query query2 = session.createQuery(request);

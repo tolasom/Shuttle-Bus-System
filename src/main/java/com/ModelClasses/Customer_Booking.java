@@ -7,6 +7,8 @@ public class Customer_Booking {
 	private int number_of_seat;
 	private int adult;
 	private int child;
+	private String description;
+	private String status;//book and request_book
 
 
 	public int getSource() {
@@ -64,4 +66,21 @@ public class Customer_Booking {
 	public void setChild(int child) {
 		this.child = child;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

@@ -16,7 +16,7 @@ public interface Custom_Dao {
 	Map<String,Object> user_info();
 	public Map<String, Map<String, List<Pickup_Location_Master>>> location();
 	public Map<String, Map<String, List<Pickup_Location_Master>>> check_location(int id);
-	public String customer_booking(Customer_Booking cb) throws ParseException;
+	public String customer_booking(Customer_Booking[] cb) throws ParseException;
 	public List<Map<String,Object>> departure_time_info();
 	public List<Map<String,Object>> cusomer_booking_history();
 	public String customer_request_booking(Customer_Booking cb);
@@ -39,4 +39,5 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Integer> get_existing_bus_and_driver(Custom_Imp booking,Session session,Customer_Booking cb,int from, int to);
 	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin);
+
 }
