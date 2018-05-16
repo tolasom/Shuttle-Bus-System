@@ -144,14 +144,15 @@
 		<div class="row rb">
 			  <div class="input-field col s12 m6">
 			    	<div class="input-field s6 flatpickr">
-						<input type="text" placeholder="Select Departure Time" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
-					</div>
-			  </div>
-			    <div class="input-field col s12 m6">
-			    	<div class="input-field s6 flatpickr">
 						<input type="text" placeholder="Select Departure Date" id="departure_date" data-input class="input flatpickr-input active" name="departure_date" required> 					
 					</div>
 			  </div>
+			  <div class="input-field col s12 m6">
+			    	<div class="input-field s6 flatpickr">
+						<input type="text" placeholder="Select Departure Time" id="departure_time" data-input class="input flatpickr-input active" name="departure_time" required> 					
+					</div>
+			  </div>
+			    
 		  </div>
 		  <div class="row rb">
 			   <div class="input-field col s12">

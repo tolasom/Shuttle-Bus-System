@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>KIT Admin</title>
+  <title>Customer</title>
   <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -19,6 +19,7 @@
   
   <!--  Scripts  -->
   <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -196,16 +197,18 @@
 				  </div>
 			  </div>
 			  <div class="row bk">
-				  <div class="input-field col s12 m6">
-				    <select id="departure_time" name="departure_time" required></select>
-				    <span id="departure_time_error" class="red-text" hidden>*Required</span>
-				  </div>
-				  <div class="input-field col s12 m6">
+			  		
+			  		<div class="input-field col s12 m6">
 				    	<div class="input-field s6 flatpickr">
 							<input type="text" placeholder="Select Departure Date" id="departure_date" name="departure_date" data-input class="input flatpickr-input active" required> 					
 						</div>
-						<a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
 				  </div>
+				  <div class="input-field col s12 m6">
+				    <select id="departure_time" name="departure_time" required></select>
+				    <span id="departure_time_error" class="red-text" hidden>*Required</span>
+				    <a id="custom_location" class="custom_link right" href="request_booking"><span style="color:red;">*Cannot find date or time you want?</span></a>
+				  </div>
+				  
 			  </div>
 			  <div class="row bk">
 				   <div class="input-field col s12">
@@ -295,7 +298,7 @@
 			    <select id="source_loc_id" name="source_loc_id" required></select>
 		  </div>
 		  <div class="input-field col s6">
-	          <input placeholder="Where you want us to pick up?" id="new_source_pickup_name" name="new_source_pickup_name" type="text" class="validate">
+	          <input placeholder="Enter your pick-up location" id="new_source_pickup_name" name="new_source_pickup_name" type="text" class="validate">
 	        </div>
 	    </div>
 	    <div class="modal-footer">
@@ -313,7 +316,7 @@
 			    <select id="select_dest_id" name="select_dest_id" required></select>
 		  </div>
 		  <div class="input-field col s6">
-	          <input placeholder="Where you want us to drop-off?" id="new_dropoff_name" name="new_dropoff_name" type="text" class="validate">
+	          <input placeholder="Enter your drop-off location" id="new_dropoff_name" name="new_dropoff_name" type="text" class="validate">
 	        </div>
 	    </div>
 	    <div class="modal-footer">
@@ -322,7 +325,12 @@
 	    </div>
 	</form>
 </div>
-
+	<input type="hidden" id="csrfToken" value="${_csrf.token}"/>
+        <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
+        <script>
+             window.token = document.getElementById("csrfToken").value
+             window.headerName = document.getElementById("csrfHeader").value
+        </script>
 	<form action="logout" method="post" id="logoutForm">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	</form>
