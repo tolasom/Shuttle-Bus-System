@@ -22,11 +22,23 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title center">Which bookings?</h4>
+          <h4 class="modal-title center">Which schedules?</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
           <form id="myForm">
+                                        <div class="form-group">
+                                            <label class="control-label">Bus</label>
+                                            <select class="form-control boxed" id="bus">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Driver</label>
+                                            <select class="form-control boxed" id="driver">
+                                                <option></option>
+                                            </select>
+                                        </div>
                                         <div class="form-group">
                                             <label class="control-label">From (Source Location)</label>
                                             <select class="form-control boxed" id="from">
@@ -49,14 +61,7 @@
                                                 <option value="nth"></option>
                                             </select> 
                                             </div>
-                                         <div class="form-group">
-                                            <label class="control-label">Status</label>
-                                            <select class="form-control boxed" id="status">
-                                                <option value="nth"></option>
-                                                <option value="Booked">Booked</option>
-                                                <option value="Cancelled">Cancelled</option>
-                                            </select> 
-                                            </div>
+                                         
                                             <button type="submit" id="bsubmit" class="btn btn-default" style="display:none;">Create</button>
                                         	</form>
         </div>
@@ -82,7 +87,7 @@ $(document).ready(function(){
 	var bootstrapjs = $("<script>");
   	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
-	$("#breport").addClass("active");
+	$("#sreport").addClass("active");
 	$('#myModal').on('hide.bs.modal', function (e) {
 		window.location.href = "current_schedule";
 	})
@@ -126,7 +131,8 @@ $(document).ready(function(){
         var to = $("#to").val();
         var date = $("#deptdate").val();
         var time = $("#depttime").val();
-        var status  = $("#status").val();
+        var bus  = $("#bus").val();
+        var driver  = $("#driver").val();
 		if(from==""||from==null)
 		{
             count++;
@@ -148,26 +154,37 @@ $(document).ready(function(){
             }
 		if(time=="nth")
 			count++;
-        if(status=="nth")
+        if(bus==""||bus==null)
+        {
             count++;
+            bus = 0;
+        }
+        else
+            bus = parseInt(bus);
+        if(driver==""||driver==null)
+        {
+            count++;
+            driver = 0;
+        }
+        else
+            driver = parseInt(driver);
         
-		if(count>=5)
+		if(count>=6)
 			{
 			swal("Action Disallowed!", "Please fill out at least one field!", "error")
 			return
 			}
 		else
 			{
-            console.log(from)
-            console.log(to)
 			$.ajax({
-    		url:'reportSubmit',
+    		url:'sReportSubmit',
     		type:'GET',
     		data:{	from_id:from,
     				to_id:to,
     				dept_date:date,
     				n:time,
-                    notification:status
+                    schedule_id:bus,
+                    user_id:driver
 
     			},
     		traditional: true,			
@@ -178,15 +195,15 @@ $(document).ready(function(){
                         setTimeout(function() {
                             swal({
                                 title: "Done!",
-                                text: response.message.length+" bookings were found!",
+                                text: response.message.length+" schedules were found!",
                                 type: "success"
                             }, function() {
-                                window.location = "bookingReport2?data="+data;
+                                window.location = "scheduleReport2?data="+data;
                             });
                         }, 10);
                     }
                     else 
-                        swal("Oops!", "No bookings as you required!", "error")
+                        swal("Oops!", "No schedules as you required!", "error")
                   },
     		error: function(err){
     				console.log(JSON.stringify(err));
@@ -206,13 +223,19 @@ $(document).ready(function(){
 load = function(){
 	$('#mybtn').trigger('click');
     var ad = ${data};
+    console.log(ad);
     locations = ad.locations;
     var times = ad.times;
+    var buses = ad.buses;
+    var drivers = ad.drivers;
     for(i=0; i<locations.length; i++)                   
         $("#from").append("<option value="+locations[i].id+">"+locations[i].name+" </option>");
     for(i=0; i<times.length; i++)                   
         $("#depttime").append("<option value="+times[i].dept_time+">"+times[i].dept_time+" </option>");
-	
+    for(i=0; i<buses.length; i++)                   
+        $("#bus").append("<option value="+buses[i].id+">"+buses[i].model+" "+buses[i].plate_number+" </option>");
+	for(i=0; i<drivers.length; i++)                   
+        $("#driver").append("<option value="+drivers[i].id+">"+drivers[i].name+" </option>");
 }
 
 

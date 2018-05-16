@@ -718,6 +718,69 @@ public class Custom_Imp implements Custom_Dao{
         }
 		return list;
 	}
+
+
+    public List<Map<String,Object>> get_sch_driver_info2(int id){
+    	User_Info customer = new User_Info();
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+        List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+        try {
+            trns1 = session.beginTransaction();
+            List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+            String queryString  = "from User_Info where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id", id);
+            customer = (User_Info) query.uniqueResult();
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("id", customer.getId());
+            map.put("name", customer.getUsername());
+            map.put("email", customer.getEmail());
+            map.put("phone_number", customer.getPhone_number());
+            list.add(map);
+            }   
+         catch (RuntimeException e) {
+            e.printStackTrace();
+        }    
+        finally {
+            session.flush();
+            session.close();
+        }
+        return list;
+    }
+    
+    
+    
+    public List<Map<String,Object>> get_sch_bus_info2(int id){
+    	Bus_Master bus= new Bus_Master();
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+        List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+        try {
+            trns1 = session.beginTransaction();
+            String queryString = "from Bus_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            bus=(Bus_Master)query.uniqueResult();
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("id", bus.getId());
+            map.put("model", bus.getModel());
+            map.put("plate_number", bus.getPlate_number());
+            map.put("number_seat", bus.getNumber_of_seat());
+            list.add(map);
+            }   
+         catch (RuntimeException e) {
+            e.printStackTrace();
+        }    
+        finally {
+            session.flush();
+            session.close();
+        }
+        return list;
+    }
+
+
+
 	//======================== combination for choosing bus till ============================
 	static List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
 	static List<Integer> total_choosen_bus_list=new ArrayList<Integer>();

@@ -9,8 +9,6 @@
  	 </id>
     <property name="name"  column="name"/>
     <property name="date_of_leaving" column="date_of_leaving"/>
-    <property name="date_of_returning" column="date_of_returning"/>
-    <property name="deadline_booking" column="deadline_booking"/>
     <property name="created_at" column="created_at"/>
     <property name="updated_at" column="updated_at"/>
     <property name="enabled" type="java.lang.Boolean">

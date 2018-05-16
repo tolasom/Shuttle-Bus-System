@@ -35,6 +35,8 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> get_request_booking_id(int id);
 	public List<Map<String,Object>> get_sch_bus_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info(int id);
+	public List<Map<String,Object>> get_sch_driver_info2(int id);
+	public List<Map<String,Object>> get_sch_bus_info2(int id);
 	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 }

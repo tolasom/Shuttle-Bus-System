@@ -2,13 +2,13 @@
 <article class="content cards-page">
                    
                      
-                    <section class="section">
+                  <section class="section">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-block">
                                         <div class="card-title-block">
-                                            <h3 class="title"> Bookings Report </h3>
+                                            <h3 class="title"> Schedules Report </h3>
                                             
                                         </div>
                                         <section class="example">
@@ -18,29 +18,28 @@
                                                         <tr>
                                                             <th>No</th>
                                                             <th>Code</th>
-                                                            <th>Name</th>
+                                                            <th>Bus</th>
+                                                            <th>Driver</th>
                                                             <th>From</th>
                                                             <th>To</th>
                                                             <th>Departure Date</th>
                                                             <th>Departure Time</th>
                                                             <th>Number of bookings</th>
-                                                            <th>Status</th>
+                                                           
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="allBooking">
+                                                    <tbody id="allSchedules">
                                                        
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </section>
-                                    </div>
-                                    <div class="col-md-12">
+                                        <div class="col-md-12">
                                 <button class="btn btn-info pull-right" onClick="generateReport()"  style="color:white;" id="moveBtn"> <i class="fa fa-bar-chart"></i> Generate Report</button>
                             </div>
+                                    </div>
                                 </div>
-
-                            </div> 
-
+                            </div>
                         </div>
                     </section>
                 </article>
@@ -54,7 +53,7 @@ $(document).ready(function(){
 	var bootstrapjs = $("<script>");
   	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
-	$("#breport").addClass("active");
+	$("#sreport").addClass("active");
 	
     $(".ir2").slideToggle();
     $("#ddr1").toggleClass("irr");
@@ -65,26 +64,30 @@ $(document).ready(function(){
 
 load = function(){
 	var response = ${data};
-    bookings = JSON.parse(response.bookings);
-    locations = response.locations;
-    customers = response.customers;
-    console.log(locations)
-    for (var i=0;i<bookings.length;i++)
-        {
-        var booking = '<tr class="hoverr search" s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
-                            +'<td>'+bookings[i].code+'</td>'
-                            +'<td>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
-                            +'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
-                            +'<td>'+searchLocation(bookings[i].to_id,locations)+'</td>'
-                            +'<td>'+formatDate(bookings[i].dept_date)+'</td>'
-                            +'<td>'+bookings[i].dept_time+'</td>'
-                            +'<td>'+bookings[i].number_booking+'</td>'
-                            +'<td>'+bookings[i].notification+'</td></tr>';
-        $("#allBooking").append(booking);               
-        }
-    $(".hoverr").on('click', function() {
-        location.href=$(this).attr('data-url');
-    });
+    var schedules = JSON.parse(response.schedules);
+    var locations = response.locations;
+    var buses = response.buses;
+    var drivers  = response.drivers;
+    for (var i=0;i<schedules.length;i++)
+            {
+            var schedule = '<tr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
+                                +'<td>'+schedules[i].code+'</td>'
+                                +'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
+                                +'<td>'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
+                                +'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
+                                +'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
+                                +'<td>'+formatDate(schedules[i].dept_date)+'</td>'
+                                +'<td>'+schedules[i].dept_time+'</td>'
+                                +'<td>'+schedules[i].number_booking+'</td></tr>';
+            $("#allSchedules").append(schedule);                
+            }
+            $( ".unhoverr" ).on('click', function(e) {
+                e.stopPropagation();    
+                var s_id = parseInt($(this).attr('data-url'));
+                deleteSchedule(s_id);
+            });
+            
+            
 }
 
 
@@ -110,14 +113,25 @@ function searchLocation(id, myArray){
     }
 }
 
-
-function searchCustomer(id, myArray){
+function searchDriver(id, myArray){
+    if(id==0)
+        return"";
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;
         }
     }
 }
+
+function searchBus(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].model;
+        }
+    }
+}
+
+
 
 generateReport = function()
 {
@@ -127,7 +141,7 @@ generateReport = function()
         
             var a = document.createElement('a');
             a.href = data_type + ', ' + table_html;
-            a.download = 'Bookings_Report' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+            a.download = 'Schedules_Report' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
             a.click();
        
 }
