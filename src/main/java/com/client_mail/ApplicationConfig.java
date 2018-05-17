@@ -19,8 +19,10 @@ public class ApplicationConfig {
  
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("sopheakdy23@gmail.com");
-        mailSender.setPassword("Pheakhappy99");
+//        mailSender.setUsername("sopheakdy23@gmail.com");
+//        mailSender.setPassword("Pheakhappy99");
+        mailSender.setUsername("maimom2222@gmail.com");
+        mailSender.setPassword("hanako12624120");
  
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", "true");

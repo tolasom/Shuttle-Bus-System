@@ -45,14 +45,14 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	}
 	public String DateNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
 	public String DateTimeNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
@@ -169,7 +169,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     		String tmr_date=tmr_dt.split(" ")[0];
     		String tmr_time=tmr_dt.split(" ")[1];
 //        	>  Query time
-    		List<Time> list_time=stu.getAvailableTime(tmr_dt, session);
+    		List<Map<String,Object>> list_time=stu.getAvailableTime(tmr_dt, session);
 //        	>  Query from, Query to -----> permutation of from and to --> list of round
     		System.out.println("list_time: ");
     		System.out.println(list_time);
@@ -180,24 +180,23 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     		for(int i=0;i<list_time.size();i++){
     			for(int j=0; j<list_round.size();j++){
     				List<Booking_Master> booked=session.createQuery("from Booking_Master where description='student' and dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
-    						.setDate("date",java.sql.Date.valueOf(tmr_date))
-    						.setTime("time", java.sql.Time.valueOf(list_time.get(i).toString()))
+    						.setDate("date",java.sql.Date.valueOf(list_time.get(i).get("date").toString()))
+    						.setTime("time", java.sql.Time.valueOf(list_time.get(i).get("time").toString()))
     						.setParameter("to", list_round.get(j)[1])
     						.setParameter("from", list_round.get(j)[0]).list();
-    				System.out.println("date: "+tmr_date);
-    				System.out.println("time: "+list_time);
+    				System.out.println("date: "+list_time.get(i).get("date").toString());
+    				System.out.println("time: "+list_time.get(i).get("time").toString());
     				System.out.println("from: "+list_round.get(j)[0]);
     				System.out.println("to: "+list_round.get(j)[1]);
     				System.out.println("booked.size: "+booked.size());
     				System.out.println();
     				if(booked.size()>0){
     					Customer_Booking cb=new Customer_Booking();
-        				cb.setDate(tmr_date);
-        				cb.setTime(list_time.get(i).toString());
-        				cb.setNumber_of_seat(1);
+        				cb.setDate(list_time.get(i).get("date").toString());
+        				cb.setTime(list_time.get(i).get("time").toString());
         				cb.setSource(list_round.get(j)[0]);
         				cb.setDestination(list_round.get(j)[1]);
-        				//stu.student_schedule(session, cb); // to assign/reset schedule
+        				stu.student_schedule(session, cb); // to assign/reset schedule
     				}
     			}
     		}
@@ -229,10 +228,10 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	  	        return schedules; 
 	  	   
 	  	 }
-	public List<Time> getAvailableTime(String tmr_dt, Session session){
+	public List<Map<String,Object>> getAvailableTime(String tmr_dt, Session session){
 		System.out.println("---------------->");
     	System.out.println("---------------->getAvailableTime(");
-		List<Time> list_time=new ArrayList<Time>();   
+		List<Map<String,Object>> list_time=new ArrayList<Map<String,Object>>();   
         try {
         	Student_Imp s=new Student_Imp();
     		String tmr_date=tmr_dt.split(" ")[0];
@@ -249,13 +248,19 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
             for(int i=0;i<list_time1.size();i++){
             	Time time=list_time1.get(i);
             	if(time.after(java.sql.Time.valueOf(tmr_time))){
-            		list_time.add(time);
+            		Map<String, Object> map=new HashMap<String, Object>();
+            		map.put("time", time);
+            		map.put("date", s.DateNow());
+            		list_time.add(map);
             	}
             }
             for(int i=0;i<list_time2.size();i++){
             	Time time=list_time2.get(i);
             	if(time.before(java.sql.Time.valueOf(tmr_time))){
-            		list_time.add(time);
+            		Map<String, Object> map=new HashMap<String, Object>();
+            		map.put("time", time);
+            		map.put("date", tmr_date);
+            		list_time.add(map);
             	}
             }
             
@@ -334,7 +339,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	          	if(passenger_seat<=existing_bus_seat){
 	          		//Assign student with existing schedule
 	          		stu.asign_to_existing_schedule(session, list_stu, schedule);
-	          		System.out.println("asign_to_existing_schedule--------->");
 	          	}//Else re-create schedule
 	          	else{
               		//query list of all available bus (result must be in order number of seat for small to big )
@@ -348,17 +352,20 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                     	}
                     	//6. create new schedule
                     	Map<Object, List<Booking_Master>> sch_with_users=stu.create_schedule(booking,session,all_bus,all_booker1,cb,total_seat_of_all_bus,passenger_seat); 			// 6. Set/Reset New Schedule 
+                    	
                     	if(sch_with_users.size()==0){
+                    		System.out.println("-----> sch_with_users.size()==0");
                     		stu.create_unassigned_booking(session, list_stu);
                     		//return "over_bus_available";
                     	}else{
                     		//Get List Existing Driver Assign match with Bus
                     		List<Integer> existing_bus_driver= stu.get_existing_bus_and_driver(booking,session,cb);
-                    		//7.Delete Schedule
-                        	int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
-                    		
+                    		//7.Delete Schedule //Cannot delete it show error: a different object with the same identifier value was already associated with the session
+                        	//int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
+                    		//Delete after new schedule create
                         	List<Integer> list_assign=new ArrayList<Integer>();
                         	System.out.println(booking.list_bus_choosen);
+                        	List<Integer> except_sch_id=new ArrayList<Integer>();
                         	for(int h=0;h<sch_with_users.size();h++){
                         		int num_booking=0;
                         		int num_customer=0;
@@ -388,7 +395,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         			Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
                             				" where id = :id");
     			                    query.setParameter("sch_id", sch.getId());
-    			                    query.setParameter("qr", cb.getDestination()+""+cb.getDestination()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
+    			                    query.setParameter("qr", cb.getSource()+""+cb.getDestination()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
     			                    query.setParameter("id", sch_with_users.get(h).get(y).getId());
     			                    int result = query.executeUpdate();
                     			}
@@ -398,6 +405,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         		sch.setNumber_customer(num_customer);
                         		sch.setNumber_staff(0);
                         		sch.setNumber_student(number_stu);
+                        		except_sch_id.add(sch.getId());
                     		}
                         	
                         	//check whether have remaining student not yet assign or not
@@ -408,7 +416,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         			Boolean status=true;
                         			for (int id: list_assign) 
                             		{ 
-                        				if(user.getId()==user.getId()){
+                        				if(id==user.getId()){
                         					status=false;
                         				}
                             		}
@@ -418,12 +426,14 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         		}
                         	}
                         	if(unassigned.size()>0){
+                        		System.out.println("------------> unassigned.size()>0");
                         		stu.create_unassigned_booking(session,unassigned);
                         	}
-                        	
+                        	int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate(),except_sch_id);
                     	}
                     	
                     }else{
+                    	System.out.println("--------------> No bus");
         	      	    stu.create_unassigned_booking(session,list_stu);
         	      	    //return "no_bus_available";
         	        }
@@ -463,9 +473,10 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	public void create_unassigned_booking(Session session,List<Booking_Master> list_stu){
 		System.out.println("---------------->");
     	System.out.println("---------------->create_unassigned_booking(");
+    	System.out.println(list_stu.size());
 			try{
 				for(int j=0;j<list_stu.size();j++){
-						Query query = session.createQuery("update Booking_Master set notification='unassigned'" +
+						Query query = session.createQuery("update Booking_Master set notification='Unassigned'" +
 		        				" where id = :id");
 		                query.setParameter("id", list_stu.get(j).getId());
 		                int result = query.executeUpdate();
@@ -487,20 +498,29 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		while(recursive){
 			int ib=0; //index of passenger
 			Boolean last_bus_choosing=true;
-			Boolean current_pass_assign=true;
 			booking.list_bus_choosen =new ArrayList<List<Map<String,Object>>>();
 			user_sch_assign=new ArrayList<Booking_Master>();
 			int total_seat_of_bus_chosen = number_of_passenger; //for recursive purpose to increase passenger in order to extend more bus
 			int next_total_seat_of_bus_chosen = 0; 
 			try {
-				//Find out number of total passengers in DB again
-				number_of_passenger=0;
-	            for(int p=0;p<all_booker1.size();p++){
-		            number_of_passenger+=all_booker1.get(p).getNumber_booking();
-		        }
 	            
 				//Final Bus Chosen the correct bus because people always accept even 1
-	            booking.list_bus_choosen=custom_imp.choose_correct_bus(booking,all_bus,cb,total_seat_of_bus_chosen,total_seat_of_all_bus);   //total_seat_of_bus_chosen==number_of_passenger
+	            if(number_of_passenger<=total_seat_of_all_bus){
+	            	booking.list_bus_choosen=custom_imp.choose_correct_bus(booking,all_bus,cb,total_seat_of_bus_chosen,total_seat_of_all_bus);   //total_seat_of_bus_chosen==number_of_passenger
+	            }else{
+	            	System.out.println("----------------->>>>>>>>..");
+	            	List<Map<String, Object>> add_list=new ArrayList<Map<String, Object>>();
+	            	for(int i=0;i<all_bus.size();i++){	
+		                  Map<String,Object> map =new HashMap<String,Object>();				
+		                  map.put("bus_model", all_bus.get(i).get("bus_model"));
+		                  map.put("number_of_seat", all_bus.get(i).get("number_of_seat"));
+		                  map.put("id", all_bus.get(i).get("id"));
+		                  add_list.add(map);
+		             } 
+	            	booking.list_bus_choosen.add(add_list);
+	            	recursive=false;
+	            	
+	            }
 	            
 	            if(booking.list_bus_choosen.size()>0){
 	            	List<Map<String, Object>> sort_bus =new ArrayList<Map<String, Object>>(booking.list_bus_choosen.get(0));
@@ -527,7 +547,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		        					status_assign=false;
 		        				}
 		        			}
-		        			System.out.println(status_assign);
 		        			if(status_assign){
 		        				if(total_pass_each_sch+all_booker1.get(j).getNumber_booking()<Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"))){
 		        					user_sch_assign.add(all_booker1.get(j)); 
@@ -543,23 +562,23 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		        				}     				
 		        			}
 		        		}
-		        		System.out.println("total_pass_each_sch: "+total_pass_each_sch);
 		        		sch_with_users.put(i, user_each_bus);
 		        	}
 
-		            //if(tem_pass_assign.size()<all_booker1.size()+cb.getNumber_of_seat()&&total_seat_of_bus_chosen<next_total_seat_of_bus_chosen){
-		            if(tem_pass_assign.size()==all_booker1.size()&&(!current_pass_assign)){	
+		           
+		            if(tem_pass_assign.size()==all_booker1.size()){	
 		            	break;
-		    		}else if((tem_pass_assign.size()<all_booker1.size()||current_pass_assign)&&last_bus_choosing){
+		    		}else if((tem_pass_assign.size()<all_booker1.size())&&last_bus_choosing){
 		    			number_of_passenger=next_total_seat_of_bus_chosen+1;
 		    			if(total_seat_of_all_bus==next_total_seat_of_bus_chosen){
 		    				last_bus_choosing=false;
 		    			}
 		    		}
-//		    		else{
-//		    			sch_with_users=new HashMap<Object,List<Booking_Master>>();
-//		    			break;
-//		    		}
+		    		else{
+		    			//sch_with_users=new HashMap<Object,List<Booking_Master>>();
+		    			System.out.println("-----------------**********");
+		    			break;
+		    		}
 	            }else{
 	            	System.out.println("Recursive!!!! 5");
 	    			sch_with_users=new HashMap<Object,List<Booking_Master>>();
@@ -615,6 +634,8 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
             all_booker1 = session.createQuery("from Booking_Master where from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
             		.setParameter(0,from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();
 
+            System.out.println("all_booker: ");
+            System.out.println(all_booker1.size());
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }    
@@ -642,9 +663,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 				excep+=" and id!="+unava2.get(i);
 			}
             query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
-            System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-            System.out.println("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc");
-            System.out.println("query_all_bus size: "+ query_all_bus.size());
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	                  Map<String,Object> map =new HashMap<String,Object>();				
@@ -740,11 +758,15 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 			return false;
 		}
 	}
-	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date){
+	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date, List<Integer> except_sch_id){
 		System.out.println("---------------->");
 		System.out.println("delete_Schedule");
 		try {
-            Query q = session.createQuery("delete Schedule_Master where from_id=? and to_id=? and dept_time=? and dept_date=?");
+			String excep="";
+			for(int i=0;i<except_sch_id.size();i++){
+				excep+=" and id!="+except_sch_id.get(i);
+			}
+            Query q = session.createQuery("delete Schedule_Master where from_id=? and to_id=? and dept_time=? and dept_date=?"+excep);
         	q.setParameter(0, from_id);
         	q.setParameter(1, to_id);
         	q.setTime(2, java.sql.Time.valueOf(time));
