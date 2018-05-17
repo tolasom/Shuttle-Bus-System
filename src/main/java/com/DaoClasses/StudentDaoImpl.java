@@ -268,8 +268,9 @@ public class StudentDaoImpl implements StudentDao{
             Query query = session.createQuery(current);
             Query query1 = session.createQuery(history);
             Query query2 = session.createQuery(request);
-            query.setMaxResults(10);
-            query1.setMaxResults((10 - query.list().size()));
+            int maxHistory = 10 - query.list().size();
+            if(maxHistory<0) maxHistory =0;
+            query1.setMaxResults(maxHistory);
             query2.setMaxResults(10);
             List<Booking_Master> bookingMasterList = query.list();
             List<Booking_Master> bookingHistory = query1.list();

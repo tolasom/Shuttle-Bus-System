@@ -225,8 +225,10 @@
         document.getElementsByClassName(".login-page").disabled = false;
     }
     function isExistUser(email) {
-        return axios.post('isexist', {
-            email: email,
+        return axios.get('isexist', {
+            params: {
+                email: email
+            }
         }).then(function (response) {
             return response.data
         })

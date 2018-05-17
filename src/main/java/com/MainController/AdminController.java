@@ -36,8 +36,8 @@ public class AdminController {
 		return new ModelAndView("cusomer_home");
 	}
 //=========================To sign up an account for customer================================
-	@RequestMapping(value="/isexist",method=RequestMethod.POST)
-	@ResponseBody public Map<String,Object> isExistUser(@RequestBody UserModel userModel) {
+	@RequestMapping(value="/isexist",method=RequestMethod.GET)
+	@ResponseBody public Map<String,Object> isExistUser(UserModel userModel) {
 		User_Info user = usersService1.findByUserName(userModel.getEmail());
 		boolean status = false;
 		Map<String,Object> map = new HashMap<String,Object>();
