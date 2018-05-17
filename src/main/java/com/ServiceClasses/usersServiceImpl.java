@@ -3,6 +3,7 @@ package com.ServiceClasses;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,7 +103,7 @@ public class usersServiceImpl implements usersService{
 	public List<User_Info> getAllUsers(){
 		return usersDao1.getAllUsers();
 	}
-	public int saveSchedule(Schedule_Model schedule)throws ParseException{
+	public Map<String, Object> saveSchedule(Schedule_Model schedule)throws ParseException{
 		return usersDao1.saveSchedule(schedule);
 	}
 	public int updateSchedule(Schedule_Model schedule) throws ParseException{

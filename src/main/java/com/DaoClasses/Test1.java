@@ -27,10 +27,10 @@ public class Test1 {
 //		long duration =difference/(1000*60*60);
 //		System.out.println(duration);
 		
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
+		List<Integer> ints = new ArrayList<Integer>();
+		ints.add(1);
+		ints.add(2);
+		System.out.println(ints.toString());
 		
 		
 		

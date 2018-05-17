@@ -2,6 +2,7 @@ package com.DaoClasses;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.EntityClasses.*;
 import com.ModelClasses.B_Model;
@@ -42,7 +43,7 @@ public interface usersDao {
 	public List <Schedule_Master> getAllCurrentSchedules();
 	public List <Schedule_Master> getAllSchedules();
 	public List<User_Info> getAllUsers();
-	public int saveSchedule(Schedule_Model schedule)throws ParseException;
+	public Map<String, Object> saveSchedule(Schedule_Model schedule)throws ParseException;
 	public int updateSchedule(Schedule_Model schedule) throws ParseException;
 	public List <Booking_Request_Master> getAllCurrentBookingRequests();
 	public Booking_Request_Master getBookingRequestById (int id);

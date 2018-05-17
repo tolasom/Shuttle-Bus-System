@@ -1,10 +1,28 @@
 <body onload="load()">
 <article class="content cards-page">
-                    <div class="title-block">
-                        <h3 class="title"> Bookings </h3>
-                         <p class="title-description"> All historical bookings </p> <br>
-                         <button type="button" class="btn btn-pill-left btn-info pull-left" style="color:white;" onclick="location.href='admin_booking';"><i class="fa fa-angle-left"></i> View all current and future bookings </button>
-                    </div>
+
+					<div class="title-block">
+                         <div class="clearfix" style="margin-bottom: 10px;">
+                         	<div class="pull-left">
+                         		<h3 class="title"> Bookings </h3>
+                         		<p class="title-description"> All historical bookings </p> 
+                         	</div>
+                         	<div class="btn-group pull-right menulist">
+		                        <button type="button" class="btn btn-info" id="allbtn" style="color:white;border-right:2px solid white;">All</button>
+		                        <button type="button" class="btn btn-info" id="customerbtn" style="color:white; border-right:2px solid white;"><i class="fa fa-users"></i></button>
+		                        <button type="button" class="btn btn-info"  id="studentbtn" style="color:white;"><i class="fa fa-graduation-cap"></i></button>
+		                    </div>
+                         	
+                         </div>
+                         
+                       
+	                         <div style="margin-bottom: 10px;">
+		                         <button type="button" class="btn btn-pill-left btn-info pull-left" style="color:white;" onclick="location.href='admin_booking';"><i class="fa fa-angle-left"></i> View all current and future bookings </button>
+		                         
+	                      	 </div>
+	                      	 </div>
+
+                    
                     
                     <div style="margin-bottom: 10px;">
 	                      	     <input type="text" class="form-control" placeholder="Search for any booking by code..." id="txtbox"/>
@@ -30,7 +48,7 @@
                                                             <th>To</th>
                                                             <th>Departure Date</th>
                                                             <th>Departure Time</th>
-                                                            <th>Number of bookings</th>
+                                                            <th>User Type</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="allBooking">
@@ -45,10 +63,17 @@
                         </div>
                     </section>
                 </article>
+                <div id="user_info_modal" class="modal">
+                    <div class="modal-content center">
+                        <h6 class="center light-blue-text">User Information</h6>
+                        <table id="get_user_info"></table>
+                    </div>
+      </div>
                 
 </body>
 <script>
 load = function(){	
+	$("#allbtn").addClass("active");
 	$.ajax({
 		url:'getAllHistoricalBookings',
 		type:'GET',
@@ -61,19 +86,51 @@ load = function(){
 			console.log(locations)
 			for (var i=0;i<bookings.length;i++)
 				{
-				var booking = '<tr class="hoverr search" s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
-				+'<td>'+bookings[i].code+'</td>'
-				+'<td>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
-				+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
-				+'<td>'+searchLocation(bookings[i].to_id,locations)+'</td>'
-				+'<td>'+formatDate(bookings[i].dept_date)+'</td>'
-				+'<td>'+bookings[i].dept_time+'</td>'
-				+'<td>'+bookings[i].number_booking+'</td></tr>';
+				var booking = '<tr class="hoverr search '+bookings[i].description+'"s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
+									+'<td>'+bookings[i].code+'</td>'
+									+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
+									+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
+									+'<td>'+searchLocation(bookings[i].to_id,locations)+'</td>'
+									+'<td>'+formatDate(bookings[i].dept_date)+'</td>'
+									+'<td>'+bookings[i].dept_time+'</td>'
+									+'<td>'+bookings[i].description+'</td></tr>';
 				$("#allBooking").append(booking);				
 				}
 			$(".hoverr").on('click', function() {
     	    	location.href=$(this).attr('data-url');
     		});
+    		$( ".user_info" ).on('click', function(e) {
+                 console.log("KK");
+                 e.stopPropagation();
+                 var id=$(this).attr('data');
+                 console.log(id);
+                 $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "GET",
+                        url: "get_sch_driver_info2",
+                        data :{'id':id},
+                        timeout: 100000,
+                        success: function(data) {
+                            console.log(data);
+                            if(data[0].phone_number==""||data[0].phone_number==null)
+                            	data[0].phone_number = "";
+                            var data='<tr><th>User\'s Name</th><td><b>:</b>  &nbsp&nbsp '+data[0].name+'</td></tr>'
+                              +'<tr><th>Phone Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].phone_number+'</td></tr>'
+                              +'<tr><th>Email</th><td><b>:</b> &nbsp&nbsp '+data[0].email +'</td></tr>'
+                              document.getElementById('get_user_info').innerHTML=data;
+                            $('#user_info_modal').modal();
+                            $('#user_info_modal').modal('open');
+                            
+                        },
+                        error: function(e) {
+                            console.log("ERROR: ", e);
+                        },
+                        done: function(e) {
+                            console.log("DONE");
+                        }
+                    });
+             });
     	},
 	error: function(err){
 		swal("Oops!", "Cannot get all buses data", "error")
@@ -116,6 +173,60 @@ $(document).ready(function(){
 		   	        });
 		     	}
 		    });
+
+
+
+		$("#customerbtn").on('click', function(e) {
+		   
+		  $("#allbtn").removeClass("active");
+		  $("#studentbtn").removeClass("active");
+		  $("#customerbtn").addClass("active");
+
+		  $(".customer").each(function(){
+		    	 $(this).show();
+		  });
+
+		  $(".student").each(function(){
+		    	 $(this).show();
+		  });
+		  $(".student").each(function(){
+		    	 $(this).hide();
+		  });
+		  
+	});
+
+	$("#studentbtn").on('click', function(e) {
+		   
+		  $("#customerbtn").removeClass("active");
+		  $("#allbtn").removeClass("active");
+		  $("#studentbtn").addClass("active");
+		   
+		  $(".customer").each(function(){
+		    	 $(this).show();
+		  });
+		  $(".student").each(function(){
+		    	 $(this).show();
+		  });
+		  $(".customer").each(function(){
+		    	 $(this).hide();
+		  });
+		  
+	});
+
+	$("#allbtn").on('click', function(e) {
+			
+		  $("#customerbtn").removeClass("active");
+		  $("#studentbtn").removeClass("active");
+		  $("#allbtn").addClass("active");
+		   
+		  $(".customer").each(function(){
+		    	 $(this).show();
+		  });
+		  $(".student").each(function(){
+		    	 $(this).show();
+		  });
+		  
+	});
 });
 
 
