@@ -49,4 +49,8 @@ public interface Custom_Dao {
 	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin);
 	public String cancel_request_booking(int id);
 	public List<User_Info> getAllD(List<Integer> idd);
+	public List<User_Info> check_valid_tocken(String token);
+	public Map<String, Object> check_and_send_email(String email);
+	public Boolean submit_new_password(UserModel user); 
+
 }

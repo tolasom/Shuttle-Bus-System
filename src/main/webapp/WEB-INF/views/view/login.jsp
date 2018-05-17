@@ -186,8 +186,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="forgort">
-                                Forgot Password?
+                            <td>
+                                <a class="forgort" href="forget_password">Forgot Password?</a>
                             </td>
                         </tr>
                     </table>
