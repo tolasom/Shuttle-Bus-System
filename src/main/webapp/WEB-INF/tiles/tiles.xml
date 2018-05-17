@@ -22,6 +22,10 @@
 		<put-attribute name="title" value="Reports" />
 		<put-attribute name="body" value="/WEB-INF/views/view/report.jsp" />		
 	</definition>
+	<definition name="sReport" extends="base.definition">
+		<put-attribute name="title" value="Reports" />
+		<put-attribute name="body" value="/WEB-INF/views/view/sReport.jsp" />		
+	</definition>
 	<definition name="bookingReport2" extends="base.definition">
 		<put-attribute name="title" value="Bookings Report" />
 		<put-attribute name="body" value="/WEB-INF/views/view/bookingReport2.jsp" />		
@@ -38,6 +42,10 @@
 		<put-attribute name="title" value="Bookings" />
 		<put-attribute name="body" value="/WEB-INF/views/view/admin_booking.jsp" />		
 	</definition>
+	<definition name="scheduleReport2" extends="base.definition">
+		<put-attribute name="title" value="Schedules Report" />
+		<put-attribute name="body" value="/WEB-INF/views/view/scheduleReport2.jsp" />		
+	</definition>
 	<definition name="admin_booking_request" extends="base.definition">
 		<put-attribute name="title" value="Booking Requests" />
 		<put-attribute name="body" value="/WEB-INF/views/view/admin_booking_request.jsp" />		
@@ -53,6 +61,10 @@
 	<definition name="departure_time" extends="base.definition">
 		<put-attribute name="title" value="Departure Time" />
 		<put-attribute name="body" value="/WEB-INF/views/view/departure_time.jsp" />		
+	</definition>
+	<definition name="departure_date" extends="base.definition">
+		<put-attribute name="title" value="Departure Date" />
+		<put-attribute name="body" value="/WEB-INF/views/view/departure_date.jsp" />		
 	</definition>
 	<definition name="historical_booking" extends="base.definition">
 		<put-attribute name="title" value="Bookings" />

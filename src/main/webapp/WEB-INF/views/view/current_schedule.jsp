@@ -62,7 +62,19 @@
                         </div>
                     </section>
                 </article>
-                
+
+                <div id="driver_info_modal" class="modal">
+                    <div class="modal-content center">
+                        <h6 class="center light-blue-text">Driver Information</h6>
+                        <table id="get_driver_info"></table>
+                    </div>
+                </div>
+                <div id="bus_info_modal" class="modal">
+                    <div class="modal-content center">
+                        <h6 class="center light-blue-text">Bus Information</h6>
+                        <table id="get_bus_info"></table>
+                    </div>
+                </div>
 </body>
 <script>
 var ch;
@@ -80,8 +92,8 @@ load = function(){
 			{
 			var schedule = '<tr class="hoverr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
 								+'<td>'+schedules[i].code+'</td>'
-								+'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
-								+'<td>'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
+								+'<td class="bus_info" data='+schedules[i].bus_id+' style="color:blue">'+searchBus(schedules[i].bus_id,buses)+'</td>'
+								+'<td class="driver_info" data='+schedules[i].driver_id+' style="color:blue">'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
 								+'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
 								+'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
 								+'<td>'+formatDate(schedules[i].dept_date)+'</td>'
@@ -100,6 +112,66 @@ load = function(){
 				e.stopPropagation();
 		    	location.href=$(this).attr('data-url');
 			});
+            $( ".driver_info" ).on('click', function(e) {
+                 console.log("KK");
+                 e.stopPropagation();
+                 var id=$(this).attr('data');
+                 console.log(id);
+                 $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "GET",
+                        url: "get_sch_driver_info2",
+                        data :{'id':id},
+                        timeout: 100000,
+                        success: function(data) {
+                            console.log(data);
+                            var data='<tr><th>Driver\'s Name</th><td><b>:</b>  &nbsp&nbsp '+data[0].name+'</td></tr>'
+                              +'<tr><th>Phone Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].phone_number+'</td></tr>'
+                              +'<tr><th>Email</th><td><b>:</b> &nbsp&nbsp '+data[0].email +'</td></tr>'
+                              document.getElementById('get_driver_info').innerHTML=data;
+                            $('#driver_info_modal').modal();
+                            $('#driver_info_modal').modal('open');
+                            
+                        },
+                        error: function(e) {
+                            console.log("ERROR: ", e);
+                        },
+                        done: function(e) {
+                            console.log("DONE");
+                        }
+                    });
+             });
+            $( ".bus_info" ).on('click', function(e) {
+                 console.log("KK");
+                 e.stopPropagation();
+                 var id=$(this).attr('data');
+                 console.log(id);
+                 $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "GET",
+                        url: "get_sch_bus_info2",
+                        data :{'id':id},
+                        timeout: 100000,
+                        success: function(data) {
+                            console.log(data);
+                            var data='<tr><th>Bus Model</th><td><b>:</b>  &nbsp&nbsp '+data[0].model+'</td></tr>'
+                              +'<tr><th>Plate Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].plate_number+'</td></tr>'
+                              +'<tr><th>Number of seats</th><td><b>:</b> &nbsp&nbsp '+data[0].number_seat +'</td></tr>'
+                              document.getElementById('get_bus_info').innerHTML=data;
+                            $('#bus_info_modal').modal();
+                            $('#bus_info_modal').modal('open');
+                            
+                        },
+                        error: function(e) {
+                            console.log("ERROR: ", e);
+                        },
+                        done: function(e) {
+                            console.log("DONE");
+                        }
+                    });
+             });
     	},
 	error: function(err){
 		swal("Oops!", "Cannot get all schedules data", "error")
@@ -149,6 +221,9 @@ $(document).ready(function(){
 		   	        });
 		     	}
 		    });
+
+    
+    
 	
 });
 
@@ -186,7 +261,7 @@ function searchDriver(id, myArray){
 function searchBus(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
-            return myArray[i].model;
+            return myArray[i].model+" "+myArray[i].plate_number;
         }
     }
 }

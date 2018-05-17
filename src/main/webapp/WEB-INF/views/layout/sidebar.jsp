@@ -37,11 +37,11 @@
                                 </li>
                                 <li id="breport" class="irr ir2">
                                     <a href="report">
-                                        <i class="fa fa-bar-chart"></i> Bookings Report </a>
+                                         <span style="margin-left: 30px;">Bookings Report </span></a>
                                 </li>
                                 <li id="sreport" class="irr ir2">
-                                    <a href="#">
-                                        <i class="fa fa-bar-chart"></i> Schedules Report </a>
+                                    <a href="sReport">
+                                        <span style="margin-left: 30px;">Schedules Report</span> </a>
                                 </li>
                                 
                                 <li id="settingMng">
@@ -50,11 +50,15 @@
                                 </li>
                                 <li id="userMng" class="irr ir">
                                     <a href="create_user">
-                                        <i class="fa fa-users"></i> Create User </a>
+                                        <span style="margin-left: 30px;"> Create User</span> </a>
                                 </li>
                                 <li id="depttimeMng" class="irr ir">
                                     <a href="departure_time">
-                                        <i class="fa fa-clock-o"></i> Manage Departure Time </a>
+                                        <span style="margin-left: 30px;"> Manage Departure Time</span> </a>
+                                </li>
+                                 <li id="deptdateMng" class="irr ir">
+                                    <a href="departure_date">
+                                        <span style="margin-left: 30px;"> Manage Departure Date</span> </a>
                                 </li>
                                 
 

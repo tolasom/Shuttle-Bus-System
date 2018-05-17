@@ -161,7 +161,12 @@
   </div>
        
        
-      
+      <div id="user_info_modal" class="modal">
+                    <div class="modal-content center">
+                        <h6 class="center light-blue-text">User Information</h6>
+                        <table id="get_user_info"></table>
+                    </div>
+      </div>
   
 </body>
 <script type="text/javascript">
@@ -202,7 +207,7 @@ load = function () {
 	$("#sfrom").append("<option value="+current_schedule.source_id+">"+searchPLocation(current_schedule.source_id,p_locations)+", "+searchLocation(current_schedule.from_id,locations)+" </option>");
 	$("#sto").append("<option value="+current_schedule.destination_id+">"+searchPLocation(current_schedule.destination_id,p_locations)+", "+searchLocation(current_schedule.to_id,locations)+" </option>");
 	for(i=0; i<all_bus.length; i++)					
-		$("#sbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" </option>");
+		$("#sbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" "+all_bus[i].plate_number+" </option>");
 	for(i=0; i<all_driver.length; i++)					
 		$("#sdriver").append("<option value="+all_driver[i].id+">"+all_driver[i].name+" </option>");
 	$("#sdriver").val(schedule.driver_id);
@@ -217,7 +222,7 @@ load = function () {
     					+'<span></span></label></td>'
     					+'<td>'+(i+1)+'</td>'
     					+'<td>'+bookings[i].code+'</td>'
-						+'<td class="unhoverr2" style="color:blue" data-url="'+bookings[i].id+'">'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
+						+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
 						+'<td>'+searchPhone(bookings[i].user_id,all_customer)+'</td>'
 						+'<td>'+bookings[i].number_booking+'</td></tr>';
 	$("#allBooking").append(booking);				
@@ -228,11 +233,38 @@ load = function () {
 	
 
 
-	// $( ".unhoverr2" ).hover(function(e) 
-	// {
-	//     e.stopPropagation();		
-	// 	alert("User")
- //  });
+	$( ".user_info" ).on('click', function(e) {
+                 console.log("KK");
+                 e.stopPropagation();
+                 var id=$(this).attr('data');
+                 console.log(id);
+                 $.ajax({
+                        async: false,
+                        cache: false,
+                        type: "GET",
+                        url: "get_sch_driver_info2",
+                        data :{'id':id},
+                        timeout: 100000,
+                        success: function(data) {
+                            console.log(data);
+                            if(data[0].phone_number==""||data[0].phone_number==null)
+                            	data[0].phone_number = "";
+                            var data='<tr><th>User\'s Name</th><td><b>:</b>  &nbsp&nbsp '+data[0].name+'</td></tr>'
+                              +'<tr><th>Phone Number</th><td><b>:</b>  &nbsp&nbsp '+ data[0].phone_number+'</td></tr>'
+                              +'<tr><th>Email</th><td><b>:</b> &nbsp&nbsp '+data[0].email +'</td></tr>'
+                              document.getElementById('get_user_info').innerHTML=data;
+                            $('#user_info_modal').modal();
+                            $('#user_info_modal').modal('open');
+                            
+                        },
+                        error: function(e) {
+                            console.log("ERROR: ", e);
+                        },
+                        done: function(e) {
+                            console.log("DONE");
+                        }
+                    });
+             });
 
 
 

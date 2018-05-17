@@ -3,6 +3,7 @@ package com.ServiceClasses;
 import java.text.ParseException;
 import java.util.List;
 
+import com.EntityClasses.Batch_Master;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Bus_Master;
 
@@ -66,4 +67,9 @@ public interface usersService {
 	public int saveTime(Schedule_Model schedule) throws ParseException;
 	public int deleteTime(int id);
 	public List<Booking_Master> getBookingReporting(B_Model booking) throws ParseException;
+	public List<Booking_Master> getScheduleReporting(B_Model booking) throws ParseException;
+	public int saveDate(Batch_Master b) throws ParseException;
+	public List<Batch_Master> getAllDates();
+	public int deleteDate(int id);
+	public int updateDate(Batch_Master batch);
 }

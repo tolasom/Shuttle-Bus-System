@@ -6,9 +6,7 @@ import java.util.Date;
 public class Batch_Master {
 		private int id;
 		private String name;
-		private Date date_of_leaving;
-		private Date date_of_returning;
-		private Date deadline_booking;
+		private int date_of_leaving;
 		private Timestamp created_at;
 		private Timestamp updated_at;
 		private boolean enabled;
@@ -27,24 +25,13 @@ public class Batch_Master {
 		public void setName(String name) {
 			this.name = name;
 		}
-		public Date getDate_of_leaving() {
+		public int getDate_of_leaving() {
 			return date_of_leaving;
 		}
-		public void setDate_of_leaving(Date date_of_leaving) {
+		public void setDate_of_leaving(int date_of_leaving) {
 			this.date_of_leaving = date_of_leaving;
 		}
-		public Date getDate_of_returning() {
-			return date_of_returning;
-		}
-		public void setDate_of_returning(Date date_of_returning) {
-			this.date_of_returning = date_of_returning;
-		}
-		public Date getDeadline_booking() {
-			return deadline_booking;
-		}
-		public void setDeadline_booking(Date deadline_booking) {
-			this.deadline_booking = deadline_booking;
-		}
+	
 		public Timestamp getCreated_at() {
 			return created_at;
 		}

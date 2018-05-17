@@ -391,7 +391,7 @@ public class userDaoImpl implements usersDao{
  		 		User_Info user1 = new User_Info();
  		 		User_Info user = roles.get(i).getUser_info();
  		 		user1.setId(user.getId());
- 		 		user1.setName(user.getName());
+ 		 		user1.setName(user.getUsername());
  		 		user1.setPhone_number(user.getPhone_number());
  		 		user1.setEmail(user.getEmail());
  		 		users.add(user1);
@@ -550,6 +550,50 @@ public class userDaoImpl implements usersDao{
         }
 		return 1;
 		}
+
+
+        public int updateDate(Batch_Master batch) {
+        int count = 0;
+        List <Batch_Master> batches  = new ArrayList<Batch_Master>();
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            batches = getAllDates();
+            for(Batch_Master b:batches)
+            {
+                if(batch.getId()!=b.getId())
+                        {
+                            if (b.getName().equals(batch.getName()))
+                                count++;
+                        }
+            }
+            if(count>=1)
+                return 0;
+            String queryString = "FROM Batch_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",batch.getId());
+            Batch_Master updatedBatch  = (Batch_Master) query.uniqueResult();
+            Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+            updatedBatch.setName(batch.getName());
+            updatedBatch.setUpdated_at(updated_at);
+            updatedBatch.setDate_of_leaving(batch.getDate_of_leaving());
+            session.update(updatedBatch);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+        }
+
+
 	
 	public List <Pickup_Location_Master> getPickUpLocationByName (String name){
 		List <Pickup_Location_Master> p_locations  = new ArrayList<Pickup_Location_Master>();
@@ -717,6 +761,25 @@ public class userDaoImpl implements usersDao{
         try {
             trns16 = session.beginTransaction();
             Query query = session.createQuery("from Dept_Time_Master where enabled =:status");
+            query.setBoolean("status", true);
+            p = query.list();
+            } catch (RuntimeException e) {
+            e.printStackTrace();
+            return p;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return p;
+        
+    }
+    public List<Batch_Master> getAllDates(){
+        List<Batch_Master> p= new ArrayList<Batch_Master>();
+        Transaction trns16 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns16 = session.beginTransaction();
+            Query query = session.createQuery("from Batch_Master where enabled =:status");
             query.setBoolean("status", true);
             p = query.list();
             } catch (RuntimeException e) {
@@ -1020,6 +1083,31 @@ public class userDaoImpl implements usersDao{
         }
         return 1;
     }
+
+
+    public int deleteDate(int id){
+        Transaction trns21 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Batch_Master date = new Batch_Master();
+        try {
+            trns21 = session.beginTransaction();
+            String queryString = "from Batch_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            date=(Batch_Master)query.uniqueResult();
+            session.delete(date);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
 	
 	public void deletePickUpLocationByLocatinId(int id){
 		Transaction trns24 = null;
@@ -1305,6 +1393,44 @@ public class userDaoImpl implements usersDao{
         }
         return 1;
     }
+
+
+
+    public int saveDate(Batch_Master b) throws ParseException{
+        List <Batch_Master> batches  = new ArrayList<Batch_Master>();
+        Batch_Master batch = new Batch_Master();
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Batch_Master where name=:name";
+            Query query = session.createQuery(queryString);
+            query.setString("name",b.getName());
+            batches=(List<Batch_Master>)query.list();
+            if(batches.size()>0)
+                    return 0;
+            Timestamp created_at = new Timestamp(System.currentTimeMillis());
+            batch.setName(b.getName());
+            batch.setCreated_at(created_at);
+            batch.setDate_of_leaving(b.getDate_of_leaving());
+            batch.setEnabled(true);
+            session.save(batch);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
+
 	
 	
 	public int saveSchedule2(Schedule_Model schedule) throws ParseException{
@@ -1780,6 +1906,72 @@ public class userDaoImpl implements usersDao{
 		}
 		return bookings;
 	}
+
+
+
+
+
+    public List<Booking_Master> getScheduleReporting(B_Model booking) throws ParseException {
+        List<Booking_Master> bookings= null;
+        int from = booking.getFrom_id();
+        int to = booking.getTo_id();
+        int driver = booking.getUser_id();
+        int bus = booking.getSchedule_id();
+        System.out.println("Date "+booking.getDept_date());
+        System.out.println("Time "+booking.getN());
+        String query = "from Schedule_Master where id>0";
+        if(from!=0)
+            query=query+" and from_id=:from";
+        if(to!=0)
+            query=query+" and to_id=:to";
+        if(driver!=0)
+            query=query+" and driver_id=:driver";
+        if(bus!=0)
+            query=query+" and bus_id=:bus";
+        if(!booking.getDept_date().equals("nth"))
+            query=query+" and dept_date=:date";
+        if(!booking.getN().toString().equals("nth"))
+            query=query+" and dept_time=:time";
+        
+        System.out.println("Query "+query);
+        Transaction trns25 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try{
+            List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+            trns25  = session.beginTransaction();
+            Query q = session.createQuery(query);
+            if(from!=0)
+                q.setInteger("from", from );
+            if(to!=0)
+                q.setInteger("to", to);
+            if(driver!=0)
+                q.setInteger("driver", driver);
+            if(bus!=0)
+                q.setInteger("bus", bus);
+            if(!booking.getDept_date().equals("nth"))
+                q.setDate("date", new SimpleDateFormat("MM/dd/yyyy").parse(booking.getDept_date()));
+            if(!booking.getN().toString().equals("nth"))
+                q.setTime("time",java.sql.Time.valueOf(booking.getN()));
+            
+            System.out.println("Q "+q);
+            bookings = q.list();
+            System.out.println("Size "+bookings.size());
+            
+        }
+        catch(RuntimeException e)
+        {
+            e.printStackTrace();
+            return bookings;
+        }
+        finally{
+            session.flush();
+            session.close();
+        }
+        return bookings;
+    }
+
+
+
 	
 	
 	
