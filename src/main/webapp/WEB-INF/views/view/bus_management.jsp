@@ -2,7 +2,39 @@
 <article class="content cards-page">
                     <div class="title-block">
                         <h3 class="title"> Bus Management </h3><br>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button></div>
+                        <section class="section">
+                       <div>
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title-block">
+                                            <h3 class="title"> All Buses </h3>
+                                        </div>
+                                        <section class="example">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Model</th>
+                                                        <th>Plate Number</th>
+                                                        <th>Number of seat</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="all_bus">
+                                                        
+                                                </tbody>
+                                            </table>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                                        
+                                        
+                    </section>
+
                         <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
@@ -56,37 +88,26 @@ load = function(){
 		type:'GET',
 		success: function(response){
 			buses = response.buses;
-    		var count=0;
-    		var rrow=1;
-    		if(buses.length<4)
-    			count=4;
-    		else count = buses.length;
-    		for (var j=0;j<=parseInt(count/4);j++)
-    			{
-    			var row = '<div class="row" id="row'+(parseInt(j)+1)+'"></div>';
-    			$(".section").append(row);
-    			}
-    		for(var i=0;i<buses.length;i++)
-    			{
-    			var card = '<div class="col-xl-3">'+
-								'<div class="card card-info">'+
-									 '<div class="card-block">'+
-											'<h1><center>'+
-												'<div class="cardHeader">'+
-													buses[i].model+
-												'</div></center>'+
-											'</h1><a href="bus_update?id='+buses[i].id+'">Update</a>'+ 
-											"<a href='javascript:func("+buses[i].id+")'>Delete</a>"+  
-										  '</div>'+
-				
-								'</div>'+
-							'</div>';
-				if(i<4)
-					$("#row1").append(card);
-				else
-					$("#row"+(parseInt(i/4)+1)).append(card);
-					
-    			}
+            console.log(buses)
+        for(var i=0;i<buses.length;i++)
+            {
+               var row = "<tr class='hoverr' data-url='bus_update?id="+buses[i].id+"'><td>"+(i+1)+"</td>"+
+                "<td>"+buses[i].model+"</td>"+
+                "<td>"+buses[i].plate_number+"</td>"+
+                "<td>"+buses[i].number_of_seat+"</td>"+
+                '<td class="unhoverr" data-url="'+buses[i].id+'" style="color:#e85a71"><i class="fa fa-trash"></i></td></tr>';
+                $("#all_bus").append(row);
+            }
+
+    $(".hoverr").on('click', function() {
+                location.href=$(this).attr('data-url');
+            });
+
+    $( ".unhoverr" ).on('click', function(e) {
+                e.stopPropagation();    
+                var s_id = parseInt($(this).attr('data-url'));
+                javascript:func(s_id);
+            });
 			
 			
 	

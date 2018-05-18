@@ -45,7 +45,7 @@ public interface usersService {
 	public List <Schedule_Master> getAllCurrentSchedules();
 	public List <Schedule_Master> getAllSchedules();
 	public List<User_Info> getAllUsers();
-	public int saveSchedule(Schedule_Model schedule)throws ParseException;
+	public Map<String, Object> saveSchedule(Schedule_Model schedule)throws ParseException;
 	public int updateSchedule(Schedule_Model schedule) throws ParseException;
 	public List <Booking_Request_Master> getAllCurrentBookingRequests();
 	public Booking_Request_Master getBookingRequestById (int id);

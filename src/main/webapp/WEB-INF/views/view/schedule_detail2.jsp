@@ -62,6 +62,7 @@
                                                             <th>Name</th>
                                                             <th>Phone Number</th>
                                                             <th>Number of bookings</th>
+                                                            <th>User Type</th>
                                                             
                                                         </tr>
                                                     </thead>
@@ -116,6 +117,7 @@ load = function () {
   	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
  	$(bootstrapjs).appendTo('body');
 	var data = ${data};
+    console.log(data)
 	var bookings = data.bookings;
 	var buses  = data.buses;
 	all_schedule = data.schedules;
@@ -154,7 +156,8 @@ load = function () {
     					+'<td>'+bookings[i].code+'</td>'
 						+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,all_customer)+'</td>'
                         +'<td>'+searchPhone(bookings[i].user_id,all_customer)+'</td>'
-						+'<td>'+bookings[i].number_booking+'</td></tr>';
+						+'<td>'+bookings[i].number_booking+'</td>'
+                        +'<td>'+bookings[i].description+'</td></tr>';
 	$("#allBooking").append(booking);				
 	}
 	$( ".unhoverr" ).on('click', function(e) {

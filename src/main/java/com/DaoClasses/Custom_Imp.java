@@ -37,6 +37,7 @@ import com.EntityClasses.Dept_Time_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
+import com.EntityClasses.UserRole;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
@@ -1331,6 +1332,55 @@ public class Custom_Imp implements Custom_Dao{
         }    
 		return all_bus;
 	}
+	
+	
+	
+	public List<Bus_Master> get_all_bus2(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+		System.out.println("get_all_bus");
+		List<Bus_Master> query_all_bus=new ArrayList<Bus_Master>();
+		List<Bus_Master> buses=new ArrayList<Bus_Master>();
+		List<Map<String,Object>> same_date_route =new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> same_date_diff_route =new ArrayList<Map<String,Object>>();
+		Custom_Dao custom_imp=new Custom_Imp();
+		try {
+			same_date_route=same_date_same_route(session, cb, from, to);
+			List<Integer> unava1= (List<Integer>) same_date_route.get(0).get("unavailable_bus");
+			same_date_diff_route=same_date_differ_route(session, cb, from, to);
+			List<Integer> unava2= (List<Integer>) same_date_diff_route.get(0).get("unavailable_bus");
+			String excep="";
+			for(int i=0;i<unava1.size();i++){
+				excep+=" and id!="+unava1.get(i);
+			}
+			for(int i=0;i<unava2.size();i++){
+				excep+=" and id!="+unava2.get(i);
+			}
+            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+            if(query_all_bus.size()>0){            
+	              for(int i=0;i<query_all_bus.size();i++){	
+	            	  Bus_Master bus = new Bus_Master();
+	                  bus.setModel(query_all_bus.get(i).getModel());
+	                  bus.setNumber_of_seat(query_all_bus.get(i).getNumber_of_seat());
+	                  bus.setId(query_all_bus.get(i).getId());
+	                  buses.add(bus);
+	              } 
+            }
+	              
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		return buses;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//Check Bus Available and not from the same route 
 	
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException{
@@ -1411,6 +1461,170 @@ public class Custom_Imp implements Custom_Dao{
 			return false;
 		}
 	}
+	
+	
+	
+	
+
+	
+	
+	
+	public List<User_Info> get_all_available_drivers(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+		System.out.println("get_all_available_drivers");
+		List<User_Info> drivers=new ArrayList<User_Info>();
+		List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> same_date_route =new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> same_date_diff_route =new ArrayList<Map<String,Object>>();
+		Custom_Dao custom_imp=new Custom_Imp();
+		try {
+			same_date_route=same_date_same_rout(session, cb, from, to);
+			List<Integer> unava1= (List<Integer>) same_date_route.get(0).get("unavailable_bus");
+			same_date_diff_route=same_date_differ_rout(session, cb, from, to);
+			List<Integer> unava2= (List<Integer>) same_date_diff_route.get(0).get("unavailable_bus");
+			unava1.addAll(unava2);
+			drivers = getAllD(unava1);
+	
+	              
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }
+		return drivers;    
+		
+		
+	}
+
+	
+	
+	//Check Bus Available and not from the same route 
+	
+		public  List<Map<String,Object>> same_date_same_rout(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+			List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
+			List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+			List<Integer> ava_bus=new ArrayList<Integer>();
+			List<Integer> una_bus=new ArrayList<Integer>();
+			try {
+				
+				sch=session.createQuery("from Schedule_Master where dept_date=:date and dept_time!=:time and to_id=:to and from_id=:from and driver_id!=:idd")
+						.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+						.setTime("time", java.sql.Time.valueOf(cb.getTime()))
+						.setParameter("to", to)
+						.setInteger("idd", 0)
+						.setParameter("from", from).list();
+				
+				for(int i=0;i<sch.size();i++){
+					if(time_same_date(sch.get(i).getDept_time().toString(),cb.getTime(),8)){
+						ava_bus.add(sch.get(i).getDriver_id());
+					}else{
+						una_bus.add(sch.get(i).getDriver_id());
+					}
+				}
+				Map<String, Object> map=new HashMap<String , Object>();
+				map.put("unavailable_bus", una_bus);
+				map.put("available_bus", ava_bus);
+				all_bus.add(map);
+				System.out.println("same_date_same_route:  ");
+				System.out.println(all_bus);
+		              
+	        } catch (RuntimeException e) {
+	        	e.printStackTrace();
+	        }    
+			return all_bus;
+		}
+		
+		
+		
+		
+		
+		
+		//Check Bus Available and not from the same route 
+		public List<Map<String,Object>> same_date_differ_rout(Session session,Customer_Booking cb,int from, int to) throws ParseException{
+				List<Schedule_Master> sch=new ArrayList<Schedule_Master>();
+				List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();
+				List<Integer> ava_bus=new ArrayList<Integer>();
+				List<Integer> una_bus=new ArrayList<Integer>();
+				try {	
+					sch=session.createQuery("from Schedule_Master where dept_date=:date and from_id!=:from and driver_id!=:idd")
+							.setDate("date",java.sql.Date.valueOf(cb.getDate()))
+							.setInteger("idd", 0)
+							.setParameter("from", from).list();
+					
+					for(int i=0;i<sch.size();i++){
+						if(time_same_date(sch.get(i).getDept_time().toString(),cb.getTime(),4)){
+							ava_bus.add(sch.get(i).getDriver_id());
+						}else{
+							una_bus.add(sch.get(i).getDriver_id());
+						}
+					}
+					Map<String, Object> map=new HashMap<String , Object>();
+					map.put("unavailable_bus", una_bus);
+					map.put("available_bus", ava_bus);
+					all_bus.add(map);
+					System.out.println("same_date_differ_route:  ");
+					System.out.println(all_bus);
+			              
+		        } catch (RuntimeException e) {
+		        	e.printStackTrace();
+		        }    
+				return all_bus;
+			}
+	
+		public  List<User_Info> getAllD(List<Integer> idd) {
+	      	List<User_Info> users= new ArrayList<User_Info>();
+	   		Transaction trns25 = null;
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			try{
+				List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+				trns25  = session.beginTransaction();
+				String queryString  = "from UserRole where role=:role";
+	 		 	Query query = session.createQuery(queryString);
+	 		 	query.setString("role", "ROLE_DRIVER");
+	 		 	List<UserRole> roles = query.list();
+	 		 	
+	 		 	List<Integer> ids = new ArrayList<Integer>();
+	 		 	ids = idd;
+	 		 	boolean status = false;
+	 		 	for(UserRole role :roles){
+	 		 		for(int id : ids){
+	 		 			if(role.getUser_info().getId() == id){
+	 		 				status = true;
+	 		 						break;
+	 		 			}
+	 		 		}
+	 		 		if(!status){
+	 		 			//No users found
+	 		 			users.add(role.getUser_info());
+	 		 		}
+	 		 		status = false;
+	 		 		
+	 		 	}
+	 		 	
+			}
+			catch(RuntimeException e)
+			{
+				e.printStackTrace();			
+			}
+			finally{
+//				session.flush();
+//				session.close();
+			}
+	        return users;
+	    } 	
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date){
 		System.out.println("delete_Schedule");
 		try {
