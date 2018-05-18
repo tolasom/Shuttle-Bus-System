@@ -5,10 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.ModelClasses.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,10 @@ import com.DaoClasses.Custom_Imp;
 import com.DaoClasses.Request_Booking;
 import com.DaoClasses.Request_Booking_Dao;
 import com.EntityClasses.Pickup_Location_Master;
+import com.EntityClasses.User_Info;
+import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.New_Pickup_Location;
+import com.ModelClasses.UserModel;
 
 
 @Controller
@@ -31,9 +38,48 @@ public class CustomerController {
 	public ModelAndView sign_up() {
 		return new ModelAndView("sign_up");
 	}
-	
-	//========================= Sign Up UI================================
-		
+	//========================= Forget Password UI================================
+	@RequestMapping(value="/forget_password")
+	public ModelAndView forget_password() {
+		return new ModelAndView("forget_password");
+	}
+	//========================= Forget Password UI================================
+	@RequestMapping(value="/submit_reset_password_email", method=RequestMethod.POST)
+	@ResponseBody public Map<String, Object> submit_reset_password_email(@RequestBody UserModel user) {
+		System.out.println("Eamil:: "+user.getEmail());
+		Custom_Dao cust=new Custom_Imp();
+		Map<String, Object> ret=cust.check_and_send_email(user.getEmail());
+		System.out.println("Return:: "+ret);
+		return ret;
+	}
+	// Reset Password
+	@RequestMapping(value = "/reset_password", method = RequestMethod.GET)
+	public ModelAndView reset_password(HttpServletRequest request,String name) {
+			ModelAndView view = null;
+			Custom_Dao cust=new Custom_Imp();
+			List<User_Info> user=cust.check_valid_tocken(name);
+	        System.out.println(name);
+			try{
+				if(user.size()==0){
+					view = new ModelAndView("invalid_link_reset_password");
+				}else{
+					Map<String, Object> model = new HashMap<String, Object>();
+					model.put("id", user.get(0).getId());
+					model.put("email", user.get(0).getEmail());
+					view = new ModelAndView("valid_link_reset_password","model",model);
+				}
+			}catch (RuntimeException e)//NullpointerException
+			{
+				view = new ModelAndView("invalid_link_reset_password");
+			}
+			return view;
+	}	
+	// Submit New  Password
+		@RequestMapping(value = "/submit_new_password", method = RequestMethod.POST)
+		@ResponseBody public Boolean submit_new_password(@RequestBody UserModel user) {
+				Custom_Dao cust=new Custom_Imp();
+				return cust.submit_new_password(user);
+		}
 	//=========================check_booking_request Information================================
 	@RequestMapping(value="/today", method=RequestMethod.GET)
 	public @ResponseBody String today() {
@@ -168,6 +214,19 @@ public class CustomerController {
 			List<Map<String, Object>> map = customer.get_sch_driver_info(id);
 			return map;
 		}	
+		//======================== Get Sch Driver Information base id================================
+		@RequestMapping(value="/get_sch_driver_info2", method=RequestMethod.GET)
+			public @ResponseBody List<Map<String,Object>> get_sch_driver_info2(int id) {
+			List<Map<String, Object>> map = customer.get_sch_driver_info2(id);
+			System.out.println("DDDDDDDDDD "+ id);
+			return map;
+		}	
+		@RequestMapping(value="/get_sch_bus_info2", method=RequestMethod.GET)
+		public @ResponseBody List<Map<String,Object>> get_sch_bus_info2(int id) {
+		List<Map<String, Object>> map = customer.get_sch_bus_info2(id);
+		System.out.println("DDDDDDDDDD "+ id);
+		return map;
+	}	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
 		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Class id_delete) {

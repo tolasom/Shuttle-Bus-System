@@ -61,7 +61,7 @@
                                         	</form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="button" style="color:black;" class="btn btn-default" data-dismiss="modal">Close</button>
           <button onClick="goTO()" class="btn btn-info">View Before Generating</button>
         </div>
       </div>
@@ -88,8 +88,8 @@ $(document).ready(function(){
 	})
 	
     $(".ir2").slideToggle();
-                        $("#ddr1").toggleClass("irr2");
-                        $("#ddr2").toggleClass("irr2");
+    $("#ddr1").toggleClass("irr2");
+    $("#ddr2").toggleClass("irr2");
     $( "#reportMng" ).off();
     $("[name=date]").keydown(function (event) {
             event.preventDefault();

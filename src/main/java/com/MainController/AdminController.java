@@ -132,6 +132,24 @@ public class AdminController {
 		}
 		return new ModelAndView("report","data",json);
 	}
+//=========================Returns report view================================
+	@RequestMapping(value="/sReport", method=RequestMethod.GET)
+	public ModelAndView sReport() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("locations",usersService1.getAllLocations());
+		map.put("times",usersService1.getAllTimes());
+		map.put("buses",usersService1.getAllBuses());
+		map.put("drivers",usersService1.getAlDrivers());
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("sReport","data",json);
+	}
 
 //=========================Returns admin booking view================================
 	@RequestMapping(value="/admin_booking", method=RequestMethod.GET)
@@ -153,6 +171,22 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		return new ModelAndView("bookingReport2","data",json);
+	}
+	@RequestMapping(value="/scheduleReport2", method=RequestMethod.GET)
+	public ModelAndView scheduleReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("schedules", data);
+		map.put("locations", usersService1.getAllLocations());
+		map.put("buses", usersService1.getAllBuses());
+		map.put("drivers", usersService1.getAlDrivers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("scheduleReport2","data",json);
 	}
 //=========================Returns historical_booking_requestt view================================
 	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
@@ -425,6 +459,15 @@ public class AdminController {
 		}
 
 
+	@RequestMapping(value="/sReportSubmit", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> sReportSubmit(B_Model booking) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(booking.getFrom_id()+"  "+booking.getTo_id()+"  "+booking.getDept_date()+"  "+booking.getN()+"  "+booking.getNotification());
+		map.put("message",usersService1.getScheduleReporting(booking));
+		return map;
+		}	
+
+
 
 
 	@RequestMapping(value="/createTime", method=RequestMethod.GET)
@@ -448,6 +491,57 @@ public class AdminController {
 		}
 		return map;
 		}
+
+
+
+		@RequestMapping(value="/createDate", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toSaveDate(Batch_Master batch) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.saveDate(batch);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Departure date of the batch already existed!");
+		}
+		else if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","New departure date has just been created successfully");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs");
+		}
+		return map;
+		}
+
+
+
+		@RequestMapping(value="/updateDate", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toUpdateDate(Batch_Master batch) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.updateDate(batch);
+			if(check==0)
+			{
+				map.put("status","0");
+				map.put("message","Batch name already existed!");
+			}
+			else if(check==1)
+			{
+				map.put("status","1");
+				map.put("message","Departure date of that batch has just been updated successfully");
+			}
+			else
+			{
+				map.put("status","5");
+				map.put("message","Technical problem occurs");
+			}
+			return map;
+		}
+
+
+
 	
 	//====================To getBookingByScheduleId by admin============================
 		@RequestMapping(value="/getBookingByScheduleId", method=RequestMethod.GET)
@@ -507,6 +601,24 @@ public class AdminController {
 					{
 						map.put("status", "0");
 						map.put("message","This departure time has not been deleted!");
+					}
+			return map;
+			}
+
+
+@RequestMapping(value="/deleteDate", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> deleteDate(@RequestParam(value = "id", required=true) Integer id) throws Exception{
+			Map<String,Object> map = new HashMap<String,Object>();
+			int check =usersService1.deleteDate(id);
+			if(check==1)
+					{
+						map.put("status", "1");
+						map.put("message","This departure date has just been deleted successfully!");
+					}
+				else
+					{
+						map.put("status", "0");
+						map.put("message","This departure date has not been deleted!");
 					}
 			return map;
 			}
@@ -827,6 +939,19 @@ public class AdminController {
 		}
 		return new ModelAndView("departure_time","data",json);
 	}
+	@RequestMapping(value="/departure_date", method=RequestMethod.GET)
+	public ModelAndView departure_date() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("times", usersService1.getAllDates());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("departure_date","data",json);
+	}
 	
 //====================To save location============================
 	@RequestMapping(value="/createPickUpLocation", method=RequestMethod.GET)
@@ -1085,6 +1210,12 @@ public class AdminController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return map;
+	}
+	@RequestMapping(value="/getDById", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getDById(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("driver", usersService1.getCustomerById(id));
 		return map;
 	}
 	

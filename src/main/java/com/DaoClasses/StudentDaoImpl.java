@@ -219,6 +219,7 @@ public class StudentDaoImpl implements StudentDao{
                 map.put("departure_time",booking_master.getDept_time());
                 map.put("id",booking_master.getId());
                 map.put("status",booking_master.getNotification());
+                map.put("code",booking_master.getCode());
                 if(booking_master.getSchedule_id() !=0 ){
                     Schedule_Master schedule_master =
                             (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
@@ -235,7 +236,6 @@ public class StudentDaoImpl implements StudentDao{
                         map.put("total_seats",bus_master.getNumber_of_seat());
                     }
                     map.put("schedule",true);
-                    map.put("code",booking_master.getCode());
                 }
                 if(booking_master.getQr()!=null){
                     map.put("qr_code",booking_master.getQr());

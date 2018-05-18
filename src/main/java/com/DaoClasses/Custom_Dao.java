@@ -8,6 +8,7 @@ import org.hibernate.Session;
 
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Pickup_Location_Master;
+import com.EntityClasses.User_Info;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
@@ -35,9 +36,14 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> get_request_booking_id(int id);
 	public List<Map<String,Object>> get_sch_bus_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info(int id);
+	public List<Map<String,Object>> get_sch_driver_info2(int id);
+	public List<Map<String,Object>> get_sch_bus_info2(int id);
 	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Integer> get_existing_bus_and_driver(Custom_Imp booking,Session session,Customer_Booking cb,int from, int to);
 	public void create_unassigned_booking(Session session,Customer_Booking cb,Pickup_Location_Master pick_source,Pickup_Location_Master pick_destin);
 	public String cancel_request_booking(int id);
+	public List<User_Info> check_valid_tocken(String token);
+	public Map<String, Object> check_and_send_email(String email);
+	public Boolean submit_new_password(UserModel user); 
 }

@@ -9,7 +9,7 @@
                                             <h3 class="title"> All departure time </h3>
                                         </div>
                                         <section class="example">
-                                            <table class="table table-bordered">
+                                            <table class="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>

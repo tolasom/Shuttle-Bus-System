@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String[] USER_MATCHERS = {
 
 		"/customer_home",
-			"/customer",
+			"/customer/**",
 		"/request_booking",
 		"/booking_history"
 		

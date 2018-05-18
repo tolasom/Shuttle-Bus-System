@@ -13,7 +13,7 @@
                                         </div>
                                         <section class="example">
                                             <div class="table-responsive">
-                                                <table class="table table-striped table-bordered table-hover">
+                                                <table id="tt" class="table table-striped table-bordered table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
@@ -35,11 +35,11 @@
                                         </section>
                                     </div>
                                     <div class="col-md-12">
-                                <button class="btn btn-info pull-right" onClick="openModal()" style="color:white;" id="moveBtn"> <i class="fa fa-bar-chart"></i> Generate Report</button>
+                                <button class="btn btn-info pull-right" onClick="generateReport()"  style="color:white;" id="moveBtn"> <i class="fa fa-bar-chart"></i> Generate Report</button>
                             </div>
                                 </div>
 
-                            </div>
+                            </div> 
 
                         </div>
                     </section>
@@ -57,8 +57,8 @@ $(document).ready(function(){
 	$("#breport").addClass("active");
 	
     $(".ir2").slideToggle();
-                        $("#ddr1").toggleClass("irr2");
-                        $("#ddr2").toggleClass("irr2");
+    $("#ddr1").toggleClass("irr");
+    $("#ddr2").toggleClass("irr");
     $( "#reportMng" ).off();
     
 });
@@ -117,5 +117,18 @@ function searchCustomer(id, myArray){
             return myArray[i].name;
         }
     }
+}
+
+generateReport = function()
+{
+            var data_type = 'data:application/vnd.ms-excel';
+            var table_div = document.getElementById('tt');
+            var table_html = table_div.outerHTML.replace(/ /g, '%20');
+        
+            var a = document.createElement('a');
+            a.href = data_type + ', ' + table_html;
+            a.download = 'Bookings_Report' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+            a.click();
+       
 }
 </script>

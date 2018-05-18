@@ -6,49 +6,21 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
 =======
     <list default="true" id="b4ddbbf0-7636-4424-be02-bf0b54da5f26" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ModelClasses/Student_Booking.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ServiceClasses/StudentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ServiceClasses/StudentServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/css/main.328896a0.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/css/main.328896a0.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.13cb8c8d.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.13cb8c8d.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/student/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/student/screen/home.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/MainController/CustomerController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/KIT-Point-System.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SpringRegister3_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SpringRegister3_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_postgresql_postgresql_42_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_postgresql_postgresql_42_2_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/SecurityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/SecurityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ModelClasses/Customer_Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ModelClasses/Customer_Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/cusomer_home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/cusomer_home.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule_Dao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule_Dao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/LoginFilter/LoginFilterClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/LoginFilter/LoginFilterClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/client_mail/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/client_mail/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/qr_code_template.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/qr_code_template.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.java/SpringRegister3/pom.properties" afterDir="false" />
+<<<<<<< HEAD
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,6 +35,7 @@
       <file leaf-file-name="CustomerController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
 <<<<<<< HEAD
             <state relative-caret-position="2145">
               <caret line="163" column="49" lean-forward="false" selection-start-line="163" selection-start-column="49" selection-end-line="163" selection-end-column="49" />
@@ -98,6 +71,10 @@
             <state relative-caret-position="3210">
               <caret line="225" column="45" lean-forward="false" selection-start-line="225" selection-start-column="45" selection-end-line="225" selection-end-column="45" />
               <folding />
+=======
+            <state relative-caret-position="1649">
+              <caret line="97" column="108" selection-start-line="97" selection-start-column="108" selection-end-line="97" selection-end-column="108" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
             </state>
           </provider>
         </entry>
@@ -116,8 +93,12 @@
             <state relative-caret-position="548">
               <caret line="947" column="97" selection-start-line="947" selection-start-column="92" selection-end-line="947" selection-end-column="97" />
               <folding>
+<<<<<<< HEAD
                 <marker date="1525542113909" expanded="true" signature="15103:15125" ph="data:" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+                <marker date="1525906412493" expanded="true" signature="15103:15125" ph="data:" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
               </folding>
             </state>
           </provider>
@@ -134,6 +115,7 @@
       <file leaf-file-name="Student_Imp.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Student_Imp.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1734">
               <caret line="102" column="17" selection-start-line="102" selection-start-column="17" selection-end-line="102" selection-end-column="17" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
@@ -158,6 +140,10 @@
             <state relative-caret-position="495">
               <caret line="33" column="9" lean-forward="false" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
               <folding />
+=======
+            <state relative-caret-position="3162">
+              <caret line="186" column="17" selection-start-line="186" selection-start-column="17" selection-end-line="186" selection-end-column="17" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
             </state>
           </provider>
         </entry>
@@ -165,6 +151,7 @@
       <file leaf-file-name="SecurityController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/SecurityController.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1155">
               <caret line="102" column="53" lean-forward="false" selection-start-line="102" selection-start-column="53" selection-end-line="102" selection-end-column="53" />
               <folding />
@@ -182,6 +169,10 @@
             <state relative-caret-position="141">
               <caret line="882" column="44" selection-start-line="882" selection-start-column="44" selection-end-line="882" selection-end-column="58" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+            <state relative-caret-position="15011">
+              <caret line="883" column="44" selection-start-line="883" selection-start-column="44" selection-end-line="883" selection-end-column="44" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
             </state>
           </provider>
         </entry>
@@ -257,11 +248,15 @@
     </navigator>
     <panes>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="AndroidView" />
 =======
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+      <pane id="Scope" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -386,9 +381,12 @@
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
       <pane id="Scope" />
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
       <pane id="AndroidView" />
       <pane id="PackagesPane" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
@@ -571,11 +569,16 @@
       <workItem from="1525672321141" duration="2860000" />
       <workItem from="1525679796981" duration="183000" />
       <workItem from="1525794574119" duration="7000" />
+<<<<<<< HEAD
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+      <workItem from="1526507609842" duration="228000" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
 <<<<<<< HEAD
     <option name="totallyTimeSpent" value="37240000" />
   </component>
@@ -616,12 +619,16 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
 =======
     <option name="totallyTimeSpent" value="10009000" />
+=======
+    <option name="totallyTimeSpent" value="10237000" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.215959" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32854578" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -629,24 +636,24 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info id="Web" order="5" side_tool="true" />
-      <window_info id="Designer" order="3" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Theme Preview" order="7" />
-      <window_info anchor="bottom" id="Java Enterprise" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Image Layers" order="7" />
-      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="3" />
       <window_info anchor="bottom" id="Spring" order="9" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="right" id="Database" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="bottom" id="Java Enterprise" order="11" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="Capture Tool" order="2" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Maven Projects" order="4" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
@@ -671,7 +678,35 @@
           <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="30" />
 =======
     <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1581">
+          <caret line="93" column="108" selection-start-line="93" selection-start-column="108" selection-end-line="93" selection-end-column="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Student_Imp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1734">
+          <caret line="102" column="17" selection-start-line="102" selection-start-column="17" selection-end-line="102" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14994">
+          <caret line="882" column="44" selection-start-line="882" selection-start-column="44" selection-end-line="882" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16099">
+          <caret line="947" column="97" selection-start-line="947" selection-start-column="92" selection-end-line="947" selection-end-column="97" />
+          <folding>
+            <marker date="1525906412493" expanded="true" signature="15103:15125" ph="data:" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp">
       <provider selected="true" editor-type-id="text-editor">
@@ -760,9 +795,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1146,9 +1178,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.settings/org.eclipse.wst.common.project.facet.core.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.sts4-cache/classpath-data.json">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1170,18 +1199,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/Maven__commons_collections_commons_collections_3_2_1.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/artifacts/SpringRegister3_war_exploded.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1018">
           <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/artifacts/SpringRegister3_war.xml">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1198,9 +1221,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SpringRegister3.iml" />
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/Maven__commons_dbcp_commons_dbcp_1_4.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1210,15 +1230,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1581">
-          <caret line="93" column="108" selection-start-line="93" selection-start-column="108" selection-end-line="93" selection-end-column="108" />
+        <state relative-caret-position="1649">
+          <caret line="97" column="108" selection-start-line="97" selection-start-column="108" selection-end-line="97" selection-end-column="108" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Student_Imp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1734">
-          <caret line="102" column="17" selection-start-line="102" selection-start-column="17" selection-end-line="102" selection-end-column="17" />
+        <state relative-caret-position="3162">
+          <caret line="186" column="17" selection-start-line="186" selection-start-column="17" selection-end-line="186" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1231,9 +1251,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="141">
           <caret line="882" column="44" selection-start-line="882" selection-start-column="44" selection-end-line="882" selection-end-column="58" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
+=======
+        <state relative-caret-position="15011">
+          <caret line="883" column="44" selection-start-line="883" selection-start-column="44" selection-end-line="883" selection-end-column="44" />
+>>>>>>> 6804647f0bf5e2aaa02b4f4333d85f8c4946ff18
         </state>
       </provider>
     </entry>
@@ -1247,7 +1272,7 @@
           <caret line="947" column="97" selection-start-line="947" selection-start-column="92" selection-end-line="947" selection-end-column="97" />
 >>>>>>> 9f6cc53ed87b61b4dd084703ab0bf1d2d9fa0df4
           <folding>
-            <marker date="1525542113909" expanded="true" signature="15103:15125" ph="data:" />
+            <marker date="1525906412493" expanded="true" signature="15103:15125" ph="data:" />
           </folding>
         </state>
       </provider>

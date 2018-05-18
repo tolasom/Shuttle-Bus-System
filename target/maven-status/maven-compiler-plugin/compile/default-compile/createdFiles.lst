@@ -1,10 +1,12 @@
 com/DaoClasses/Custom_Imp.class
 com/HibernateUtil/HibernateUtil.class
 com/EntityClasses/Location_Master.class
+com/client_mail/Test1.class
 com/EncryptionDecryption/SecretKeyClass.class
 getInfoLogin/IdUser.class
 com/client_mail/MailServiceImpl.class
 com/MainController/DriverController.class
+com/client_mail/Test_Forget_Password.class
 com/ModelClasses/IdentifyTypeUser.class
 com/DaoClasses/StudentDaoImpl.class
 com/DaoClasses/Custom_Dao.class
@@ -14,6 +16,7 @@ com/EntityClasses/Bus_Master.class
 com/DaoClasses/Set_Student_Schedule.class
 com/ServiceClasses/Customer_Service.class
 com/ModelClasses/B_Model.class
+com/client_mail/Base64ToImage.class
 com/ModelClasses/ID_Class.class
 com/DaoClasses/CORSFilter.class
 com/MainController/CustomerController.class
@@ -35,12 +38,14 @@ com/ModelClasses/New_Pickup_Location.class
 com/ModelClasses/UserModel.class
 com/ModelClasses/Mail.class
 com/ModelClasses/Bus_Model.class
+com/client_mail/App.class
 com/DaoClasses/userDaoImpl.class
 com/DaoClasses/Request_Booking.class
 com/ServiceClasses/StudentServiceImpl.class
 com/ModelClasses/Project_Model.class
 com/ServiceClasses/usersService.class
 com/ModelClasses/Reset_Password.class
+com/client_mail/Test.class
 com/DaoClasses/Mailer.class
 com/DaoClasses/Custom_Imp$1.class
 com/EntityClasses/Schedule_Master.class

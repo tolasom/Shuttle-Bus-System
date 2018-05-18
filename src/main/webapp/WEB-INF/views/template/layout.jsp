@@ -18,6 +18,9 @@
 <!--  jQuery Validation -->
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script> 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+
 <!-- App JS -->      
 <spring:url value="/resources/Bootstrap/js/app.js" var="AppJS"/>
 <spring:url value="/resources/Bootstrap/js/vendor.js" var="VendorJS"/>
@@ -87,7 +90,9 @@
 <script src="${dateJS2}"></script>
 <script src="${AppJS}"></script>
 
+
 <script>
+
                     
 var eee;
                     $(document).ready(function(){
@@ -153,9 +158,9 @@ var eee;
                           autoclose: true,
                         };  
                         var slickjs = $("<link>");
-    $(slickjs).attr('rel', 'stylesheet');
-    $(slickjs).attr('href', '/resources/Bootstrap/css/calendar.css');
-    $(slickjs).appendTo('head');
+                        $(slickjs).attr('rel', 'stylesheet');
+                        $(slickjs).attr('href', '/resources/Bootstrap/css/calendar.css');
+                        $(slickjs).appendTo('head');
                         var options2 = { now: "08:00", //hh:mm 24 hour format only, defaults to current time
                                  twentyFour: true, //Display 24 hour format, defaults to false 
                                  upArrow: 'wickedpicker__controls__control-up', //The up arrow class selector to use, for custom CSS 

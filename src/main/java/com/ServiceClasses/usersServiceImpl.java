@@ -177,6 +177,21 @@ public class usersServiceImpl implements usersService{
 	public List<Booking_Master> getBookingReporting(B_Model booking) throws ParseException{
 		return usersDao1.getBookingReporting(booking);
 	}
+	public List<Booking_Master> getScheduleReporting(B_Model booking) throws ParseException{
+		return usersDao1.getScheduleReporting(booking);
+	}
+	public int saveDate(Batch_Master b) throws ParseException{
+		return usersDao1.saveDate(b);
+	}
+	public List<Batch_Master> getAllDates(){
+		return usersDao1.getAllDates();
+	}
+	public int deleteDate(int id){
+		return usersDao1.deleteDate(id);
+	}
+	public int updateDate(Batch_Master batch){
+		return usersDao1.updateDate(batch);
+	}
 }
 
 

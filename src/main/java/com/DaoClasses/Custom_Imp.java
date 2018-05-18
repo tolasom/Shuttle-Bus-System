@@ -3,6 +3,8 @@ package com.DaoClasses;
 import getInfoLogin.IdUser;
 
 import java.io.ByteArrayOutputStream; 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +24,10 @@ import net.glxn.qrgen.image.ImageType;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
+import com.EncryptionDecryption.Encryption;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
@@ -33,8 +38,11 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.Mail;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
+import com.client_mail.ApplicationConfig;
+import com.client_mail.MailService;
 
 public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
@@ -83,7 +91,7 @@ public class Custom_Imp implements Custom_Dao{
 		  else  
 		   return "S"+scode; 
 		   
-		 }
+	}
 	public List <Schedule_Master> getAllSchedules(){ 
 		  List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>(); 
 		        Transaction trns19 = null; 
@@ -120,6 +128,115 @@ public class Custom_Imp implements Custom_Dao{
 		   return "B"+scode; 
 		   
 	}
+	 public String Key(int mount,int id){
+   		 SecureRandom random = new SecureRandom();
+   		 System.out.println("id: "+(new BigInteger(mount*5, random).toString(32))+String.valueOf(id));
+   		 return  (new BigInteger(mount*5, random).toString(32))+String.valueOf(id);	   
+   	}
+	 public Map<String, Object> check_and_send_email(String email){
+		System.out.println("check_and_send_email");
+		 Custom_Imp cus= new Custom_Imp();
+		 	Map<String, Object> map=new HashMap<String,Object>();
+			Transaction trns = null;
+			User_Info user= new User_Info();
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	     	try {
+	            trns = session.beginTransaction();
+	            String hql ="from User_Info where email='"+email+"'";
+                System.out.println(hql);
+		        Query query =  session.createQuery(hql);
+		        System.out.println(query.list());
+		        if(query.list().size()>0){
+		        	user = (User_Info) query.list().get(0);
+		        	String token= cus.Key(50,user.getId());
+		        	System.out.println("token: "+token);
+		        	String hql1 ="update User_Info set reset_token=:token where id=:id";
+			        Query query1 =  session.createQuery(hql1);
+			        query1.setParameter("id", user.getId());
+			        query1.setString("token",token);
+			        query1.executeUpdate();
+			        trns.commit();
+			        
+		        	Mail mail = new Mail();
+			        mail.setMailFrom("nanaresearch9@gmail.com");
+			        mail.setMailTo(user.getEmail());
+			        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
+			        mail.setFile_name("forget_password_template.txt");
+			 
+			        Map < String, Object > model = new HashMap < String, Object > ();
+			        model.put("email", user.getEmail());
+			        model.put("key", token);
+			        mail.setModel(model);
+			 
+			        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+			        MailService mailService = (MailService) context.getBean("mailService");
+			        mailService.sendEmail(mail);
+			        context.close();
+			        
+			        map.put("email", user.getEmail());
+			        map.put("status", true);
+		        }else{
+			        map.put("status", false);
+		        } 
+	        }catch (RuntimeException e){
+	        	map.put("status", false);
+	        	return map;
+	     	}finally {
+	            session.flush();
+	            session.close();
+	        }
+	        return map;
+		}
+	 public List<User_Info> check_valid_tocken(String token){
+			Transaction trns = null;
+			List<User_Info> user= new ArrayList<User_Info>();
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	     	try {
+	            trns = session.beginTransaction();
+	            String hql ="from User_Info where reset_token=:token";
+		        Query query =  session.createQuery(hql);
+		        query.setString("token", token);
+		        user = query.list();
+		        
+	        }catch (RuntimeException e){
+	            if (trns != null) {
+	                trns.rollback();
+	            }
+	     	}finally {
+	            session.flush();
+	            session.close();
+	          }
+	        return user;
+		}
+	 public Boolean submit_new_password(UserModel user){
+			Transaction trns = null;
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	     	try {
+	            trns = session.beginTransaction();
+	            Encryption encode = new Encryption();
+	            String hashedPassword = encode.PasswordEncode(user.getPassword());
+	            String hql ="Update User_Info set password=:password, reset_token=null where id=:id";
+		        Query query =  session.createQuery(hql);
+		        query.setString("password", hashedPassword);
+		        query.setParameter("id", user.getId());
+		        int ret = query.executeUpdate();
+		        if(ret==0){
+		        	return false;
+		        }else{
+		        	trns.commit();
+		        	return true;
+		        }
+		        
+	        }catch (RuntimeException e){
+	            if (trns != null) {
+	                trns.rollback();
+	            }
+	            return false;
+	     	}finally {
+	            session.flush();
+	            session.close();
+	          }
+		}
 	 public List <Booking_Master> getAllBookings(){ 
 		  List <Booking_Master> bookings  = new ArrayList<Booking_Master>(); 
 		        Transaction trns19 = null; 
@@ -747,6 +864,69 @@ public class Custom_Imp implements Custom_Dao{
         }
 		return list;
 	}
+
+
+    public List<Map<String,Object>> get_sch_driver_info2(int id){
+    	User_Info customer = new User_Info();
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+        List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+        try {
+            trns1 = session.beginTransaction();
+            List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+            String queryString  = "from User_Info where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id", id);
+            customer = (User_Info) query.uniqueResult();
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("id", customer.getId());
+            map.put("name", customer.getUsername());
+            map.put("email", customer.getEmail());
+            map.put("phone_number", customer.getPhone_number());
+            list.add(map);
+            }   
+         catch (RuntimeException e) {
+            e.printStackTrace();
+        }    
+        finally {
+            session.flush();
+            session.close();
+        }
+        return list;
+    }
+    
+    
+    
+    public List<Map<String,Object>> get_sch_bus_info2(int id){
+    	Bus_Master bus= new Bus_Master();
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();      
+        List<Map<String,Object>> list =new ArrayList<Map<String,Object>>();
+        try {
+            trns1 = session.beginTransaction();
+            String queryString = "from Bus_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",id);
+            bus=(Bus_Master)query.uniqueResult();
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("id", bus.getId());
+            map.put("model", bus.getModel());
+            map.put("plate_number", bus.getPlate_number());
+            map.put("number_seat", bus.getNumber_of_seat());
+            list.add(map);
+            }   
+         catch (RuntimeException e) {
+            e.printStackTrace();
+        }    
+        finally {
+            session.flush();
+            session.close();
+        }
+        return list;
+    }
+
+
+
 	//======================== combination for choosing bus till ============================
 	List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
 	List<Integer> total_choosen_bus_list=new ArrayList<Integer>();
@@ -1652,15 +1832,19 @@ public class Custom_Imp implements Custom_Dao{
 		
 	
 	public static void main(String args[]){
-		int id=1;
-		Transaction trns1 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();     
-		try {
-            trns1 = session.beginTransaction();
-            Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-        	query.setParameter("id", id);
-        	int result = query.executeUpdate();
-        	trns1.commit();
+		Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+     	try {
+            trns = session.beginTransaction();
+            Encryption encode = new Encryption();
+            String hashedPassword = encode.PasswordEncode("12345678");
+            String hql ="Update User_Info set password=:password, reset_token=null where id=:id";
+	        Query query =  session.createQuery(hql);
+	        query.setString("password", hashedPassword);
+	        query.setParameter("id", 17);
+	        int ret = query.executeUpdate();
+	        trns.commit();
+	        
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }
