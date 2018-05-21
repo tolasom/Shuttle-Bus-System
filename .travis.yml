@@ -8,8 +8,6 @@ addons:
       secure: "QZNJWxkA38mxgNLfMu7eH12cMwDM5GOyic+uqaJgPOhFgo1Huyh9IK+78RvQWPI+252mpOIstmunJryG5nOU2xP8tTh9cl+NdAqrXJcFVdNMAuB4P8YaSRie8urjW25WO+DggLGpT0XsJcLt2y3atYW+xyF/NNgutEIHxwRC12W6ePNshiArGdovZ7dCg+QyDsqQMSHKgk/Tl/RhqradIDebWePhcTS8hPFfa+jM868N7LXM9gWZM/U4PkBkT3MgWD6I2Zk4XEKsQjNzRxJHyQZM+F32HGIp2H/4NS/H/Y5hWAs0U0EN9Pjr9DJV+2fcDaE7skBkgE6zjhpnYMSjh9FB08ABNxVs50CbyYaRXSPtSnYs+btfQmq+jXuL8lDrrSQO6/GyzuMFndaP84Np3IoA/8fcHhDa5Uy5rJAT/DI1GIPQZljLC0YaYvzO2G2fmqwAeyO7EKRNH8sbL3bNRPbc+JhjWYYfPhpemW0YGApnIM2hiJHlVSTrI2NUaYtIIeXKQ5K7iWpx5BhlnhtgJuYPeeLSvQQusWottlgMZ/ekAnxvIg4XWRAcD48sVUsvRXHaMJbHkMdTuUh11uie6IBXkexpevkwiF5DC7vIjhjA8V1gbUbnfVdWf+XttOQOtfkewC7sasnsMP0mzT6vqFZRQRzfOMseHOVFv44n+Jk="
 jdk:
   - oraclejdk8 -X 
-before_install:
-  - cd Shuttle_Bus
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 cache:
