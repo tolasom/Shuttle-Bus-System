@@ -1,9 +1,9 @@
 package com.DaoClasses;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 import com.EntityClasses.*;
 import com.HibernateUtil.HibernateUtil;
@@ -133,7 +133,7 @@ public class StudentDaoImpl implements StudentDao{
     }
     public List<Map<String,Object>> getHistory(){
          List<Map<String,Object>> list_history = new ArrayList<Map<String,Object>>();
-         /*List<Booking_Master> list_booking = new ArrayList<Booking_Master>();
+         List<Booking_Master> list_booking = new ArrayList<Booking_Master>();
          Session session = HibernateUtil.getSessionFactory().openSession();
          try {
              String hql = "From Booking_Master where user_id="+id.getAuthentic();
@@ -180,7 +180,7 @@ public class StudentDaoImpl implements StudentDao{
             session.flush();
             session.close();
          }
-*/
+
          return list_history;
     }
 
@@ -210,6 +210,8 @@ public class StudentDaoImpl implements StudentDao{
         try {
             for(Booking_Master booking_master : booking_masterList){
                 Map<String,Object> map = new HashMap<String, Object>();
+                Location_Master location_master = new Location_Master();
+                Pickup_Location_Master pickup_location_master = new Pickup_Location_Master();
                 map.put("destination_id",booking_master.getDestination_id());
                 map.put("source_id",booking_master.getSource_id());
                 map.put("departure_date",booking_master.getDept_date());
@@ -220,6 +222,20 @@ public class StudentDaoImpl implements StudentDao{
                 map.put("id",booking_master.getId());
                 map.put("status",booking_master.getNotification());
                 map.put("code",booking_master.getCode());
+
+
+                location_master = (Location_Master) session.load(Location_Master.class,booking_master.getSource_id());
+                map.put("source_name",location_master.getName());
+                location_master = (Location_Master) session.load(Location_Master.class,booking_master.getDestination_id());
+                map.put("destination_name",location_master.getName());
+
+                pickup_location_master = (Pickup_Location_Master)
+                session.load(Pickup_Location_Master.class,booking_master.getFrom_id());
+                map.put("pickup_location",pickup_location_master.getName());
+                pickup_location_master = (Pickup_Location_Master)
+                        session.load(Pickup_Location_Master.class,booking_master.getTo_id());
+                map.put("drop_off_location",pickup_location_master.getName());
+
                 if(booking_master.getSchedule_id() !=0 ){
                     Schedule_Master schedule_master =
                             (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
@@ -291,7 +307,11 @@ public class StudentDaoImpl implements StudentDao{
         return map;
     }
 
+    public static void main(String arg[]){
 
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+    }
 
 }
 

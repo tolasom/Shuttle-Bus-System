@@ -5,6 +5,7 @@ com/client_mail/Test1.class
 com/EncryptionDecryption/SecretKeyClass.class
 getInfoLogin/IdUser.class
 com/client_mail/MailServiceImpl.class
+com/DaoClasses/test2.class
 com/MainController/DriverController.class
 com/client_mail/Test_Forget_Password.class
 com/ModelClasses/IdentifyTypeUser.class
@@ -17,6 +18,7 @@ com/DaoClasses/Set_Student_Schedule.class
 com/ServiceClasses/Customer_Service.class
 com/ModelClasses/B_Model.class
 com/client_mail/Base64ToImage.class
+com/client_mail/Test2.class
 com/ModelClasses/ID_Class.class
 com/DaoClasses/CORSFilter.class
 com/MainController/CustomerController.class

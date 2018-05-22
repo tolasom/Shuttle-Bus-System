@@ -81,16 +81,20 @@
 var locations;
 var pickup_location;
 var s_code;
+var all_driver;
+var all_bus;
 load = function () {
 	var data = ${data};
 	console.log(data)
 	var buses  = data.buses;
+	all_bus = buses;
 	var code = data.code;
 	s_code = code;
 	var location = data.locations;
 	pickup_locations = location;
 	locations = data.main_locations;
 	var drivers = data.drivers;
+	all_driver = drivers;
 	for(i=0; i<buses.length; i++)					
 		$("#sbus").append("<option value="+buses[i].id+">"+buses[i].model+" "+buses[i].plate_number+" </option>");
 	for(i=0; i<pickup_locations.length; i++)					
@@ -139,6 +143,8 @@ $(document).ready(function(){
 	
 	$("#myForm").on('submit',function(e){
 		e.preventDefault();
+		//var dateee = document.getElementsById('deptdate')[0].innerHTML;
+		//var convertedDate = dateee.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
 		if($("#scode").val()!=s_code)
 		{
 		swal("Action Disallowed!", "You cannot change Code!", "error")
@@ -188,8 +194,11 @@ $(document).ready(function(){
     			},
     		traditional: true,			
     		success: function(response){
-    				if(response.status=="1")
-    					{
+    				console.log(response)
+    				
+    				
+    				if(response.status=="all fine")
+			  		{
     					setTimeout(function() {
     				        swal({
     				            title: "Done!",
@@ -200,8 +209,51 @@ $(document).ready(function(){
     				        });
     				    }, 10);
     					
+			  		}
+    				else if(response.status=="b nfine")
+    				{
+        				var buses = JSON.parse(response.bus_data);
+        				var ddd="";
+        				console.log(buses)
+        				for (i=0;i<buses.length;i++)
+        					{
+        					ddd = ddd + searchBus(buses[i],all_bus)+", ";
+        					console.log(ddd);
+        					}
+        				swal(response.message, "Here are available buses: "+ddd, "error")
+        				}
+    					
+    				else if(response.status=="d nfine"){
+    				var drivers = JSON.parse(response.driver_data);
+    				var ddd="";
+    				console.log(drivers)
+    				for (i=0;i<drivers.length;i++)
+    					{
+    					ddd = ddd + searchDriver(drivers[i],all_driver)+", ";
+    					console.log(ddd);
     					}
-    				//var obj = jQuery.parseJSON(response);
+    				swal(response.message, "Here are available drivers: "+ddd, "error")
+    				}
+    				else if (response.status=="d nfine b nfine"){
+        				var drivers = JSON.parse(response.driver_data);
+        				var ddd="";
+        				console.log(drivers)
+        				for (i=0;i<drivers.length;i++)
+        					{
+        					ddd = ddd + searchDriver(drivers[i],all_driver)+", ";
+        					console.log(ddd);
+        					}
+        				var buses = JSON.parse(response.bus_data);
+        				var ccc="";
+        				console.log(buses)
+        				for (i=0;i<buses.length;i++)
+        					{
+        					ccc = ccc + searchBus(buses[i],all_bus)+", ";
+        					console.log(ccc);
+        					}
+        				swal(response.message, "Here are available drivers: "+ddd+".  Here are available buses: "+ccc, "error")
+        				}
+			 		
     				else 
      					swal("Oops!", response.message, "error")    
     				
@@ -229,6 +281,8 @@ formatDate =function (date) {
     return [month, day, year].join('-');
 };
 
+
+
 function searchLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
@@ -236,6 +290,18 @@ function searchLocation(id, myArray){
         }
     }
 }
+
+function searchDriver(id, myArray){
+    if(id==0)
+        return"";
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+
 function searchPLocation(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {

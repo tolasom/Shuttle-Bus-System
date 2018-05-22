@@ -1,22 +1,17 @@
 package com.MainController;
 
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.ModelClasses.*;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.DaoClasses.Request_Booking;
@@ -83,10 +78,9 @@ public class CustomerController {
 	//=========================check_booking_request Information================================
 	@RequestMapping(value="/today", method=RequestMethod.GET)
 	public @ResponseBody String today() {
-		Calendar cal = Calendar.getInstance();
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    String today=sdf.format(cal.getTime());
-	    return today;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+	    return f.format(new Date());
 	}
 	//=========================User Information================================
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
@@ -107,7 +101,7 @@ public class CustomerController {
 			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
 			Map<String, Map<String, List<Pickup_Location_Master>>> map = customer.location();
 			return map;
-		}	
+		}
 	//=========================Departure Time Information================================
 		@RequestMapping(value="/departure_time_info", method=RequestMethod.GET)
 			public @ResponseBody List<Map<String,Object>> departure_time_info() {
@@ -221,12 +215,7 @@ public class CustomerController {
 			System.out.println("DDDDDDDDDD "+ id);
 			return map;
 		}	
-		@RequestMapping(value="/get_sch_bus_info2", method=RequestMethod.GET)
-		public @ResponseBody List<Map<String,Object>> get_sch_bus_info2(int id) {
-		List<Map<String, Object>> map = customer.get_sch_bus_info2(id);
-		System.out.println("DDDDDDDDDD "+ id);
-		return map;
-	}	
+	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
 		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Class id_delete) {
@@ -257,6 +246,8 @@ public class CustomerController {
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
+	
+	
 //	@Scheduled(cron="*/5 * * * * *")
 //  public void updateEmployeeInventory(){
 //      System.out.println("Started cron job 1");

@@ -898,6 +898,7 @@ label,
   .images-container .image-container:hover .controls {
     bottom: 0;
     opacity: 1; }
+  
 
 .images-container .controls {
   position: absolute;

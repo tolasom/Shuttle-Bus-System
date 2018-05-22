@@ -52,7 +52,7 @@ public class StudentController {
 
 
     @RequestMapping(value = "/student_history", method = RequestMethod.GET)
-    public List<Map<String, Object>> getHistory() {
+    @ResponseBody public List<Map<String, Object>> getHistory() {
         return studentDao.getHistory();
     }
 

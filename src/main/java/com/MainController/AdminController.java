@@ -426,26 +426,11 @@ public class AdminController {
 //====================To save schedule by admin============================
 	@RequestMapping(value="/createSchedule", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSaveSchedule(Schedule_Model schedule) throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> res = new HashMap<String,Object>();
 		System.out.println(("In java"));
 		System.out.println(schedule.getCode()+"  "+schedule.getDriver_id()+"  "+schedule.getBus_id()+"  "+schedule.getSource_id()+"  "+schedule.getDestination_id()+"  "+schedule.getNumber_booking()+"  "+schedule.getDept_date()+"  "+schedule.getDept_time());;
-		int check = usersService1.saveSchedule(schedule);
-		if(check==0)
-		{
-			map.put("status","0");
-			map.put("message","Code already existed!");
-		}
-		else if(check==1)
-		{
-			map.put("status","1");
-			map.put("message","Schedule has just been created successfully");
-		}
-		else
-		{
-			map.put("status","5");
-			map.put("message","Technical problem occurs");
-		}
-		return map;
+		res = usersService1.saveSchedule(schedule);
+		return res;
 		}
 
 

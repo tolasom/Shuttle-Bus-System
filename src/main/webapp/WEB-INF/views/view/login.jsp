@@ -354,6 +354,8 @@
                         }
                     }
                     else{
+                        $("#login-error").css("display","inline");
+                        document.getElementById("login-error").innerHTML = "email or password is incorrect"
                         return false;
                     }
                 }

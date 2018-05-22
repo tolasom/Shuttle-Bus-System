@@ -32,6 +32,7 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Request_Booking.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Pickup_Location_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/MainController/SecurityController.java
+/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/Test2.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/Customer_Booking.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/Reset_Password.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Bus_Master.java
@@ -54,6 +55,7 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Request_Booking_Dao.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Batch_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/Bus_Model.java
+/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/test2.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EncryptionDecryption/KeyGeneration.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Booking_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/MainController/CustomerController.java
