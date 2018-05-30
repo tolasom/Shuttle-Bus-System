@@ -13,4 +13,5 @@ public interface StudentDao {
     public List<Object> list_booking_date();
     public List<Map<String,Object>>getHistory();
     public Map<String,Object> customerHistory();
+    public List<Integer> listBookedDate();
 }

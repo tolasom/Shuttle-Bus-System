@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
         <meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json">
         <link rel="shortcut icon" href="/favicon.ico">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <title>React App</title>
     </head>
     <body>

@@ -59,6 +59,10 @@ public class StudentController {
     @RequestMapping(value = "/customer_history_all", method = RequestMethod.GET)
     @ResponseBody public Map<String,Object> customerHistory(){ return studentDao.customerHistory(); }
 
+
+    @RequestMapping(value = "/list_enable", method = RequestMethod.GET)
+    @ResponseBody public List<Integer> listBookedDate(){ return studentDao.listBookedDate(); }
+
     //@Scheduled(cron="*/5 * * * * *")
     public void updateEmployeeInventory() {
         System.out.println("Started cron job 1");
