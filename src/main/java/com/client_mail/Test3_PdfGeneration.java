@@ -1,4 +1,5 @@
 package com.client_mail;
+
 import java.io.FileOutputStream;
 import java.util.Date;
 
@@ -19,9 +20,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
-public class Test {
-    private static String FILE = "d:/temp/zPdf.pdf";
+public class Test3_PdfGeneration {
+	private static String FILE = "d:/temp/6Pdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,

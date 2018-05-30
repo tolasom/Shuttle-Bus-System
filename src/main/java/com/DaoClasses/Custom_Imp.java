@@ -2009,7 +2009,80 @@ public class Custom_Imp implements Custom_Dao{
 			return list;
 	}
 	
-	
+	public List<Booking_Master> send_email_qr_generator(int id){
+		Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();   
+        List<Booking_Master> cr = new ArrayList<Booking_Master>();
+        List<User_Info> user = new ArrayList<User_Info>();
+        List<Pickup_Location_Master> pickUp = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> source = new ArrayList<Location_Master>();
+        List<Pickup_Location_Master> drop_off = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> destination = new ArrayList<Location_Master>();
+        Map<String, Object> map=new HashMap<String, Object>();
+		try {
+            trns1 = session.beginTransaction();
+            cr = session.createQuery("from Booking_Master where id=:id").setParameter("id", id).list();
+            if(cr.size()>0){
+            	user = session.createQuery("from User_Info where id=:id").setParameter("id", cr.get(0).getUser_id()).list();
+            	pickUp = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", cr.get(0).getSource_id()).list();
+            	source = session.createQuery("from Location_Master where id=:id").setParameter("id", cr.get(0).getFrom_id()).list();
+            	drop_off = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", cr.get(0).getDestination_id()).list();
+            	destination = session.createQuery("from Location_Master where id=:id").setParameter("id", cr.get(0).getTo_id()).list();
+            	if(user.size()>0&&pickUp.size()>0&&source.size()>0
+            			&&drop_off.size()>0&&destination.size()>0){
+            		Mail mail = new Mail();
+    		        mail.setMailFrom("maimom2222@gmail.com");
+    		        mail.setMailTo(user.get(0).getEmail());
+    		        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
+    		        mail.setFile_name("forget_password_template.txt");
+    		 
+    		        
+    		        //Take current IP
+    		        InetAddress ip = null;
+    				try {
+    					ip = InetAddress.getLocalHost();
+    				} catch (UnknownHostException e) {
+    					e.printStackTrace();
+    					return new ArrayList<Booking_Master>();
+    				}
+    				
+    		        Map < String, Object > model = new HashMap < String, Object > ();
+    		        model.put("name", user.get(0).getName());
+    		        model.put("email", user.get(0).getEmail());
+    		        model.put("source", source.get(0).getName());
+    		        model.put("pick_up", pickUp.get(0).getName());
+    		        model.put("destination", destination.get(0).getName());
+    		        model.put("drop_off", drop_off.get(0).getName());
+    		        model.put("ip_address", ip.getHostAddress());
+    		        model.put("dept_date", cr.get(0).getDept_date());
+    		        model.put("dept_time", cr.get(0).getDept_time());
+    		        model.put("amount", cr.get(0).getNumber_booking());
+    		        model.put("total_cost", cr.get(0).getTotal_cost());
+    		        model.put("child", cr.get(0).getChild());
+    		        model.put("adult", cr.get(0).getAdult());
+    		        mail.setModel(model);
+    		 
+    		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+    		        MailService mailService = (MailService) context.getBean("mailService");
+    		        mailService.sendEmail(mail);
+    		        context.close();
+            	}else{
+            		return new ArrayList<Booking_Master>();
+            	}
+            	
+            }else{
+            	return new ArrayList<Booking_Master>();
+            }
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+		return cr;
+}
+
 	
 	
 	

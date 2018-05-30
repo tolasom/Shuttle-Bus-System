@@ -18,7 +18,7 @@ public class Base64ToImage {
           String base64=s.nextLine();  
           byte[] base64Val=convertToImg(base64);  
           System.out.println(base64Val);
-          writeByteToImageFile(base64Val, "./img/1.png");  
+          writeByteToImageFile(base64Val, "./src/main/resources/img/3.png");  
           System.out.println("Saved the base64 as image in current directory with name image.png");  
      }  
      public static byte[] convertToImg(String base64) throws IOException  
@@ -30,8 +30,6 @@ public class Base64ToImage {
     	 System.out.println(imgBytes);
           File imgFile = new File(imgFileName);  
           BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgBytes));  
-          System.out.println(imgFile);
-          System.out.println(img);
           ImageIO.write(img, "png", imgFile);  
      }  
 }

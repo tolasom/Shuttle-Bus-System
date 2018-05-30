@@ -1,6 +1,10 @@
 package com.MainController;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,17 +13,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.DaoClasses.Custom_Dao;
 import com.DaoClasses.Custom_Imp;
 import com.DaoClasses.Request_Booking;
 import com.DaoClasses.Request_Booking_Dao;
+import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.User_Info;
 import com.ModelClasses.Customer_Booking;
@@ -256,4 +268,16 @@ public class CustomerController {
 //  public void updateEmployeeInventory(){
 //      System.out.println("Started cron job 1");
 //  }
+	
+	// Send email with QR code to user
+	//=========================Send email with QR code to user================================
+	@RequestMapping(value="/send_email_qr_generator", method=RequestMethod.POST)
+			public @ResponseBody List<Booking_Master> send_email_qr_generator(int id) {
+			List<Booking_Master> ret = customer.send_email_qr_generator(id);
+			return ret;
+		}
+	
+	
+	
+	
 }

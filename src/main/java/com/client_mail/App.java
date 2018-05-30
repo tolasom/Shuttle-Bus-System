@@ -21,7 +21,6 @@ import com.ModelClasses.Mail;
 public class App {
  
     public static void main(String args[]) {
-		Boolean ret=false;
 		Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
      	try {
