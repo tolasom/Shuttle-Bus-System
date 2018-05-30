@@ -155,7 +155,7 @@ public class userDaoImpl implements usersDao{
             Encryption encode = new Encryption();
             String hashedPassword = encode.PasswordEncode(user.getPassword());
             UserRole user_role = new UserRole();
-            
+            Batch_Master batch_master = new Batch_Master();
             user_info.setBatch_id(0);
             user_info.setEmail(user.getEmail());
             user_info.setName(user.getName());
@@ -164,6 +164,7 @@ public class userDaoImpl implements usersDao{
             if(type.equals("google")){
             	user_info.setGooglePassword(hashedPassword);
             	System.out.println("google");
+
             }
             else {
             	System.out.println("system");
@@ -2693,7 +2694,16 @@ public class userDaoImpl implements usersDao{
           }
         
 	}
-	
+
+	public static void main(String arg[]){
+	    String email = "varathana14@kit.edu.kh";
+	    System.out.println(email.contains("@kit.edu.kh"));
+        String ar = email.split("@")[0];
+        String year = String.valueOf(ar.charAt(ar.length()-2)) + ar.charAt(ar.length()-1);
+        int batch = Integer.parseInt(year) -13;
+        System.out.println(batch);
+
+    }
 
 	
 	

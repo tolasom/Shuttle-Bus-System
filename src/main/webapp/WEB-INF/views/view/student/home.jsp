@@ -8,7 +8,7 @@
         <meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json">
         <link rel="shortcut icon" href="/favicon.ico">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <title>React App</title>
+        <title>Student</title>
     </head>
     <body>
         <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
@@ -19,8 +19,8 @@
         </script>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <script type="text/javascript" src="http://10.10.1.21:3000/static/js/bundle.js">
-
-        </script>
+        <script type="text/javascript" src="/sbs/resources/student/build/static/js/main.14d3d0b5.js"></script>
+        <link rel="stylesheet" href="/sbs/resources/student/build/static/css/main.0573fbe1.css">
+        <!--<script type="text/javascript" src="http://10.10.1.21:3000/static/js/bundle.js"></script>-->
     </body>
 </html>
