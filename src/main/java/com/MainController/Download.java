@@ -4,7 +4,14 @@
 
 package com.MainController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import javax.servlet.ServletContext;
+
+import org.apache.pdfbox.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
@@ -16,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itextpdf.io.IOException;
 
@@ -45,4 +53,26 @@ public class Download {
 	  return response;
 
 	 }
+	 
+	 @RequestMapping("/file/{name}")
+	    public ResponseEntity<byte[]> downloadFile(@PathVariable("name") String name) throws IOException, java.io.IOException {
+	        System.out.println(name);
+	    	String filename = System.getProperty("user.dir")+"/src/main/resources/img/" + name + ".png";
+	        InputStream inputImage = new FileInputStream(filename);
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        byte[] buffer = new byte[512];
+	        int l = inputImage.read(buffer);
+	        while(l >= 0) {
+	            outputStream.write(buffer, 0, l);
+	            l = inputImage.read(buffer);
+	        }
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("Content-Type", "image/jpeg");
+	        headers.set("Content-Disposition", "attachment; filename=\"" + name + ".png\"");
+	        return new ResponseEntity<byte[]>(outputStream.toByteArray(), headers, HttpStatus.OK);
+	    }
+	    public static void main(String[] args) {
+	        System.out.println("Working Directory = " +
+	        		System.getProperty("user.dir")+"/src/main/resources/downloads/");
+	   }
 }

@@ -179,7 +179,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     	System.out.println("---------------->getAvailableTime(");
 		List<Map<String,Object>> list_time=new ArrayList<Map<String,Object>>();   
         try {
-        	Student_Imp s=new Student_Imp();
+        	Set_Student_Schedule s=new Set_Student_Schedule();
     		String tmr_date=tmr_dt.split(" ")[0];
     		String tmr_time=tmr_dt.split(" ")[1];
     		List<Time> list_time1=new ArrayList<Time>();   

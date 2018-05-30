@@ -7,9 +7,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.DaoClasses.Set_Student_Schedule;
 import com.DaoClasses.StudentDao;
 import com.DaoClasses.StudentDaoImpl;
-import com.DaoClasses.Student_Imp;
 import com.ModelClasses.Student_Booking;
 
 @Controller
@@ -55,7 +55,12 @@ public class StudentController {
     @Scheduled(cron="0 0 5,9,12 * * *")
     public void updateEmployeeInventory() throws ParseException {
         System.out.println("Started create schedule for studen");
-        Student_Imp c =new Student_Imp();
+        Set_Student_Schedule c =new Set_Student_Schedule();
+        c.createSchedule();
+    }
+    
+    public static void main(String args[]) throws ParseException{
+    	Set_Student_Schedule c =new Set_Student_Schedule();
         c.createSchedule();
     }
 

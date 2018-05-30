@@ -7,7 +7,6 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,16 +18,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-
 import com.EncryptionDecryption.Encryption;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
@@ -58,14 +54,14 @@ public class Custom_Imp implements Custom_Dao{
 	}
 	public String DateNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
 	public String DateTimeNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
@@ -971,9 +967,11 @@ public class Custom_Imp implements Custom_Dao{
         				new_booker.setAdult(cb.getAdult());
         				new_booker.setChild(cb.getChild());
         				new_booker.setDescription("customer");
+        				new_booker.setEmail_confirm(false);
         				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
         				session.save(new_booker);
         				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
+        				new_booker.setQr_name(c.Key(50, new_booker.getId()));
         				
         				
         				Query query = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
@@ -1116,9 +1114,11 @@ public class Custom_Imp implements Custom_Dao{
 			new_booker.setAdult(cb.getAdult());
 			new_booker.setChild(cb.getChild());
 			new_booker.setDescription("customer");
+			new_booker.setEmail_confirm(false);
 			new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
 			session.save(new_booker);
 			new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
+			new_booker.setQr_name(c.Key(50, new_booker.getId()));
 		} catch (RuntimeException e) {
 	    	e.printStackTrace();
 	    }        
@@ -2008,70 +2008,22 @@ public class Custom_Imp implements Custom_Dao{
 	        }
 			return list;
 	}
-	
-	public List<Booking_Master> send_email_qr_generator(int id){
-		Transaction trns1 = null;
+	public void send_QRCODE(){
+		Custom_Imp test=new Custom_Imp();
+    	Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();   
         List<Booking_Master> cr = new ArrayList<Booking_Master>();
-        List<User_Info> user = new ArrayList<User_Info>();
-        List<Pickup_Location_Master> pickUp = new ArrayList<Pickup_Location_Master>();
-        List<Location_Master> source = new ArrayList<Location_Master>();
-        List<Pickup_Location_Master> drop_off = new ArrayList<Pickup_Location_Master>();
-        List<Location_Master> destination = new ArrayList<Location_Master>();
-        Map<String, Object> map=new HashMap<String, Object>();
+        QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
 		try {
             trns1 = session.beginTransaction();
-            cr = session.createQuery("from Booking_Master where id=:id").setParameter("id", id).list();
-            if(cr.size()>0){
-            	user = session.createQuery("from User_Info where id=:id").setParameter("id", cr.get(0).getUser_id()).list();
-            	pickUp = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", cr.get(0).getSource_id()).list();
-            	source = session.createQuery("from Location_Master where id=:id").setParameter("id", cr.get(0).getFrom_id()).list();
-            	drop_off = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", cr.get(0).getDestination_id()).list();
-            	destination = session.createQuery("from Location_Master where id=:id").setParameter("id", cr.get(0).getTo_id()).list();
-            	if(user.size()>0&&pickUp.size()>0&&source.size()>0
-            			&&drop_off.size()>0&&destination.size()>0){
-            		Mail mail = new Mail();
-    		        mail.setMailFrom("maimom2222@gmail.com");
-    		        mail.setMailTo(user.get(0).getEmail());
-    		        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
-    		        mail.setFile_name("forget_password_template.txt");
-    		 
-    		        
-    		        //Take current IP
-    		        InetAddress ip = null;
-    				try {
-    					ip = InetAddress.getLocalHost();
-    				} catch (UnknownHostException e) {
-    					e.printStackTrace();
-    					return new ArrayList<Booking_Master>();
-    				}
-    				
-    		        Map < String, Object > model = new HashMap < String, Object > ();
-    		        model.put("name", user.get(0).getName());
-    		        model.put("email", user.get(0).getEmail());
-    		        model.put("source", source.get(0).getName());
-    		        model.put("pick_up", pickUp.get(0).getName());
-    		        model.put("destination", destination.get(0).getName());
-    		        model.put("drop_off", drop_off.get(0).getName());
-    		        model.put("ip_address", ip.getHostAddress());
-    		        model.put("dept_date", cr.get(0).getDept_date());
-    		        model.put("dept_time", cr.get(0).getDept_time());
-    		        model.put("amount", cr.get(0).getNumber_booking());
-    		        model.put("total_cost", cr.get(0).getTotal_cost());
-    		        model.put("child", cr.get(0).getChild());
-    		        model.put("adult", cr.get(0).getAdult());
-    		        mail.setModel(model);
-    		 
-    		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-    		        MailService mailService = (MailService) context.getBean("mailService");
-    		        mailService.sendEmail(mail);
-    		        context.close();
-            	}else{
-            		return new ArrayList<Booking_Master>();
+            cr = session.createQuery("from Booking_Master where dept_date>=? and email_confirm='false' and description='customer'").setDate(0, java.sql.Date.valueOf(test.DateNow())).list();
+            System.out.println(cr.size());
+            for(Booking_Master bm: cr){
+            	Boolean status=qr_gen.qr_generator(bm);
+            	System.out.println("KK :"+bm.getId());
+            	if(status){
+            		test.send_email_qr_generator(bm);
             	}
-            	
-            }else{
-            	return new ArrayList<Booking_Master>();
             }
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -2080,17 +2032,90 @@ public class Custom_Imp implements Custom_Dao{
             session.flush();
             session.close();
         }
-		return cr;
-}
+    }
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public void send_email_qr_generator(Booking_Master bm){
+		Transaction trns1 = null;
+		Custom_Imp ci=new Custom_Imp();
+        Session session = HibernateUtil.getSessionFactory().openSession(); 
+        List<User_Info> user = new ArrayList<User_Info>();
+        List<Pickup_Location_Master> pickUp = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> source = new ArrayList<Location_Master>();
+        List<Pickup_Location_Master> drop_off = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> destination = new ArrayList<Location_Master>();
+        Map<String, Object> map=new HashMap<String, Object>();
+		try {
+            trns1 = session.beginTransaction();
+            user = session.createQuery("from User_Info where id=:id").setParameter("id", bm.getUser_id()).list();
+        	pickUp = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", bm.getSource_id()).list();
+        	source = session.createQuery("from Location_Master where id=:id").setParameter("id", bm.getFrom_id()).list();
+        	drop_off = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", bm.getDestination_id()).list();
+        	destination = session.createQuery("from Location_Master where id=:id").setParameter("id", bm.getTo_id()).list();
+        	if(user.size()>0&&pickUp.size()>0&&source.size()>0
+        			&&drop_off.size()>0&&destination.size()>0){
+        		Mail mail = new Mail();
+		        mail.setMailFrom("maimom2222@gmail.com");
+		        //mail.setMailTo("maimom61@gmail.com");
+		        mail.setMailTo(user.get(0).getEmail());
+		        mail.setMailSubject("vKirirom Shuttle Bus Booked Confirmation");
+		        mail.setFile_name("qr_code_template.txt");
+		 
+		        
+		        //Take current IP
+		        InetAddress ip = null;
+				try {
+					ip = InetAddress.getLocalHost();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
+				
+		        Map < String, Object > model = new HashMap < String, Object > ();
+		        model.put("name", user.get(0).getName());
+		        model.put("booking_code", bm.getCode());
+		        model.put("email", user.get(0).getEmail());
+		        model.put("source", source.get(0).getName());
+		        model.put("pick_up", pickUp.get(0).getName());
+		        model.put("destination", destination.get(0).getName());
+		        model.put("drop_off", drop_off.get(0).getName());
+		        model.put("ip_address", ip.getHostAddress());
+		        model.put("dept_date", ci.convertDateTimetoDate(bm.getDept_date()));
+		        model.put("dept_time", bm.getDept_time());
+		        model.put("amount", bm.getNumber_booking());
+		        model.put("total_cost", bm.getTotal_cost());
+		        model.put("child", bm.getChild());
+		        model.put("adult", bm.getAdult());
+		        model.put("qr_name", bm.getQr_name());
+		        mail.setModel(model);
+		 
+		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		        MailService mailService = (MailService) context.getBean("mailService");
+		        mailService.sendEmail(mail);
+		        context.close();
+		        
+		        String hql ="Update Booking_Master set email_confirm='true' where id=:id";
+		        Query query =  session.createQuery(hql);
+		        query.setParameter("id", bm.getId());
+		        int ret=query.executeUpdate();
+		        trns1.commit();
+        	}
+            	
+
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+	}
+	public String convertDateTimetoDate(Date d){
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+    }
+
 	
 	
 		
