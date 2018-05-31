@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>sbbs</groupId>
-  <!-- <groupId>com.java</groupId> -->
-  <artifactId>SBBS</artifactId>
+  <!-- <groupId>sbbs</groupId> -->
+  <groupId>com.java</groupId>
+  <!-- <artifactId>SBBS</artifactId> -->
   <!-- SpringRegister3 -->
-  <!-- <artifactId>SpringRegister3</artifactId> -->
+  <artifactId>SpringRegister3</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>SBBS Maven Webapp</name>
-  <!-- <name>SpringRegister3 Maven Webapp</name> -->
+  <!-- <name>SBBS Maven Webapp</name> -->
+  <name>SpringRegister3 Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
  
