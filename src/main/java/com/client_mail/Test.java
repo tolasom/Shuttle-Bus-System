@@ -21,7 +21,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class Test {
-    private static String FILE = "d:/temp/5Pdf.pdf";
+    private static String FILE = "d:/temp/zPdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,

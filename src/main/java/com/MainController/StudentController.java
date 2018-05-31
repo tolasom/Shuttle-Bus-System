@@ -1,20 +1,15 @@
 package com.MainController;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.DaoClasses.StudentDao;
 import com.DaoClasses.StudentDaoImpl;
+import com.DaoClasses.Student_Imp;
 import com.ModelClasses.Student_Booking;
 
 @Controller
@@ -56,6 +51,7 @@ public class StudentController {
         return studentDao.getHistory();
     }
 
+
     @RequestMapping(value = "/customer_history_all", method = RequestMethod.GET)
     @ResponseBody public Map<String,Object> customerHistory(){ return studentDao.customerHistory(); }
 
@@ -64,9 +60,15 @@ public class StudentController {
     @ResponseBody public List<Integer> listBookedDate(){ return studentDao.listBookedDate(); }
 
     //@Scheduled(cron="*/5 * * * * *")
-    public void updateEmployeeInventory() {
-        System.out.println("Started cron job 1");
+    //public void updateEmployeeInventory() {
+       // System.out.println("Started cron job 1");
+    @Scheduled(cron="0 0 5,9,12 * * *")
+    public void updateEmployeeInventory() throws ParseException{
+        System.out.println("Started create schedule for studen");
+        Student_Imp c =new Student_Imp();
+        c.createSchedule();
     }
+
 
 }
 
