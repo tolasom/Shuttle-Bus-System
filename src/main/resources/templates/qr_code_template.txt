@@ -60,7 +60,7 @@
 					</table>
 					<br>
 					<p style="color:black;">Please click the link below to download your ticket QR-code</p>
-					<p>${ip_address}/sbs/download/file/${qr_name}</p>
+					<p>http://shuttlebus.vkirirom.com/sbs/download/file/${qr_name}</p>
 					<br>
 				    <p style="color:black;">Thank you,</p>
 				    <p style="color:black;">KIT Technical Support</p>
