@@ -209,10 +209,17 @@ $(document).ready(function () {
                        		+ 'If you don\'t see the email after a few minutes, check your spam folder. </p>'
                        	
                 	}else{
-                		form='<h3 class="title-header">Reset your password</h3>'
-                       		+'<p>Sorry problem occur while sent a password reset email to <b>'
-                       		+ response.data.email+'</b></p>'
-                       		+ '<p>Please kindly try again, thank you. </p>'
+                		if(response.data.email=== undefined){
+                			form='<h3 class="title-header">Reset your password</h3>'
+                           		+ "<p>Sorry your email: <b>"+ email+"</b> doesn't exist with our system yet"
+                           		+ '<p>Please kindly sign up a new account or login with google account, thank you. </p>'
+                		}else{
+                			form='<h3 class="title-header">Reset your password</h3>'
+                           		+'<p>Sorry your email problem occur while sent a password reset email to <b>'
+                           		+ email+'</b></p>'
+                           		+ '<p>Please kindly try again, thank you. </p>'
+                		}
+                		
                 	}
                 	console.log(form);
                 	document.getElementById("return_form").innerHTML = form;
