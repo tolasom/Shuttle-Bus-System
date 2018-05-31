@@ -19,8 +19,6 @@ public class ApplicationConfig {
  
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-//        mailSender.setUsername("sopheakdy23@gmail.com");
-//        mailSender.setPassword("Pheakhappy99");
         mailSender.setUsername("nanaresearch9@gmail.com");
         mailSender.setPassword("mom12624120");
  

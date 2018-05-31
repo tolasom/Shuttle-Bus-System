@@ -29,7 +29,7 @@
     <property name="updated_at" column="updated_at"/>
     <property name="qr_status" column="qr_status"/>
     <property name="email_confirm" column="email_confirm"/>
-    
+    <property name="qr_name" column="qr_name"/>
     
  	</class>
 </hibernate-mapping>

@@ -2,12 +2,10 @@ package com.DaoClasses;
 
 import getInfoLogin.IdUser;
 
-import java.io.ByteArrayOutputStream; 
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,23 +14,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.glxn.qrgen.QRCode;
-import net.glxn.qrgen.image.ImageType;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.UserModel;
 
 public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	IdUser user=new IdUser();
@@ -125,7 +118,8 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 //        	-----> Loop time and round ---> Assign with schedule function base on list>0
     		for(int i=0;i<list_time.size();i++){
     			for(int j=0; j<list_round.size();j++){
-    				List<Booking_Master> booked=session.createQuery("from Booking_Master where description='student' and dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+    				List<Booking_Master> booked=session.createQuery("from Booking_Master where description='student' " +
+                            "and dept_date=:date and dept_time=:time and to_id=:to and from_id=:from and notification!='Cancelled'")
     						.setDate("date",java.sql.Date.valueOf(list_time.get(i).get("date").toString()))
     						.setTime("time", java.sql.Time.valueOf(list_time.get(i).get("time").toString()))
     						.setParameter("to", list_round.get(j)[1])
@@ -179,7 +173,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     	System.out.println("---------------->getAvailableTime(");
 		List<Map<String,Object>> list_time=new ArrayList<Map<String,Object>>();   
         try {
-        	Student_Imp s=new Student_Imp();
+        	Set_Student_Schedule s=new Set_Student_Schedule();
     		String tmr_date=tmr_dt.split(" ")[0];
     		String tmr_time=tmr_dt.split(" ")[1];
     		List<Time> list_time1=new ArrayList<Time>();   
@@ -423,10 +417,12 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     	System.out.println(list_stu.size());
 			try{
 				for(int j=0;j<list_stu.size();j++){
-						Query query = session.createQuery("update Booking_Master set notification='Unassigned'" +
-		        				" where id = :id");
-		                query.setParameter("id", list_stu.get(j).getId());
-		                int result = query.executeUpdate();
+
+					Booking_Master booking = (Booking_Master) session.load(Booking_Master.class,list_stu.get(j).getId());
+					booking.setNotification("Unassigned");
+
+					User_Info user_info = (User_Info) session.load(User_Info.class,booking.getUser_id());
+					user_info.setNumber_ticket(user_info.getNumber_ticket()-1);
 				}
 					
 			} catch (RuntimeException e) {

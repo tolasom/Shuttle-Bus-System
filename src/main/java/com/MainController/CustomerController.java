@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -270,20 +271,17 @@ public class CustomerController {
         return currentDateTimeString;
 	}
 	
+	//Send QR code to home that not yet send out
+	@Scheduled(cron="* */30 * * * *")
+	public void updateEmployeeInventory(){
+      System.out.println("Started send QR code to home that not yet send out");
+      customer.send_QRCODE();
+	}
 	
-//	@Scheduled(cron="*/5 * * * * *")
-//  public void updateEmployeeInventory(){
-//      System.out.println("Started cron job 1");
-//  }
-	
-	// Send email with QR code to user
-	//=========================Send email with QR code to user================================
-	@RequestMapping(value="/send_email_qr_generator", method=RequestMethod.POST)
-			public @ResponseBody List<Booking_Master> send_email_qr_generator(int id) {
-			List<Booking_Master> ret = customer.send_email_qr_generator(id);
-			return ret;
-		}
-	
+	public static void main(String args[]){
+		Custom_Dao cus=new Custom_Imp();
+		cus.send_QRCODE();
+	}
 	
 	
 	

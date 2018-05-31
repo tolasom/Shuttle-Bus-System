@@ -28,7 +28,7 @@ public class Booking_Master {
 		private Timestamp updated_at;
 		private Boolean qr_status;
 		private Boolean email_confirm;
-		
+		private String qr_name;
 	
 		public int getFrom_id() {
 			return from_id;
@@ -168,6 +168,12 @@ public class Booking_Master {
 		}
 		public void setQr_status(Boolean qr_status) {
 			this.qr_status = qr_status;
+		}
+		public String getQr_name() {
+			return qr_name;
+		}
+		public void setQr_name(String qr_name) {
+			this.qr_name = qr_name;
 		}
 		
 }

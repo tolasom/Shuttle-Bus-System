@@ -27,6 +27,7 @@ public class App {
      		trns = session.beginTransaction();
             String hql ="from Booking_Master where id='2'";
 	        Query query =  session.createQuery(hql);
+	        System.out.println(query.list().size());
 	        if(query.list().size()>0){
 	        	Booking_Master book = (Booking_Master) query.list().get(0);
 		        System.out.println(book.getUser_id());
