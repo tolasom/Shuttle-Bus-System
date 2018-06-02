@@ -65,77 +65,23 @@ public class Request_Booking implements Request_Booking_Dao{
 		dt = c.getTime();
 		return dt;
 	}
-	public static String getScheduleSequence(){ 
-		  List<Schedule_Master> schedules = new ArrayList<Schedule_Master>(); 
-		  schedules = new Request_Booking().getAllSchedules(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Schedule_Master s : schedules) 
-		   System.out.println(s.getId()); 
-		  if(schedules.size()>0){ 
-		   code = 1000000+schedules.get(schedules.size()-1).getId()+1; 
+	public static String getScheduleSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
 		   scode = Integer.toString(code); 
 		   scode = scode.substring(1); 
 		   return "S"+scode; 
-		  } 
-		  else  
-		   return "S"+scode; 
-		   
-		 }
-	public List <Schedule_Master> getAllSchedules(){ 
-		  List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>(); 
-		        Transaction trns19 = null; 
-		        Session session = HibernateUtil.getSessionFactory().openSession(); 
-		        try { 
-		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Schedule_Master order by id asc"; 
-		            Query query = session.createQuery(queryString); 
-		            schedules=(List<Schedule_Master>)query.list(); 
-		        } catch (RuntimeException e) { 
-		            e.printStackTrace(); 
-		            return schedules; 
-		        } finally { 
-		            session.flush(); 
-		            session.close(); 
-		        } 
-		        return schedules; 
-		   
-		 }
-	 public static String getBookingSequence(){ 
-		  List<Booking_Master> bookings = new ArrayList<Booking_Master>(); 
-		  bookings = new Request_Booking().getAllBookings(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Booking_Master s : bookings) 
-		   System.out.println(s.getId()); 
-		  if(bookings.size()>0){ 
-		   code = 1000000+bookings.get(bookings.size()-1).getId()+1; 
-		   scode = Integer.toString(code); 
-		   scode = scode.substring(1); 
-		   return "B"+scode; 
-		  } 
-		  else  
-		   return "B"+scode; 
-		   
+		  
 	}
-	 public List <Booking_Master> getAllBookings(){ 
-		  List <Booking_Master> bookings  = new ArrayList<Booking_Master>(); 
-		        Transaction trns19 = null; 
-		        Session session = HibernateUtil.getSessionFactory().openSession(); 
-		        try { 
-		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Booking_Master"; 
-		            Query query = session.createQuery(queryString); 
-		            bookings=(List<Booking_Master>)query.list(); 
-		        } catch (RuntimeException e) { 
-		            e.printStackTrace(); 
-		            return bookings; 
-		        } finally { 
-		            session.flush(); 
-		            session.close(); 
-		        } 
-		        return bookings; 
-		   
+	public static String getBookingSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
+		   scode = Integer.toString(code); 
+		   scode = scode.substring(1); 
+		   return "B"+scode; 
+		  
 	}
 	
 	//======================== combination for choosing bus till ============================
@@ -198,14 +144,14 @@ public class Request_Booking implements Request_Booking_Dao{
         				new_booker.setUser_id(user.getAuthentic());
         				new_booker.setNumber_booking(cb.getNumber_of_seat());
         				new_booker.setNotification("Booked");
-        				new_booker.setCode(Request_Booking.getBookingSequence());
+        				
         				new_booker.setSchedule_id(schedule.get(i).getId());
         				new_booker.setAdult(cb.getAdult());
         				new_booker.setChild(cb.getChild());
         				new_booker.setDescription("customer");
         				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
         				session.save(new_booker);
-        				
+        				new_booker.setCode(Request_Booking.getBookingSequence(new_booker.getId()));
         				
         				Query query = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
                 				" where id = :id");
@@ -267,7 +213,7 @@ public class Request_Booking implements Request_Booking_Dao{
                             		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                             		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                             		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                            		sch.setCode(Request_Booking.getScheduleSequence());
+                            		
                             		session.save(sch);
                             		for(int y=0;y<sch_with_users.get(h).size();y++){
                             			System.out.println("kkkkk1122");
@@ -289,6 +235,7 @@ public class Request_Booking implements Request_Booking_Dao{
         			                    int result = query.executeUpdate();
                         			}
                             		
+                            		sch.setCode(Request_Booking.getScheduleSequence(sch.getId()));
                             		sch.setNumber_booking(num_booking);
                             		sch.setRemaining_seat(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
                             		sch.setNumber_customer(num_customer);
@@ -346,12 +293,13 @@ public class Request_Booking implements Request_Booking_Dao{
 			new_booker.setUser_id(user.getAuthentic());
 			new_booker.setNumber_booking(cb.getNumber_of_seat());
 			new_booker.setNotification("Unassigned");
-			new_booker.setCode(Request_Booking.getBookingSequence());
+			
 			new_booker.setAdult(cb.getAdult());
 			new_booker.setChild(cb.getChild());
 			new_booker.setDescription("customer");
 			new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
 			session.save(new_booker);
+			new_booker.setCode(Request_Booking.getBookingSequence(new_booker.getId()));
 		} catch (RuntimeException e) {
 	    	e.printStackTrace();
 	    }        
@@ -438,13 +386,13 @@ public class Request_Booking implements Request_Booking_Dao{
 		    				new_booker.setUser_id(user.getAuthentic());
 		    				new_booker.setNumber_booking(cb.getNumber_of_seat());
 		    				new_booker.setNotification("Booked");
-		    				new_booker.setCode(Request_Booking.getBookingSequence());
+		    				
 		    				new_booker.setAdult(cb.getAdult());
 		    				new_booker.setChild(cb.getChild());
 		    				new_booker.setDescription("customer");
 		    				session.save(new_booker);
 		    				
-		    				
+		    				new_booker.setCode(Request_Booking.getBookingSequence(new_booker.getId()));
 		    				current_pass_assign=false;
 		    				total_pass_each_sch+=cb.getNumber_of_seat();
 		    				user_each_bus.add(new_booker);

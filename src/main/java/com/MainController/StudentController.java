@@ -1,18 +1,13 @@
 package com.MainController;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.DaoClasses.Set_Student_Schedule;
 import com.DaoClasses.StudentDao;
 import com.DaoClasses.StudentDaoImpl;
 import com.ModelClasses.Student_Booking;
@@ -57,9 +52,16 @@ public class StudentController {
         return studentDao.getHistory();
     }
 
-    //@Scheduled(cron="*/5 * * * * *")
-    public void updateEmployeeInventory() {
-        System.out.println("Started cron job 1");
+    @Scheduled(cron="0 0 5,9,12 * * *")
+    public void updateEmployeeInventory() throws ParseException {
+        System.out.println("Started create schedule for studen");
+        Set_Student_Schedule c =new Set_Student_Schedule();
+        c.createSchedule();
+    }
+    
+    public static void main(String args[]) throws ParseException{
+    	Set_Student_Schedule c =new Set_Student_Schedule();
+        c.createSchedule();
     }
 
 }

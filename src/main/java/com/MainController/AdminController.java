@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -325,10 +326,10 @@ public class AdminController {
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) throws ParseException {
 		Map<String,Object> map = new HashMap<String,Object>();
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date d1 = null;
+		Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String today=sdf.format(cal.getTime());
+	    Date d1 = sdf.parse(today);
 		Date d2 = null;
         Schedule_Master schedule = usersService1.getScheduleById(id);
         String screen = "schedule_detail";
@@ -340,11 +341,10 @@ public class AdminController {
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
 		map.put("drivers", usersService1.getAlDrivers());
 		map.put("customers", usersService1.getAlCustomers());
-		d1 = format.parse(dtf.format(now));
 		d1.setHours(0);
 		d1.setMinutes(0);
 		d1.setSeconds(0);
-		d2 = format.parse(schedule.getDept_date().toString());
+		d2 = schedule.getDept_date();
         long diff = d2.getTime() - d1.getTime();
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		if (diffDays>=2)

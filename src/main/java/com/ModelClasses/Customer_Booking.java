@@ -9,6 +9,7 @@ public class Customer_Booking {
 	private int child;
 	private String description;
 	private String status;//book and request_book
+	private float total_cost;
 
 
 	public int getSource() {
@@ -81,6 +82,14 @@ public class Customer_Booking {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public float getTotal_cost() {
+		return total_cost;
+	}
+
+	public void setTotal_cost(float total_cost) {
+		this.total_cost = total_cost;
 	}
 	
 }

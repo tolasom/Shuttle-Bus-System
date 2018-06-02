@@ -4,8 +4,9 @@ import getInfoLogin.IdUser;
 
 import java.io.ByteArrayOutputStream; 
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,16 +18,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-
 import com.EncryptionDecryption.Encryption;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
@@ -56,14 +54,14 @@ public class Custom_Imp implements Custom_Dao{
 	}
 	public String DateNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
 	public String DateTimeNow(){
 		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateTimeString = sdf.format(d);
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
@@ -76,58 +74,23 @@ public class Custom_Imp implements Custom_Dao{
 		dt = c.getTime();
 		return dt;
 	}
-	public static String getScheduleSequence(){ 
-		  List<Schedule_Master> schedules = new ArrayList<Schedule_Master>(); 
-		  schedules = new Custom_Imp().getAllSchedules(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Schedule_Master s : schedules) 
-		   System.out.println(s.getId()); 
-		  if(schedules.size()>0){ 
-		   code = 1000000+schedules.get(schedules.size()-1).getId()+1; 
+	public static String getScheduleSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
 		   scode = Integer.toString(code); 
 		   scode = scode.substring(1); 
 		   return "S"+scode; 
-		  } 
-		  else  
-		   return "S"+scode; 
-		   
+		  
 	}
-	public List <Schedule_Master> getAllSchedules(){ 
-		  List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>(); 
-		        Transaction trns19 = null; 
-		        Session session = HibernateUtil.getSessionFactory().openSession(); 
-		        try { 
-		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Schedule_Master order by id asc"; 
-		            Query query = session.createQuery(queryString); 
-		            schedules=(List<Schedule_Master>)query.list(); 
-		        } catch (RuntimeException e) { 
-		            e.printStackTrace(); 
-		            return schedules; 
-		        } finally { 
-		            session.flush(); 
-		            session.close(); 
-		        } 
-		        return schedules; 
-		   
-		 }
-	 public static String getBookingSequence(){ 
-		  List<Booking_Master> bookings = new ArrayList<Booking_Master>(); 
-		  bookings = new Custom_Imp().getAllBookings(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Booking_Master s : bookings) 
-		   System.out.println(s.getId()); 
-		  if(bookings.size()>0){ 
-		   code = 1000000+bookings.get(bookings.size()-1).getId()+1; 
+	public static String getBookingSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
 		   scode = Integer.toString(code); 
 		   scode = scode.substring(1); 
 		   return "B"+scode; 
-		  } 
-		  else  
-		   return "B"+scode; 
-		   
+		  
 	}
 	 public String Key(int mount,int id){
    		 SecureRandom random = new SecureRandom();
@@ -155,17 +118,30 @@ public class Custom_Imp implements Custom_Dao{
 			        query1.setParameter("id", user.getId());
 			        query1.setString("token",token);
 			        query1.executeUpdate();
-			        trns.commit();
+			        
 			        
 		        	Mail mail = new Mail();
 			        mail.setMailFrom("maimom2222@gmail.com");
-			        mail.setMailTo("maimom61@gmail.com");
+			        mail.setMailTo(user.getEmail());
 			        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
 			        mail.setFile_name("forget_password_template.txt");
 			 
+			        
+			        //Take current IP
+			        InetAddress ip = null;
+					try {
+						ip = InetAddress.getLocalHost();
+						System.out.println("Current IP address : " + ip.getHostAddress());
+					} catch (UnknownHostException e) {
+						e.printStackTrace();
+						map.put("status", false);
+			        	return map;
+					}
+					
 			        Map < String, Object > model = new HashMap < String, Object > ();
 			        model.put("email", user.getEmail());
 			        model.put("key", token);
+			        model.put("ip_address", ip.getHostAddress());
 			        mail.setModel(model);
 			 
 			        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
@@ -175,6 +151,7 @@ public class Custom_Imp implements Custom_Dao{
 			        
 			        map.put("email", user.getEmail());
 			        map.put("status", true);
+			        trns.commit();
 		        }else{
 			        map.put("status", false);
 		        } 
@@ -986,13 +963,15 @@ public class Custom_Imp implements Custom_Dao{
         				new_booker.setUser_id(user.getAuthentic());
         				new_booker.setNumber_booking(cb.getNumber_of_seat());
         				new_booker.setNotification("Booked");
-        				new_booker.setCode(Custom_Imp.getBookingSequence());
         				new_booker.setSchedule_id(schedule.get(i).getId());
         				new_booker.setAdult(cb.getAdult());
         				new_booker.setChild(cb.getChild());
         				new_booker.setDescription("customer");
+        				new_booker.setEmail_confirm(false);
         				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
         				session.save(new_booker);
+        				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
+        				new_booker.setQr_name(c.Key(50, new_booker.getId()));
         				
         				
         				Query query = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
@@ -1055,7 +1034,7 @@ public class Custom_Imp implements Custom_Dao{
                             		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                             		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                             		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                            		sch.setCode(Custom_Imp.getScheduleSequence());
+                            		
                             		session.save(sch);
                             		for(int y=0;y<sch_with_users.get(h).size();y++){
                             			System.out.println("kkkkk");
@@ -1079,6 +1058,7 @@ public class Custom_Imp implements Custom_Dao{
                             		sch.setNumber_customer(num_customer);
                             		sch.setNumber_staff(0);
                             		sch.setNumber_student(number_stu);
+                            		sch.setCode(Custom_Imp.getScheduleSequence(sch.getId()));
                         			for(int y=0;y<sch_with_users.get(h).size();y++){
                         				System.out.print(sch_with_users.get(h).get(y).getId()+" ");
                         			}
@@ -1131,12 +1111,14 @@ public class Custom_Imp implements Custom_Dao{
 			new_booker.setUser_id(user.getAuthentic());
 			new_booker.setNumber_booking(cb.getNumber_of_seat());
 			new_booker.setNotification("Unassigned");
-			new_booker.setCode(Custom_Imp.getBookingSequence());
 			new_booker.setAdult(cb.getAdult());
 			new_booker.setChild(cb.getChild());
 			new_booker.setDescription("customer");
+			new_booker.setEmail_confirm(false);
 			new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
 			session.save(new_booker);
+			new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
+			new_booker.setQr_name(c.Key(50, new_booker.getId()));
 		} catch (RuntimeException e) {
 	    	e.printStackTrace();
 	    }        
@@ -1223,12 +1205,12 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setUser_id(user.getAuthentic());
 		    				new_booker.setNumber_booking(cb.getNumber_of_seat());
 		    				new_booker.setNotification("Booked");
-		    				new_booker.setCode(Custom_Imp.getBookingSequence());
 		    				new_booker.setAdult(cb.getAdult());
 		    				new_booker.setChild(cb.getChild());
 		    				new_booker.setDescription("customer");
 		    				session.save(new_booker);
 		    				
+		    				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
 		    				
 		    				current_pass_assign=false;
 		    				total_pass_each_sch+=cb.getNumber_of_seat();
@@ -2026,16 +2008,114 @@ public class Custom_Imp implements Custom_Dao{
 	        }
 			return list;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void send_QRCODE(){
+		Custom_Imp test=new Custom_Imp();
+    	Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();   
+        List<Booking_Master> cr = new ArrayList<Booking_Master>();
+        QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
+		try {
+            trns1 = session.beginTransaction();
+            cr = session.createQuery("from Booking_Master where dept_date>=? and email_confirm='false' and description='customer'").setDate(0, java.sql.Date.valueOf(test.DateNow())).list();
+            System.out.println(cr.size());
+            for(Booking_Master bm: cr){
+            	Boolean status=qr_gen.qr_generator(bm);
+            	System.out.println("KK :"+bm.getId());
+            	if(status){
+            		test.send_email_qr_generator(bm);
+            	}
+            }
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+    }
+
+
+	public void send_email_qr_generator(Booking_Master bm){
+		Transaction trns1 = null;
+		Custom_Imp ci=new Custom_Imp();
+        Session session = HibernateUtil.getSessionFactory().openSession(); 
+        List<User_Info> user = new ArrayList<User_Info>();
+        List<Pickup_Location_Master> pickUp = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> source = new ArrayList<Location_Master>();
+        List<Pickup_Location_Master> drop_off = new ArrayList<Pickup_Location_Master>();
+        List<Location_Master> destination = new ArrayList<Location_Master>();
+        Map<String, Object> map=new HashMap<String, Object>();
+		try {
+            trns1 = session.beginTransaction();
+            user = session.createQuery("from User_Info where id=:id").setParameter("id", bm.getUser_id()).list();
+        	pickUp = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", bm.getSource_id()).list();
+        	source = session.createQuery("from Location_Master where id=:id").setParameter("id", bm.getFrom_id()).list();
+        	drop_off = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", bm.getDestination_id()).list();
+        	destination = session.createQuery("from Location_Master where id=:id").setParameter("id", bm.getTo_id()).list();
+        	if(user.size()>0&&pickUp.size()>0&&source.size()>0
+        			&&drop_off.size()>0&&destination.size()>0){
+        		Mail mail = new Mail();
+		        mail.setMailFrom("maimom2222@gmail.com");
+		        //mail.setMailTo("maimom61@gmail.com");
+		        mail.setMailTo(user.get(0).getEmail());
+		        mail.setMailSubject("vKirirom Shuttle Bus Booked Confirmation");
+		        mail.setFile_name("qr_code_template.txt");
+		 
+		        
+		        //Take current IP
+		        InetAddress ip = null;
+				try {
+					ip = InetAddress.getLocalHost();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
+				
+		        Map < String, Object > model = new HashMap < String, Object > ();
+		        model.put("name", user.get(0).getName());
+		        model.put("booking_code", bm.getCode());
+		        model.put("email", user.get(0).getEmail());
+		        model.put("source", source.get(0).getName());
+		        model.put("pick_up", pickUp.get(0).getName());
+		        model.put("destination", destination.get(0).getName());
+		        model.put("drop_off", drop_off.get(0).getName());
+		        model.put("ip_address", ip.getHostAddress());
+		        model.put("dept_date", ci.convertDateTimetoDate(bm.getDept_date()));
+		        model.put("dept_time", bm.getDept_time());
+		        model.put("amount", bm.getNumber_booking());
+		        model.put("total_cost", bm.getTotal_cost());
+		        model.put("child", bm.getChild());
+		        model.put("adult", bm.getAdult());
+		        model.put("qr_name", bm.getQr_name());
+		        mail.setModel(model);
+		 
+		        AbstractApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+		        MailService mailService = (MailService) context.getBean("mailService");
+		        mailService.sendEmail(mail);
+		        context.close();
+		        
+		        String hql ="Update Booking_Master set email_confirm='true' where id=:id";
+		        Query query =  session.createQuery(hql);
+		        query.setParameter("id", bm.getId());
+		        int ret=query.executeUpdate();
+		        trns1.commit();
+        	}
+            	
+
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }    
+		finally {
+            session.flush();
+            session.close();
+        }
+	}
+	public String convertDateTimetoDate(Date d){
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+        String currentDateTimeString = sdf.format(d);
+        System.out.println(currentDateTimeString);
+        return currentDateTimeString;
+    }
+
 	
 	
 		

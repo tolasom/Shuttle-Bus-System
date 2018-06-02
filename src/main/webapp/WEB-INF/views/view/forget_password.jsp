@@ -32,7 +32,7 @@
         .form input,.form{
             border-radius: 5px;
         }
-        .login-page{
+        .forget-page{
             padding: 4% 0 0;
         }
         .form{
@@ -156,7 +156,7 @@
 <body class="row" style="background: linear-gradient(to left, #636e72, #636e72);">
 <div >
     <div class="loader"></div>
-    <div class="login-page" style="width: unset !important;">
+    <div class="forget-page" style="width: unset !important;">
         <ul class="form" style="padding: 0;padding-top:0px">
             <div class="formdev" id="return_form">
                 <h3 class="title-header">Reset your password</h3>
@@ -164,7 +164,7 @@
                 <div id="devlogin">
                     <form id="email_submit"  method="post" onsubmit="return false;">
                         <input type='text'placeholder="Email" name='username' id="login-username" required>
-                        <input type="submit" class="submit-btn" value="SEND PASSWORD RRSET" >
+                        <input type="submit" class="submit-btn" value="RESET PASSWORD" >
                     </form>
                 </div>
             </div>
@@ -181,7 +181,7 @@ $(document).ready(function () {
     axios.defaults.headers.common[header] = token;
 })
 
-        $("#email_submit").validate({
+  $("#email_submit").validate({
             rules: {
                 username: {
                     required: true,
@@ -195,6 +195,7 @@ $(document).ready(function () {
                 }
             },
             submitHandler: function (form) {
+            	loading();
                 var email = $("#login-username").val();
                 axios.post('submit_reset_password_email', {
                     email:email,
@@ -209,19 +210,37 @@ $(document).ready(function () {
                        		+ 'If you don\'t see the email after a few minutes, check your spam folder. </p>'
                        	
                 	}else{
-                		form='<h3 class="title-header">Reset your password</h3>'
-                       		+'<p>Sorry problem occur while sent a password reset email to <b>'
-                       		+ response.data.email+'</b></p>'
-                       		+ '<p>Please kindly try again, thank you. </p>'
+                		if(response.data.email=== undefined){
+                			form='<h3 class="title-header">Reset your password</h3>'
+                           		+ "<p>Sorry your email: <b>"+ email+"</b> doesn't exist with our system yet"
+                           		+ '<p>Please kindly sign up a new account or login with google account, thank you. </p>'
+                		}else{
+                			form='<h3 class="title-header">Reset your password</h3>'
+                           		+'<p>Sorry your email problem occur while sent a password reset email to <b>'
+                           		+ email+'</b></p>'
+                           		+ '<p>Please kindly try again, thank you. </p>'
+                		}
+                		
                 	}
-                	console.log(form);
+                	finish();
                 	document.getElementById("return_form").innerHTML = form;
                 }).catch(function (error) {
-                        console.log(error);
+                   console.log(error);
+                   finish()
                 });
             }
         });
-
+        
+	function loading() {
+	    $(".loader").css("display","block");
+	    $(".forget-page").css("opacity","0.6");
+	    document.getElementsByClassName(".forget-page").disabled = true;
+	}
+	function finish() {
+	    $(".loader").css("display","none");
+	    $(".forget-page").css("opacity","1");
+	    document.getElementsByClassName(".forget-page").disabled = false;
+	}
 
 </script>
 </html>

@@ -76,77 +76,23 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         System.out.println(tmrDateTimeString);
 		return tmrDateTimeString;
 	}
-	public static String getScheduleSequence(){ 
-		  List<Schedule_Master> schedules = new ArrayList<Schedule_Master>(); 
-		  schedules = new Set_Student_Schedule().getAllSchedules(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Schedule_Master s : schedules) 
-		   System.out.println(s.getId()); 
-		  if(schedules.size()>0){ 
-		   code = 1000000+schedules.get(schedules.size()-1).getId()+1; 
+	public static String getScheduleSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
 		   scode = Integer.toString(code); 
 		   scode = scode.substring(1); 
 		   return "S"+scode; 
-		  } 
-		  else  
-		   return "S"+scode; 
-		   
-		 }
-	public List <Schedule_Master> getAllSchedules(){ 
-		  List <Schedule_Master> schedules  = new ArrayList<Schedule_Master>(); 
-		        Transaction trns19 = null; 
-		        Session session = HibernateUtil.getSessionFactory().openSession(); 
-		        try { 
-		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Schedule_Master order by id asc"; 
-		            Query query = session.createQuery(queryString); 
-		            schedules=(List<Schedule_Master>)query.list(); 
-		        } catch (RuntimeException e) { 
-		            e.printStackTrace(); 
-		            return schedules; 
-		        } finally { 
-		            session.flush(); 
-		            session.close(); 
-		        } 
-		        return schedules; 
-		   
-		 }
-	 public static String getBookingSequence(){ 
-		  List<Booking_Master> bookings = new ArrayList<Booking_Master>(); 
-		  bookings = new Set_Student_Schedule().getAllBookings(); 
-		  int code; 
-		  String scode= "000001"; 
-		  for(Booking_Master s : bookings) 
-		   System.out.println(s.getId()); 
-		  if(bookings.size()>0){ 
-		   code = 1000000+bookings.get(bookings.size()-1).getId()+1; 
-		   scode = Integer.toString(code); 
-		   scode = scode.substring(1); 
-		   return "B"+scode; 
-		  } 
-		  else  
-		   return "B"+scode; 
-		   
+		  
 	}
-	 public List <Booking_Master> getAllBookings(){ 
-		  List <Booking_Master> bookings  = new ArrayList<Booking_Master>(); 
-		        Transaction trns19 = null; 
-		        Session session = HibernateUtil.getSessionFactory().openSession(); 
-		        try { 
-		            trns19 =  session.beginTransaction(); 
-		            String queryString = "from Booking_Master"; 
-		            Query query = session.createQuery(queryString); 
-		            bookings=(List<Booking_Master>)query.list(); 
-		        } catch (RuntimeException e) { 
-		            e.printStackTrace(); 
-		            return bookings; 
-		        } finally { 
-		            session.flush(); 
-		            session.close(); 
-		        } 
-		        return bookings; 
-		   
+	public static String getBookingSequence(int id){ 
+		   int code;
+		   String scode = new String();
+		   code = 10000000+id; 
+		   scode = Integer.toString(code); 
+		   scode = scode.substring(1); 
+		   return "B"+scode; 
+		  
 	}
 	
 	//======================== combination for choosing bus till ============================
@@ -233,7 +179,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     	System.out.println("---------------->getAvailableTime(");
 		List<Map<String,Object>> list_time=new ArrayList<Map<String,Object>>();   
         try {
-        	Student_Imp s=new Student_Imp();
+        	Set_Student_Schedule s=new Set_Student_Schedule();
     		String tmr_date=tmr_dt.split(" ")[0];
     		String tmr_time=tmr_dt.split(" ")[1];
     		List<Time> list_time1=new ArrayList<Time>();   
@@ -381,7 +327,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                         		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                         		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                        		sch.setCode(Set_Student_Schedule.getScheduleSequence());
+                        		
                         		session.save(sch);
                         		for(int y=0;y<sch_with_users.get(h).size();y++){
                         			list_assign.add(sch_with_users.get(h).get(y).getId());
@@ -405,6 +351,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                         		sch.setNumber_customer(num_customer);
                         		sch.setNumber_staff(0);
                         		sch.setNumber_student(number_stu);
+                        		sch.setCode(Set_Student_Schedule.getScheduleSequence(sch.getId()));
                         		except_sch_id.add(sch.getId());
                     		}
                         	

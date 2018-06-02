@@ -18,6 +18,7 @@ public class Booking_Master {
 		private int number_booking;
 		private int child;
 		private int adult;
+		private float total_cost; //$
 		private String notification;
 		private String qr;
 		private String code;
@@ -26,7 +27,8 @@ public class Booking_Master {
 		private Timestamp created_at;
 		private Timestamp updated_at;
 		private Boolean qr_status;
-		
+		private Boolean email_confirm;
+		private String qr_name;
 	
 		public int getFrom_id() {
 			return from_id;
@@ -34,12 +36,24 @@ public class Booking_Master {
 		public void setFrom_id(int from_id) {
 			this.from_id = from_id;
 		}
+		public float getTotal_cost() {
+			return total_cost;
+		}
+		public void setTotal_cost(float total_cost) {
+			this.total_cost = total_cost;
+		}
 		public int getTo_id() {
 			return to_id;
 		}
 		public void setTo_id(int to_id) {
 			this.to_id = to_id;
 		
+		}
+		public Boolean getEmail_confirm() {
+			return email_confirm;
+		}
+		public void setEmail_confirm(Boolean email_confirm) {
+			this.email_confirm = email_confirm;
 		}
 		public String getCode() {
 			return code;
@@ -154,6 +168,12 @@ public class Booking_Master {
 		}
 		public void setQr_status(Boolean qr_status) {
 			this.qr_status = qr_status;
+		}
+		public String getQr_name() {
+			return qr_name;
+		}
+		public void setQr_name(String qr_name) {
+			this.qr_name = qr_name;
 		}
 		
 }

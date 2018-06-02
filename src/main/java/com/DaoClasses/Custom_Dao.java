@@ -52,5 +52,7 @@ public interface Custom_Dao {
 	public List<User_Info> check_valid_tocken(String token);
 	public Map<String, Object> check_and_send_email(String email);
 	public Boolean submit_new_password(UserModel user); 
+	public void send_email_qr_generator(Booking_Master bm);
+	public void send_QRCODE();
 
 }
