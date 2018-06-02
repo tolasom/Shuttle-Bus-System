@@ -248,7 +248,7 @@ public class AdminController {
 		B_Model model = new B_Model();
 		model.setN(usersService1.getCustomerById(booking.getUser_id()).getName());
 		model.setCode(booking.getCode());
-		model.setCreated_at(booking.getCreated_at().toString());
+		//model.setCreated_at(booking.getCreated_at().toString());
 		model.setDept_date(booking.getDept_date().toString());
 		model.setDept_time(booking.getDept_time());
 		model.setDescription(booking.getDescription());
@@ -259,7 +259,7 @@ public class AdminController {
 		model.setQr(booking.getQr());
 		model.setSchedule_id(booking.getSchedule_id());
 		model.setSource_id(booking.getSource_id());
-		model.setUpdated_at(booking.getUpdated_at().toString());
+		//model.setUpdated_at(booking.getUpdated_at().toString());
 		model.setUser_id(booking.getUser_id());
 		model.setFrom_id(booking.getFrom_id());
 		model.setTo_id(booking.getTo_id());
