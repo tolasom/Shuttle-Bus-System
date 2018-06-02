@@ -159,7 +159,7 @@ var eee;
                         };  
                         var slickjs = $("<link>");
                         $(slickjs).attr('rel', 'stylesheet');
-                        $(slickjs).attr('href', '/resources/Bootstrap/css/calendar.css');
+                        $(slickjs).attr('href', '/sbs/resources/Bootstrap/css/calendar.css');
                         $(slickjs).appendTo('head');
                         var options2 = { now: "08:00", //hh:mm 24 hour format only, defaults to current time
                                  twentyFour: true, //Display 24 hour format, defaults to false 

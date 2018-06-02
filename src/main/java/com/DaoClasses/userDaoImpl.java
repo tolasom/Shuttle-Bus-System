@@ -487,9 +487,10 @@ public class userDaoImpl implements usersDao{
 		try{
 			List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
 			trns25  = session.beginTransaction();
-			String queryString  = "from UserRole where role=:role";
+			String queryString  = "from UserRole where role=:role or role =:role1";
  		 	Query query = session.createQuery(queryString);
  		 	query.setString("role", "ROLE_CUSTOMER");
+ 		 	query.setString("role1", "ROLE_STUDENT");
  		 	List<UserRole> roles = query.list();
  		 	for(int i=0;i<roles.size();i++)
  		 	{

@@ -51,7 +51,7 @@ var locations;
 
 $(document).ready(function(){
 	var bootstrapjs = $("<script>");
-  	$(bootstrapjs).attr('src', '/KIT_Point_Management_System/resources/Bootstrap/js/bootstrap.min.js');
+  	$(bootstrapjs).attr('src', '/sbs/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
 	$("#sreport").addClass("active");
 	
