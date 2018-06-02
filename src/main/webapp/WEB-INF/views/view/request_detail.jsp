@@ -102,8 +102,16 @@ load = function () {
 	if(request.status!="Pending")
 		$("#actionn").hide();
 	$("#uname").val(searchCustomer(request.user_id,customers));
-	$("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
-	$("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
+    if(request.source_id!=0)
+        $("#from").val(searchPLocation(request.source_id,p_locations)+", "+searchLocation(request.from_id,locations));
+    else
+        $("#from").val(searchLocation(request.from_id,locations));
+    if(request.destination_id!=0)
+        $("#to").val(searchPLocation(request.destination_id,p_locations)+", "+searchLocation(request.to_id,locations));
+    else
+        $("#to").val(searchLocation(request.to_id,locations));
+
+
 	$("#dept_date").val(formatDate(request.dept_date));
 	$("#dept_time").val(request.dept_time);
 	$("#requestedOn").val(formatDate(request.created_at));
@@ -167,9 +175,9 @@ formatDate =function (date) {
         year = d.getFullYear();
 
     if (month.length < 2) month = '0' + month;
-      if (day.length < 2) day = '0' + day;
+    if (day.length < 2) day = '0' + day;
 
-    return [month, day, year].join('-');
+    return [year, month, day].join('/');
 };
 
 function searchLocation(id, myArray){

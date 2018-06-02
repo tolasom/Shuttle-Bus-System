@@ -248,7 +248,7 @@ public class AdminController {
 		B_Model model = new B_Model();
 		model.setN(usersService1.getCustomerById(booking.getUser_id()).getName());
 		model.setCode(booking.getCode());
-		//model.setCreated_at(booking.getCreated_at().toString());
+		model.setCreated_at(booking.getCreated_at().toString());
 		model.setDept_date(booking.getDept_date().toString());
 		model.setDept_time(booking.getDept_time());
 		model.setDescription(booking.getDescription());

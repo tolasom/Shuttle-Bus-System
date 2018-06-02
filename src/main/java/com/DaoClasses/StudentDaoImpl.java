@@ -1,5 +1,6 @@
 package com.DaoClasses;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -98,6 +99,7 @@ public class StudentDaoImpl implements StudentDao{
         Map<String,Object> map = new HashMap<String, Object>();
         Custom_Imp custom_dao = new Custom_Imp();
         Location_Master location_master = new Location_Master();
+        Timestamp created_at = new Timestamp(System.currentTimeMillis());
         try {
             Booking_Master booking_master = new Booking_Master();
             booking_master.setUser_id(id.getAuthentic());
@@ -107,6 +109,7 @@ public class StudentDaoImpl implements StudentDao{
             booking_master.setDescription("student");
             booking_master.setNotification("Booked");
             booking_master.setNumber_booking(1);
+            booking_master.setCreated_at(created_at);
             booking_master.setAdult(1);
             booking_master.setChild(0);
             location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
@@ -118,8 +121,9 @@ public class StudentDaoImpl implements StudentDao{
             if(book_data.getChoice()==2){
                 Booking_Master booking_return = new Booking_Master();
                 booking_return.setUser_id(id.getAuthentic());
-                booking_return.setDestination_id(book_data.getSource());
-                booking_return.setSource_id(book_data.getDestination());
+                booking_return.setCreated_at(created_at);
+                booking_return.setFrom_id(book_data.getSource());
+                booking_return.setTo_id(book_data.getDestination());
                 booking_return.setDept_date(java.sql.Date.valueOf(book_data.getReturn_date()));
                 booking_return.setDescription("student");
                 booking_return.setNotification("Booked");
@@ -185,6 +189,7 @@ public class StudentDaoImpl implements StudentDao{
                  Map<String,Object> map = new HashMap<String, Object>();
                  Location_Master location_master = new Location_Master();
                  map.put("destination_id",booking_master.getFrom_id());
+                 map.put("code",booking_master.getCode());
                  map.put("source_id",booking_master.getTo_id());
                  map.put("departure_date",booking_master.getDept_date());
                  map.put("child",booking_master.getChild());
@@ -197,6 +202,7 @@ public class StudentDaoImpl implements StudentDao{
                  map.put("destination_name",location_master.getName());
                  location_master = (Location_Master) session.load(Location_Master.class,booking_master.getTo_id());
                  map.put("source_name",location_master.getName());
+                 System.out.println(booking_master.getFrom_id());
                  if(booking_master.getSchedule_id() !=0 ){
                      Schedule_Master schedule_master =
                              (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
