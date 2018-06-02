@@ -1,4 +1,3 @@
-/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/Base64ToImage.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/CORSFilter.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/StudentDao.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/MailServiceImpl.java
@@ -25,6 +24,7 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Set_Student_Schedule_Dao.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Schedule_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/MainController/Download.java
+/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/QR_Image_Gemerator.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Custom_Imp.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/StudentDaoImpl.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Dept_Time_Master.java
@@ -40,7 +40,6 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/Reset_Password.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Bus_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/Mail.java
-/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Test1.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/HibernateUtil/HibernateUtil.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/MainController/AdminController.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/MainController/StudentController.java
@@ -51,7 +50,6 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/MailService.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/userDaoImpl.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/IdentifyTypeUser.java
-/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Student_Dao.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/Test_Forget_Password.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/Config/SecurityConfig.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/LoginFilter/LoginGoogle.java
@@ -66,10 +64,8 @@
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/client_mail/App.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EntityClasses/Location_Master.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ServiceClasses/Customer_Service_Imp.java
-/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/Student_Imp.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/Config/Core/SpringSecurityInitializer.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EncryptionDecryption/Decryption.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EncryptionDecryption/SecretKeyClass.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/EncryptionDecryption/Encryption.java
 /Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/ModelClasses/B_Model.java
-/Users/rathana/Desktop/Shuttle-Bus-System/src/main/java/com/DaoClasses/test.java

@@ -420,9 +420,10 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 
 					Booking_Master booking = (Booking_Master) session.load(Booking_Master.class,list_stu.get(j).getId());
 					booking.setNotification("Unassigned");
-
+					session.update(booking);
 					User_Info user_info = (User_Info) session.load(User_Info.class,booking.getUser_id());
 					user_info.setNumber_ticket(user_info.getNumber_ticket()-1);
+					session.update(user_info);
 				}
 					
 			} catch (RuntimeException e) {

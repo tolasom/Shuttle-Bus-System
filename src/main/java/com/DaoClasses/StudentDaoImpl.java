@@ -71,7 +71,7 @@ public class StudentDaoImpl implements StudentDao{
          Transaction trns1 = null;
          Session session = HibernateUtil.getSessionFactory().openSession();
          try {
-              String hql = "from Location_Master";
+              String hql = "from Location_Master where enabled='true'";
               Query query = session.createQuery(hql);
               List<Location_Master> list_location = query.list();
 
@@ -167,7 +167,7 @@ public class StudentDaoImpl implements StudentDao{
          List<Booking_Master> list_booking = new ArrayList<Booking_Master>();
          Session session = HibernateUtil.getSessionFactory().openSession();
          try {
-             String hql = "From Booking_Master where user_id="+id.getAuthentic();
+             String hql = "From Booking_Master where notification ='Booked' and user_id="+id.getAuthentic();
              Query query = session.createQuery(hql);
              query.setMaxResults(10);
               list_booking= query.list();
@@ -179,6 +179,8 @@ public class StudentDaoImpl implements StudentDao{
                  map.put("child",booking_master.getChild());
                  map.put("adult",booking_master.getAdult());
                  map.put("number_of_seats",booking_master.getNumber_booking());
+                 map.put("schedule_id",booking_master.getId());
+                 map.put("status",booking_master.getNotification());
                  if(booking_master.getSchedule_id() !=0 ){
                      Schedule_Master schedule_master =
                              (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
@@ -398,21 +400,22 @@ public class StudentDaoImpl implements StudentDao{
         return map;
     }
     public Map<String,Object> cancel_ticket(ID_Class id_class){
-
+        System.out.println("id: "+id_class.getId());
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
             Booking_Master booking =(Booking_Master) session.load(Booking_Master.class,id_class.getId());
             booking.setNotification("Cancelled");
-
+            session.update(booking);
             User_Info user_info=(User_Info) session.load(User_Info.class,booking.getUser_id());
             user_info.setNumber_ticket(user_info.getNumber_ticket()+1);
-
-            map.put("current",generateHistory(bookingMasterList));
+            session.update(user_info);
             session.beginTransaction().commit();
+            map.put("status",true);
         }
         catch (RuntimeException e) {
             e.printStackTrace();
+            map.put("status",false);
         }
         finally {
             session.flush();

@@ -1,6 +1,7 @@
 package com.DaoClasses;
 
 import com.EntityClasses.Booking_Master;
+import com.ModelClasses.ID_Class;
 import com.ModelClasses.Student_Booking;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface StudentDao {
     public List<Map<String,Object>>getHistory();
     public Map<String,Object> customerHistory();
     public List<Integer> listBookedDate();
+    public Map<String,Object> cancel_ticket(ID_Class id_class);
 }

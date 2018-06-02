@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import com.ModelClasses.ID_Class;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,9 @@ public class StudentController {
 
     @RequestMapping(value = "/list_enable", method = RequestMethod.GET)
     @ResponseBody public List<Integer> listBookedDate(){ return studentDao.listBookedDate(); }
+    @RequestMapping(value = "/student_cancel", method = RequestMethod.POST)
+    @ResponseBody public Map<String,Object> studentCancel(@RequestBody ID_Class id_class)
+    { return studentDao.cancel_ticket(id_class);}
 
     //@Scheduled(cron="*/5 * * * * *")
     //public void updateEmployeeInventory() {
