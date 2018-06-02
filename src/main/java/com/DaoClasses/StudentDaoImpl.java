@@ -173,6 +173,7 @@ public class StudentDaoImpl implements StudentDao{
               list_booking= query.list();
              for(Booking_Master booking_master : list_booking){
                  Map<String,Object> map = new HashMap<String, Object>();
+                 Location_Master location_master = new Location_Master();
                  map.put("destination_id",booking_master.getDestination_id());
                  map.put("source_id",booking_master.getSource_id());
                  map.put("departure_date",booking_master.getDept_date());
@@ -181,6 +182,11 @@ public class StudentDaoImpl implements StudentDao{
                  map.put("number_of_seats",booking_master.getNumber_booking());
                  map.put("schedule_id",booking_master.getId());
                  map.put("status",booking_master.getNotification());
+                 location_master = (Location_Master)
+                         session.load(Location_Master.class,booking_master.getFrom_id());
+                 map.put("destination_name",location_master.getName());
+                 location_master = (Location_Master) session.load(Location_Master.class,booking_master.getTo_id());
+                 map.put("source_name",location_master.getName());
                  if(booking_master.getSchedule_id() !=0 ){
                      Schedule_Master schedule_master =
                              (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
