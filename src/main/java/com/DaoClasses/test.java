@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,33 +25,18 @@ import com.ModelClasses.Customer_Booking;
 
 public class test {
 	
-	public static List <Booking_Master> getAllBookings(){
-		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
-        Transaction trns19 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Master b order by b.description";
-            Query query = session.createQuery(queryString);
-            bookings=(List<Booking_Master>)query.list();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return bookings;
-        } finally {
-            session.flush();
-            session.close();
-        }
-        return bookings;
-		
-	}
 	
 	public static void main(String args[]) throws ParseException
 	{
-		List <Booking_Master> bookings = getAllBookings();
-		
-		for (Booking_Master booking:bookings)
-			System.out.println(booking.getDescription());
-		
+		Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String today=sdf.format(cal.getTime());
+	    Date d = new userDaoImpl().getScheduleById(14).getDept_date();
+	    long diff = d.getTime() - sdf.getTime();
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+	    System.out.println(today);
+	    System.out.println(d);
+	    System.out.println();
 	}
 	
 	

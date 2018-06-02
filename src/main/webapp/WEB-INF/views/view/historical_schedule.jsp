@@ -101,14 +101,21 @@ load = function(){
             var drivers = response.drivers;
 			for (var i=0;i<schedules.length;i++)
 			{
+            var cc="bus_info";
+            var ccl = 'color:blue';
+            if(searchBus2(schedules[i].bus_id,buses)=="Rental Bus")
+                {
+                    cc = "";
+                    ccl ="";
+                }
 			var schedule = '<tr class="hoverr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
                                 +'<td>'+schedules[i].code+'</td>'
-                                +'<td class="bus_info" data='+schedules[i].bus_id+' style="color:blue">'+searchBus(schedules[i].bus_id,buses)+'</td>'
+                                +'<td class="'+cc+'" data='+schedules[i].bus_id+' style="'+ccl+'">'+searchBus(schedules[i].bus_id,buses)+'</td>'
                                 +'<td class="driver_info" data='+schedules[i].driver_id+' style="color:blue">'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
                                 +'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
                                 +'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
                                 +'<td>'+formatDate(schedules[i].dept_date)+'</td>'
-                                +'<td>'+schedules[i].dept_time+'</td>'
+                                +'<td>'+timeConverter(schedules[i].dept_time)+'</td>'
                                 +'<td>'+schedules[i].number_booking+'</td>'
                                 +'<td class="unhoverr" data-url="'+schedules[i].id+'" style="color:#e85a71"><i class="fa fa-trash"></i></td></tr>';
 			$("#allSchedules").append(schedule);				
@@ -273,7 +280,10 @@ function searchDriver(id, myArray){
 function searchBus(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
-            return myArray[i].model+" "+myArray[i].plate_number;
+            if(myArray[i].model != 'Rental Bus')
+                return myArray[i].model+" "+myArray[i].plate_number;
+            return myArray[i].model
+
         }
     }
 }
@@ -328,5 +338,30 @@ swal({
     });
     }
     
+
+    function timeConverter(t){
+var time=t;
+var hours = Number(time.match(/^(\d+)/)[1]);
+var minutes = Number(time.match(/:(\d+)/)[1]);
+var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
+
+if (AMPM == "pm" && hours < 12) hours = hours + 12;
+if (AMPM == "am" && hours == 12) hours = hours - 12;
+var sHours = hours.toString();
+var sMinutes = minutes.toString();
+if (hours < 10) sHours = "0" + sHours;
+if (minutes < 10) sMinutes = "0" + sMinutes;
+
+return(sHours +':'+sMinutes);
+
+}
+   
+function searchBus2(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].model;
+        }
+    }
+}
    
 </script>

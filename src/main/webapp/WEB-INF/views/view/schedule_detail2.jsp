@@ -140,8 +140,12 @@ load = function () {
 	$("#sdepttime").val(schedule.dept_time);
 	$("#sfrom").append("<option value="+current_schedule.source_id+">"+searchPLocation(current_schedule.source_id,p_locations)+", "+searchLocation(current_schedule.from_id,locations)+" </option>");
 	$("#sto").append("<option value="+current_schedule.destination_id+">"+searchPLocation(current_schedule.destination_id,p_locations)+", "+searchLocation(current_schedule.to_id,locations)+" </option>");
-	for(i=0; i<all_bus.length; i++)					
-		$("#sbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" "+all_bus[i].plate_number+" </option>");
+	for(i=0; i<all_bus.length; i++)
+  {
+      if(all_bus[i].model == 'Rental Bus')
+          all_bus[i].plate_number = ""
+      $("#sbus").append("<option value="+all_bus[i].id+">"+all_bus[i].model+" "+all_bus[i].plate_number+" </option>");
+  }             
 	for(i=0; i<all_driver.length; i++)					
 		$("#sdriver").append("<option value="+all_driver[i].id+">"+all_driver[i].name+" </option>");
 	$("#sdriver").val(schedule.driver_id);
@@ -205,7 +209,7 @@ load = function () {
 		e.stopPropagation();
     	location.href=$(this).attr('data-url');
 	});
-	
+	console.log(typeof(schedule.dept_time))
 }
 
 
