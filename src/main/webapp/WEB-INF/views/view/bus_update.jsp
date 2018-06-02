@@ -20,7 +20,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Number of seat</label>
-                                            <input type="text" class="form-control" id="number_of_seat" maxlength="2" required>
+                                            <input type="text" class="form-control" id="number_of_seat" maxlength="2" required disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail3">Description</label>

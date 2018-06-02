@@ -21,6 +21,7 @@ public interface usersService {
 	public boolean updateUser(User_Info user,UserModel user_model,String type);
 	public int saveBus(Bus_Master bus);
 	public List<Bus_Master> getAllBuses();
+	public List<Bus_Master> getAllBuses2();
 	public Bus_Master getBusById (int id);
 	public int updateBus(Bus_Master bus);
 	public int deleteBus(int id);
@@ -72,4 +73,5 @@ public interface usersService {
 	public List<Batch_Master> getAllDates();
 	public int deleteDate(int id);
 	public int updateDate(Batch_Master batch);
+	public Map<String, String> moveToRental(Schedule_Model model);
 }

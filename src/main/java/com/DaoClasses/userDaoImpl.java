@@ -52,6 +52,8 @@ import org.springframework.stereotype.Repository;
 
 
 
+
+
 //import org.springframework.stereotype.Service;
 import com.EncryptionDecryption.Decryption;
 import com.EncryptionDecryption.Encryption;
@@ -243,6 +245,7 @@ public class userDaoImpl implements usersDao{
     		Timestamp created_at = new Timestamp(System.currentTimeMillis());
         	bus.setCreated_at(created_at);
         	bus.setEnabled(true);
+        	bus.setAvailability(true);
             session.save(bus);  
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -748,8 +751,9 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns16 = session.beginTransaction();
-            Query query = session.createQuery("from Bus_Master where enabled =:status");
+            Query query = session.createQuery("from Bus_Master where enabled =:status and availability=:availability");
             query.setBoolean("status", true);
+            query.setBoolean("availability", true);
             p = query.list();
             } catch (RuntimeException e) {
             e.printStackTrace();
@@ -761,6 +765,31 @@ public class userDaoImpl implements usersDao{
         return p;
 		
 	}
+
+
+
+    public List<Bus_Master> getAllBuses2(){
+        List<Bus_Master> p= new ArrayList<Bus_Master>();
+        Transaction trns16 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns16 = session.beginTransaction();
+            Query query = session.createQuery("from Bus_Master where enabled =:status");
+            query.setBoolean("status", true);
+            p = query.list();
+            } catch (RuntimeException e) {
+            e.printStackTrace();
+            return p;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return p;
+        
+    }
+
+
+
     public List<Dept_Time_Master> getAllTimes(){
         List<Dept_Time_Master> p= new ArrayList<Dept_Time_Master>();
         Transaction trns16 = null;
@@ -1165,6 +1194,7 @@ public class userDaoImpl implements usersDao{
 	
 	
 	public int saveLocation(Location_Master location){
+		System.out.println("LOCATIONNNNNN "+location.getDept_time2());
 		List <Location_Master> locations  = new ArrayList<Location_Master>();
 		List <Pickup_Location_Master> p_locations  = new ArrayList<Pickup_Location_Master>();
     	Transaction trns7 = null;
@@ -1187,6 +1217,8 @@ public class userDaoImpl implements usersDao{
     		Timestamp created_at = new Timestamp(System.currentTimeMillis());
         	location.setCreated_at(created_at);
         	location.setEnabled(true);
+        	if(!location.getDept_time2().equals("nth"))
+        	location.setDept_time(java.sql.Time.valueOf(location.getDept_time2()));
             session.save(location);  
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -1208,19 +1240,10 @@ public class userDaoImpl implements usersDao{
 		Date dept_date = null;
 		Time dept_time = null;
     	Transaction trns7 = null;
+        int iid;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns7 = session.beginTransaction();
-            String queryString = "FROM Schedule_Master where code=:code";
-            Query query = session.createQuery(queryString);
-            query.setString("code",schedule.getCode());
-            schedules=(List<Schedule_Master>)query.list();
-            if(schedules.size()>0)
-    				{
-            			map.put("status", "duplicate code");
-            			map.put("message", "Code already existed!");
-            			return map;
-    				}
             Customer_Booking booking = new Customer_Booking();
             List<Integer> ints1 = new ArrayList<Integer>();
             List<Integer> ints2 = new ArrayList<Integer>();
@@ -1320,7 +1343,6 @@ public class userDaoImpl implements usersDao{
     				Timestamp created_at = new Timestamp(System.currentTimeMillis());
 		    		int remaining =  new userDaoImpl().getBusById(schedule.getBus_id()).getNumber_of_seat()-schedule.getNumber_booking();
 		    		s.setBus_id(schedule.getBus_id());
-		    		s.setCode(schedule.getCode());
 		    		s.setCreated_at(created_at);
 		    		s.setDept_date(java.sql.Date.valueOf(schedule.getDept_date()));
 		    		s.setDept_time(java.sql.Time.valueOf(schedule.getDept_time()));
@@ -1334,10 +1356,13 @@ public class userDaoImpl implements usersDao{
 		    		s.setSource_id(schedule.getSource_id());
 		    		s.setFrom_id(new userDaoImpl().getPickUpLocationById(schedule.getSource_id()).getLocation_id());
 		    		s.setTo_id(new userDaoImpl().getPickUpLocationById(schedule.getDestination_id()).getLocation_id());
-		            session.save(s);  
+		            session.save(s);
+                    iid = s.getId();
+                    s.setCode(getScheduleSequence(iid));
+                    session.update(s);
 		            session.getTransaction().commit();
     				map.put("status", "all fine");
-	    			map.put("message", "Schedule has just been created successfully");
+	    			map.put("message", "Schedule "+getScheduleSequence(iid)+" has just been created successfully");
 	    		}
     		else if(status1.equals("driver not fine")&&status2.equals("bus not fine"))
     		{
@@ -1396,7 +1421,15 @@ public class userDaoImpl implements usersDao{
 		
 	}
 
-
+    public String getScheduleSequence(int id){ 
+           int code;
+           String scode = new String();
+           code = 10000000+id; 
+           scode = Integer.toString(code); 
+           scode = scode.substring(1); 
+           return "S"+scode; 
+          
+    }
 	
 	
 	
@@ -2620,6 +2653,102 @@ public class userDaoImpl implements usersDao{
         }
         return 1;
 	}
+	public List<Bus_Master> getBusByAva (){
+		List<Bus_Master> buses= new ArrayList<Bus_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 = session.beginTransaction();
+            String queryString = "from Bus_Master where availability=:availability";
+            Query query = session.createQuery(queryString);
+            query.setBoolean("availability",false);
+            buses=(List<Bus_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return buses;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return buses;
+		
+	}
+	
+
+    public Map<String, String> moveToRental(Schedule_Model model)
+    {
+    	Schedule_Master s = new Schedule_Master();
+    	Map<String, String> map = new HashMap<String,String>();
+    	Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int a[]=model.getB();    
+        int s_id = 0;
+        try {
+        	Timestamp created_at = new Timestamp(System.currentTimeMillis());
+        	int bus_id;
+            trns19 =  session.beginTransaction();
+            List<Bus_Master> buses  = new userDaoImpl().getBusByAva();
+            if(buses.size()>0)
+            {
+            	bus_id = buses.get(0).getId();
+            }
+            else{
+            	Bus_Master bus = new Bus_Master();
+            	bus.setAvailability(false);
+            	bus.setCreated_at(created_at);
+            	bus.setEnabled(true);
+            	bus.setModel("Rental Bus");
+            	bus.setNumber_of_seat(0);
+            	bus.setPlate_number("Unknown");
+            	bus_id = (Integer) session.save(bus);
+            }
+            	
+            s.setBus_id(bus_id);
+    		s.setCreated_at(created_at);
+    		s.setDept_date(model.getDept_date2());
+    		s.setDept_time(model.getDept_time2());
+    		s.setDestination_id(model.getDestination_id());
+    		s.setDriver_id(0);
+    		s.setNumber_customer(model.getNumber_customer());
+    		s.setNumber_staff(model.getNumber_staff());
+    		s.setNumber_student(model.getNumber_student());
+    		s.setSource_id(model.getSource_id());
+    		s.setRemaining_seat(0);
+    		s.setFrom_id(new userDaoImpl().getPickUpLocationById(model.getSource_id()).getLocation_id());
+    		s.setTo_id(new userDaoImpl().getPickUpLocationById(model.getDestination_id()).getLocation_id());
+    		s_id  = (Integer) session.save(s);
+    		s.setCode(getScheduleSequence(s_id));
+            int ab = 0;
+            for (int i = 0; i < a.length; i++)
+           {
+              System.out.println(a[i]);
+              Booking_Master booking = getBookingById(a[i]);
+              booking.setSchedule_id(s_id);
+              booking.setNotification("Booked");
+              ab += booking.getNumber_booking();
+              session.update(booking);
+             
+           }
+            s.setNumber_booking(ab);           
+            session.update(s);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns19 != null) {
+                trns19.rollback();
+            }
+            e.printStackTrace();
+            map.put("status", "0");
+            return map;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        map.put("status", "1");
+        map.put("code", getScheduleSequence(s_id));
+        return map;
+    }
+
+
 	
 	
 	

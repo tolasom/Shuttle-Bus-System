@@ -9,9 +9,7 @@
                                         <h3 class="title"> Schedule Detail </h3>
                                     </div>
                                     <form class="form-inline" id="myForm">
-                                       <div class="form-group col-md-4" style="margin-bottom:2%;">
-                                            <label for="exampleInputPassword3"  style="margin-right:4%;">Code</label>
-                                            <input type="text" class="form-control" style="width: inherit;" id="scode" placeholder=Code required> </div>
+                                       
                                        <div class="form-group col-md-4" style="margin-bottom:2%;">
                                             <label for="exampleInputEmail3"  style="margin-right:4%;">Driver</label>
                                             <select class="form-control" style="width: inherit;" id="sdriver" required><option></option></select> </div>
@@ -101,8 +99,7 @@ load = function () {
 		$("#sfrom").append("<option value="+pickup_locations[i].id+">"+pickup_locations[i].name+"  ("+searchPLocation(pickup_locations[i].location_id,locations)+")"+" </option>");
 	for(i=0; i<drivers.length; i++)					
 		$("#sdriver").append("<option value="+drivers[i].id+">"+drivers[i].name+" </option>");
-	$("#scode").val(code);
-	$("#scode").prop('disabled', true);
+	
 	
 }
 
@@ -117,6 +114,9 @@ $(document).ready(function(){
     $("[name=time]").keydown(function (event) { 
             event.preventDefault();
         });
+    
+    
+
 
 	$("#sfrom").change(function(){
 		var input  = this.value;
@@ -143,13 +143,10 @@ $(document).ready(function(){
 	
 	$("#myForm").on('submit',function(e){
 		e.preventDefault();
-		//var dateee = document.getElementsById('deptdate')[0].innerHTML;
-		//var convertedDate = dateee.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-		if($("#scode").val()!=s_code)
-		{
-		swal("Action Disallowed!", "You cannot change Code!", "error")
-		return
-		}
+		var dateee = $("#sdeptdate").val();
+		var convertedDate = dateee.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+        console.log(convertedDate)
+		
 		if($("#sdriver").val()==""||$("#sdriver").val()==null)
 		{
 		swal("Action Disallowed!", "You cannot leave Driver field blank!", "error")
@@ -183,13 +180,13 @@ $(document).ready(function(){
 		$.ajax({
     		url:'createSchedule',
     		type:'GET',
-    		data:{	code:$("#scode").val(),
+    		data:{
     				driver_id:parseInt($("#sdriver").val()),
     				bus_id:parseInt($("#sbus").val()),
     				source_id:parseInt($("#sfrom").val()),
     				destination_id:parseInt($("#sto").val()),
     				number_booking:0,
-    				dept_date:$("#sdeptdate").val(),
+    				dept_date:convertedDate,
     				dept_time:toDate($("#sdepttime").val(),'h:m')
     			},
     		traditional: true,			

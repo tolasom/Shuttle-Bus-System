@@ -17,7 +17,7 @@
                        
 	                         <div style="margin-bottom: 10px;">
 		                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking';">View all historical bookings <i class="fa fa-angle-right"></i></button>
-		                          <button class="btn btn-warning pull-left" onClick="openModal()" style="color:white;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
+		                          <button class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
 		                         
 	                      	 </div>
 	                      	 </div>
@@ -95,7 +95,7 @@ load = function(){
 						cb = '<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>';
     				}
-				var booking = '<tr class="hoverr search '+bookings[i].description+'" style="'+color+'"s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'">'
+				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'">'
 									+cb
 									+'<td>'+(i+1)+'</td>'
 									+'<td>'+bookings[i].code+'</td>'
@@ -107,6 +107,12 @@ load = function(){
 									+'<td>'+bookings[i].description+'</td></tr>';
 				$("#allBooking").append(booking);				
 				}
+			$(".checkbox").on('click', function(e) {
+				var a = $(this).parents(".hoverr")[0];
+				$(a).toggleClass("selected");
+				showMoveBtn(a);
+			});
+
 			$(".hoverr").on('click', function() {
     	    	location.href=$(this).attr('data-url');
     		});
@@ -153,11 +159,7 @@ load = function(){
 		
 	});
 	
-	$(".checkbox").on('click', function(e) {
-		var a = $(this).parents(".hoverr")[0];
-		$(a).toggleClass("selected");
-		showMoveBtn(a);
-	});
+	
 	
 $("#moveBtn").hide();
 	
@@ -256,28 +258,100 @@ $(document).ready(function(){
 
 
 
-function openModal(){
-	$('#moveModal').modal('toggle');
-	$('#mschedule').children('option:not(:first)').remove();
-	for(var i=0; i<all_schedule.length; i++)					
-		{
-		if(all_schedule[i].id!=idd)
-			{
-			var s  = "<option value="+all_schedule[i].id+">"+all_schedule[i].code+"</option>";
-			$("#mschedule").append(s);
-			}
-		}
-	$("#moveSimple").hide();
-	$("#moveNew").show();
-
+function confirmMove(){
+	var b_id = []
+	var str = ""
+	var code
+	$(".selected").each(function(){
+			var id = parseInt($(this).attr("tofind"))
+			b_id.push(id)
+			code = searchBooking3(id,bookings)
+			str = str+code+", "
+		});
+	func(b_id, str)
 }
 
 
+func=function(b_id, str)
+{
+swal({
+    title: "Do you want to move these unassigned bookings to a schedule?",
+    text: str+" will be moved!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#76D4F5",
+    confirmButtonText: "Move",
+    cancelButtonText: "Cancel",
+    closeOnConfirm: false,
+    closeOnCancel: true
+  },
+    function (isConfirm) {
+      if (isConfirm) {
+    	  $.ajax({
+    	     url:'moveToRental',
+    	     type:'GET',
+    	     data:{b:b_id},
+    	     traditional: true,
+    	     success: function(response){
+    	      if(response.status=="1")
+    	      {
+    	      setTimeout(function() {
+    	             swal({
+    	                 title: "Done!",
+    	                 text: response.message,
+    	                 type: "success"
+    	             }, function() {
+    	                 window.location = "admin_booking";
+    	             });
+    	         }, 10);
+
+    	      }
+
+    	          else 
+    	           {
+    	           swal("Oops!",response.message, "error")
+
+    	           } 
+    	     },
+    				error: function(err){
+    					
+    					console.log(JSON.stringify(err));
+    					}
+    	       });
+      } 
+    });
+    }
+
+
+
 function showMoveBtn(e){
-	
+	var dates = []
+	var times = []
 	var numItems = $('.selected').length;
+	var count=0;
 	if(numItems>0)
-		$("#moveBtn").show();
+	{
+		
+		if (numItems!=1) {
+			$(".selected").each(function(){
+			var id = parseInt($(this).attr("tofind"))
+			dates.push(searchBooking(id,bookings))
+			times.push(searchBooking2(id,bookings))	         
+		    console.log(searchBooking(id,bookings))
+			});
+			console.log(dates)
+			console.log(times)
+			if((!!dates.reduce(function(a, b){ return (a === b) ? a : NaN; }))&&(!!times.reduce(function(a, b){ return (a === b) ? a : NaN; })))
+			{
+				$("#moveBtn").show();
+			}
+			else
+			$("#moveBtn").hide();
+		}
+		else
+			$("#moveBtn").show();
+		
+	}
 	else 
 		$("#moveBtn").hide();
 	
@@ -309,6 +383,28 @@ function searchCustomer(id, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;
+        }
+    }
+}
+
+function searchBooking(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return formatDate(myArray[i].dept_date);
+        }
+    }
+}
+function searchBooking2(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].dept_time;
+        }
+    }
+}
+function searchBooking3(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].code;
         }
     }
 }

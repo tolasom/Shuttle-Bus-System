@@ -71,7 +71,7 @@ public class StudentDaoImpl implements StudentDao{
          Transaction trns1 = null;
          Session session = HibernateUtil.getSessionFactory().openSession();
          try {
-              String hql = "from Location_Master where enabled='true'";
+              String hql = "from Location_Master where enabled='true' and forstudent='true'";
               Query query = session.createQuery(hql);
               List<Location_Master> list_location = query.list();
 
@@ -96,19 +96,25 @@ public class StudentDaoImpl implements StudentDao{
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
-
+        Custom_Imp custom_dao = new Custom_Imp();
+        Location_Master location_master = new Location_Master();
         try {
             Booking_Master booking_master = new Booking_Master();
             booking_master.setUser_id(id.getAuthentic());
-            booking_master.setDestination_id(book_data.getDestination());
-            booking_master.setSource_id(book_data.getSource());
+            booking_master.setFrom_id(book_data.getDestination());
+            booking_master.setTo_id(book_data.getSource());
             booking_master.setDept_date(java.sql.Date.valueOf(book_data.getDeparture_date()));
             booking_master.setDescription("student");
             booking_master.setNotification("Booked");
             booking_master.setNumber_booking(1);
             booking_master.setAdult(1);
             booking_master.setChild(0);
+            location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
+            booking_master.setDept_time(location_master.getDept_time());
             session.save(booking_master);
+            booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
+            session.update(booking_master);
+
             if(book_data.getChoice()==2){
                 Booking_Master booking_return = new Booking_Master();
                 booking_return.setUser_id(id.getAuthentic());
@@ -120,7 +126,11 @@ public class StudentDaoImpl implements StudentDao{
                 booking_return.setChild(0);
                 booking_return.setAdult(0);
                 booking_return.setNumber_booking(1);
+                location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
+                booking_return.setDept_time(location_master.getDept_time());
                 session.save(booking_return);
+                booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
+                session.update(booking_return);
             }
 
             User_Info user_info = (User_Info) session.load(User_Info.class,id.getAuthentic());
@@ -174,8 +184,8 @@ public class StudentDaoImpl implements StudentDao{
              for(Booking_Master booking_master : list_booking){
                  Map<String,Object> map = new HashMap<String, Object>();
                  Location_Master location_master = new Location_Master();
-                 map.put("destination_id",booking_master.getDestination_id());
-                 map.put("source_id",booking_master.getSource_id());
+                 map.put("destination_id",booking_master.getFrom_id());
+                 map.put("source_id",booking_master.getTo_id());
                  map.put("departure_date",booking_master.getDept_date());
                  map.put("child",booking_master.getChild());
                  map.put("adult",booking_master.getAdult());

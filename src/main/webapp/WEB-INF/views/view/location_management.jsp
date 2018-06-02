@@ -17,6 +17,16 @@
                                         <div class="form-group">
                                             <label class="control-label">Name</label>
                                             <input type="text" class="form-control boxed" id="name" maxlength="30"  required> </div>
+                                        <div>
+                                                
+                                                <label>
+                                                    <input class="checkbox rounded" type="checkbox" id="forstudent">
+                                                    <span>Also for students?</span>
+                                                </label>
+                                            </div>
+                                        <div class="form-group" style="display:none;" id="ddf">
+                                            <label class="control-label">Departure time for students</label>
+                                            <input type="text" name="time" class="form-control boxed" id="depttime"  required> </div>
                                        
                                          <button type="submit" id="bsubmit" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
@@ -150,9 +160,10 @@ var llid;
 var plid;
 var p_location_data;
 var location_data;
+var status = 0;
 
 load = function(){
-	
+	$(".wickedpicker").css('z-index',"1050");
 	$.ajax({
 		url:'getAllLocations',
 		type:'GET',
@@ -268,6 +279,16 @@ $(document).ready(function(){
 		console.log("Fired")
 		e.preventDefault();
 		var b_name = $("#name").val().trim();
+        var time = "nth";
+        var fors = false;
+        if(parseInt(status)>0){
+            if(parseInt(status)%2!=0)
+            {
+                time = toDate($("#depttime").val(),'h:m')
+                fors = true
+            }
+        }
+
 		var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 		if(b_name=='')
 		{
@@ -287,7 +308,9 @@ $(document).ready(function(){
 		$.ajax({
     		url:'createLocation',
     		type:'GET',
-    		data:{	name:b_name
+    		data:{	name:b_name,
+                    forstudent:fors,
+                    dept_time2:time
     			},
     		traditional: true,			
     		success: function(response){
@@ -416,6 +439,14 @@ $(document).ready(function(){
     				}
     		
     			});	
+
+        
+
+        $("#forstudent").change(function() {
+            if(this.checked) {
+                console.log("Called")
+            }
+        });
 		
 	});	
 	
@@ -588,6 +619,20 @@ function getlength(number) {
     return number.toString().length;
 }
 
+$('#forstudent').on('click', function(){
+    console.log("clicked")
+            $('#ddf').toggle();
+            status = parseInt(status) +1;
+        });
 
-
+function toDate(dStr,format) {
+    var now = new Date();
+    if (format == "h:m") {
+        now.setHours(dStr.substr(0,dStr.indexOf(":")));
+        now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
+        now.setSeconds(0);
+        return now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+    }else 
+        return "Invalid Format";
+}
 </script>
