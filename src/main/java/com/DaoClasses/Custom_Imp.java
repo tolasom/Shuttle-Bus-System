@@ -1285,7 +1285,7 @@ public class Custom_Imp implements Custom_Dao{
 		System.out.println("get_all_booker");
 		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
 		try {
-            all_booker1 = session.createQuery("from Booking_Master where description='customer' and from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' and description='customer' and from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
             		.setParameter(0,from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();
 
         } catch (RuntimeException e) {
@@ -1313,10 +1313,8 @@ public class Custom_Imp implements Custom_Dao{
 			for(int i=0;i<unava2.size();i++){
 				excep+=" and id!="+unava2.get(i);
 			}
-            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
-            System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-            System.out.println("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc");
-            System.out.println("query_all_bus size: "+ query_all_bus.size());
+            query_all_bus = session.createQuery("from Bus_Master where availability='true' and enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+    
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	                  Map<String,Object> map =new HashMap<String,Object>();				
@@ -1354,7 +1352,7 @@ public class Custom_Imp implements Custom_Dao{
 			for(int i=0;i<unava2.size();i++){
 				excep+=" and id!="+unava2.get(i);
 			}
-            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+            query_all_bus = session.createQuery("from Bus_Master where availability='true' and enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	            	  Bus_Master bus = new Bus_Master();
@@ -1921,16 +1919,20 @@ public class Custom_Imp implements Custom_Dao{
         				" where id = :id");
                 query.setParameter("id", id);
                 int result = query.executeUpdate();
+                if(schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking()==0){
+                	Query query1 = session.createQuery("delete Schedule_Master where id=:id");
+                	query1.setParameter("id", schedule.get(0).getId());
+                	int result1 = query1.executeUpdate();
+                }else{
+                	Query query1 = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
+            				" where id = :id");
+                    query1.setParameter("num_booking", schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking());
+                    query1.setParameter("remain_seat", schedule.get(0).getRemaining_seat()+bo.get(0).getNumber_booking());
+                    query1.setParameter("number_customer", schedule.get(0).getNumber_customer()-bo.get(0).getNumber_booking());
+                    query1.setParameter("id", schedule.get(0).getId());
+                    int result1 = query1.executeUpdate();
+                }
                 
-                Query query1 = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
-        				" where id = :id");
-                query1.setParameter("num_booking", schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking());
-                query1.setParameter("remain_seat", schedule.get(0).getRemaining_seat()+bo.get(0).getNumber_booking());
-                query1.setParameter("number_customer", schedule.get(0).getNumber_customer()-bo.get(0).getNumber_booking());
-                query1.setParameter("id", schedule.get(0).getId());
-                int result1 = query1.executeUpdate();
-                
-
                 trns1.commit();  
             }else{
             	return "no_record";
@@ -2125,13 +2127,9 @@ public class Custom_Imp implements Custom_Dao{
         Session session = HibernateUtil.getSessionFactory().openSession();
      	try {
             trns = session.beginTransaction();
-            Encryption encode = new Encryption();
-            String hashedPassword = encode.PasswordEncode("12345678");
-            String hql ="Update User_Info set password=:password, reset_token=null where id=:id";
-	        Query query =  session.createQuery(hql);
-	        query.setString("password", hashedPassword);
-	        query.setParameter("id", 17);
-	        int ret = query.executeUpdate();
+            Query query1 = session.createQuery("delete Schedule_Master where id=:id");
+        	query1.setParameter("id",19);
+        	int result1 = query1.executeUpdate();
 	        trns.commit();
 	        
         } catch (RuntimeException e) {

@@ -338,7 +338,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 										{
 										number_stu+=sch_with_users.get(h).get(y).getNumber_booking();
 									}
-                        			Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
+                        			Query query = session.createQuery("update Booking_Master set notification='Booked',schedule_id = :sch_id, qr= :qr" +
                             				" where id = :id");
     			                    query.setParameter("sch_id", sch.getId());
     			                    query.setParameter("qr", cb.getSource()+""+cb.getDestination()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
@@ -395,23 +395,50 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
     	System.out.println("---------------->asign_to_existing_schedule(");
 		int index=0;
 		try{
+			List<Map<String,Object>> sch=new ArrayList<Map<String,Object>>();
 			outerloop:
 			for(int i=0;i<list_schedule.size();i++){
-					for(int j=0;j<list_schedule.get(i).getRemaining_seat();j++){
+				int amount=0;
+				Boolean check=false;   
+				for(int j=0;j<list_schedule.get(i).getRemaining_seat();j++){
 						if(index<=list_stu.size()){
-							Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
+							Query query = session.createQuery("update Booking_Master set notification='Booked',schedule_id = :sch_id, qr= :qr" +
 			        				" where id = :id");
 			                query.setParameter("sch_id", list_schedule.get(i).getId());
 			                query.setParameter("qr", list_stu.get(index).getFrom_id()+""+list_stu.get(index).getTo_id()+""+list_stu.get(index).getDept_date()+""+list_stu.get(index).getDept_time()+""+list_stu.get(index).getId());
 			                query.setParameter("id", list_stu.get(index).getId());
 			                int result = query.executeUpdate();
-			                index++;
+			                
+
+	                        check=true;//check have update schedule or not
+	                        amount++;  //set amount to update with this schedule
+	                        
+			                index++;//check loop
 						}
 						else{
 							break outerloop;
 						}
-					}
+				}
+				if(check){
+					Map<String,Object> map=new HashMap<String,Object>();
+					map.put("scheule",list_schedule.get(i) );
+					map.put("amount", amount);
+					sch.add(map);
+				}
+				
 			}
+			for(Map<String, Object> map: sch){
+				Schedule_Master sm=(Schedule_Master) map.get("scheule");
+				int num=Integer.valueOf((String) map.get("amount"));
+				Query query1 = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_student=:number_student" +
+	    				" where id = :id");
+	            query1.setParameter("num_booking",sm.getNumber_booking()+num );
+	            query1.setParameter("remain_seat", sm.getNumber_booking()-num);
+	            query1.setParameter("number_student", sm.getNumber_student()+num);
+	            query1.setParameter("id", sm.getId());
+	            int result1 = query1.executeUpdate();
+			}
+
 		} catch (RuntimeException e) {
         	e.printStackTrace();
         }
@@ -578,7 +605,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		System.out.println("get_all_booker");
 		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
 		try {
-            all_booker1 = session.createQuery("from Booking_Master where from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' and from_id=? and to_id=? and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
             		.setParameter(0,from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();
 
             System.out.println("all_booker: ");
@@ -609,7 +636,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 			for(int i=0;i<unava2.size();i++){
 				excep+=" and id!="+unava2.get(i);
 			}
-            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+            query_all_bus = session.createQuery("from Bus_Master where availability='true' and enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	                  Map<String,Object> map =new HashMap<String,Object>();				
