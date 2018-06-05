@@ -76,6 +76,7 @@ public class StudentController {
     public static void main(String args[]) throws ParseException{
     	Set_Student_Schedule c =new Set_Student_Schedule();
         c.createSchedule();
+        System.out.println("End");
     }
 
 

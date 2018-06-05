@@ -606,7 +606,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 			for(int i=0;i<unava2.size();i++){
 				excep+=" and id!="+unava2.get(i);
 			}
-            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();  
+            query_all_bus = session.createQuery("from Bus_Master where enabled=?"+excep+" order by number_of_seat asc").setBoolean(0, true).list();
             if(query_all_bus.size()>0){            
 	              for(int i=0;i<query_all_bus.size();i++){	
 	                  Map<String,Object> map =new HashMap<String,Object>();				

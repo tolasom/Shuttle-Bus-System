@@ -22,7 +22,7 @@
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-       <script type="text/javascript" src="/sbs/resources/student/build/static/js/main.79c8d936.js"></script>
+       <script type="text/javascript" src="/sbs/resources/student/build/static/js/main.8d517253.js"></script>
         <link rel="stylesheet" href="/sbs/resources/student/build/static/css/main.b4bbf50f.css">
        <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
     </body>

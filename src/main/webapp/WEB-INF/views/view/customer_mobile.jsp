@@ -23,7 +23,7 @@
 </form>
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
-<script type="text/javascript" src="/sbs/resources/build/static/js/main.6998fb97.js">
+<script type="text/javascript" src="/sbs/resources/build/static/js/main.668b870f.js">
 </script>
 <link rel="stylesheet" href="/sbs/resources/build/static/css/main.0c03517c.css">
 <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->

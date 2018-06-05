@@ -103,8 +103,8 @@ public class StudentDaoImpl implements StudentDao{
         try {
             Booking_Master booking_master = new Booking_Master();
             booking_master.setUser_id(id.getAuthentic());
-            booking_master.setFrom_id(book_data.getDestination());
-            booking_master.setTo_id(book_data.getSource());
+            booking_master.setFrom_id(book_data.getSource());
+            booking_master.setTo_id(book_data.getDestination());
             booking_master.setDept_date(java.sql.Date.valueOf(book_data.getDeparture_date()));
             booking_master.setDescription("student");
             booking_master.setNotification("Booked");
@@ -112,7 +112,7 @@ public class StudentDaoImpl implements StudentDao{
             booking_master.setCreated_at(created_at);
             booking_master.setAdult(1);
             booking_master.setChild(0);
-            location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
+            location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
             booking_master.setDept_time(location_master.getDept_time());
             session.save(booking_master);
             booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
@@ -122,15 +122,15 @@ public class StudentDaoImpl implements StudentDao{
                 Booking_Master booking_return = new Booking_Master();
                 booking_return.setUser_id(id.getAuthentic());
                 booking_return.setCreated_at(created_at);
-                booking_return.setFrom_id(book_data.getSource());
-                booking_return.setTo_id(book_data.getDestination());
+                booking_return.setFrom_id(book_data.getDestination());
+                booking_return.setTo_id(book_data.getSource());
                 booking_return.setDept_date(java.sql.Date.valueOf(book_data.getReturn_date()));
                 booking_return.setDescription("student");
                 booking_return.setNotification("Booked");
                 booking_return.setChild(0);
                 booking_return.setAdult(0);
                 booking_return.setNumber_booking(1);
-                location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
+                location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
                 booking_return.setDept_time(location_master.getDept_time());
                 session.save(booking_return);
                 booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
@@ -181,7 +181,7 @@ public class StudentDaoImpl implements StudentDao{
          List<Booking_Master> list_booking = new ArrayList<Booking_Master>();
          Session session = HibernateUtil.getSessionFactory().openSession();
          try {
-             String hql = "From Booking_Master where notification ='Booked' and user_id="+id.getAuthentic();
+             String hql = "From Booking_Master where notification != 'Cancelled' and user_id="+id.getAuthentic();
              Query query = session.createQuery(hql);
              query.setMaxResults(10);
               list_booking= query.list();
@@ -198,9 +198,9 @@ public class StudentDaoImpl implements StudentDao{
                  map.put("schedule_id",booking_master.getId());
                  map.put("status",booking_master.getNotification());
                  location_master = (Location_Master)
-                         session.load(Location_Master.class,booking_master.getFrom_id());
+                         session.load(Location_Master.class,booking_master.getTo_id());
                  map.put("destination_name",location_master.getName());
-                 location_master = (Location_Master) session.load(Location_Master.class,booking_master.getTo_id());
+                 location_master = (Location_Master) session.load(Location_Master.class,booking_master.getFrom_id());
                  map.put("source_name",location_master.getName());
                  System.out.println(booking_master.getFrom_id());
                  if(booking_master.getSchedule_id() !=0 ){
