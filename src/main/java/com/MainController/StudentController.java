@@ -77,6 +77,7 @@ public class StudentController {
     	Set_Student_Schedule c =new Set_Student_Schedule();
         c.createSchedule();
         System.out.println("End");
+
     }
 
 
