@@ -175,6 +175,12 @@ $(document).ready(function(){
 			swal("Oops!", "Description Cannot Be More Than 80 Digits", "error")  
 			return
 		}
+        parseInt(b_number_of_seat)
+        if(parseInt(b_number_of_seat)<=0)
+        {
+            swal("Oops!", "Number of seat cannot be less than 0", "error")  
+            return
+        }
 		$.ajax({
     		url:'createBus',
     		type:'GET',

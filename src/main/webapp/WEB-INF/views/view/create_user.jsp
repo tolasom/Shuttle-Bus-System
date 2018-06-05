@@ -163,6 +163,11 @@ $(document).ready(function(){
             swal("Oops!", "Name Cannot Be More Than 30 Characters", "error")  
             return
         }
+        if(getlength($("#uusername").val())<2)
+        {
+            swal("Oops!", "Name Cannot Be Less Than 2 Characters", "error")  
+            return
+        }
         if(getlength($("#upassword").val())>30)
         {
             swal("Oops!", "Password Cannot Be More Than 30 Characters", "error")  
@@ -176,6 +181,11 @@ $(document).ready(function(){
         if(getlength($("#uphonenumber").val())>15)
         {
             swal("Oops!", "Phone Number Cannot Be More Than 15 Digits", "error")  
+            return
+        }
+        if(getlength($("#uphonenumber").val())<8)
+        {
+            swal("Oops!", "Phone Number Cannot Be Less Than 8 Digits", "error")  
             return
         }
 

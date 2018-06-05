@@ -98,6 +98,7 @@ public class Custom_Imp implements Custom_Dao{
    		 return  (new BigInteger(mount*5, random).toString(32))+String.valueOf(id);	   
    	}
 	 public Map<String, Object> check_and_send_email(String email){
+		System.out.println("check_and_send_email");
 		 Custom_Imp cus= new Custom_Imp();
 		 	Map<String, Object> map=new HashMap<String,Object>();
 			Transaction trns = null;
@@ -105,10 +106,10 @@ public class Custom_Imp implements Custom_Dao{
 	        Session session = HibernateUtil.getSessionFactory().openSession();
 	     	try {
 	            trns = session.beginTransaction();
-	            String hql ="from User_Info where email=:email";
+	            String hql ="from User_Info where email='"+email+"'";
+                System.out.println(hql);
 		        Query query =  session.createQuery(hql);
-		        query.setString("email", email);
-		        System.out.println(user.getId());
+		        System.out.println(query.list());
 		        if(query.list().size()>0){
 		        	user = (User_Info) query.list().get(0);
 		        	String token= cus.Key(50,user.getId());
@@ -121,7 +122,8 @@ public class Custom_Imp implements Custom_Dao{
 			        
 			        
 		        	Mail mail = new Mail();
-			        mail.setMailFrom("maimom2222@gmail.com");
+			        mail.setMailFrom("nanaresearch9@gmail.com");
+
 			        mail.setMailTo(user.getEmail());
 			        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
 			        mail.setFile_name("forget_password_template.txt");
@@ -288,6 +290,7 @@ public class Custom_Imp implements Custom_Dao{
 
 		return pickup;
 	}
+
 	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np){
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();       
@@ -507,11 +510,12 @@ public class Custom_Imp implements Custom_Dao{
                 	System.out.println("LL: "+bh.get(i).getSchedule_id());
                 	Bus_Master bus=new Bus_Master();
                 	bus = (Bus_Master) session.createQuery("from Bus_Master where id=?").setParameter(0, sch_ma.getBus_id()).list().get(0);
+
                 	
-                	ByteArrayOutputStream out = QRCode.from(bh.get(i).getQr().toString()).to(ImageType.PNG).stream();  
+                	ByteArrayOutputStream out = QRCode.from(bh.get(i).getQr().toString()).to(ImageType.PNG).stream();
     				byte[] test = out.toByteArray();
     				String encodedImage = Base64.getEncoder().encodeToString(test);
-                	
+
                 	Map<String,Object> map=new HashMap<String,Object>();
                 	map.put("booking_code", bh.get(i).getCode());
                 	map.put("id", bh.get(i).getId());
@@ -1780,12 +1784,15 @@ public class Custom_Imp implements Custom_Dao{
         Booking_Request_Master book = new Booking_Request_Master();
         Custom_Imp c=new Custom_Imp();
 //		java.sql.Timestamp.valueOf(c.DateTimeNow())
+        System.out.println(""+cb.getSource());
 		try {
             trns1 = session.beginTransaction();
             Pickup_Location_Master pick_source=new Pickup_Location_Master();
-          	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getSource()).list().get(0);
+          	pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+					.setParameter(0, cb.getSource()).list().get(0);
           	Pickup_Location_Master pick_destin=new Pickup_Location_Master();
-          	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
+          	pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+					.setParameter(0, cb.getDestination()).list().get(0);
             
           	
             book.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));

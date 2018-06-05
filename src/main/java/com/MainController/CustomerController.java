@@ -4,7 +4,9 @@ package com.MainController;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.*;
+
+import com.ModelClasses.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +48,10 @@ public class CustomerController {
 	//========================= Forget Password UI================================
 	@RequestMapping(value="/submit_reset_password_email", method=RequestMethod.POST)
 	@ResponseBody public Map<String, Object> submit_reset_password_email(@RequestBody UserModel user) {
-		System.out.println(user.getEmail());
+		System.out.println("Eamil:: "+user.getEmail());
 		Custom_Dao cust=new Custom_Imp();
 		Map<String, Object> ret=cust.check_and_send_email(user.getEmail());
+		System.out.println("Return:: "+ret);
 		return ret;
 	}
 	// Reset Password
@@ -82,10 +85,9 @@ public class CustomerController {
 	//=========================check_booking_request Information================================
 	@RequestMapping(value="/today", method=RequestMethod.GET)
 	public @ResponseBody String today() {
-		Calendar cal = Calendar.getInstance();
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    String today=sdf.format(cal.getTime());
-	    return today;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+	    return f.format(new Date());
 	}
 	//=========================User Information================================
 	@RequestMapping(value="/user_info", method=RequestMethod.GET)
@@ -106,7 +108,7 @@ public class CustomerController {
 			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
 			Map<String, Map<String, List<Pickup_Location_Master>>> map = customer.location();
 			return map;
-		}	
+		}
 	//=========================Departure Time Information================================
 		@RequestMapping(value="/departure_time_info", method=RequestMethod.GET)
 			public @ResponseBody List<Map<String,Object>> departure_time_info() {
@@ -153,23 +155,23 @@ public class CustomerController {
 		return ret;
 	}
 	//=========================Request Book Now================================
-	@RequestMapping(value="/request_book_now", method=RequestMethod.GET)
-	public @ResponseBody String request_book_now(int id) throws ParseException {
+	@RequestMapping(value="/request_book_now", method=RequestMethod.POST)
+	public @ResponseBody String request_book_now(@RequestBody ID_Class id_class) throws ParseException {
 		Request_Booking_Dao req=new Request_Booking();
-		String ret = req.request_book_now(id);
-		System.out.println(id);
+		String ret = req.request_book_now(id_class.getId());
+		System.out.println(id_class.getId());
 		return ret;
 	}
 	//=========================Customer Request Booking Information================================
-	@RequestMapping(value="/customer_request_booking", method=RequestMethod.GET)
-	public @ResponseBody String customer_request_booking(Customer_Booking cb) {
+	@RequestMapping(value="/customer_request_booking", method=RequestMethod.POST)
+	public @ResponseBody String customer_request_booking(@RequestBody Customer_Booking cb) {
 			String ret = customer.customer_request_booking(cb);
 			return ret;
 	}
 	//=========================Customer Request Booking Information================================
-	@RequestMapping(value="/cancel_request_booking", method=RequestMethod.GET)
-	public @ResponseBody String cancel_request_booking(int id) {
-		String ret = customer.cancel_request_booking(id);
+	@RequestMapping(value="/cancel_request_booking", method=RequestMethod.POST)
+	public @ResponseBody String cancel_request_booking(@RequestBody ID_Class id_class) {
+		String ret = customer.cancel_request_booking(id_class.getId());
 			return ret;
 	}
 	//=========================To get Booking History of User================================
@@ -222,12 +224,12 @@ public class CustomerController {
 		}	
 	
 	//=========================To Cancel Booking Ticket================================
-	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.GET)
-		public @ResponseBody String cancel_booking_ticket(int id) {
-		String ret = customer.cancel_booking_ticket(id);
+	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
+		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Class id_delete) {
+
+		String ret = customer.cancel_booking_ticket(id_delete.getId());
 		return ret;
 	}
-
 
 	@RequestMapping(value="/customer/**")
 	public ModelAndView customer_mobile() {

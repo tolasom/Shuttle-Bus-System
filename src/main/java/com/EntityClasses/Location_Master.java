@@ -1,5 +1,6 @@
 package com.EntityClasses;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -9,7 +10,9 @@ public class Location_Master {
 		private Timestamp created_at;
 		private Timestamp updated_at;
 		private boolean enabled;
-		
+		private Time dept_time;
+		private Boolean forstudent;
+		private String dept_time2;
 		
 		
 		public int getId() {
@@ -41,6 +44,24 @@ public class Location_Master {
 		}
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
+		}
+		public Time getDept_time() {
+			return dept_time;
+		}
+		public void setDept_time(Time dept_time) {
+			this.dept_time = dept_time;
+		}
+		public Boolean getForstudent() {
+			return forstudent;
+		}
+		public void setForstudent(Boolean forstudent) {
+			this.forstudent = forstudent;
+		}
+		public String getDept_time2() {
+			return dept_time2;
+		}
+		public void setDept_time2(String dept_time2) {
+			this.dept_time2 = dept_time2;
 		}
 		
 		

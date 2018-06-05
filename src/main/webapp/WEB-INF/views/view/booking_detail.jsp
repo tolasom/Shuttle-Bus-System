@@ -69,11 +69,18 @@ load = function () {
 	console.log(data)
 	$("#code").val(booking.code);
 	$("#uname").val(searchCustomer(booking.user_id,customers));
-	$("#from").val(searchPLocation(booking.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
-	$("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
+	if(booking.source_id!=0)
+	    $("#from").val(searchPLocation(booking.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
+	else
+        $("#from").val(searchLocation(booking.from_id,locations));
+    if(booking.destination_id!=0)
+        $("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
+    else
+        $("#to").val(searchLocation(booking.to_id,locations));
+
 	$("#dept_date").val(formatDate(booking.dept_date));
 	$("#dept_time").val(booking.dept_time);
-	$("#bookedOn").val(formatDate(booking.booking_date));
+	$("#bookedOn").val(formatDate(booking.created_at));
 	$("#no_booking").val(booking.number_booking);
 	
 	
@@ -99,7 +106,7 @@ formatDate =function (date) {
     if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
 
-    return [month, day, year].join('-');
+    return [year, month, day].join('/');
 };
 
 

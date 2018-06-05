@@ -197,10 +197,11 @@ $(document).ready(function () {
             submitHandler: function (form) {
             	loading();
                 var email = $("#login-username").val();
+                console.log("Email: "+email)
                 axios.post('submit_reset_password_email', {
                     email:email,
                 }).then(function (response) {
-                	console.log(response.data.email);
+                	console.log(response);
                 	var form="";
                 	if(response.data.status){
                 		form='<h3 class="title-header">Reset your password</h3>'

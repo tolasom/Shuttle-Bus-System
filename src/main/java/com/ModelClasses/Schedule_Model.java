@@ -27,7 +27,8 @@ public class Schedule_Model {
 	private String created_at;
 	private String updated_at;
 	private int b[];
-	
+	private Date dept_date2;
+	private Time dept_time2;
 	
 	
 	
@@ -163,6 +164,19 @@ public class Schedule_Model {
 	public void setNew_id(int new_id) {
 		this.new_id = new_id;
 	}
+	public Date getDept_date2() {
+		return dept_date2;
+	}
+	public void setDept_date2(Date dept_date2) {
+		this.dept_date2 = dept_date2;
+	}
+	public Time getDept_time2() {
+		return dept_time2;
+	}
+	public void setDept_time2(Time dept_time2) {
+		this.dept_time2 = dept_time2;
+	}
+	
 	
 	
 }

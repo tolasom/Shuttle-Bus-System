@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,8 @@ public class AdminController {
 		return new ModelAndView("cusomer_home");
 	}
 //=========================To sign up an account for customer================================
-	@RequestMapping(value="/isexist",method=RequestMethod.POST)
-	@ResponseBody public Map<String,Object> isExistUser(@RequestBody UserModel userModel) {
+	@RequestMapping(value="/isexist",method=RequestMethod.GET)
+	@ResponseBody public Map<String,Object> isExistUser(UserModel userModel) {
 		User_Info user = usersService1.findByUserName(userModel.getEmail());
 		boolean status = false;
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -258,7 +259,7 @@ public class AdminController {
 		model.setQr(booking.getQr());
 		model.setSchedule_id(booking.getSchedule_id());
 		model.setSource_id(booking.getSource_id());
-		model.setUpdated_at(booking.getUpdated_at().toString());
+		//model.setUpdated_at(booking.getUpdated_at().toString());
 		model.setUser_id(booking.getUser_id());
 		model.setFrom_id(booking.getFrom_id());
 		model.setTo_id(booking.getTo_id());
@@ -325,10 +326,10 @@ public class AdminController {
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) throws ParseException {
 		Map<String,Object> map = new HashMap<String,Object>();
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date d1 = null;
+		Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String today=sdf.format(cal.getTime());
+	    Date d1 = sdf.parse(today);
 		Date d2 = null;
         Schedule_Master schedule = usersService1.getScheduleById(id);
         String screen = "schedule_detail";
@@ -336,19 +337,20 @@ public class AdminController {
 		map.put("schedules", usersService1.getAllSchedules());
 		map.put("locations", usersService1.getAllLocations());
 		map.put("p_locations", usersService1.getAllPickUpLocations());
-		map.put("buses", usersService1.getAllBuses());
+		map.put("buses", usersService1.getAllBuses2());
 		map.put("bookings", usersService1.getBookingByScheduleId(id));
 		map.put("drivers", usersService1.getAlDrivers());
 		map.put("customers", usersService1.getAlCustomers());
-		d1 = format.parse(dtf.format(now));
 		d1.setHours(0);
 		d1.setMinutes(0);
 		d1.setSeconds(0);
-		d2 = format.parse(schedule.getDept_date().toString());
+		d2 = schedule.getDept_date();
         long diff = d2.getTime() - d1.getTime();
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		if (diffDays>=2)
 			screen+="2";
+		System.out.println("D1 "+d1);
+		System.out.println("D2 "+d2);
 		System.out.println("OUTTTTTTTT "+screen);
 		System.out.println(schedule.getDept_date());
 		System.out.println(diffDays);
@@ -678,6 +680,34 @@ public class AdminController {
 				map.put("status","0");
 				map.put("message","New schedule has not just been created and bookings are not moved to anywhere!");
 			}
+		}
+		return map;
+		}
+
+
+		@RequestMapping(value="/moveToRental", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> moveToRental(Schedule_Model s) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,String> check = new HashMap<String,String>();
+		int b_id[] =s.getB();
+		System.out.println("lengthhhhh "+s.getB().length);
+		Booking_Master booking = usersService1.getBookingById(b_id[0]);
+		s.setDept_date2(booking.getDept_date());
+		s.setDept_time2(booking.getDept_time());
+		s.setDestination_id(booking.getDestination_id());
+		s.setFrom_id(booking.getFrom_id());
+		s.setSource_id(booking.getSource_id());
+		s.setTo_id(booking.getSource_id());
+		check = usersService1.moveToRental(s);
+		if(check.get("status").equals("1"))
+		{
+			map.put("status","1");
+			map.put("message","Bookings have just been successfully moved to schedule code "+check.get("code")+"!");
+		}
+		else
+		{
+			map.put("status","0");
+			map.put("message","Bookings have not been successfully moved!");
 		}
 		return map;
 		}	
@@ -1076,7 +1106,7 @@ public class AdminController {
 			{
 			map.put("schedules", list);
 			map.put("locations", usersService1.getAllLocations());
-			map.put("buses", usersService1.getAllBuses());
+			map.put("buses", usersService1.getAllBuses2());
 			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
@@ -1096,7 +1126,7 @@ public class AdminController {
 			{
 			map.put("schedules", list);
 			map.put("locations", usersService1.getAllLocations());
-			map.put("buses", usersService1.getAllBuses());
+			map.put("buses", usersService1.getAllBuses2());
 			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
@@ -1146,7 +1176,7 @@ public class AdminController {
 	public ModelAndView schedule_list(@RequestParam(value = "date", required=true, defaultValue = "0") Integer date,@RequestParam(value = "month", required=true, defaultValue = "0") Integer month, @RequestParam(value = "year", required=true, defaultValue = "0") Integer year) throws ParseException{
 		List<Schedule_Master> list = usersService1.schedule_list(Integer.toString(date),Integer.toString(month),Integer.toString(year));
 		List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
-		List<Bus_Master> list3 =  usersService1.getAllBuses();
+		List<Bus_Master> list3 =  usersService1.getAllBuses2();
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("schedules", list);
 		map.put("locations", list2);

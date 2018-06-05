@@ -31,6 +31,9 @@ public class usersServiceImpl implements usersService{
 	public List<Bus_Master> getAllBuses(){
 		return usersDao1.getAllBuses();
 	}
+	public List<Bus_Master> getAllBuses2(){
+		return usersDao1.getAllBuses2();
+	}
 	public Bus_Master getBusById (int id){
 		return usersDao1.getBusById(id);
 	}
@@ -192,6 +195,9 @@ public class usersServiceImpl implements usersService{
 	}
 	public int updateDate(Batch_Master batch){
 		return usersDao1.updateDate(batch);
+	}
+	public Map<String, String> moveToRental(Schedule_Model model){
+		return usersDao1.moveToRental(model);
 	}
 }
 

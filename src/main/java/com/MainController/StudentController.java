@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import com.ModelClasses.ID_Class;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,19 +42,32 @@ public class StudentController {
 
 
     @RequestMapping(value = "/list_booking_date", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Object> list_booking_date() {
+    @ResponseBody public List<Object> list_booking_date() {
         return studentDao.list_booking_date();
     }
 
-    @RequestMapping(value = "/list_history", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Map<String, Object>> getHistory() {
+
+    @RequestMapping(value = "/student_history", method = RequestMethod.GET)
+    @ResponseBody public List<Map<String, Object>> getHistory() {
         return studentDao.getHistory();
     }
 
+
+    @RequestMapping(value = "/customer_history_all", method = RequestMethod.GET)
+    @ResponseBody public Map<String,Object> customerHistory(){ return studentDao.customerHistory(); }
+
+
+    @RequestMapping(value = "/list_enable", method = RequestMethod.GET)
+    @ResponseBody public List<Integer> listBookedDate(){ return studentDao.listBookedDate(); }
+    @RequestMapping(value = "/student_cancel", method = RequestMethod.POST)
+    @ResponseBody public Map<String,Object> studentCancel(@RequestBody ID_Class id_class)
+    { return studentDao.cancel_ticket(id_class);}
+
+    //@Scheduled(cron="*/5 * * * * *")
+    //public void updateEmployeeInventory() {
+       // System.out.println("Started cron job 1");
     @Scheduled(cron="0 0 5,9,12 * * *")
-    public void updateEmployeeInventory() throws ParseException {
+    public void updateEmployeeInventory() throws ParseException{
         System.out.println("Started create schedule for studen");
         Set_Student_Schedule c =new Set_Student_Schedule();
         c.createSchedule();
@@ -64,6 +78,7 @@ public class StudentController {
         c.createSchedule();
         System.out.println("end");
     }
+
 
 }
 
