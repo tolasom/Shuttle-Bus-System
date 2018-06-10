@@ -2673,6 +2673,40 @@ public class userDaoImpl implements usersDao{
         return buses;
 		
 	}
+
+
+    public List<Schedule_Master> getUnassignedSchedule (Schedule_Model s){
+        List<Schedule_Master> schedules = new ArrayList<Schedule_Master>();
+        boolean status =false;
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 = session.beginTransaction();
+            String queryString = "from Schedule_Master where dept_date=:dept_date"+
+            "and dept_time=:dept_time and from_id=:from_id and to_id =:to_id"+ 
+            "and source_id=:source_id and destination_id=:destination_id"+ 
+            "and description=:description";
+            Query query = session.createQuery(queryString);
+            query.setDate("dept_date", s.getDept_date2());
+            query.setTime("dept_time", s.getDept_time2());
+            query.setInteger("from_id", s.getFrom_id());
+            query.setInteger("from_id", s.getFrom_id());
+            query.setInteger("source_id", s.getSource_id());
+            query.setInteger("destination_id", s.getDestination_id());
+            query.setString("description", "Unassigned");
+            schedules=(List<Schedule_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return schedules;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return schedules;
+        
+    }
+
+    
 	
 
     public Map<String, String> moveToRental(Schedule_Model model)
@@ -2683,54 +2717,81 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         int a[]=model.getB();    
         int s_id = 0;
+        model.setFrom_id(new userDaoImpl().getPickUpLocationById(model.getSource_id()).getLocation_id());
+        model.setTo_id(new userDaoImpl().getPickUpLocationById(model.getDestination_id()).getLocation_id());
         try {
         	Timestamp created_at = new Timestamp(System.currentTimeMillis());
-        	int bus_id;
             trns19 =  session.beginTransaction();
-            List<Bus_Master> buses  = new userDaoImpl().getBusByAva();
-            if(buses.size()>0)
+            List<Schedule_Master> schedules = new ArrayList<Schedule_Master>();
+            if(schedules.size()==1)
             {
-            	bus_id = buses.get(0).getId();
-            }
-            else{
-            	Bus_Master bus = new Bus_Master();
-            	bus.setAvailability(false);
-            	bus.setCreated_at(created_at);
-            	bus.setEnabled(true);
-            	bus.setModel("Rental Bus");
-            	bus.setNumber_of_seat(0);
-            	bus.setPlate_number("Unknown");
-            	bus_id = (Integer) session.save(bus);
-            }
+            	int ab = 0;
+            	for (int i = 0; i < a.length; i++)
+                {
+                   System.out.println(a[i]);
+                   Booking_Master booking = getBookingById(a[i]);
+                   booking.setSchedule_id(schedules.get(0).getId());
+                   booking.setNotification("Booked");
+                   ab += booking.getNumber_booking();
+                   session.update(booking);
+                  
+                }
+            	ab+= schedules.get(0).getNumber_booking(); 
+            	schedules.get(0).setNumber_booking(ab);
+            	session.update(schedules.get(0));
             	
-            s.setBus_id(bus_id);
-    		s.setCreated_at(created_at);
-    		s.setDept_date(model.getDept_date2());
-    		s.setDept_time(model.getDept_time2());
-    		s.setDestination_id(model.getDestination_id());
-    		s.setDriver_id(0);
-    		s.setNumber_customer(model.getNumber_customer());
-    		s.setNumber_staff(model.getNumber_staff());
-    		s.setNumber_student(model.getNumber_student());
-    		s.setSource_id(model.getSource_id());
-    		s.setRemaining_seat(0);
-    		s.setFrom_id(new userDaoImpl().getPickUpLocationById(model.getSource_id()).getLocation_id());
-    		s.setTo_id(new userDaoImpl().getPickUpLocationById(model.getDestination_id()).getLocation_id());
-    		s_id  = (Integer) session.save(s);
-    		s.setCode(getScheduleSequence(s_id));
-            int ab = 0;
-            for (int i = 0; i < a.length; i++)
-           {
-              System.out.println(a[i]);
-              Booking_Master booking = getBookingById(a[i]);
-              booking.setSchedule_id(s_id);
-              booking.setNotification("Booked");
-              ab += booking.getNumber_booking();
-              session.update(booking);
-             
-           }
-            s.setNumber_booking(ab);           
-            session.update(s);
+            	map.put("status", "5");
+                map.put("code", getScheduleSequence(schedules.get(0).getId()));
+            }
+            else
+            {
+            	int bus_id;
+                List<Bus_Master> buses  = new userDaoImpl().getBusByAva();
+                if(buses.size()>0)
+                {
+                	bus_id = buses.get(0).getId();
+                }
+                else{
+                	Bus_Master bus = new Bus_Master();
+                	bus.setAvailability(false);
+                	bus.setCreated_at(created_at);
+                	bus.setEnabled(true);
+                	bus.setModel("Rental Bus");
+                	bus.setNumber_of_seat(0);
+                	bus.setPlate_number("Unknown");
+                	bus_id = (Integer) session.save(bus);
+                }
+                	
+                s.setBus_id(bus_id);
+        		s.setCreated_at(created_at);
+        		s.setDept_date(model.getDept_date2());
+        		s.setDept_time(model.getDept_time2());
+        		s.setDestination_id(model.getDestination_id());
+        		s.setDriver_id(0);
+        		s.setNumber_customer(model.getNumber_customer());
+        		s.setNumber_staff(model.getNumber_staff());
+        		s.setNumber_student(model.getNumber_student());
+        		s.setSource_id(model.getSource_id());
+        		s.setRemaining_seat(0);
+                s.setDescription("Unassigned");
+        		s.setFrom_id(model.getFrom_id());
+        		s.setTo_id(model.getTo_id());
+        		s_id  = (Integer) session.save(s);
+        		s.setCode(getScheduleSequence(s_id));
+                int ab = 0;
+                for (int i = 0; i < a.length; i++)
+               {
+                  System.out.println(a[i]);
+                  Booking_Master booking = getBookingById(a[i]);
+                  booking.setSchedule_id(s_id);
+                  booking.setNotification("Booked");
+                  ab += booking.getNumber_booking();
+                  session.update(booking);
+                 
+               }
+                s.setNumber_booking(ab);           
+                session.update(s);
+            }
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             if (trns19 != null) {

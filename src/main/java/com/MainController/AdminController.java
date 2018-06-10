@@ -702,7 +702,12 @@ public class AdminController {
 		if(check.get("status").equals("1"))
 		{
 			map.put("status","1");
-			map.put("message","Bookings have just been successfully moved to schedule code "+check.get("code")+"!");
+			map.put("message","Bookings have just been successfully moved to a new schedule code "+check.get("code")+"!");
+		}
+		else if(check.get("status").equals("5"))
+		{
+			map.put("status","5");
+			map.put("message","Bookings have just been successfully moved to an existing schedule code "+check.get("code")+"!");
 		}
 		else
 		{

@@ -293,7 +293,7 @@ swal({
     	     data:{b:b_id},
     	     traditional: true,
     	     success: function(response){
-    	      if(response.status=="1")
+    	      if(response.status=="1"||response.status=="5")
     	      {
     	      setTimeout(function() {
     	             swal({
