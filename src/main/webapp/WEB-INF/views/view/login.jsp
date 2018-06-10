@@ -225,8 +225,10 @@
         document.getElementsByClassName(".login-page").disabled = false;
     }
     function isExistUser(email) {
-        return axios.post('isexist', {
-            email: email,
+        return axios.get('isexist', {
+            params: {
+                email: email
+            }
         }).then(function (response) {
             return response.data
         })
@@ -352,6 +354,8 @@
                         }
                     }
                     else{
+                        $("#login-error").css("display","inline");
+                        document.getElementById("login-error").innerHTML = "email or password is incorrect"
                         return false;
                     }
                 }

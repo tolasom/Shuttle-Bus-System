@@ -37,8 +37,8 @@ public class AdminController {
 		return new ModelAndView("cusomer_home");
 	}
 //=========================To sign up an account for customer================================
-	@RequestMapping(value="/isexist",method=RequestMethod.POST)
-	@ResponseBody public Map<String,Object> isExistUser(@RequestBody UserModel userModel) {
+	@RequestMapping(value="/isexist",method=RequestMethod.GET)
+	@ResponseBody public Map<String,Object> isExistUser(UserModel userModel) {
 		User_Info user = usersService1.findByUserName(userModel.getEmail());
 		boolean status = false;
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -248,7 +248,7 @@ public class AdminController {
 		B_Model model = new B_Model();
 		model.setN(usersService1.getCustomerById(booking.getUser_id()).getName());
 		model.setCode(booking.getCode());
-		//model.setCreated_at(booking.getCreated_at().toString());
+		model.setCreated_at(booking.getCreated_at().toString());
 		model.setDept_date(booking.getDept_date().toString());
 		model.setDept_time(booking.getDept_time());
 		model.setDescription(booking.getDescription());
