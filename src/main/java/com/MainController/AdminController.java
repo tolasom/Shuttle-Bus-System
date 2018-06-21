@@ -690,19 +690,20 @@ public class AdminController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		Map<String,String> check = new HashMap<String,String>();
 		int b_id[] =s.getB();
-		System.out.println("lengthhhhh "+s.getB().length);
+		System.out.println("lengthhhhh "+b_id[0]);
 		Booking_Master booking = usersService1.getBookingById(b_id[0]);
 		s.setDept_date2(booking.getDept_date());
 		s.setDept_time2(booking.getDept_time());
-		s.setDestination_id(booking.getDestination_id());
-		s.setFrom_id(booking.getFrom_id());
-		s.setSource_id(booking.getSource_id());
-		s.setTo_id(booking.getSource_id());
 		check = usersService1.moveToRental(s);
 		if(check.get("status").equals("1"))
 		{
 			map.put("status","1");
-			map.put("message","Bookings have just been successfully moved to schedule code "+check.get("code")+"!");
+			map.put("message","Bookings have just been successfully moved to a new schedule code "+check.get("code")+"!");
+		}
+		else if(check.get("status").equals("55"))
+		{
+			map.put("status","55");
+			map.put("message","Bookings have just been successfully moved to an existing schedule code "+check.get("code")+"!");
 		}
 		else
 		{

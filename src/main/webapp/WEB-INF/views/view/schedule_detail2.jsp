@@ -133,8 +133,6 @@ load = function () {
 	s_code = schedule.code;
 	$("#scode").val(schedule.code);
 	$("#sremaining").val(schedule.remaining_seat);
-	$("#sfrom").val(searchLocation(schedule.source_id,locations));
-	$("#sto").val(searchLocation(schedule.destination_id,locations));
 	$("#snumberbooking").val(schedule.number_booking);
 	$("#sdeptdate").val(formatDate(schedule.dept_date));
 	$("#sdepttime").val(schedule.dept_time);
@@ -242,6 +240,8 @@ function searchLocation(id, myArray){
 
 
 function searchPLocation(id, myArray){
+     if(id==0)
+      return "";
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

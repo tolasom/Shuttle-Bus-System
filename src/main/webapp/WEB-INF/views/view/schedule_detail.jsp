@@ -201,8 +201,15 @@ load = function () {
 	s_code = schedule.code;
 	$("#scode").val(schedule.code);
 	$("#sremaining").val(schedule.remaining_seat);
-	$("#sfrom").val(searchLocation(schedule.source_id,locations));
-	$("#sto").val(searchLocation(schedule.destination_id,locations));
+  // if(schedule.source_id!=0)
+  //     $("#sfrom").val(searchPLocation(schedule.source_id,p_locations)+", "+searchLocation(booking.from_id,locations));
+  // else
+  //       $("#from").val(searchLocation(booking.from_id,locations));
+  // if(booking.destination_id!=0)
+  //     $("#to").val(searchPLocation(booking.destination_id,p_locations)+", "+searchLocation(booking.to_id,locations));
+  // else
+  //     $("#to").val(searchLocation(booking.to_id,locations));
+
 	$("#snumberbooking").val(schedule.number_booking);
 	$("#sdeptdate").val(formatDate(schedule.dept_date));
 	$("#sdepttime").val(schedule.dept_time);
@@ -590,6 +597,8 @@ function searchLocation(id, myArray){
 
 
 function searchPLocation(id, myArray){
+    if(id==0)
+      return "";
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].id === id) {
             return myArray[i].name;

@@ -160,40 +160,48 @@ $(document).ready(function(){
 			{
             console.log(from)
             console.log(to)
-			$.ajax({
-    		url:'reportSubmit',
-    		type:'GET',
-    		data:{	from_id:from,
-    				to_id:to,
-    				dept_date:date,
-    				n:time,
+            var data = {  from_id:from,
+                    to_id:to,
+                    dept_date:date,
+                    n:time,
                     notification:status
 
-    			},
-    		traditional: true,			
-    		success: function(response){
-                    var data = JSON.stringify(response.message);
-                     if(response.message.length>0)
-                    {
-                        setTimeout(function() {
-                            swal({
-                                title: "Done!",
-                                text: response.message.length+" bookings were found!",
-                                type: "success"
-                            }, function() {
-                                window.location = "bookingReport2?data="+data;
-                            });
-                        }, 10);
-                    }
-                    else 
-                        swal("Oops!", "No bookings as you required!", "error")
-                  },
-    		error: function(err){
-    				console.log(JSON.stringify(err));
+                }
+            window.location = "reportSubmit?data="+data;
+			// $.ajax({
+   //  		url:'reportSubmit',
+   //  		type:'GET',
+   //  		data:{	from_id:from,
+   //  				to_id:to,
+   //  				dept_date:date,
+   //  				n:time,
+   //                  notification:status
+
+   //  			},
+   //  		traditional: true,			
+   //  		success: function(response){
+   //                  var data = JSON.stringify(response.message);
+   //                   if(response.message.length>0)
+   //                  {
+   //                      setTimeout(function() {
+   //                          swal({
+   //                              title: "Done!",
+   //                              text: response.message.length+" bookings were found!",
+   //                              type: "success"
+   //                          }, function() {
+   //                              window.location = "bookingReport2?data="+data;
+   //                          });
+   //                      }, 10);
+   //                  }
+   //                  else 
+   //                      swal("Oops!", "No bookings as you required!", "error")
+   //                },
+   //  		error: function(err){
+   //  				console.log(JSON.stringify(err));
     				
-    				}
+   //  				}
     		
-    			});	
+   //  			});	
 			}
 		
 	});
