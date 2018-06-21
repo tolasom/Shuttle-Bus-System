@@ -95,7 +95,8 @@ load = function(){
 						cb = '<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>';
     				}
-				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'">'
+				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+'"from="'+bookings[i].from_id+'"'+
+				'destination="'+bookings[i].destination_id+'"'+'source="'+bookings[i].source_id+'"'+'to="'+bookings[i].to_id+'"'+'data-url="booking_detail?id='+bookings[i].id+'">'
 									+cb
 									+'<td>'+(i+1)+'</td>'
 									+'<td>'+bookings[i].code+'</td>'
@@ -260,19 +261,32 @@ $(document).ready(function(){
 
 function confirmMove(){
 	var b_id = []
+	var from = 0
+	var to = 0
+	var source = 0
+	var destination = 0
 	var str = ""
 	var code
 	$(".selected").each(function(){
 			var id = parseInt($(this).attr("tofind"))
 			b_id.push(id)
+			if(parseInt($(this).attr("from"))!=0)
+				from = parseInt($(this).attr("from"))
+			if(parseInt($(this).attr("to"))!=0)
+				to = parseInt($(this).attr("to"))
+			if(parseInt($(this).attr("source"))!=0)
+				source = parseInt($(this).attr("source"))
+			if(parseInt($(this).attr("destination"))!=0)
+				destination = parseInt($(this).attr("destination"))
+
 			code = searchBooking3(id,bookings)
 			str = str+code+", "
 		});
-	func(b_id, str)
+	func(b_id, str,from,to,source,destination)
 }
 
 
-func=function(b_id, str)
+func=function(b_id, str,from,to,source,destination)
 {
 swal({
     title: "Do you want to move these unassigned bookings to a schedule?",
@@ -290,10 +304,17 @@ swal({
     	  $.ajax({
     	     url:'moveToRental',
     	     type:'GET',
-    	     data:{b:b_id},
+    	     data:{
+    	     	b:b_id,
+    	     	to_id:to,
+    	     	from_id:from,
+    	     	source_id:source,
+    	     	destination_id:destination
+    	     	},
     	     traditional: true,
     	     success: function(response){
-    	      if(response.status=="1"||response.status=="5")
+    	     console.log(response)
+    	      if(response.status=="1"||response.status=="55")
     	      {
     	      setTimeout(function() {
     	             swal({

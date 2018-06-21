@@ -2683,17 +2683,14 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 = session.beginTransaction();
-            String queryString = "from Schedule_Master where dept_date=:dept_date"+
+            String queryString = "from Schedule_Master where dept_date=:dept_date "+
             "and dept_time=:dept_time and from_id=:from_id and to_id =:to_id"+ 
-            "and source_id=:source_id and destination_id=:destination_id"+ 
-            "and description=:description";
+            " and description=:description";
             Query query = session.createQuery(queryString);
             query.setDate("dept_date", s.getDept_date2());
             query.setTime("dept_time", s.getDept_time2());
             query.setInteger("from_id", s.getFrom_id());
-            query.setInteger("from_id", s.getFrom_id());
-            query.setInteger("source_id", s.getSource_id());
-            query.setInteger("destination_id", s.getDestination_id());
+            query.setInteger("to_id", s.getTo_id());
             query.setString("description", "Unassigned");
             schedules=(List<Schedule_Master>)query.list();
         } catch (RuntimeException e) {
@@ -2718,13 +2715,13 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         int a[]=model.getB();    
         int s_id = 0;
-        model.setFrom_id(new userDaoImpl().getPickUpLocationById(model.getSource_id()).getLocation_id());
-        model.setTo_id(new userDaoImpl().getPickUpLocationById(model.getDestination_id()).getLocation_id());
+        System.out.println("Modellllllllllllll "+model);
         try {
         	Timestamp created_at = new Timestamp(System.currentTimeMillis());
             trns19 =  session.beginTransaction();
             List<Schedule_Master> schedules = new ArrayList<Schedule_Master>();
-            if(schedules.size()==1)
+            schedules = new userDaoImpl().getUnassignedSchedule(model);
+            if(schedules.size()>=1)
             {
             	int ab = 0;
             	for (int i = 0; i < a.length; i++)
@@ -2737,12 +2734,16 @@ public class userDaoImpl implements usersDao{
                    session.update(booking);
                   
                 }
-            	ab+= schedules.get(0).getNumber_booking(); 
+            	ab+= schedules.get(0).getNumber_booking();
+                if(model.getSource_id()!=0)
+                    schedules.get(0).setSource_id(model.getSource_id());
+                if(model.getDestination_id()!=0)
+                    schedules.get(0).setDestination_id(model.getDestination_id());
             	schedules.get(0).setNumber_booking(ab);
             	session.update(schedules.get(0));
             	
-            	map.put("status", "5");
-                map.put("code", getScheduleSequence(schedules.get(0).getId()));
+            	map.put("status", "55");
+                map.put("code", schedules.get(0).getCode());
             }
             else
             {
@@ -2792,6 +2793,8 @@ public class userDaoImpl implements usersDao{
                }
                 s.setNumber_booking(ab);           
                 session.update(s);
+                map.put("status", "1");
+                map.put("code", getScheduleSequence(s_id));
             }
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -2805,8 +2808,7 @@ public class userDaoImpl implements usersDao{
             session.flush();
             session.close();
         }
-        map.put("status", "1");
-        map.put("code", getScheduleSequence(s_id));
+        
         return map;
     }
 
