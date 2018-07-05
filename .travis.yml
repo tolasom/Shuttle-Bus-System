@@ -7,8 +7,13 @@ addons:
     token:
       secure: "TlZZ4PK8Cp/qzMXZ1gWTV5KrkF+SBlY46zAVfDMkKY5UDdK/D4zSWKlZkUqEhXhz/2/PYA/5B67TtW17XF33J2Vhbl3h5n210PNHRmhYBgwAmN7wDnIIq3wGKxfESyT2hOetbVr+kdS9yWbqlPR6YZMUxnJn0xXyDuXyRnRWd0DmU+a8HRPZx5//ZmakjBI8JgHPcNQaBQOItpTDdR3hWP+VLQTBXjH7a/MCbtrLaJNcqZumt2KzVi8LJ1G58thpceMUkQYOLUbIPSmeqMxXNyvI2dbt5b+/hf2ErLL1nwFmPCEB+a68/eqtMsZ8bnww0vYHnlRvOlI8595a7Vy7/C++Mb1a63odRJTfX7dja7QEr5QKS480RbRN8OLmkX8HmDJEjejcTZCIfA3VC/2mwz9QUvvj4XU1He5Zdd30h/WQ1a7/1QXSQB/85PfAjyvvbg+LTcQFXFKk5yYmd7zV9Szyl+sKOZagBW1DNqHRymwr13i5aWthDy5um7lhMKPSwwlgFMis6+Y6Y52RUg5gq21TDNBjbktD3RGpbEIHbP6Oo2p1V0TlKCpTGl5FnFRulfyFGeR7uPbqTqbvBbrdm1ak2XA1HYk+nXHYjSxUudemfFBspru+ryIeKAtCreByFbimNxJ51YYGK+Pd8Pos+ApVFUdhTuRYgTqP2cFKKa4="
 jdk:
-  - oraclejdk8 -X 
+  - oraclejdk8
+  - oraclejdk10
+  - oraclejdk-ea
+  - openjdk10
+  - openjdk11
 script:
+  
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 cache:
   directories:
