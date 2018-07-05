@@ -5,11 +5,11 @@
   <groupId>com.java</groupId>
   <!-- <artifactId>SBBS</artifactId> -->
   <!-- SpringRegister3 -->
-  <artifactId>SpringRegister3</artifactId>
+  <artifactId>SBBS</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <!-- <name>SBBS Maven Webapp</name> -->
-  <name>SpringRegister3 Maven Webapp</name>
+  <name>SBBS Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
   <properties>
