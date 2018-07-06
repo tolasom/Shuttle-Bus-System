@@ -5,15 +5,7 @@ import getInfoLogin.IdUser;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -29,28 +21,20 @@ import com.ModelClasses.Customer_Booking;
 
 public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	IdUser user=new IdUser();
-	public String TimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
-	}
+
 	public String DateNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+        return f.format(new Date());
 	}
 	public String DateTimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+		return f.format(new Date());
 	}
-	public Date TomorrowDate(){
+	public Date TomorrowDate() {
 		Date dt = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(dt); 
@@ -58,15 +42,18 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		dt = c.getTime();
 		return dt;
 	}
-	public String TomorrowDateTime(){
-		Date dt = new Date();
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(dt); 
+	public String TomorrowDateTime() throws ParseException{
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(f.format(new Date()));
+		Calendar c = Calendar.getInstance();
+		c.setTime(dt);
 		c.add(Calendar.DATE, 1);
 		dt = c.getTime();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String tmrDateTimeString = sdf.format(dt);
-        System.out.println(tmrDateTimeString);
+		String tmrDateTimeString = sdf.format(dt);
+		System.out.println(tmrDateTimeString);
 		return tmrDateTimeString;
 	}
 	public static String getScheduleSequence(int id){ 
@@ -395,7 +382,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 				int amount=0;
 				Boolean check=false;   
 				for(int j=0;j<list_schedule.get(i).getRemaining_seat();j++){
-						if(index<=list_stu.size()){
+						if(index<list_stu.size()){
 							Query query = session.createQuery("update Booking_Master set notification='Booked',schedule_id = :sch_id, qr= :qr" +
 			        				" where id = :id");
 			                query.setParameter("sch_id", list_schedule.get(i).getId());

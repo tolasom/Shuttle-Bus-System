@@ -100,46 +100,56 @@ public class StudentDaoImpl implements StudentDao{
         Custom_Imp custom_dao = new Custom_Imp();
         Location_Master location_master = new Location_Master();
         Timestamp created_at = new Timestamp(System.currentTimeMillis());
+        int count_ticket = 0;
+        int user_id = id.getAuthentic();
         try {
-            Booking_Master booking_master = new Booking_Master();
-            booking_master.setUser_id(id.getAuthentic());
-            booking_master.setFrom_id(book_data.getSource());
-            booking_master.setTo_id(book_data.getDestination());
-            booking_master.setDept_date(java.sql.Date.valueOf(book_data.getDeparture_date()));
-            booking_master.setDescription("student");
-            booking_master.setNotification("Booked");
-            booking_master.setNumber_booking(1);
-            booking_master.setCreated_at(created_at);
-            booking_master.setAdult(1);
-            booking_master.setChild(0);
-            location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
-            booking_master.setDept_time(location_master.getDept_time());
-            session.save(booking_master);
-            booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
-            session.update(booking_master);
+
+                Booking_Master booking_master = new Booking_Master();
+                booking_master.setUser_id(user_id);
+                booking_master.setFrom_id(book_data.getSource());
+                booking_master.setTo_id(book_data.getDestination());
+                booking_master.setDept_date(java.sql.Date.valueOf(book_data.getDeparture_date()));
+                booking_master.setDescription("student");
+                booking_master.setQr_status(false);
+                booking_master.setNotification("Booked");
+                booking_master.setNumber_booking(1);
+                booking_master.setCreated_at(created_at);
+                booking_master.setAdult(1);
+                booking_master.setChild(0);
+                location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
+                booking_master.setDept_time(location_master.getDept_time());
+                session.save(booking_master);
+                booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
+                session.update(booking_master);
+                count_ticket ++;
+
 
             if(book_data.getChoice()==2){
-                Booking_Master booking_return = new Booking_Master();
-                booking_return.setUser_id(id.getAuthentic());
-                booking_return.setCreated_at(created_at);
-                booking_return.setFrom_id(book_data.getDestination());
-                booking_return.setTo_id(book_data.getSource());
-                booking_return.setDept_date(java.sql.Date.valueOf(book_data.getReturn_date()));
-                booking_return.setDescription("student");
-                booking_return.setNotification("Booked");
-                booking_return.setChild(0);
-                booking_return.setAdult(0);
-                booking_return.setNumber_booking(1);
-                location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
-                booking_return.setDept_time(location_master.getDept_time());
-                session.save(booking_return);
-                booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
-                session.update(booking_return);
+
+                    Booking_Master booking_return = new Booking_Master();
+                    booking_return.setUser_id(user_id);
+                    booking_return.setCreated_at(created_at);
+                    booking_return.setFrom_id(book_data.getDestination());
+                    booking_return.setTo_id(book_data.getSource());
+                    booking_return.setDept_date(java.sql.Date.valueOf(book_data.getReturn_date()));
+                    booking_return.setDescription("student");
+                    booking_return.setNotification("Booked");
+                    booking_master.setQr_status(false);
+                    booking_return.setChild(0);
+                    booking_return.setAdult(0);
+                    booking_return.setNumber_booking(1);
+                    location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
+                    booking_return.setDept_time(location_master.getDept_time());
+                    session.save(booking_return);
+                    booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
+                    session.update(booking_return);
+                    count_ticket ++;
+
+
             }
 
-            User_Info user_info = (User_Info) session.load(User_Info.class,id.getAuthentic());
-            user_info.setNumber_ticket(user_info.getNumber_ticket()-book_data.getChoice());
-
+            User_Info user_info = (User_Info) session.load(User_Info.class,user_id);
+            user_info.setNumber_ticket(user_info.getNumber_ticket()-count_ticket);
             session.beginTransaction().commit();
             map.put("status",true);
 
@@ -159,7 +169,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             List<Booking_Master> list_booking_master = new ArrayList<Booking_Master>();
-            String hql = "From Booking_Master where dept_date >= current_date() and user_id = "+id.getAuthentic();
+            String hql = "From Booking_Master where notification='Booked' and dept_date >= current_date() and user_id = "
+                    +id.getAuthentic();
             Query query = session.createQuery(hql);
             list_booking_master = query.list();
             for(Booking_Master booking_master : list_booking_master){
@@ -446,7 +457,46 @@ public class StudentDaoImpl implements StudentDao{
 
         return map;
     }
+    private boolean isExited(int user_id,String date){
+         boolean status = false;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "From Booking_Master where user_id="+user_id+" dept_date='"+date+"'";
+            Query query = session.createQuery(hql);
+            if(query.list().size()>0){
+                status = true;
+            }
+
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
+
+        }
+        finally {
+            session.flush();
+            session.close();
+        }
+
+         return status;
+    }
     public static void main(String arg[]){
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+           String hql = "From Booking_Master where dept_date='2018-7-2'";
+           Query query = session.createQuery(hql);
+
+           System.out.println(query.list());
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
+
+        }
+        finally {
+            session.flush();
+            session.close();
+        }
+
 
 
     }

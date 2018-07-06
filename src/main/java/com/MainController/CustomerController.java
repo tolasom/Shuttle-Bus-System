@@ -233,7 +233,7 @@ public class CustomerController {
 
 	@RequestMapping(value="/customer/**")
 	public ModelAndView customer_mobile() {
-		return new ModelAndView("customer_mobile");
+		return new ModelAndView("dev");
 	}
 
 

@@ -15,6 +15,7 @@
     <property name="source_id" column="source_id"/>
    	<property name="dept_date"  column="dept_date"/>
     <property name="dept_time" column="dept_time"/>
+        <property name="arrival_time" column="arrival_time"/>
     <property name="description" column="description"/>
     <property name="code" column="code"/>
     <property name="number_booking" column="number_booking"/>

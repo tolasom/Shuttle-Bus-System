@@ -114,6 +114,11 @@ public class SecurityController {
 		return model;
 
 	}
+	@RequestMapping(value = "/ie", method = RequestMethod.GET)
+	public ModelAndView IE() {
+		ModelAndView modelAndView = new ModelAndView("ie");
+		return modelAndView;
+	}
 
 	// customize the error message
 	private String getErrorMessage(HttpServletRequest request, String key) {

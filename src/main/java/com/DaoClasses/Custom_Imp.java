@@ -972,6 +972,7 @@ public class Custom_Imp implements Custom_Dao{
         				new_booker.setChild(cb.getChild());
         				new_booker.setDescription("customer");
         				new_booker.setEmail_confirm(false);
+        				new_booker.setQr_status(false);
         				new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
         				session.save(new_booker);
         				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
@@ -1119,6 +1120,7 @@ public class Custom_Imp implements Custom_Dao{
 			new_booker.setChild(cb.getChild());
 			new_booker.setDescription("customer");
 			new_booker.setEmail_confirm(false);
+			new_booker.setQr_status(false);
 			new_booker.setQr(pick_source.getLocation_id()+""+pick_destin.getLocation_id()+""+cb.getDate()+""+cb.getTime()+""+user.getAuthentic());
 			session.save(new_booker);
 			new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
@@ -1212,6 +1214,7 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setAdult(cb.getAdult());
 		    				new_booker.setChild(cb.getChild());
 		    				new_booker.setDescription("customer");
+		    				new_booker.setQr_status(false);
 		    				session.save(new_booker);
 		    				
 		    				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));

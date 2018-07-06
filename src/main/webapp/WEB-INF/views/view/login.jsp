@@ -200,6 +200,9 @@
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
+    if(false || !!document.documentMode){
+        window.location.href = "/sbs/ie"
+    }
     $("#signupform").hide();
     $("#signin-btn").addClass('active-btn');
     $("#signup-btn").click(function () {
@@ -242,13 +245,20 @@
             $("#login-error").css("display","inline");
             document.getElementById("login-error").innerHTML = "email or password is incorrect";
         }
+
+
     })
+    $.validator.addMethod("notKIT", function(value, element) {
+        console.log(value)
+        return !value.includes("@kit.edu.kh")
+    }, "KIT email not allow to sign up");
     $(function() {
         $("#signupform").validate({
             rules: {
                 email: {
                     required: true,
-                    email: true
+                    email: true,
+                    notKIT:true
                 },
                 pass: {
                     required: true,

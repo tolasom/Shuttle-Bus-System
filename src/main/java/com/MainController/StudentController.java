@@ -1,7 +1,7 @@
 package com.MainController;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.ModelClasses.ID_Class;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -66,7 +66,7 @@ public class StudentController {
     //@Scheduled(cron="*/5 * * * * *")
     //public void updateEmployeeInventory() {
        // System.out.println("Started cron job 1");
-    @Scheduled(cron="0 0 5,9,12 * * *")
+    @Scheduled(cron="0 1 * * * *")
     public void updateEmployeeInventory() throws ParseException{
         System.out.println("Started create schedule for studen");
         Set_Student_Schedule c =new Set_Student_Schedule();
@@ -74,12 +74,23 @@ public class StudentController {
     }
     
     public static void main(String args[]) throws ParseException{
-    	Set_Student_Schedule c =new Set_Student_Schedule();
-        c.createSchedule();
-        System.out.println("End");
+//    	Set_Student_Schedule c =new Set_Student_Schedule();
+//        c.createSchedule();
+//        System.out.println("End");
+
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+        System.out.println(f.format(new Date()));
+        Date dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(f.format(new Date()));
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tmrDateTimeString = sdf.format(dt);
+        System.out.println(tmrDateTimeString);
 
     }
 
 
 }
-
