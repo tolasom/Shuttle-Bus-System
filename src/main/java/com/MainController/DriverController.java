@@ -115,6 +115,7 @@ public class DriverController {
             	map1.put("id", schedules.get(i).getId());
             	map1.put("dep_date", DateFormat(schedules.get(i).getDept_date()));
             	map1.put("dep_time", schedules.get(i).getDept_time());
+            	map1.put("arr_time", schedules.get(i).getArrival_time());
             	map1.put("des_from", des_from.getName());
             	map1.put("des_to", des_to.getName());
             	map1.put("no_of_booking", schedules.get(i).getNumber_booking());
