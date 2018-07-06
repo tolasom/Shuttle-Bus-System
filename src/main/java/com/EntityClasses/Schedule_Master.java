@@ -11,16 +11,7 @@ public class Schedule_Master {
 		private int driver_id;
 		private int destination_id;
 		private int source_id;
-
-	public Time getArrival_time() {
-		return arrival_time;
-	}
-
-	public void setArrival_time(Time arrival_time) {
-		this.arrival_time = arrival_time;
-	}
-
-	private int from_id;
+		private int from_id;
 		private int to_id;
 		private Date dept_date;
 		private Time dept_time;
@@ -33,7 +24,6 @@ public class Schedule_Master {
 		private int number_student;
 		private Timestamp created_at;
 		private Timestamp updated_at;
-		private Time arrival_time;
 		
 		
 		public int getFrom_id() {
