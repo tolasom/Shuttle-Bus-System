@@ -34,14 +34,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		System.out.println(f.format(new Date()));
 		return f.format(new Date());
 	}
-	public Date TomorrowDate() {
-		Date dt = new Date();
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(dt); 
-		c.add(Calendar.DATE, 1);
-		dt = c.getTime();
-		return dt;
-	}
 	public String TomorrowDateTime() throws ParseException{
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
@@ -92,6 +84,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         	trns = session.beginTransaction();
         	Set_Student_Schedule s=new Set_Student_Schedule();
     		String tmr_dt=s.TomorrowDateTime();
+    		System.out.println("tmr date: "+tmr_dt);
     		String tmr_date=tmr_dt.split(" ")[0];
     		String tmr_time=tmr_dt.split(" ")[1];
 //        	>  Query time
@@ -240,140 +233,148 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	        
 			try {
 				
-				list_passenger=stu.get_all_booker(session, cb.getSource(), cb.getDestination()
+				//Check Student Schedule if it already create no need to create more
+				Boolean check_sch=c.check_stu_scheule(session, cb.getSource(), cb.getDestination()
 						, cb.getTime(), cb.getDate());
-	          	for(int i=0;i<list_passenger.size();i++){
-	          		passenger_seat+=list_passenger.get(i).getNumber_booking();
-	          		if(list_passenger.get(i).getDescription().equals("customer")){
-	          			list_customer.add(list_passenger.get(i));
-	          			all_booker1.add(list_passenger.get(i));
-	          		}
-	          		else{
-	          			list_stu.add(list_passenger.get(i));
-	          		}
-	          	}
-	          	for(int i=0;i<list_stu.size();i++){
-	          		all_booker1.add(list_stu.get(i));
-	          	}
+				if(check_sch){
+					list_passenger=stu.get_all_booker(session, cb.getSource(), cb.getDestination()
+							, cb.getTime(), cb.getDate());
+		          	for(int i=0;i<list_passenger.size();i++){
+		          		passenger_seat+=list_passenger.get(i).getNumber_booking();
+		          		if(list_passenger.get(i).getDescription().equals("customer")){
+		          			list_customer.add(list_passenger.get(i));
+		          			all_booker1.add(list_passenger.get(i));
+		          		}
+		          		else{
+		          			list_stu.add(list_passenger.get(i));
+		          		}
+		          	}
+		          	for(int i=0;i<list_stu.size();i++){
+		          		all_booker1.add(list_stu.get(i));
+		          	}
+					
+		          	schedule=stu.get_schedules(session, cb);
+		          	int existing_bus_seat=0;
+		          	for(int i=0;i<schedule.size();i++){
+		          		existing_bus_seat+=schedule.get(i).getNumber_booking()+schedule.get(i).getRemaining_seat();
+		          	}
+		          	
+		          	//True----> Assign to existing bus/schedule
+		          	if(passenger_seat<=existing_bus_seat){
+		          		//Assign student with existing schedule
+		          		stu.asign_to_existing_schedule(session, list_stu, schedule);
+		          	}//Else re-create schedule
+		          	else{
+	              		//query list of all available bus (result must be in order number of seat for small to big )
+	                    all_bus= stu.get_all_bus(session,cb,cb.getSource(),cb.getDestination());
+	        	        
+	        	        //if have bus or have no bus
+	                    if(all_bus.size()>0){
+	                    	//5. Fins total seat of all bus
+	                    	for(int i=0;i<all_bus.size();i++){
+	           	             	total_seat_of_all_bus+=Integer.valueOf((String) all_bus.get(i).get("number_of_seat")); 
+	                    	}
+	                    	//6. create new schedule
+	                    	Map<Object, List<Booking_Master>> sch_with_users=stu.create_schedule(booking,session,all_bus,all_booker1,cb,total_seat_of_all_bus,passenger_seat); 			// 6. Set/Reset New Schedule 
+	                    	
+	                    	if(sch_with_users.size()==0){
+	                    		System.out.println("-----> sch_with_users.size()==0");
+	                    		stu.create_unassigned_booking(session, list_stu);
+	                    		//return "over_bus_available";
+	                    	}else{
+	                    		//Get List Existing Driver Assign match with Bus
+	                    		List<Integer> existing_bus_driver= stu.get_existing_bus_and_driver(booking,session,cb);
+	                    		//7.Delete Schedule //Cannot delete it show error: a different object with the same identifier value was already associated with the session
+	                        	//int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
+	                    		//Delete after new schedule create
+	                        	List<Integer> list_assign=new ArrayList<Integer>();
+	                        	System.out.println(booking.list_bus_choosen);
+	                        	List<Integer> except_sch_id=new ArrayList<Integer>();
+	                        	for(int h=0;h<sch_with_users.size();h++){
+	                        		int num_booking=0;
+	                        		int num_customer=0;
+	                        		int number_stu=0;
+	                        		Schedule_Master sch=new Schedule_Master();
+	                        		sch.setBus_id(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("id")));
+	                        		sch.setDriver_id(existing_bus_driver.get(h));
+	                        		sch.setSource_id(cb.getSource());
+	                        		sch.setDestination_id(cb.getDestination());
+	                        		sch.setFrom_id(cb.getSource());
+	                        		sch.setTo_id(cb.getDestination());
+	                        		sch.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+	                        		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+	                        		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+	                        		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+	                        		
+	                        		session.save(sch);
+	                        		for(int y=0;y<sch_with_users.get(h).size();y++){
+	                        			list_assign.add(sch_with_users.get(h).get(y).getId());
+	                        			num_booking+=sch_with_users.get(h).get(y).getNumber_booking();
+	                        			if(sch_with_users.get(h).get(y).getDescription().equals("customer")){
+											num_customer+=sch_with_users.get(h).get(y).getNumber_booking();
+										}else       //student
+											{
+											number_stu+=sch_with_users.get(h).get(y).getNumber_booking();
+										}
+	                        			Query query = session.createQuery("update Booking_Master set notification='Booked',schedule_id = :sch_id, qr= :qr" +
+	                            				" where id = :id");
+	    			                    query.setParameter("sch_id", sch.getId());
+	    			                    query.setParameter("qr", cb.getSource()+""+cb.getDestination()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
+	    			                    query.setParameter("id", sch_with_users.get(h).get(y).getId());
+	    			                    int result = query.executeUpdate();
+	                    			}
+	                        		
+	                        		sch.setNumber_booking(num_booking);
+	                        		sch.setRemaining_seat(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
+	                        		sch.setNumber_customer(num_customer);
+	                        		sch.setNumber_staff(0);
+	                        		sch.setNumber_student(number_stu);
+	                        		sch.setCode(Set_Student_Schedule.getScheduleSequence(sch.getId()));
+	                        		except_sch_id.add(sch.getId());
+	                    		}
+	                        	
+	                        	//check whether have remaining student not yet assign or not
+	                        	List<Booking_Master> unassigned=new ArrayList<Booking_Master>();
+	                        	if(list_assign.size()!=all_booker1.size()){
+	                        		for (Booking_Master user: all_booker1) 
+	                        		{ 
+	                        			Boolean status=true;
+	                        			for (int id: list_assign) 
+	                            		{ 
+	                        				if(id==user.getId()){
+	                        					status=false;
+	                        				}
+	                            		}
+	                        			if(status){
+	                        				unassigned.add(user);
+	                        			}
+	                        		}
+	                        	}
+	                        	if(unassigned.size()>0){
+	                        		System.out.println("------------> unassigned.size()>0");
+	                        		stu.create_unassigned_booking(session,unassigned);
+	                        	}
+	                        	int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate(),except_sch_id);
+	                    	}
+	                    	
+	                    }else{
+	                    	System.out.println("--------------> No bus");
+	        	      	    stu.create_unassigned_booking(session,list_stu);
+	        	        }
+	              	}
+				}
 				
-	          	schedule=stu.get_schedules(session, cb);
-	          	int existing_bus_seat=0;
-	          	for(int i=0;i<schedule.size();i++){
-	          		existing_bus_seat+=schedule.get(i).getNumber_booking()+schedule.get(i).getRemaining_seat();
-	          	}
-	          	
-	          	//True----> Assign to existing bus/schedule
-	          	if(passenger_seat<=existing_bus_seat){
-	          		//Assign student with existing schedule
-	          		stu.asign_to_existing_schedule(session, list_stu, schedule);
-	          	}//Else re-create schedule
-	          	else{
-              		//query list of all available bus (result must be in order number of seat for small to big )
-                    all_bus= stu.get_all_bus(session,cb,cb.getSource(),cb.getDestination());
-        	        
-        	        //if have bus or have no bus
-                    if(all_bus.size()>0){
-                    	//5. Fins total seat of all bus
-                    	for(int i=0;i<all_bus.size();i++){
-           	             	total_seat_of_all_bus+=Integer.valueOf((String) all_bus.get(i).get("number_of_seat")); 
-                    	}
-                    	//6. create new schedule
-                    	Map<Object, List<Booking_Master>> sch_with_users=stu.create_schedule(booking,session,all_bus,all_booker1,cb,total_seat_of_all_bus,passenger_seat); 			// 6. Set/Reset New Schedule 
-                    	
-                    	if(sch_with_users.size()==0){
-                    		System.out.println("-----> sch_with_users.size()==0");
-                    		stu.create_unassigned_booking(session, list_stu);
-                    		//return "over_bus_available";
-                    	}else{
-                    		//Get List Existing Driver Assign match with Bus
-                    		List<Integer> existing_bus_driver= stu.get_existing_bus_and_driver(booking,session,cb);
-                    		//7.Delete Schedule //Cannot delete it show error: a different object with the same identifier value was already associated with the session
-                        	//int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate());	// 5. Delete old Schedule 
-                    		//Delete after new schedule create
-                        	List<Integer> list_assign=new ArrayList<Integer>();
-                        	System.out.println(booking.list_bus_choosen);
-                        	List<Integer> except_sch_id=new ArrayList<Integer>();
-                        	for(int h=0;h<sch_with_users.size();h++){
-                        		int num_booking=0;
-                        		int num_customer=0;
-                        		int number_stu=0;
-                        		Schedule_Master sch=new Schedule_Master();
-                        		sch.setBus_id(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("id")));
-                        		sch.setDriver_id(existing_bus_driver.get(h));
-                        		sch.setSource_id(cb.getSource());
-                        		sch.setDestination_id(cb.getDestination());
-                        		sch.setFrom_id(cb.getSource());
-                        		sch.setTo_id(cb.getDestination());
-                        		sch.setDept_date(java.sql.Date.valueOf(cb.getDate()));
-                        		sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
-                        		sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                        		sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-                        		
-                        		session.save(sch);
-                        		for(int y=0;y<sch_with_users.get(h).size();y++){
-                        			list_assign.add(sch_with_users.get(h).get(y).getId());
-                        			num_booking+=sch_with_users.get(h).get(y).getNumber_booking();
-                        			if(sch_with_users.get(h).get(y).getDescription().equals("customer")){
-										num_customer+=sch_with_users.get(h).get(y).getNumber_booking();
-									}else       //student
-										{
-										number_stu+=sch_with_users.get(h).get(y).getNumber_booking();
-									}
-                        			Query query = session.createQuery("update Booking_Master set notification='Booked',schedule_id = :sch_id, qr= :qr" +
-                            				" where id = :id");
-    			                    query.setParameter("sch_id", sch.getId());
-    			                    query.setParameter("qr", cb.getSource()+""+cb.getDestination()+""+cb.getDate()+""+cb.getTime()+""+sch_with_users.get(h).get(y).getId());
-    			                    query.setParameter("id", sch_with_users.get(h).get(y).getId());
-    			                    int result = query.executeUpdate();
-                    			}
-                        		
-                        		sch.setNumber_booking(num_booking);
-                        		sch.setRemaining_seat(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("number_of_seat"))-num_booking);
-                        		sch.setNumber_customer(num_customer);
-                        		sch.setNumber_staff(0);
-                        		sch.setNumber_student(number_stu);
-                        		sch.setCode(Set_Student_Schedule.getScheduleSequence(sch.getId()));
-                        		except_sch_id.add(sch.getId());
-                    		}
-                        	
-                        	//check whether have remaining student not yet assign or not
-                        	List<Booking_Master> unassigned=new ArrayList<Booking_Master>();
-                        	if(list_assign.size()!=all_booker1.size()){
-                        		for (Booking_Master user: all_booker1) 
-                        		{ 
-                        			Boolean status=true;
-                        			for (int id: list_assign) 
-                            		{ 
-                        				if(id==user.getId()){
-                        					status=false;
-                        				}
-                            		}
-                        			if(status){
-                        				unassigned.add(user);
-                        			}
-                        		}
-                        	}
-                        	if(unassigned.size()>0){
-                        		System.out.println("------------> unassigned.size()>0");
-                        		stu.create_unassigned_booking(session,unassigned);
-                        	}
-                        	int delete=delete_Schedule(session,cb.getSource(),cb.getDestination(),cb.getTime(), cb.getDate(),except_sch_id);
-                    	}
-                    	
-                    }else{
-                    	System.out.println("--------------> No bus");
-        	      	    stu.create_unassigned_booking(session,list_stu);
-        	      	    //return "no_bus_available";
-        	        }
-              	}
 
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }        
 	}	
+	
+	
 	public void asign_to_existing_schedule(Session session,List<Booking_Master> list_stu,List<Schedule_Master> list_schedule){
 		System.out.println("---------------->");
     	System.out.println("---------------->asign_to_existing_schedule(");
+    	System.out.println(list_stu);
 		int index=0;
 		try{
 			List<Map<String,Object>> sch=new ArrayList<Map<String,Object>>();
@@ -389,17 +390,22 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 			                query.setParameter("qr", list_stu.get(index).getFrom_id()+""+list_stu.get(index).getTo_id()+""+list_stu.get(index).getDept_date()+""+list_stu.get(index).getDept_time()+""+list_stu.get(index).getId());
 			                query.setParameter("id", list_stu.get(index).getId());
 			                int result = query.executeUpdate();
-			                
-
 	                        check=true;//check have update schedule or not
 	                        amount++;  //set amount to update with this schedule
 	                        
 			                index++;//check loop
 						}
 						else{
+							if(check){
+								Map<String,Object> map=new HashMap<String,Object>();
+								map.put("scheule",list_schedule.get(i) );
+								map.put("amount", amount);
+								sch.add(map);
+							}
 							break outerloop;
 						}
 				}
+				System.out.println("check: "+check);
 				if(check){
 					Map<String,Object> map=new HashMap<String,Object>();
 					map.put("scheule",list_schedule.get(i) );
@@ -408,6 +414,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 				}
 				
 			}
+			System.out.println("sch list: "+ sch.size());
 			for(Map<String, Object> map: sch){
 				Schedule_Master sm=(Schedule_Master) map.get("scheule");
 				int num=Integer.valueOf(map.get("amount").toString());
@@ -419,7 +426,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
                 System.out.println("2. :"+sm.getRemaining_seat());
                 System.out.println("3. :"+num);
 	            query1.setParameter("num_booking",Integer.valueOf(sm.getNumber_booking())+num );
-	            query1.setParameter("remain_seat", Integer.valueOf(sm.getNumber_booking())-num);
+	            query1.setParameter("remain_seat", Integer.valueOf(sm.getRemaining_seat())-num);
 	            query1.setParameter("number_student", Integer.valueOf(sm.getNumber_student()+num));
 	            query1.setParameter("id", sm.getId());
 	            int result1 = query1.executeUpdate();
@@ -589,6 +596,32 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		System.out.println("List :      "+booking.list.size());
 		return list_bus_choosen;
 	}
+	
+	
+	//If it was already created no need run regenerate schedule of student again
+	public Boolean check_stu_scheule(Session session,int from_id, int to_id, String time, String date){  
+		System.out.println("---------------->");
+		System.out.println("check_stu_scheule");
+		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
+		try {
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' and from_id=? and to_id=? " +
+                    "and dept_time=? and dept_date=? and qr!=null and description='student'")
+            		.setParameter(0,from_id).setParameter(1, to_id).
+                            setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();
+
+            System.out.println("all_booker check schedule: ");
+            System.out.println(all_booker1.size());
+            if(all_booker1.size()>0){
+            	return false;
+            }else{
+            	return true;
+            }
+        } catch (RuntimeException e) {
+        	e.printStackTrace();
+        }
+		return false; 
+	}
+	
 	public List<Booking_Master> get_all_booker(Session session,int from_id, int to_id, String time, String date){  
 		System.out.println("---------------->");
 		System.out.println("get_all_booker");
