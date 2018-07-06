@@ -33,6 +33,7 @@ public class Schedule_Master {
 		private int number_student;
 		private Timestamp created_at;
 		private Timestamp updated_at;
+		private Time arrival_time;
 		
 		
 		public int getFrom_id() {
@@ -143,6 +144,13 @@ public class Schedule_Master {
 		}
 		public void setUpdated_at(Timestamp updated_at) {
 			this.updated_at = updated_at;
+		}
+		
+		public Time getArrival_time() {
+			return arrival_time;
+		}
+		public void setArrival_time(Time arrival_time) {
+			this.arrival_time = arrival_time;
 		}
 		
 }

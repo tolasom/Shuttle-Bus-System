@@ -5,18 +5,24 @@
   <groupId>com.java</groupId>
   <!-- <artifactId>SBBS</artifactId> -->
   <!-- SpringRegister3 -->
-  <artifactId>SpringRegister3</artifactId>
+  <artifactId>SBBS</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <!-- <name>SBBS Maven Webapp</name> -->
-  <name>SpringRegister3 Maven Webapp</name>
+  <name>SBBS Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
- 
+  <properties>
+    <!-- Sonar -->
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+    <sonar.language>java</sonar.language>
+  </properties>
   <properties>
     <java-version>1.7</java-version>
- </properties>
- <repositories>
+  </properties>
+  <repositories>
     <repository>
         <id>itext</id>
         <name>iText Repository - releases</name>
@@ -251,6 +257,23 @@
   <artifactId>maven-war-plugin</artifactId>
   <version>3.0.0</version>
 </plugin>
+        <plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.6.0.201210061924</version>
+    <configuration>
+        <destFile>${sonar.jacoco.reportPath}</destFile>
+        <append>true</append>
+    </configuration>
+    <executions>
+        <execution>
+            <id>agent</id>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+        </execution>
+    </executions>
+    </plugin>
         <plugin>
             <groupId>org.apache.tomcat.maven</groupId>
             <artifactId>tomcat7-maven-plugin</artifactId>

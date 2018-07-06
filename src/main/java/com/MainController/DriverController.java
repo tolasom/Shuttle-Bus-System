@@ -115,6 +115,7 @@ public class DriverController {
             	map1.put("id", schedules.get(i).getId());
             	map1.put("dep_date", DateFormat(schedules.get(i).getDept_date()));
             	map1.put("dep_time", schedules.get(i).getDept_time());
+            	map1.put("arr_time", schedules.get(i).getArrival_time());
             	map1.put("des_from", des_from.getName());
             	map1.put("des_to", des_to.getName());
             	map1.put("no_of_booking", schedules.get(i).getNumber_booking());
@@ -133,9 +134,11 @@ public class DriverController {
             	for(int j=0;j<pass.size();j++){
             		User_Info passenger=new User_Info();
 	            	passenger = (User_Info) session.createQuery("from User_Info where id=?").setParameter(0, pass.get(j).getUser_id()).list().get(0);
-            		
+	            	UserRole Role = (UserRole) passenger.getUserRole();
+	            	
             		Map<String, Object> map_pass = new HashMap<String, Object>();
             		map_pass.put("id", pass.get(j).getId());
+            		map_pass.put("role", Role.getRole().toString());
             		map_pass.put("user_id", pass.get(j).getUser_id());
             		map_pass.put("user_name", passenger.getUsername());
             		map_pass.put("full_name", passenger.getName());
