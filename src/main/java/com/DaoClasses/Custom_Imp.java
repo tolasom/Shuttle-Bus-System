@@ -1215,9 +1215,11 @@ public class Custom_Imp implements Custom_Dao{
 		    				new_booker.setChild(cb.getChild());
 		    				new_booker.setDescription("customer");
 		    				new_booker.setQr_status(false);
+		    				new_booker.setEmail_confirm(false);
 		    				session.save(new_booker);
 		    				
 		    				new_booker.setCode(Custom_Imp.getBookingSequence(new_booker.getId()));
+		    				new_booker.setQr_name(c.Key(50, new_booker.getId()));
 		    				
 		    				current_pass_assign=false;
 		    				total_pass_each_sch+=cb.getNumber_of_seat();
