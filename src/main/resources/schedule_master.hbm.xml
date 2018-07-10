@@ -15,7 +15,7 @@
     <property name="source_id" column="source_id"/>
    	<property name="dept_date"  column="dept_date"/>
     <property name="dept_time" column="dept_time"/>
-        <property name="arrival_time" column="arrival_time"/>
+    <property name="arrival_time" column="arrival_time"/>
     <property name="description" column="description"/>
     <property name="code" column="code"/>
     <property name="number_booking" column="number_booking"/>
@@ -25,7 +25,6 @@
     <property name="number_student" column="number_student"/>
     <property name="created_at" column="created_at"/>
     <property name="updated_at" column="updated_at"/>
-    <property name="arrival_time" column="arrival_time"/>
     
     
  	</class>

@@ -2128,6 +2128,30 @@ public class Custom_Imp implements Custom_Dao{
         return currentDateTimeString;
     }
 
+
+	public Map<String,Object> updatePhone(UserModel userModel){
+		Map<String,Object> status = new HashMap<String, Object>();
+		Transaction trns1 = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			trns1 = session.beginTransaction();
+			User_Info user_info = (User_Info)session.load(User_Info.class,user.getAuthentic());
+
+			user_info.setPhone_number(userModel.getPhone());
+			session.update(user_info);
+			System.out.println(userModel.getPhone());
+			trns1.commit();
+			status.put("status",true);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			status.put("status",false);
+			return status;
+		}finally {
+			session.flush();
+			session.close();
+		}
+		return status;
+	}
 	
 	
 		

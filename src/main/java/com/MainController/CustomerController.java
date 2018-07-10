@@ -245,6 +245,12 @@ public class CustomerController {
 		return ret;
 	}
 
+	//=========================To update customer phone number================================
+	@RequestMapping(value="/update_phone", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> updatePhone(@RequestBody UserModel userModel) {
+		return customer.updatePhone(userModel);
+	}
+
 	@RequestMapping(value="/date_time")
 	public String DateTime(){
 		Date d=new Date();
@@ -253,6 +259,7 @@ public class CustomerController {
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
+
 	
 	//Send QR code to home that not yet send out
 	@Scheduled(cron="* */30 * * * *")
