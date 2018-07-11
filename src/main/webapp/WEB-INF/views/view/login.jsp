@@ -175,7 +175,8 @@
                     <p class="login-error" id="login-error"></p>
                     <form id="loginform" action="<c:url value='login' />" method="post">
                         <input type='text'placeholder="Email" name='username' id="login-username" required>
-                        <input type="password" placeholder="Password" name="password" autocomplete="new-password" required/>
+                        <input type="password" placeholder="Password" name="password" id="login-password"
+                               autocomplete="new-password" required/>
                         <input type="submit" value="LOGIN" class="submit-btn">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     </form>
@@ -204,16 +205,16 @@
         window.location.href = "/sbs/ie"
     }
     $("#signupform").hide();
-    $("#signin-btn").addClass('active-btn');
+    $("#signup-btn").addClass('active-btn');
     $("#signup-btn").click(function () {
-        $("#signup-btn").addClass('active-btn');
-        $("#signin-btn").removeClass('active-btn');
+        $("#signin-btn").addClass('active-btn');
+        $("#signup-btn").removeClass('active-btn');
         $("#signupform").slideDown(200)
         $("#devlogin").hide();
     })
     $("#signin-btn").click(function () {
-        $("#signin-btn").addClass("active-btn");
-        $("#signup-btn").removeClass("active-btn");
+        $("#signup-btn").addClass("active-btn");
+        $("#signin-btn").removeClass("active-btn");
         $("#devlogin").slideDown(200)
         $("#signupform").hide()
     })
@@ -316,8 +317,11 @@
                             })
                                 .then(function (response) {
                                     if(response.data.status){
-                                        data = 'username='+email+"--google" + '&password='+password
-                                        googleSignin(data)
+                                        console.log("signup")
+                                        $('#login-username').val(email)
+                                        $('#login-password').val(password)
+                                        $('#loginform').submit()
+
                                     }
                                 })
                                 .catch(function (error) {

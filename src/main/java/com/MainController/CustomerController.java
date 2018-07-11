@@ -271,6 +271,7 @@ public class CustomerController {
 	public static void main(String args[]){
 		Custom_Dao cus=new Custom_Imp();
 		cus.send_QRCODE();
+		System.out.println("End.....");
 	}
 	
 	

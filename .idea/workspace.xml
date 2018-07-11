@@ -2,24 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28058996-6c4c-4168-beea-afdb7fa93f7a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/1cbre6dlnf3b8b1al13m1j6tsnp37bguj3lrdjqivdhb60h6vj4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/7u2e7n5ic10b5eg73c20qgprqfgojov69c7ef9pbin3lq7lncb40.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/glcmvma6kssiqun65kmloo23l03h0i4jj9n4lgo80aknl3mjid7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/i07aqllml5jvcv2s8d35qkfnpmat7c3v58anea6cc1rj6c14qp8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/jki7a2bmnbpvmjqi1u6r5i9g6d0ldn1us47g2fdvsc4pqadk8s39.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/tlpq29hlnmqlmlcmghjv5ful95tst6ncpc0svtt288p2pkkc0k19.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/img/8slgeg0r2rsloi6esitp9fb36inb29jhh6k8mh8493jte3gd3u2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/img/p4cr820odfaf0v80j83dp6l7e9b8kp6vgmvhq4oj56ehhcn1og1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/image.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/EntityClasses/Schedule_Master.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/EntityClasses/Schedule_Master.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/schedule_master.hbm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schedule_master.hbm.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/client_mail/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/client_mail/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/16di5lp76if2m028uedlji38hqebbi2ggp8t12n46uik9a7fcu54.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/17vus5i022iifg09rrc95tlvihv3qo7km6dl9l8abro5a0ff1v8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/1cbre6dlnf3b8b1al13m1j6tsnp37bguj3lrdjqivdhb60h6vj4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/1l5ijdkdh5qb1qm3hom051hn6ddvrt59jopkvlerg91u62aa3813.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/2j5q73hcta1all0a19d7lck5ob54up33dnklvbtpaa6hfm3bei15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/34n93uhj12died9jva6snqh46mho1dppqrol2d5lnv8rorg3rn18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/34spms3106e04mveu8ej2hmekm29a3pu7dv89ugbq35ckm6osk17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/4rtrgb43shqkhgsu9uu0j5mqphrq1ilsunrek565gl3gcrth4e16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/4vmpbopibvl36nr05e26539s73c2tconc856a2v1j0i75o6rcs38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/656dsair5aopg9eh2oks4kd0f6gddvisbc9oaj619cig691ubb9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/71nt8pout6larlr40k8r7iptf98vnr86u6a0r3r05kreqra2d420.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/7u2e7n5ic10b5eg73c20qgprqfgojov69c7ef9pbin3lq7lncb40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/7vs3rrktk3stp02ib21fqmrvaesiao3jfcsvt2pvttls2mfem141.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/9gpgq92347pq4p3skl8lssdtnhq5tg0oohg77vdv5pcn4slcaj22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/ckq48an3pbqj95el3on53ko9dricqf0amlm3t6b3a8lm2hcfn642.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/e0be113qnnk2lgkuinq0vjtqn3n50kg875aum4c27hv1n4rjt11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/gkk2hck1d6qo92u3u7otl6ja3kg3noir1sjaemcol81254lok355.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/glcmvma6kssiqun65kmloo23l03h0i4jj9n4lgo80aknl3mjid7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/i07aqllml5jvcv2s8d35qkfnpmat7c3v58anea6cc1rj6c14qp8.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/img/i07aqllml5jvcv2s8d35qkfnpmat7c3v58anea6cc1rj6c14qp8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/j8g9mk9i0eekp8osd8pl728mjabrjl5i5mmhejtrr8u9ls4m3e39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/jki7a2bmnbpvmjqi1u6r5i9g6d0ldn1us47g2fdvsc4pqadk8s39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/k5iup5s4hakviksrffjgh71tvb6qfge3h5uitliu24e5h5uutj19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/k828p7dpktf0m2ddsqbpqfvsjeslnt2102oemlvaho1t48kuld10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/kkklll.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/m0p5hip2rletl7ts9urha1fpqv5jf20qqds2hf6fhpecnererm21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/o4c683mvhcga3qbo0ujbnvhutvs1ib5emtudpoendfpmum8ka114.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/r9e1dpv9n7ctb3ot3g7a570jm2ae6hi0v9mufeu28nv45bv9ke40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/rnikt32s31a6b2pc33u8jtm5pct96esc11gbmqeegur032kq5g12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/tdid1nc3t8s2s7uiro2dn1ortgvad5qubpan05vk4a6mieitdr7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/tlpq29hlnmqlmlcmghjv5ful95tst6ncpc0svtt288p2pkkc0k19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/asset-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/service-worker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/css/main.c3dc8386.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/css/main.c3dc8386.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.1195f27e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.1195f27e.js.map" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,8 +81,17 @@
       <file leaf-file-name="home.jsp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
+            <state relative-caret-position="345">
+              <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dev.jsp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/dev.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" selection-start-line="14" selection-end-line="14" />
             </state>
           </provider>
         </entry>
@@ -64,8 +111,8 @@
       <file leaf-file-name="StudentController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="91" column="48" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
+            <state relative-caret-position="825">
+              <caret line="77" selection-start-line="77" selection-end-line="77" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -73,20 +120,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Set_Student_Schedule.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="66" column="10" selection-start-line="66" selection-start-column="10" selection-end-line="66" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="CustomerController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="97" column="19" lean-forward="true" selection-start-line="97" selection-start-column="19" selection-end-line="97" selection-end-column="19" />
+            <state relative-caret-position="3030">
+              <caret line="238" selection-start-line="238" selection-end-line="238" />
             </state>
           </provider>
         </entry>
@@ -94,8 +132,17 @@
       <file leaf-file-name="StudentDaoImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="7290">
+              <caret line="499" selection-start-line="499" selection-end-line="499" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StudentDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -103,8 +150,8 @@
       <file leaf-file-name="customer_mobile.jsp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+            <state relative-caret-position="450">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
         </entry>
@@ -112,138 +159,8 @@
       <file leaf-file-name="Custom_Imp.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="2153" column="5" lean-forward="true" selection-start-line="2153" selection-start-column="5" selection-end-line="2153" selection-end-column="5" />
-              <folding>
-                <element signature="e#3487#3502#0" expanded="true" />
-                <element signature="e#5048#5066#0" expanded="true" />
-                <element signature="e#6036#6047#0" expanded="true" />
-                <element signature="e#7757#7773#0" expanded="true" />
-                <element signature="e#8656#8667#0" expanded="true" />
-                <element signature="e#8707#8722#0" expanded="true" />
-                <element signature="e#9616#9633#0" expanded="true" />
-                <element signature="e#9711#9761#0" expanded="true" />
-                <element signature="e#9826#9864#0" expanded="true" />
-                <element signature="e#9918#9942#0" expanded="true" />
-                <element signature="e#11093#11110#0" expanded="true" />
-                <element signature="e#11188#11238#0" expanded="true" />
-                <element signature="e#11303#11341#0" expanded="true" />
-                <element signature="e#11459#11483#0" expanded="true" />
-                <element signature="e#13244#13260#0" expanded="true" />
-                <element signature="e#14689#14706#0" expanded="true" />
-                <element signature="e#14784#14834#0" expanded="true" />
-                <element signature="e#14899#14937#0" expanded="true" />
-                <element signature="e#14991#15015#0" expanded="true" />
-                <element signature="e#15078#15102#0" expanded="true" />
-                <element signature="e#16352#16370#0" expanded="true" />
-                <element signature="e#16421#16441#0" expanded="true" />
-                <element signature="e#16739#16754#0" expanded="true" />
-                <element signature="e#17432#17448#0" expanded="true" />
-                <element signature="e#17502#17522#0" expanded="true" />
-                <element signature="e#18881#18898#0" expanded="true" />
-                <element signature="e#19340#19355#0" expanded="true" />
-                <element signature="e#21139#21155#0" expanded="true" />
-                <element signature="e#23167#23182#0" expanded="true" />
-                <element signature="e#25082#25106#0" expanded="true" />
-                <element signature="e#25157#25177#0" expanded="true" />
-                <element signature="e#26845#26860#0" expanded="true" />
-                <element signature="e#29270#29285#0" expanded="true" />
-                <element signature="e#31624#31639#0" expanded="true" />
-                <element signature="e#34637#34652#0" expanded="true" />
-                <element signature="e#36483#36507#0" expanded="true" />
-                <element signature="e#36558#36578#0" expanded="true" />
-                <element signature="e#37877#37892#0" expanded="true" />
-                <element signature="e#39523#39539#0" expanded="true" />
-                <element signature="e#39590#39610#0" expanded="true" />
-                <element signature="e#39974#39991#0" expanded="true" />
-                <element signature="e#40204#40216#0" expanded="true" />
-                <element signature="e#40418#40433#0" expanded="true" />
-                <element signature="e#41172#41188#0" expanded="true" />
-                <element signature="e#41239#41259#0" expanded="true" />
-                <element signature="e#41623#41640#0" expanded="true" />
-                <element signature="e#41852#41863#0" expanded="true" />
-                <element signature="e#42067#42082#0" expanded="true" />
-                <element signature="e#42863#42883#0" expanded="true" />
-                <element signature="e#43010#43030#0" expanded="true" />
-                <element signature="e#43302#43317#0" expanded="true" />
-                <element signature="e#44061#44081#0" expanded="true" />
-                <element signature="e#44407#44422#0" expanded="true" />
-                <element signature="e#45020#45046#0" expanded="true" />
-                <element signature="e#45101#45110#0" expanded="true" />
-                <element signature="e#45307#45333#0" expanded="true" />
-                <element signature="e#46065#46081#0" expanded="true" />
-                <element signature="e#46148#46168#0" expanded="true" />
-                <element signature="e#46234#46251#0" expanded="true" />
-                <element signature="e#59101#59117#0" expanded="true" />
-                <element signature="e#59188#59217#0" expanded="true" />
-                <element signature="e#60434#60455#0" expanded="true" />
-                <element signature="e#60528#60834#0" expanded="true" />
-                <element signature="e#60833#60834#0" expanded="true" />
-                <element signature="e#61021#61030#0" expanded="true" />
-                <element signature="e#61372#61388#0" expanded="true" />
-                <element signature="e#66067#66093#0" expanded="true" />
-                <element signature="e#67577#67593#0" expanded="true" />
-                <element signature="e#68289#68301#0" expanded="true" />
-                <element signature="e#68354#68374#0" expanded="true" />
-                <element signature="e#68435#68455#0" expanded="true" />
-                <element signature="e#68521#68541#0" expanded="true" />
-                <element signature="e#69455#69470#0" expanded="true" />
-                <element signature="e#70129#70141#0" expanded="true" />
-                <element signature="e#70183#70195#0" expanded="true" />
-                <element signature="e#70256#70276#0" expanded="true" />
-                <element signature="e#70342#70362#0" expanded="true" />
-                <element signature="e#71889#71906#0" expanded="true" />
-                <element signature="e#71959#71979#0" expanded="true" />
-                <element signature="e#72020#72029#0" expanded="true" />
-                <element signature="e#72070#72079#0" expanded="true" />
-                <element signature="e#72667#72684#0" expanded="true" />
-                <element signature="e#73216#73233#0" expanded="true" />
-                <element signature="e#73287#73307#0" expanded="true" />
-                <element signature="e#73349#73358#0" expanded="true" />
-                <element signature="e#73400#73409#0" expanded="true" />
-                <element signature="e#73885#73902#0" expanded="true" />
-                <element signature="e#75008#75019#0" expanded="true" />
-                <element signature="e#75072#75092#0" expanded="true" />
-                <element signature="e#75153#75173#0" expanded="true" />
-                <element signature="e#75239#75259#0" expanded="true" />
-                <element signature="e#76044#76061#0" expanded="true" />
-                <element signature="e#76115#76135#0" expanded="true" />
-                <element signature="e#76177#76186#0" expanded="true" />
-                <element signature="e#76228#76237#0" expanded="true" />
-                <element signature="e#76895#76912#0" expanded="true" />
-                <element signature="e#77475#77492#0" expanded="true" />
-                <element signature="e#77547#77567#0" expanded="true" />
-                <element signature="e#77610#77619#0" expanded="true" />
-                <element signature="e#77662#77671#0" expanded="true" />
-                <element signature="e#78215#78232#0" expanded="true" />
-                <element signature="e#78662#78673#0" expanded="true" />
-                <element signature="e#78841#78861#0" expanded="true" />
-                <element signature="e#79156#79165#0" expanded="true" />
-                <element signature="e#80655#80675#0" expanded="true" />
-                <element signature="e#81070#81085#0" expanded="true" />
-                <element signature="e#82261#82276#0" expanded="true" />
-                <element signature="e#83038#83058#0" expanded="true" />
-                <element signature="e#83387#83404#0" expanded="true" />
-                <element signature="e#83458#83467#0" expanded="true" />
-                <element signature="e#83882#83891#0" expanded="true" />
-                <element signature="e#83939#83948#0" expanded="true" />
-                <element signature="e#84437#84446#0" expanded="true" />
-                <element signature="e#91323#91339#0" expanded="true" />
-                <element signature="e#91398#91418#0" expanded="true" />
-                <element signature="e#91476#91493#0" expanded="true" />
-                <element signature="e#93720#93736#0" expanded="true" />
-                <element signature="e#93792#93812#0" expanded="true" />
-                <element signature="e#95455#95470#0" expanded="true" />
-                <element signature="e#97484#97500#0" expanded="true" />
-                <element signature="e#98510#98521#0" expanded="true" />
-                <element signature="e#98584#98608#0" expanded="true" />
-                <element signature="e#98664#98681#0" expanded="true" />
-                <element signature="e#98746#98770#0" expanded="true" />
-                <element signature="e#98831#98848#0" expanded="true" />
-                <element signature="e#98895#98911#0" expanded="true" />
-                <element signature="e#100271#100289#0" expanded="true" />
-                <element signature="e#102241#102257#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="31710">
+              <caret line="2155" column="5" selection-start-line="2155" selection-start-column="5" selection-end-line="2155" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -278,6 +195,7 @@
       <find>/user_info</find>
       <find>user_info()</find>
       <find>student_i</find>
+      <find>customer/**</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -287,14 +205,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" />
         <option value="$PROJECT_DIR$/src/main/resources/schedule_master.hbm.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/EntityClasses/Schedule_Master.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/MainController/SecurityController.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/ie.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/dev.jsp" />
-        <option value="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/DaoClasses/Set_Student_Schedule.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" />
@@ -302,6 +217,10 @@
         <option value="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" />
       </list>
     </option>
@@ -327,7 +246,6 @@
     <panes>
       <pane id="Scope" />
       <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -384,22 +302,6 @@
               <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="ModelClasses" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -409,15 +311,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
@@ -503,6 +396,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,8 +406,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/webapp/resources" />
       <recent name="$PROJECT_DIR$/src/main/webapp/resources/student" />
+      <recent name="$PROJECT_DIR$/src/main/webapp/resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -666,12 +560,14 @@
       <workItem from="1531055509485" duration="40000" />
       <workItem from="1531104886137" duration="1584000" />
       <workItem from="1531119160403" duration="841000" />
-      <workItem from="1531186129015" duration="769000" />
+      <workItem from="1531186129015" duration="4734000" />
+      <workItem from="1531203608004" duration="3116000" />
+      <workItem from="1531271989348" duration="840000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59333000" />
+    <option name="totallyTimeSpent" value="67254000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="670" extended-state="0" />
@@ -698,7 +594,7 @@
       <window_info anchor="bottom" id="Spring" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.63699824" />
       <window_info id="Persistence" order="2" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28700906" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2960725" />
       <window_info id="Web" order="2" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -723,13 +619,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/js/customer_booking.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -965,13 +854,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/security/sign_up.jsp">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3045">
-          <caret line="203" column="40" selection-start-line="203" selection-start-column="40" selection-end-line="203" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/ie.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -981,13 +863,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/sign_up.jsp">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/dev.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.js" />
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.js.map" />
@@ -1029,16 +904,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="91" column="48" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="436">
@@ -1046,168 +911,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        <state relative-caret-position="31710">
+          <caret line="2155" column="5" selection-start-line="2155" selection-start-column="5" selection-end-line="2155" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/dev.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="2153" column="5" lean-forward="true" selection-start-line="2153" selection-start-column="5" selection-end-line="2153" selection-end-column="5" />
-          <folding>
-            <element signature="e#3487#3502#0" expanded="true" />
-            <element signature="e#5048#5066#0" expanded="true" />
-            <element signature="e#6036#6047#0" expanded="true" />
-            <element signature="e#7757#7773#0" expanded="true" />
-            <element signature="e#8656#8667#0" expanded="true" />
-            <element signature="e#8707#8722#0" expanded="true" />
-            <element signature="e#9616#9633#0" expanded="true" />
-            <element signature="e#9711#9761#0" expanded="true" />
-            <element signature="e#9826#9864#0" expanded="true" />
-            <element signature="e#9918#9942#0" expanded="true" />
-            <element signature="e#11093#11110#0" expanded="true" />
-            <element signature="e#11188#11238#0" expanded="true" />
-            <element signature="e#11303#11341#0" expanded="true" />
-            <element signature="e#11459#11483#0" expanded="true" />
-            <element signature="e#13244#13260#0" expanded="true" />
-            <element signature="e#14689#14706#0" expanded="true" />
-            <element signature="e#14784#14834#0" expanded="true" />
-            <element signature="e#14899#14937#0" expanded="true" />
-            <element signature="e#14991#15015#0" expanded="true" />
-            <element signature="e#15078#15102#0" expanded="true" />
-            <element signature="e#16352#16370#0" expanded="true" />
-            <element signature="e#16421#16441#0" expanded="true" />
-            <element signature="e#16739#16754#0" expanded="true" />
-            <element signature="e#17432#17448#0" expanded="true" />
-            <element signature="e#17502#17522#0" expanded="true" />
-            <element signature="e#18881#18898#0" expanded="true" />
-            <element signature="e#19340#19355#0" expanded="true" />
-            <element signature="e#21139#21155#0" expanded="true" />
-            <element signature="e#23167#23182#0" expanded="true" />
-            <element signature="e#25082#25106#0" expanded="true" />
-            <element signature="e#25157#25177#0" expanded="true" />
-            <element signature="e#26845#26860#0" expanded="true" />
-            <element signature="e#29270#29285#0" expanded="true" />
-            <element signature="e#31624#31639#0" expanded="true" />
-            <element signature="e#34637#34652#0" expanded="true" />
-            <element signature="e#36483#36507#0" expanded="true" />
-            <element signature="e#36558#36578#0" expanded="true" />
-            <element signature="e#37877#37892#0" expanded="true" />
-            <element signature="e#39523#39539#0" expanded="true" />
-            <element signature="e#39590#39610#0" expanded="true" />
-            <element signature="e#39974#39991#0" expanded="true" />
-            <element signature="e#40204#40216#0" expanded="true" />
-            <element signature="e#40418#40433#0" expanded="true" />
-            <element signature="e#41172#41188#0" expanded="true" />
-            <element signature="e#41239#41259#0" expanded="true" />
-            <element signature="e#41623#41640#0" expanded="true" />
-            <element signature="e#41852#41863#0" expanded="true" />
-            <element signature="e#42067#42082#0" expanded="true" />
-            <element signature="e#42863#42883#0" expanded="true" />
-            <element signature="e#43010#43030#0" expanded="true" />
-            <element signature="e#43302#43317#0" expanded="true" />
-            <element signature="e#44061#44081#0" expanded="true" />
-            <element signature="e#44407#44422#0" expanded="true" />
-            <element signature="e#45020#45046#0" expanded="true" />
-            <element signature="e#45101#45110#0" expanded="true" />
-            <element signature="e#45307#45333#0" expanded="true" />
-            <element signature="e#46065#46081#0" expanded="true" />
-            <element signature="e#46148#46168#0" expanded="true" />
-            <element signature="e#46234#46251#0" expanded="true" />
-            <element signature="e#59101#59117#0" expanded="true" />
-            <element signature="e#59188#59217#0" expanded="true" />
-            <element signature="e#60434#60455#0" expanded="true" />
-            <element signature="e#60528#60834#0" expanded="true" />
-            <element signature="e#60833#60834#0" expanded="true" />
-            <element signature="e#61021#61030#0" expanded="true" />
-            <element signature="e#61372#61388#0" expanded="true" />
-            <element signature="e#66067#66093#0" expanded="true" />
-            <element signature="e#67577#67593#0" expanded="true" />
-            <element signature="e#68289#68301#0" expanded="true" />
-            <element signature="e#68354#68374#0" expanded="true" />
-            <element signature="e#68435#68455#0" expanded="true" />
-            <element signature="e#68521#68541#0" expanded="true" />
-            <element signature="e#69455#69470#0" expanded="true" />
-            <element signature="e#70129#70141#0" expanded="true" />
-            <element signature="e#70183#70195#0" expanded="true" />
-            <element signature="e#70256#70276#0" expanded="true" />
-            <element signature="e#70342#70362#0" expanded="true" />
-            <element signature="e#71889#71906#0" expanded="true" />
-            <element signature="e#71959#71979#0" expanded="true" />
-            <element signature="e#72020#72029#0" expanded="true" />
-            <element signature="e#72070#72079#0" expanded="true" />
-            <element signature="e#72667#72684#0" expanded="true" />
-            <element signature="e#73216#73233#0" expanded="true" />
-            <element signature="e#73287#73307#0" expanded="true" />
-            <element signature="e#73349#73358#0" expanded="true" />
-            <element signature="e#73400#73409#0" expanded="true" />
-            <element signature="e#73885#73902#0" expanded="true" />
-            <element signature="e#75008#75019#0" expanded="true" />
-            <element signature="e#75072#75092#0" expanded="true" />
-            <element signature="e#75153#75173#0" expanded="true" />
-            <element signature="e#75239#75259#0" expanded="true" />
-            <element signature="e#76044#76061#0" expanded="true" />
-            <element signature="e#76115#76135#0" expanded="true" />
-            <element signature="e#76177#76186#0" expanded="true" />
-            <element signature="e#76228#76237#0" expanded="true" />
-            <element signature="e#76895#76912#0" expanded="true" />
-            <element signature="e#77475#77492#0" expanded="true" />
-            <element signature="e#77547#77567#0" expanded="true" />
-            <element signature="e#77610#77619#0" expanded="true" />
-            <element signature="e#77662#77671#0" expanded="true" />
-            <element signature="e#78215#78232#0" expanded="true" />
-            <element signature="e#78662#78673#0" expanded="true" />
-            <element signature="e#78841#78861#0" expanded="true" />
-            <element signature="e#79156#79165#0" expanded="true" />
-            <element signature="e#80655#80675#0" expanded="true" />
-            <element signature="e#81070#81085#0" expanded="true" />
-            <element signature="e#82261#82276#0" expanded="true" />
-            <element signature="e#83038#83058#0" expanded="true" />
-            <element signature="e#83387#83404#0" expanded="true" />
-            <element signature="e#83458#83467#0" expanded="true" />
-            <element signature="e#83882#83891#0" expanded="true" />
-            <element signature="e#83939#83948#0" expanded="true" />
-            <element signature="e#84437#84446#0" expanded="true" />
-            <element signature="e#91323#91339#0" expanded="true" />
-            <element signature="e#91398#91418#0" expanded="true" />
-            <element signature="e#91476#91493#0" expanded="true" />
-            <element signature="e#93720#93736#0" expanded="true" />
-            <element signature="e#93792#93812#0" expanded="true" />
-            <element signature="e#95455#95470#0" expanded="true" />
-            <element signature="e#97484#97500#0" expanded="true" />
-            <element signature="e#98510#98521#0" expanded="true" />
-            <element signature="e#98584#98608#0" expanded="true" />
-            <element signature="e#98664#98681#0" expanded="true" />
-            <element signature="e#98746#98770#0" expanded="true" />
-            <element signature="e#98831#98848#0" expanded="true" />
-            <element signature="e#98895#98911#0" expanded="true" />
-            <element signature="e#100271#100289#0" expanded="true" />
-            <element signature="e#102241#102257#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="97" column="19" lean-forward="true" selection-start-line="97" selection-start-column="19" selection-end-line="97" selection-end-column="19" />
+        <state relative-caret-position="3030">
+          <caret line="238" selection-start-line="238" selection-end-line="238" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        <state relative-caret-position="450">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/login.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="320" column="70" selection-start-line="320" selection-start-column="70" selection-end-line="320" selection-end-column="70" />
+          <folding>
+            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#ul#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#ul#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7290">
+          <caret line="499" selection-start-line="499" selection-end-line="499" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="825">
+          <caret line="77" selection-start-line="77" selection-end-line="77" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
+        <state relative-caret-position="345">
+          <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
         </state>
       </provider>
     </entry>
