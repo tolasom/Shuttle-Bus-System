@@ -201,7 +201,8 @@
 <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
 </body>
 <script type="text/javascript">
-    if(false || !!document.documentMode){
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    if(isIE||(!isIE && !!window.StyleMedia)){
         window.location.href = "/sbs/ie"
     }
     $("#signupform").hide();
