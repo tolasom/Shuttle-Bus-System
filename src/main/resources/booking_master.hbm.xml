@@ -30,6 +30,8 @@
     <property name="qr_status" column="qr_status"/>
     <property name="email_confirm" column="email_confirm"/>
     <property name="qr_name" column="qr_name"/>
+    <property name="payment" column="payment"/>
+    <property name="transaction_id" column="transaction_id"/>
     
  	</class>
 </hibernate-mapping>

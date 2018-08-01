@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.DaoClasses.*;
 import com.ModelClasses.*;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,10 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.DaoClasses.Custom_Dao;
-import com.DaoClasses.Custom_Imp;
-import com.DaoClasses.Request_Booking;
-import com.DaoClasses.Request_Booking_Dao;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.User_Info;
 import com.ModelClasses.Customer_Booking;
@@ -33,7 +30,6 @@ import com.ModelClasses.UserModel;
 @Controller
 public class CustomerController {
 	Custom_Dao customer=new Custom_Imp();
-	Timestamp current_timestamp = new Timestamp(System.currentTimeMillis());
 	
 	//========================= Sign Up UI================================
 	@RequestMapping(value="/sign_up")
@@ -82,7 +78,7 @@ public class CustomerController {
 				Custom_Dao cust=new Custom_Imp();
 				return cust.submit_new_password(user);
 		}
-	//=========================check_booking_request Information================================
+
 	@RequestMapping(value="/today", method=RequestMethod.GET)
 	public @ResponseBody String today() {
 		SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -97,12 +93,7 @@ public class CustomerController {
 		System.out.println(map);
 		return map;
 	}
-//	//=========================check_booking_request Information================================
-//		@RequestMapping(value="/check_booking_request", method=RequestMethod.GET)
-//			public @ResponseBody Map<String,Object> check_booking_request() {
-//			Map<String, Object> map = customer.user_info();
-//			return map;
-//		}
+
 	//=========================Location Information================================
 		@RequestMapping(value="/location_data", method=RequestMethod.GET)
 			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
@@ -139,12 +130,15 @@ public class CustomerController {
 
 	@RequestMapping(value="/customer_booking", method=RequestMethod.POST)
 	public @ResponseBody String customer_booking(@RequestBody Customer_Booking[] cb) throws ParseException {
-			System.out.println("KKKKKKKKKKKKKKKKKKKKKKK: "+cb[0].getDate());
-			for(int i=0;i<cb.length;i++){
-				cb[i].setStatus("book");
-			}
-			String ret = customer.customer_booking(cb);
-			return ret;
+		    // Before Payment
+//			for(int i=0;i<cb.length;i++){
+//				cb[i].setStatus("book");
+//			}
+//			String ret = customer.customer_booking(cb);
+
+		Customer_Schedule_Generation_Dao user=new Customer_Schedule_Generation_Imp();
+		String ret=user.booking(cb);
+		return ret;
 
 		}	
 	
@@ -157,9 +151,11 @@ public class CustomerController {
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.POST)
 	public @ResponseBody String request_book_now(@RequestBody ID_Class id_class) throws ParseException {
-		Request_Booking_Dao req=new Request_Booking();
-		String ret = req.request_book_now(id_class.getId());
-		System.out.println(id_class.getId());
+		//Request_Booking_Dao req=new Request_Booking();
+		//String ret = req.request_book_now(id_class.getId());
+		//System.out.println(id_class.getId());
+		Request_Booking_Dao user =new Request_Booking();
+		String ret = user.booking(id_class.getId());
 		return ret;
 	}
 	//=========================Customer Request Booking Information================================
@@ -168,7 +164,7 @@ public class CustomerController {
 			String ret = customer.customer_request_booking(cb);
 			return ret;
 	}
-	//=========================Customer Request Booking Information================================
+	//=========================Customer Cancel Request Booking Information================================
 	@RequestMapping(value="/cancel_request_booking", method=RequestMethod.POST)
 	public @ResponseBody String cancel_request_booking(@RequestBody ID_Class id_class) {
 		String ret = customer.cancel_request_booking(id_class.getId());

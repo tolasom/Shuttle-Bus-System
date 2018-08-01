@@ -29,21 +29,21 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         return f.format(new Date());
 	}
 	public String DateTimeNow(){
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
 		return f.format(new Date());
 	}
 	public String TomorrowDateTime() throws ParseException{
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
-		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(f.format(new Date()));
+		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss").parse(f.format(new Date()));
 		Calendar c = Calendar.getInstance();
 		c.setTime(dt);
 		c.add(Calendar.DATE, 1);
 		dt = c.getTime();
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		String tmrDateTimeString = sdf.format(dt);
 		System.out.println(tmrDateTimeString);
 		return tmrDateTimeString;

@@ -9,15 +9,8 @@ import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
 import org.hibernate.Query;
@@ -46,25 +39,22 @@ import com.client_mail.MailService;
 public class Custom_Imp implements Custom_Dao{
 	IdUser user=new IdUser();
 	public String TimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
+		SimpleDateFormat f = new SimpleDateFormat("HH:MM:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+		return f.format(new Date());
 	}
 	public String DateNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+		return f.format(new Date());
 	}
 	public String DateTimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		System.out.println(f.format(new Date()));
+		return f.format(new Date());
 	}
 	public Date TomorrowDate(){
 		Date dt = new Date();

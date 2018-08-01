@@ -40,7 +40,6 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> get_sch_bus_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info2(int id);
-	public List<Map<String,Object>> get_sch_bus_info2(int id);
 	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_differ_rout(Session session,Customer_Booking cb,int from, int to) throws ParseException;
@@ -51,7 +50,7 @@ public interface Custom_Dao {
 	public List<User_Info> getAllD(List<Integer> idd);
 	public List<User_Info> check_valid_tocken(String token);
 	public Map<String, Object> check_and_send_email(String email);
-	public Boolean submit_new_password(UserModel user); 
+	public Boolean submit_new_password(UserModel user);
 	public void send_email_qr_generator(Booking_Master bm);
 	public void send_QRCODE();
 

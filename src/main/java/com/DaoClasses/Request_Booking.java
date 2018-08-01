@@ -1,70 +1,31 @@
 package com.DaoClasses;
 
 import getInfoLogin.IdUser;
-
-import java.io.ByteArrayOutputStream; 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.glxn.qrgen.QRCode;
-import net.glxn.qrgen.image.ImageType;
+import java.util.*;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
 import com.EntityClasses.Bus_Master;
 import com.EntityClasses.Location_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.New_Pickup_Location;
-import com.ModelClasses.UserModel;
 
 public class Request_Booking implements Request_Booking_Dao{
 	IdUser user=new IdUser();
-	public String TimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
-	}
-	public String DateNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
-	}
-	public String DateTimeNow(){
-		Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
-        String currentDateTimeString = sdf.format(d);
-        System.out.println(currentDateTimeString);
-        return currentDateTimeString;
-	}
-	public Date TomorrowDate(){
-		Date dt = new Date();
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(dt); 
-		c.add(Calendar.DATE, 1);
-		dt = c.getTime();
-		return dt;
-	}
+    public String DateTimeNow(){
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+        f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+        System.out.println(f.format(new Date()));
+        return f.format(new Date());
+    }
+
 	public static String getScheduleSequence(int id){ 
 		   int code;
 		   String scode = new String();
@@ -83,6 +44,66 @@ public class Request_Booking implements Request_Booking_Dao{
 		   return "B"+scode; 
 		  
 	}
+
+	//======================== Store Booking (After Request have confirmed by admin) Record When user booked  =================
+	public String booking(int id){
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction trns1 = null;
+		Booking_Request_Master book = new Booking_Request_Master();
+		Customer_Booking cb=new Customer_Booking();
+		Custom_Imp c=new Custom_Imp();
+		try {
+			trns1 = session.beginTransaction();
+
+			Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?")
+					.setParameter(0, id).list().get(0);
+
+			cb.setDate(br.getDept_date().toString().subSequence(0, 10).toString());
+			cb.setTime(br.getProvided_time());
+			cb.setSource(br.getSource_id());
+			cb.setDestination(br.getDestination_id());
+			cb.setNumber_of_seat(br.getNumber_of_booking());
+
+			Pickup_Location_Master pick_source=new Pickup_Location_Master();
+			pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+					.setParameter(0, cb.getSource()).list().get(0);
+			Pickup_Location_Master pick_destin=new Pickup_Location_Master();
+			pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+					.setParameter(0, cb.getDestination()).list().get(0);
+
+
+			book.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+			book.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
+			book.setDescription(cb.getDescription());
+			book.setSource_id(cb.getSource());
+			book.setFrom_id(pick_source.getLocation_id());
+			book.setDestination_id(cb.getDestination());
+			book.setTo_id(pick_destin.getLocation_id());
+			book.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+			book.setDept_time(java.sql.Time.valueOf(cb.getTime()));
+			book.setNumber_of_booking(cb.getNumber_of_seat());
+			book.setAdult(cb.getAdult());
+			book.setChild(cb.getChild());
+			book.setUser_id(user.getAuthentic());
+			book.setEnabled(true);
+			book.setStatus("Pending");
+			session.save(book);
+			trns1.commit();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return "error";
+		}
+		finally {
+			session.flush();
+			session.close();
+		}
+		return "success";
+	}
+
+
+
+
 	
 	//======================== combination for choosing bus till ============================
 	List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
