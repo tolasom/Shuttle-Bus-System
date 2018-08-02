@@ -59,6 +59,10 @@ public class StudentController {
 
     @RequestMapping(value = "/list_enable", method = RequestMethod.GET)
     @ResponseBody public List<Integer> listBookedDate(){ return studentDao.listBookedDate(); }
+
+    @RequestMapping(value = "/remaining_ticket", method = RequestMethod.GET)
+    @ResponseBody public Map<String,Object> remainingTicket(){ return studentDao.remainingTicket(); }
+
     @RequestMapping(value = "/student_cancel", method = RequestMethod.POST)
     @ResponseBody public Map<String,Object> studentCancel(@RequestBody ID_Class id_class)
     { return studentDao.cancel_ticket(id_class);}

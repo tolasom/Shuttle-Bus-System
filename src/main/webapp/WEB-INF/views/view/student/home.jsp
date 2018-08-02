@@ -11,7 +11,6 @@
         <title>Student</title>
     </head>
     <body>
-        <div id="background"></div>
         <input type="hidden" id="csrfToken" value="${_csrf.token}"/>
         <input type="hidden" id="csrfHeader" value="${_csrf.headerName}"/>
         <script>
@@ -23,8 +22,8 @@
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <script type="text/javascript" src="/resources/student/build/static/js/main.1195f27e.js"></script>
-        <link rel="stylesheet" href="/resources/student/build/static/css/main.c3dc8386.css">
+        <script type="text/javascript" src="/sbs/resources/student/build/static/js/main.7245a47b.js"></script>
+        <link rel="stylesheet" href="/sbs/resources/student/build/static/css/main.d81bcc4c.css">
        <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
     </body>
 </html>

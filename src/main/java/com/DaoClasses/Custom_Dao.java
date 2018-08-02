@@ -53,5 +53,6 @@ public interface Custom_Dao {
 	public Boolean submit_new_password(UserModel user);
 	public void send_email_qr_generator(Booking_Master bm);
 	public void send_QRCODE();
+	public Map<String,Object> updatePhone(UserModel userModel);
 
 }

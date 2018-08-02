@@ -241,6 +241,12 @@ public class CustomerController {
 		return ret;
 	}
 
+	//=========================To update customer phone number================================
+	@RequestMapping(value="/update_phone", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> updatePhone(@RequestBody UserModel userModel) {
+		return customer.updatePhone(userModel);
+	}
+
 	@RequestMapping(value="/date_time")
 	public String DateTime(){
 		Date d=new Date();
@@ -249,10 +255,19 @@ public class CustomerController {
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
-	
+
+	//=========================PayWay Push Back Notification================================
+	@RequestMapping(value="/push_back_notification", method=RequestMethod.GET)
+	public @ResponseBody String pushBackNotification(@RequestBody PushBackNotification pb) {
+		//String ret = customer.customer_request_booking(cb);
+		System.out.println("Hello");
+		return null;
+	}
+
+
 	//Send QR code to home that not yet send out
 	@Scheduled(cron="* */30 * * * *")
-	public void updateEmployeeInventory(){
+	public void sendEmail(){
       System.out.println("Started send QR code to home that not yet send out");
       customer.send_QRCODE();
 	}
