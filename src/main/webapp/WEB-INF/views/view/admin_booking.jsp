@@ -7,17 +7,17 @@
                          		<p class="title-description"> All current and future bookings </p> 
                          	</div>
                          	<div class="btn-group pull-right menulist">
-		                        <button type="button" class="btn btn-info" id="allbtn" style="color:white;border-right:2px solid white;">All</button>
-		                        <button type="button" class="btn btn-info" id="customerbtn" style="color:white; border-right:2px solid white;"><i class="fa fa-users"></i></button>
-		                        <button type="button" class="btn btn-info"  id="studentbtn" style="color:white;"><i class="fa fa-graduation-cap"></i></button>
+		                        <button type="button" data-toggle="tooltip" title="All Bookings" class="btn btn-info" id="allbtn" style="color:white;border-right:2px solid white;">All</button>
+		                        <button type="button" data-toggle="tooltip" title="All Customer Bookings" class="btn btn-info" id="customerbtn" style="color:white; border-right:2px solid white;"><i class="fa fa-users"></i></button>
+		                        <button type="button" data-toggle="tooltip" title="All Student Bookings" class="btn btn-info"  id="studentbtn" style="color:white;"><i class="fa fa-graduation-cap"></i></button>
 		                    </div>
                          	
                          </div>
                          
                        
 	                         <div style="margin-bottom: 10px;">
-		                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking';">View all historical bookings <i class="fa fa-angle-right"></i></button>
-		                          <button class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
+		                         <button type="button" data-toggle="tooltip" title="Historical Bookings" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking';">View all historical bookings <i class="fa fa-angle-right"></i></button>
+		                          <button data-toggle="tooltip" title="Assign Bookings To New Schedule" class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
 		                         
 	                      	 </div>
 	                      	 </div>
@@ -25,7 +25,7 @@
 
                    
                      <div style="margin-bottom: 10px;">
-	                      	     <input type="text" class="form-control" placeholder="Search for any booking by code..." id="txtbox"/>
+	                      	     <input type="text" class="form-control" placeholder="Search for any booking by code or username..." id="txtbox"/>
 	                    	 </div>	
                     <section class="section">
                         <div class="row">
@@ -95,7 +95,7 @@ load = function(){
 						cb = '<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>';
     				}
-				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+'"from="'+bookings[i].from_id+'"'+
+				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'"from="'+bookings[i].from_id+'"'+
 				'destination="'+bookings[i].destination_id+'"'+'source="'+bookings[i].source_id+'"'+'to="'+bookings[i].to_id+'"'+'data-url="booking_detail?id='+bookings[i].id+'">'
 									+cb
 									+'<td>'+(i+1)+'</td>'

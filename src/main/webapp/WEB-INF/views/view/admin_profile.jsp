@@ -22,7 +22,7 @@
                     
 
                     <div class="form-group col-md-12" style="margin-bottom:2%;">
-						<button type="submit" class="btn btn-info">Update</button>
+						<button type="submit" data-toggle="tooltip" title="Update Information" class="btn btn-info">Update</button>
 						</div>
                 </form>
   <!--                  <div class="col-xl-12">

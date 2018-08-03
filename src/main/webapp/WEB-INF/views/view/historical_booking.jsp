@@ -25,7 +25,7 @@
                     
                     
                     <div style="margin-bottom: 10px;">
-	                      	     <input type="text" class="form-control" placeholder="Search for any booking by code..." id="txtbox"/>
+	                      	     <input type="text" class="form-control" placeholder="Search for any booking by code or username..." id="txtbox"/>
 	                    	 </div>	
                     <section class="section">
                         <div class="row">
@@ -86,7 +86,7 @@ load = function(){
 			console.log(locations)
 			for (var i=0;i<bookings.length;i++)
 				{
-				var booking = '<tr class="hoverr search '+bookings[i].description+'"s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
+				var booking = '<tr class="hoverr search '+bookings[i].description+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
 									+'<td>'+bookings[i].code+'</td>'
 									+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
 									+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'

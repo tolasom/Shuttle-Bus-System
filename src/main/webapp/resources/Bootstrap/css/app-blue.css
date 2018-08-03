@@ -2790,4 +2790,11 @@ pre {
       margin-top: 8px; } }
 .irr{
   display: none;
+} 
+
+.no-style {
+    text-decoration: none !important;
+}
+button, tr.search{
+  cursor: pointer;
 }

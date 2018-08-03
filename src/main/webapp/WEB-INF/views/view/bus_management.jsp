@@ -2,7 +2,7 @@
 <article class="content cards-page">
                     <div class="title-block">
                         <h3 class="title"> Bus Management </h3><br>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button></div>
+                        <button data-toggle="tooltip" title="Create a bus" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button></div>
                         <section class="section">
                        <div>
                                 <div class="card">
