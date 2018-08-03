@@ -1,5 +1,6 @@
 package com.DaoClasses;
 
+import com.ModelClasses.*;
 import getInfoLogin.IdUser;
 
 import java.io.ByteArrayOutputStream; 
@@ -29,10 +30,6 @@ import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.UserRole;
 import com.EntityClasses.User_Info;
 import com.HibernateUtil.HibernateUtil;
-import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.Mail;
-import com.ModelClasses.New_Pickup_Location;
-import com.ModelClasses.UserModel;
 import com.client_mail.ApplicationConfig;
 import com.client_mail.MailService;
 
@@ -1802,6 +1799,7 @@ public class Custom_Imp implements Custom_Dao{
             book.setNumber_of_booking(cb.getNumber_of_seat());
             book.setAdult(cb.getAdult());
             book.setChild(cb.getChild());
+            book.setTotal_cost(cb.getTotal_cost());
             book.setUser_id(user.getAuthentic());
             book.setEnabled(true);
             book.setStatus("Pending");
@@ -1835,51 +1833,7 @@ public class Custom_Imp implements Custom_Dao{
         }              
 		return "success";
 	}
-	public String request_book_now(int id) throws ParseException{
-		Request_Booking_Dao cus=new Request_Booking();
-		Transaction trns1 = null;
-		Customer_Booking cb=new Customer_Booking();
-		Customer_Booking[] arr_cb=new Customer_Booking[1];
-        Session session = HibernateUtil.getSessionFactory().openSession();     
-        String book=null;
-		try {
-            trns1 = session.beginTransaction();
-            Booking_Request_Master br= (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?").setParameter(0, id).list().get(0);
-           
-            cb.setDate(br.getDept_date().toString().subSequence(0, 10).toString());
-            cb.setTime(br.getProvided_time());
-            cb.setSource(br.getSource_id());
-            cb.setDestination(br.getDestination_id());
-            cb.setNumber_of_seat(br.getNumber_of_booking());
-            arr_cb[0]=cb;
-            System.out.println();
-            System.out.println(arr_cb[0].getDate());
-            System.out.println(arr_cb[0].getTime());
-            System.out.println(arr_cb[0].getSource());
-            System.out.println(arr_cb[0].getDestination());
-            book=cus.customer_booking(arr_cb);
-           // if(book.equals("success")||book.equals("over_bus_available")||book.equals("no_bus_available")){
-//            	Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-//            	query.setParameter("id", id);
-//            	int result = query.executeUpdate();
-//            	trns1.commit();
-//            }
-//            else if(book.equals("over_bus_available")||book.equals("no_bus_available")){
-//            	Query query = session.createQuery("update Booking_Request_Master set status='Rejected' where id = :id");
-//            	query.setParameter("id", id);
-//            	int result = query.executeUpdate();
-//            	trns1.commit();
-//            }
-            
-        } catch (RuntimeException e) {
-        	e.printStackTrace();
-        	return "error";
-        }finally {
-            session.flush();
-            session.close();
-        }              
-		return book;
-	}
+
 	public String confirm_phone_number(UserModel id){
 		Custom_Dao cus=new Custom_Imp();
 		Transaction trns1 = null;
@@ -2020,7 +1974,9 @@ public class Custom_Imp implements Custom_Dao{
         QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
 		try {
             trns1 = session.beginTransaction();
-            cr = session.createQuery("from Booking_Master where dept_date>=? and email_confirm='false' and description='customer'").setDate(0, java.sql.Date.valueOf(test.DateNow())).list();
+            cr = session.createQuery("from Booking_Master where dept_date>=? " +
+					"and payment='Succeed' and email_confirm='false' and description='customer'")
+					.setDate(0, java.sql.Date.valueOf(test.DateNow())).list();
             System.out.println(cr.size());
             for(Booking_Master bm: cr){
             	Boolean status=qr_gen.qr_generator(bm);
@@ -2144,23 +2100,162 @@ public class Custom_Imp implements Custom_Dao{
 		}
 		return status;
 	}
-	
-	
-		
-	
-	public static void main(String args[]){
-		Transaction trns = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-     	try {
-            trns = session.beginTransaction();
-            Query query1 = session.createQuery("delete Schedule_Master where id=:id");
-        	query1.setParameter("id",19);
-        	int result1 = query1.executeUpdate();
-	        trns.commit();
-	        
-        } catch (RuntimeException e) {
-        	e.printStackTrace();
-        }
+
+	public String pushBackNotification(PushBackNotification pb) throws ParseException{
+		System.out.println("================> pushBackNotification");
+		if(pb.getStatus().equals("0")){
+			//================= Update Payway Status ================
+
+			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+			Transaction trns1 = null;
+			Session session1 = HibernateUtil.getSessionFactory().openSession();
+			try {
+				trns1 =  session1.beginTransaction();
+				String queryString = "from Booking_Master where transaction_id='"+pb.getTran_id()+"'";
+				Query query = session1.createQuery(queryString);
+				bookings=(List<Booking_Master>)query.list();
+				System.out.println(bookings.size());
+				for(Booking_Master booking: bookings){
+					Booking_Master bm= (Booking_Master) session1.load(Booking_Master.class,booking.getId());
+					bm.setPayment("Succeed");
+					session1.update(bm);
+				}
+				trns1.commit();
+				System.out.println("================> End pushBackNotification 1");
+			}catch (RuntimeException e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				session1.flush();
+				session1.close();
+			}
+
+			//================= Assign Schedule and Send Confirmation Email to user ================
+			Transaction trns2 = null;
+			Session session2 = HibernateUtil.getSessionFactory().openSession();
+			try {
+				trns2 =  session2.beginTransaction();
+				// Schedule Generation
+				Custom_Imp c=new Custom_Imp();
+				for (Booking_Master booking: bookings){
+					Customer_Booking cb=new Customer_Booking();
+					cb.setDate(dateToString(booking.getDept_date()));
+					cb.setTime(timeToString(booking.getDept_time()));
+					cb.setSource(booking.getSource_id());
+					cb.setDestination(booking.getDestination_id());
+					cb.setNumber_of_seat(booking.getNumber_booking());
+					cb.setAdult(booking.getAdult());
+					cb.setChild(booking.getChild());
+					cb.setStatus("Booked");
+					cb.setTotal_cost(booking.getTotal_cost());
+					cb.setBooking_master_id(booking.getId());
+
+
+					if(c.isToday(booking.getDept_date())&&c.isLastDay(booking.getDept_time())){
+						//Check whether it is during 24 hours before departure time ==> Booking Request
+						Request_Booking_Dao book=new Request_Booking();
+						String ret=book.customer_booking(cb);
+						//Send Confirmation Email
+						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
+							sendEmailQRCode(booking);
+						}
+					}else{
+						//generate or regenerate schedule
+						Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
+						String ret=cus.customer_schedule_generation(cb);
+						//Send Confirmation Email
+						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
+							sendEmailQRCode(booking);
+						}
+					}
+				}
+				trns2.commit();
+				System.out.println("================> End pushBackNotification 2");
+			}catch (RuntimeException e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				session2.flush();
+				session2.close();
+			}
+
+
+
+
+		}
+
+		return "";
+	}
+
+	public void sendEmailQRCode(Booking_Master booking){
+		Custom_Imp c=new Custom_Imp();
+		QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
+		Boolean status=qr_gen.qr_generator(booking);
+		if(status){
+			c.send_email_qr_generator(booking);
+		}
+	}
+
+
+	public static String dateToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+		return f.format(date);
+	}
+
+	public static String timeToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("HH:mm:ss");
+		return f.format(date);
+	}
+
+	public Boolean isToday(Date date){
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		String today=f.format(new Date());
+		String dept_date=f.format(date);
+		if(today.equals(dept_date)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	// Customer book shuttle bus with 24 hour before dept time
+	public Boolean isLastDay(java.sql.Time time) throws ParseException{
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		Date current_time = f.parse(f.format(new Date()));
+		long difference = (time.getTime() - current_time.getTime())/(1000*60*60); // (hours)
+		if (difference>0)
+			return false;
+		else
+			return true;
+
+	}
+
+
+	public static void main(String args[]) throws Exception{
+//		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+//		Transaction trns1 = null;
+//		String tid="JJ";
+//		Session session = HibernateUtil.getSessionFactory().openSession();
+//		try {
+//			trns1 =  session.beginTransaction();
+//			String queryString = "from Booking_Master where transaction_id='"+tid+"'";
+//			Query query = session.createQuery(queryString);
+//			bookings=(List<Booking_Master>)query.list();
+//			System.out.println(bookings.size());
+//		} catch (RuntimeException e) {
+//        	e.printStackTrace();
+//        }
+
+		java.sql.Time time =java.sql.Time.valueOf("22:05:00");
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		Date current_time = f.parse(f.format(new Date()));
+		long difference = time.getTime() - current_time.getTime();
+		System.out.println(difference/(1000*60*60));
+
+
 	}
 
 }

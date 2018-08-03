@@ -255,13 +255,20 @@ public class CustomerController {
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
+	@RequestMapping(value="/pay_way")
+	public ModelAndView paymentGetWay() {
+		return new ModelAndView("payment");
+	}
 
 	//=========================PayWay Push Back Notification================================
 	@RequestMapping(value="/push_back_notification", method=RequestMethod.GET)
-	public @ResponseBody String pushBackNotification(@RequestBody PushBackNotification pb) {
+	public @ResponseBody String pushBackNotification(PushBackNotification pb) throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
-		System.out.println("Hello");
-		return null;
+		System.out.println("Push back.............");
+		String ret=null;
+		Custom_Dao customer=new Custom_Imp();
+		ret =customer.pushBackNotification(pb);
+		return ret;
 	}
 
 
