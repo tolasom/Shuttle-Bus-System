@@ -2184,7 +2184,7 @@ public class Custom_Imp implements Custom_Dao{
 
 		}
 
-		return "";
+		return "Success";
 	}
 
 	public void sendEmailQRCode(Booking_Master booking){
