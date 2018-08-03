@@ -248,7 +248,7 @@
 
 
  <build>
-    <finalName>ShuttleBus</finalName>
+    <finalName>ShuttleBus1</finalName>
     <plugins>
     <plugin>
   <groupId>org.apache.maven.plugins</groupId>
