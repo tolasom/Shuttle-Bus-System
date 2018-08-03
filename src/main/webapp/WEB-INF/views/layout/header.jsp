@@ -21,7 +21,7 @@
                             <li class="profile dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                     
-                                    <span class="name" id="fname"></span>
+                                    <i class="fa fa-user icon" style="padding-right: 10px;"></i><span class="name" id="fname"></span> 
                                     
                                 </a>
                                 <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">

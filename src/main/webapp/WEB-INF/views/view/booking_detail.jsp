@@ -44,7 +44,7 @@
                                         </div>
                                         
                                         
-                                        <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)"><i class="fa fa-angle-left"></i><b>Back</b></button> 
+                                        <button data-toggle="tooltip" title="Back To Previous Page" class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)"><i class="fa fa-angle-left"></i><b>Back</b></button> 
                                
                                        
                                         
