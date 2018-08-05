@@ -119,6 +119,7 @@ public class StudentDaoImpl implements StudentDao{
                     booking_master.setAdult(1);
                     booking_master.setChild(0);
                     booking_master.setPayment("Succeed");
+                    booking_master.setBooking_request_id(0);
                     location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
                     booking_master.setDept_time(location_master.getDept_time());
                     session.save(booking_master);
