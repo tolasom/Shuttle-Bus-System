@@ -176,7 +176,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
                 session.save(new_booker);
                 if (transactionID == null) {
-                    transactionID = c.transactionID(8, new_booker.getId());
+                    transactionID = c.transactionID(15, new_booker.getId());
                 }
                 new_booker.setTransaction_id(transactionID);
                 new_booker.setCode(Customer_Schedule_Generation_Imp.getBookingSequence(new_booker.getId()));

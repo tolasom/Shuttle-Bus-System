@@ -220,7 +220,7 @@ public class Request_Booking implements Request_Booking_Dao {
             session.save(new_booker);
             
 
-            transactionID = c.transactionID(8, new_booker.getId());
+            transactionID = c.transactionID(15, new_booker.getId());
 
             new_booker.setTransaction_id(transactionID);
             new_booker.setCode(c.getBookingSequence(new_booker.getId()));
