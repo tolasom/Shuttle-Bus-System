@@ -29,6 +29,7 @@ import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.Schedule_Master;
 import com.EntityClasses.UserRole;
 import com.EntityClasses.User_Info;
+import com.EntityClasses.Cost;
 import com.HibernateUtil.HibernateUtil;
 import com.client_mail.ApplicationConfig;
 import com.client_mail.MailService;
@@ -2031,7 +2032,6 @@ public class Custom_Imp implements Custom_Dao{
         return currentDateTimeString;
     }
 
-
 	public Map<String,Object> updatePhone(UserModel userModel){
 		Map<String,Object> status = new HashMap<String, Object>();
 		Transaction trns1 = null;
@@ -2057,6 +2057,8 @@ public class Custom_Imp implements Custom_Dao{
 		}
 		return status;
 	}
+
+
 
 	public String pushBackNotification(PushBackNotification pb) throws ParseException{
 		System.out.println("================> pushBackNotification");
@@ -2162,7 +2164,27 @@ public class Custom_Imp implements Custom_Dao{
 			c.send_email_qr_generator(session2,booking);
 		}
 	}
-
+	public Cost Cost_Master(){
+	    Map<String,Object> status = new HashMap<String, Object>();
+	    Transaction trns1 = null;
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    Cost cost = new Cost();
+	    try {
+	
+	        Query query = session.createQuery("From Cost");
+	
+	        cost = (Cost) query.uniqueResult();
+	
+	        return cost;
+	    } catch (RuntimeException e) {
+	        e.printStackTrace();
+	        return cost;
+	
+	    }finally {
+	        session.flush();
+	        session.close();
+	    }
+	}
 
 	public static String dateToString(Date date){
 		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");

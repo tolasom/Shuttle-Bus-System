@@ -23,9 +23,9 @@
 
         <form method="POST" target="aba_webservice"
               action="<% out.print(PayWayApiCheckout.getApiUrl()); %>" id="aba_merchant_request">
-            <input type="hidden" name="hash" value="<% out.print(PayWayApiCheckout.getHash(transactionId, amount)); %>" id="hash"/>
-            <input type="hidden" name="tran_id" value="<%= transactionId %> " id="tran_id"/>
-            <input type="hidden" name="amount" value="<%= amount %>" id="amount"/>
+            <input type="hidden" name="hash" id="hash"/>
+            <input type="hidden" name="tran_id"  id="tran_id"/>
+            <input type="hidden" name="amount" id="amount"/>
             <input type="hidden" name="firstname" value="<%= firstName %>"/>
             <input type="hidden" name="lastname" value="<%= lastName %>"/>
             <input type="hidden" name="phone" value="<%= phone %>"/>

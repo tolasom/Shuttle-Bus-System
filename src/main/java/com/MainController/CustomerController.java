@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.User_Info;
+import com.EntityClasses.Cost;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
+import com.PaymentGateway.PayWayApiCheckout;
 
 
 @Controller
@@ -129,16 +131,18 @@ public class CustomerController {
 	//=========================Customer Booking Information================================
 
 	@RequestMapping(value="/customer_booking", method=RequestMethod.POST)
-	public @ResponseBody String customer_booking(@RequestBody Customer_Booking[] cb) throws ParseException {
+	public @ResponseBody Map<String,Object> customer_booking(@RequestBody Customer_Booking[] cb) throws ParseException {
 		    // Before Payment
 //			for(int i=0;i<cb.length;i++){
 //				cb[i].setStatus("book");
 //			}
 //			String ret = customer.customer_booking(cb);
-
+		Map<String,Object> map = new HashMap<String,Object>();
 		Customer_Schedule_Generation_Dao user=new Customer_Schedule_Generation_Imp();
-		String ret=user.booking(cb);
-		return ret;
+		String ret = user.booking(cb);
+		map.put("transaction_id",ret);
+
+		return map;
 
 		}	
 	
@@ -255,13 +259,26 @@ public class CustomerController {
         System.out.println(currentDateTimeString);
         return currentDateTimeString;
 	}
+	@RequestMapping(value="/get_hash", method=RequestMethod.POST)
+	@ResponseBody public Map<String,Object> getHash(@RequestBody Get_Hash get_hash){
+		Map<String,Object> map = new HashMap<String, Object>();
+		PayWayApiCheckout payWayApiCheckout = new PayWayApiCheckout();
+		map.put("hash",payWayApiCheckout.getHash(get_hash.getTransaction_id(),get_hash.getAmount()));
+		return map;
+	}
+
 	@RequestMapping(value="/pay_way")
 	public ModelAndView paymentGetWay() {
 		return new ModelAndView("payment");
 	}
 
+	@RequestMapping(value="/cost_master",method=RequestMethod.GET)
+	@ResponseBody public Cost Cost_Master() {
+		return customer.Cost_Master();
+	}
+
 	//=========================PayWay Push Back Notification================================
-	@RequestMapping(value="/push_back_notification", method=RequestMethod.GET)
+	@RequestMapping(value="/push_back_notification", method=RequestMethod.POST)
 	public @ResponseBody String pushBackNotification(PushBackNotification pb) throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
 		System.out.println("Push back.............");

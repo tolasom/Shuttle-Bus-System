@@ -4,13 +4,10 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import com.EntityClasses.*;
 import com.ModelClasses.PushBackNotification;
 import org.hibernate.Session;
 
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.User_Info;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
@@ -54,6 +51,7 @@ public interface Custom_Dao {
 	public void send_email_qr_generator(Session session,Booking_Master bm);
 	public void send_QRCODE(Session session);
 	public Map<String,Object> updatePhone(UserModel userModel);
+	public Cost Cost_Master();
 	public String pushBackNotification(PushBackNotification pb) throws ParseException;
 
 }
