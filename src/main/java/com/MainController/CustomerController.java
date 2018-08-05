@@ -278,7 +278,7 @@ public class CustomerController {
 	}
 
 	//=========================PayWay Push Back Notification================================
-	@RequestMapping(value="/push_back_notification", method=RequestMethod.POST)
+	@RequestMapping(value="/push_back_notification", method=RequestMethod.GET)
 	public @ResponseBody String pushBackNotification(PushBackNotification pb) throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
 		System.out.println("Push back.............");

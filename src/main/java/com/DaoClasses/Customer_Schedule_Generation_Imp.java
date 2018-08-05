@@ -236,6 +236,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                     new_booker.setSchedule_id(schedule.get(i).getId());
                     new_booker.setQr(pick_source.getLocation_id() + "" + pick_destin.getLocation_id()
                             + "" + cb.getDate() + "" + cb.getTime() + "" + cb.getBooking_master_id());
+                    //QR---> source_id+destin_id+dept_date+dept_time+booing_master_id
                     session.update(new_booker);
 
                     Query query = session.createQuery("update Schedule_Master set number_booking=:num_booking, " +
@@ -258,6 +259,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 all_bus = custom_imp.get_all_bus(session, cb, pick_source.getLocation_id(), pick_destin.getLocation_id());
                 //2. get all bookers
                 all_booker1 = custom_imp.get_all_booker(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());
+          
                 //3. Find out number of total passengers in DB
                 for (int p = 0; p < all_booker1.size(); p++) {
                     number_of_passenger += all_booker1.get(p).getNumber_booking();
@@ -523,7 +525,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                     "and description='customer' and payment='Succeed' and schedule_id!='0' and from_id=? " +
                     "and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
                     .setParameter(0, from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time)).setDate(3, java.sql.Date.valueOf(date)).list();
-
+            System.out.println("All Booker: "+all_booker1.size());
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
