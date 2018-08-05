@@ -273,15 +273,15 @@ public class CustomerController {
 
 
 	//Send QR code to home that not yet send out
-	@Scheduled(cron="* */30 * * * *")
-	public void sendEmail(){
-      System.out.println("Started send QR code to home that not yet send out");
-      customer.send_QRCODE();
-	}
+//	@Scheduled(cron="* */30 * * * *")
+//	public void sendEmail(){
+//      System.out.println("Started send QR code to home that not yet send out");
+//      customer.send_QRCODE();
+//	}
 	
 	public static void main(String args[]){
 		Custom_Dao cus=new Custom_Imp();
-		cus.send_QRCODE();
+		//cus.send_QRCODE();
 		System.out.println("End.....");
 	}
 	

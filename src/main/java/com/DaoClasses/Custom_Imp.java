@@ -145,6 +145,9 @@ public class Custom_Imp implements Custom_Dao{
 			        map.put("status", false);
 		        } 
 	        }catch (RuntimeException e){
+	        	if (trns != null) {
+	                trns.rollback();
+	            }
 	        	map.put("status", false);
 	        	return map;
 	     	}finally {
@@ -165,9 +168,7 @@ public class Custom_Imp implements Custom_Dao{
 		        user = query.list();
 		        
 	        }catch (RuntimeException e){
-	            if (trns != null) {
-	                trns.rollback();
-	            }
+	            System.out.println(e);
 	     	}finally {
 	            session.flush();
 	            session.close();
@@ -298,8 +299,6 @@ public class Custom_Imp implements Custom_Dao{
             pick.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             session.save(pick);
             
-            trns1.commit();
-            
             locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
             System.out.println(locat.get(0).getId());
             for(int i=0;i<locat.size();i++){
@@ -313,8 +312,13 @@ public class Custom_Imp implements Custom_Dao{
             }
             pickup.put("location", list);
             
+            trns1.commit();
+            
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         }finally {
             session.flush();
             session.close();
@@ -352,6 +356,9 @@ public class Custom_Imp implements Custom_Dao{
             
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         }finally {
             session.flush();
             session.close();
@@ -650,13 +657,8 @@ public class Custom_Imp implements Custom_Dao{
                 	map.put("time_status", "past");
                 	list.add(map);
             	}
-            	System.out.println("KKKKKKKKKKKKKKK");
-            	System.out.println(list);
             }
             
-            System.out.println("KKKKKKKKKKKKKKK111111111111111");
-        	System.out.println(list);
-        	 System.out.println("KKKKKKKKKKKKKKK111111111111111:     "+bh.size());
             if(bh.size()<10){
             	bh = session.createQuery("from Booking_Request_Master where user_id=? and dept_date<? and enabled='true' order by dept_date desc")
                 		.setParameter(0, user.getAuthentic()).setDate(1, java.sql.Date.valueOf(c.DateNow())).setMaxResults(10-bh.size()).list();
@@ -694,8 +696,6 @@ public class Custom_Imp implements Custom_Dao{
                 	list.add(map);
             	}
             }
-            System.out.println("KKKKKKKKKKKKKKK444444444");
-            System.out.println(list);
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }    
@@ -832,7 +832,6 @@ public class Custom_Imp implements Custom_Dao{
 		return list;
 	}
 
-
     public List<Map<String,Object>> get_sch_driver_info2(int id){
     	User_Info customer = new User_Info();
         Transaction trns1 = null;
@@ -861,9 +860,7 @@ public class Custom_Imp implements Custom_Dao{
         }
         return list;
     }
-    
-    
-    
+ 
     public List<Map<String,Object>> get_sch_bus_info2(int id){
     	Bus_Master bus= new Bus_Master();
         Transaction trns1 = null;
@@ -891,8 +888,6 @@ public class Custom_Imp implements Custom_Dao{
         }
         return list;
     }
-
-
 
 	//======================== combination for choosing bus till ============================
 	List<List<Map<String,Object>>> list =new ArrayList<List<Map<String,Object>>>();
@@ -1079,7 +1074,9 @@ public class Custom_Imp implements Custom_Dao{
             trns.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        	trns.rollback();
+        	if (trns != null) {
+                trns.rollback();
+            }
         	return "error";
         }finally {
             session.flush();
@@ -1326,9 +1323,7 @@ public class Custom_Imp implements Custom_Dao{
         }    
 		return all_bus;
 	}
-	
-	
-	
+
 	public List<Bus_Master> get_all_bus2(Session session,Customer_Booking cb,int from, int to) throws ParseException{
 		System.out.println("get_all_bus");
 		List<Bus_Master> query_all_bus=new ArrayList<Bus_Master>();
@@ -1364,16 +1359,6 @@ public class Custom_Imp implements Custom_Dao{
         }    
 		return buses;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	//Check Bus Available and not from the same route 
 	
@@ -1457,12 +1442,6 @@ public class Custom_Imp implements Custom_Dao{
 	}
 	
 	
-	
-	
-
-	
-	
-	
 	public List<User_Info> get_all_available_drivers(Session session,Customer_Booking cb,int from, int to) throws ParseException{
 		System.out.println("get_all_available_drivers");
 		List<User_Info> drivers=new ArrayList<User_Info>();
@@ -1487,8 +1466,6 @@ public class Custom_Imp implements Custom_Dao{
 		
 	}
 
-	
-	
 	//Check Bus Available and not from the same route 
 	
 		public  List<Map<String,Object>> same_date_same_rout(Session session,Customer_Booking cb,int from, int to) throws ParseException{
@@ -1524,10 +1501,6 @@ public class Custom_Imp implements Custom_Dao{
 	        }    
 			return all_bus;
 		}
-		
-		
-		
-		
 		
 		
 		//Check Bus Available and not from the same route 
@@ -1604,20 +1577,6 @@ public class Custom_Imp implements Custom_Dao{
 	        return users;
 	    } 	
 		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date){
 		System.out.println("delete_Schedule");
@@ -1807,6 +1766,9 @@ public class Custom_Imp implements Custom_Dao{
             trns1.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         	return "error";
         }    
 		finally {
@@ -1826,6 +1788,9 @@ public class Custom_Imp implements Custom_Dao{
         	trns1.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         	return "error";
         }finally {
             session.flush();
@@ -1847,6 +1812,9 @@ public class Custom_Imp implements Custom_Dao{
             trns1.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         	return "error";
         }finally {
             session.flush();
@@ -1895,6 +1863,9 @@ public class Custom_Imp implements Custom_Dao{
             }
         } catch (RuntimeException e) {
         	e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
         	return "error";
         }finally {
             session.flush();
@@ -1966,10 +1937,9 @@ public class Custom_Imp implements Custom_Dao{
 	        }
 			return list;
 	}
-	public void send_QRCODE(){
+	public void send_QRCODE(Session session){
 		Custom_Imp test=new Custom_Imp();
-    	Transaction trns1 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();   
+    	Transaction trns1 = null;  
         List<Booking_Master> cr = new ArrayList<Booking_Master>();
         QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
 		try {
@@ -1982,23 +1952,17 @@ public class Custom_Imp implements Custom_Dao{
             	Boolean status=qr_gen.qr_generator(bm);
             	System.out.println("KK :"+bm.getId());
             	if(status){
-            		test.send_email_qr_generator(bm);
+            		test.send_email_qr_generator(session, bm);
             	}
             }
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        }    
-		finally {
-            session.flush();
-            session.close();
         }
     }
 
 
-	public void send_email_qr_generator(Booking_Master bm){
-		Transaction trns1 = null;
+	public void send_email_qr_generator(Session session,Booking_Master bm){
 		Custom_Imp ci=new Custom_Imp();
-        Session session = HibernateUtil.getSessionFactory().openSession(); 
         List<User_Info> user = new ArrayList<User_Info>();
         List<Pickup_Location_Master> pickUp = new ArrayList<Pickup_Location_Master>();
         List<Location_Master> source = new ArrayList<Location_Master>();
@@ -2006,7 +1970,6 @@ public class Custom_Imp implements Custom_Dao{
         List<Location_Master> destination = new ArrayList<Location_Master>();
         Map<String, Object> map=new HashMap<String, Object>();
 		try {
-            trns1 = session.beginTransaction();
             user = session.createQuery("from User_Info where id=:id").setParameter("id", bm.getUser_id()).list();
         	pickUp = session.createQuery("from Pickup_Location_Master where id=:id").setParameter("id", bm.getSource_id()).list();
         	source = session.createQuery("from Location_Master where id=:id").setParameter("id", bm.getFrom_id()).list();
@@ -2016,7 +1979,6 @@ public class Custom_Imp implements Custom_Dao{
         			&&drop_off.size()>0&&destination.size()>0){
         		Mail mail = new Mail();
 		        mail.setMailFrom("maimom2222@gmail.com");
-		        //mail.setMailTo("maimom61@gmail.com");
 		        mail.setMailTo(user.get(0).getEmail());
 		        mail.setMailSubject("vKirirom Shuttle Bus Booked Confirmation");
 		        mail.setFile_name("qr_code_template.txt");
@@ -2057,17 +2019,10 @@ public class Custom_Imp implements Custom_Dao{
 		        Query query =  session.createQuery(hql);
 		        query.setParameter("id", bm.getId());
 		        int ret=query.executeUpdate();
-		        trns1.commit();
         	}
-            	
-
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }    
-		finally {
-            session.flush();
-            session.close();
-        }
 	}
 	public String convertDateTimetoDate(Date d){
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
@@ -2087,11 +2042,13 @@ public class Custom_Imp implements Custom_Dao{
 
 			user_info.setPhone_number(userModel.getPhone());
 			session.update(user_info);
-			System.out.println(userModel.getPhone());
 			trns1.commit();
 			status.put("status",true);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
+        	if (trns1 != null) {
+                trns1.rollback();
+            }
 			status.put("status",false);
 			return status;
 		}finally {
@@ -2103,9 +2060,8 @@ public class Custom_Imp implements Custom_Dao{
 
 	public String pushBackNotification(PushBackNotification pb) throws ParseException{
 		System.out.println("================> pushBackNotification");
-		if(pb.getStatus().equals("0")){
-			//================= Update Payway Status ================
-
+		if(pb.getStatus().equals("0")){			
+			//1. ================= Update Payway Status ================
 			List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
 			Transaction trns1 = null;
 			Session session1 = HibernateUtil.getSessionFactory().openSession();
@@ -2119,11 +2075,24 @@ public class Custom_Imp implements Custom_Dao{
 					Booking_Master bm= (Booking_Master) session1.load(Booking_Master.class,booking.getId());
 					bm.setPayment("Succeed");
 					session1.update(bm);
+					
+					//If it is booking request --> update Booking Request Master
+					if(bm.getBooking_request_id()!=0){
+						Booking_Request_Master brm= (Booking_Request_Master) session1.load(Booking_Request_Master.class,bm.getBooking_request_id());
+						brm.setEnabled(false);
+						session1.update(brm);						
+//						Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
+//			            query.setParameter("id", id);
+//			            int result = query.executeUpdate();
+					}
 				}
 				trns1.commit();
 				System.out.println("================> End pushBackNotification 1");
 			}catch (RuntimeException e) {
 				e.printStackTrace();
+	        	if (trns1 != null) {
+	                trns1.rollback();
+	            }
 				return null;
 			} finally {
 				session1.flush();
@@ -2154,18 +2123,18 @@ public class Custom_Imp implements Custom_Dao{
 					if(c.isToday(booking.getDept_date())&&c.isLastDay(booking.getDept_time())){
 						//Check whether it is during 24 hours before departure time ==> Booking Request
 						Request_Booking_Dao book=new Request_Booking();
-						String ret=book.customer_booking(cb);
+						String ret=book.customer_booking(session2,cb);
 						//Send Confirmation Email
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(booking);
+							sendEmailQRCode(session2,booking);
 						}
 					}else{
 						//generate or regenerate schedule
 						Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
-						String ret=cus.customer_schedule_generation(cb);
+						String ret=cus.customer_schedule_generation(session2,cb);
 						//Send Confirmation Email
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(booking);
+							sendEmailQRCode(session2,booking);
 						}
 					}
 				}
@@ -2173,26 +2142,24 @@ public class Custom_Imp implements Custom_Dao{
 				System.out.println("================> End pushBackNotification 2");
 			}catch (RuntimeException e) {
 				e.printStackTrace();
+	        	if (trns2 != null) {
+	                trns2.rollback();
+	            }
 				return null;
 			} finally {
 				session2.flush();
 				session2.close();
 			}
-
-
-
-
 		}
-
 		return "Success";
 	}
 
-	public void sendEmailQRCode(Booking_Master booking){
+	public void sendEmailQRCode(Session session2, Booking_Master booking){
 		Custom_Imp c=new Custom_Imp();
 		QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
 		Boolean status=qr_gen.qr_generator(booking);
 		if(status){
-			c.send_email_qr_generator(booking);
+			c.send_email_qr_generator(session2,booking);
 		}
 	}
 
@@ -2229,7 +2196,6 @@ public class Custom_Imp implements Custom_Dao{
 			return false;
 		else
 			return true;
-
 	}
 
 

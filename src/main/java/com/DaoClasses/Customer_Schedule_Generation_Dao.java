@@ -13,7 +13,7 @@ import java.util.Map;
 public interface Customer_Schedule_Generation_Dao {
     public String booking(Customer_Booking[] cb);
 
-    public String customer_schedule_generation(Customer_Booking cb) throws ParseException;
+    public String customer_schedule_generation(Session session,Customer_Booking cb) throws ParseException;
 
     public void create_unassigned_booking(Session session, Customer_Booking cb, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin);
 

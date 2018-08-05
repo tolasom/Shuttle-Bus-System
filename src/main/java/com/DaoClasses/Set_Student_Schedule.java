@@ -123,7 +123,9 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         	trns.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        	trns.rollback();
+            if (trns != null) {
+                trns.rollback();
+            }
         }finally {
             session.flush();
             session.close();
@@ -369,8 +371,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         	e.printStackTrace();
         }        
 	}	
-	
-	
+		
 	public void asign_to_existing_schedule(Session session,List<Booking_Master> list_stu,List<Schedule_Master> list_schedule){
 		System.out.println("---------------->");
     	System.out.println("---------------->asign_to_existing_schedule(");
@@ -464,7 +465,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         Map<Object,List<Booking_Master>> sch_with_users=new HashMap<Object,List<Booking_Master>>();
         Set_Student_Schedule_Dao custom_imp=new Set_Student_Schedule();  
         Set_Student_Schedule c=new Set_Student_Schedule();
-//		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		while(recursive){
 			int ib=0; //index of passenger
 			Boolean last_bus_choosing=true;
@@ -919,14 +919,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		return final_driver_list;
     }
     //======================== combination for choosing bus till here ============================
-
-
-	
-	
-	
-	
-	
-		
 	
 	public static void main(String args[]) throws ParseException{
 		Set_Student_Schedule_Dao stu=new Set_Student_Schedule();

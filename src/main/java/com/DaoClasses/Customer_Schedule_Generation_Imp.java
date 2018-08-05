@@ -30,7 +30,6 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         scode = Integer.toString(code);
         scode = scode.substring(1);
         return "S" + scode;
-
     }
 
     public static String getBookingSequence(int id) {
@@ -40,7 +39,6 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         scode = Integer.toString(code);
         scode = scode.substring(1);
         return "B" + scode;
-
     }
 
     static void combinationUtil(Customer_Schedule_Generation_Imp booking, List<Map<String, Object>> all_bus, List<Map<String, Object>> data, int start,
@@ -174,6 +172,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setDescription("customer");
                 new_booker.setEmail_confirm(false);
                 new_booker.setQr_status(false);
+                new_booker.setBooking_request_id(0);
                 new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
                 session.save(new_booker);
                 if (transactionID == null) {
@@ -188,24 +187,20 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
             trns1.commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
-            trns1.rollback();
+            if (trns1 != null) {
+                trns1.rollback();
+            }
             return null;
         } finally {
             session.flush();
             session.close();
         }
-        System.out.println("transactionID: " + transactionID);
         return transactionID;
     }
 
-    public String customer_schedule_generation(Customer_Booking cb) throws ParseException {
+    public String customer_schedule_generation(Session session,Customer_Booking cb) throws ParseException {
         System.out.println("customer_booking");
-        Transaction trns = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
         try {
-            trns = session.beginTransaction();
-
             //======================== Start create schedule ====================================
             int total_seat_of_all_bus = 0;
             int number_of_passenger = 0;
@@ -353,14 +348,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 }
             }
             //======================== End loop create schedule ====================================
-            trns.commit();
         } catch (RuntimeException e) {
-            e.printStackTrace();
-            trns.rollback();
             return "error";
-        } finally {
-            session.flush();
-            session.close();
         }
         return "success";
     }
@@ -486,13 +475,11 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 e.printStackTrace();
             }
         }
-
         return sch_with_users;
     }
 
 
     //Check Bus Available and not from the same route
-
     public List<List<Map<String, Object>>> choose_correct_bus(Customer_Schedule_Generation_Imp booking, List<Map<String, Object>> all_bus,
                                                               Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin,
                                                               int number_of_passenger, int total_seat_of_all_bus) {
@@ -525,7 +512,6 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        System.out.println("List :      " + booking.list.size());
         return list_bus_choosen;
     }
 
@@ -614,7 +600,6 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         return all_bus;
     }
 
-    //Check Bus Available and not from the same route
 
     //Check Bus Available and not from the same route
     public List<Map<String, Object>> same_date_differ_route(Session session, Customer_Booking cb, int from, int to) throws ParseException {
@@ -787,8 +772,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-//				session.flush();
-//				session.close();
+			session.flush();
+			session.close();
         }
         return users;
     }

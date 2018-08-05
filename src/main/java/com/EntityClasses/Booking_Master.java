@@ -31,6 +31,7 @@ public class Booking_Master {
 		private String qr_name;
 		private String payment;
 		private String transaction_id;
+		private int booking_request_id;
 	
 		public int getFrom_id() {
 			return from_id;
@@ -193,4 +194,12 @@ public class Booking_Master {
 		public void setTransaction_id(String transaction_id) {
 			this.transaction_id = transaction_id;
 		}
+		public int getBooking_request_id() {
+			return booking_request_id;
+		}
+		public void setBooking_request_id(int booking_request_id) {
+			this.booking_request_id = booking_request_id;
+		}
+		
+		
 }
