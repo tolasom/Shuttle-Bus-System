@@ -13,7 +13,6 @@
     <property name="to_id" column="to_id"/>
     <property name="source_id" column="source_id"/>
     <property name="schedule_id" column="schedule_id"/>
-   	<property name="booking_date"  column="booking_date"/>
     <property name="dept_date" column="dept_date"/>
     <property name="dept_time" column="dept_time"/>
     <property name="number_booking" column="number_booking"/>
@@ -30,6 +29,8 @@
     <property name="qr_status" column="qr_status"/>
     <property name="email_confirm" column="email_confirm"/>
     <property name="qr_name" column="qr_name"/>
+    <property name="payment" column="payment"/>
+    <property name="transaction_id" column="transaction_id"/>
     
  	</class>
 </hibernate-mapping>

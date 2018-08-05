@@ -29,21 +29,21 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         return f.format(new Date());
 	}
 	public String DateTimeNow(){
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
 		return f.format(new Date());
 	}
 	public String TomorrowDateTime() throws ParseException{
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
-		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(f.format(new Date()));
+		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss").parse(f.format(new Date()));
 		Calendar c = Calendar.getInstance();
 		c.setTime(dt);
 		c.add(Calendar.DATE, 1);
 		dt = c.getTime();
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		String tmrDateTimeString = sdf.format(dt);
 		System.out.println(tmrDateTimeString);
 		return tmrDateTimeString;
@@ -627,7 +627,8 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		System.out.println("get_all_booker");
 		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
 		try {
-            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' and from_id=? and to_id=? " +
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " +
+					"and payment='Succeed' and from_id=? and to_id=? " +
                     "and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
             		.setParameter(0,from_id).setParameter(1, to_id).
                             setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();

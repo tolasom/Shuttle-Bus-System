@@ -178,7 +178,7 @@ var eee;
                         time_input.wickedpicker(options2);
                         date_input.datepicker(options);
                         
-                        
+                        $('[data-toggle="tooltip"]').tooltip();
                         
                         
                         

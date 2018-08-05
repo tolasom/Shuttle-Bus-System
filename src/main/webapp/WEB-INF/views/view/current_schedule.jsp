@@ -7,16 +7,16 @@
                          		<p class="title-description"> All current schedules </p> 
                          	</div>
                          	<div class="btn-group pull-right">
-		                        <button type="button" class="btn btn-info" id="btnList" style="color:white;border-right:2px solid white;"><i class="fa fa-list-ul"></i></button>
-		                        <button type="button" class="btn btn-info" onclick="window.location.href='schedule'" style="color:white;"><i class="fa fa-calendar"></i></button>
+		                        <button data-toggle="tooltip" title="View Schedules In List View" type="button" class="btn btn-info" id="btnList" style="color:white;border-right:2px solid white;"><i class="fa fa-list-ul"></i></button>
+		                        <button data-toggle="tooltip" title="View Schedules In Calendar View" type="button" class="btn btn-info" onclick="window.location.href='schedule'" style="color:white;"><i class="fa fa-calendar"></i></button>
 		                    </div>
                          	
                          </div>
                          
                        
 	                         <div style="margin-bottom: 10px;">
-		                         <button type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_schedule';">View all historical schedules <i class="fa fa-angle-right"></i></button>
-		                         <button type="button" class="btn btn-info" onclick="window.location.href='create_schedule'" style="color:white;">Create</button>
+		                         <button data-toggle="tooltip" title="View all historical schedules" type="button" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_schedule';">View all historical schedules <i class="fa fa-angle-right"></i></button>
+		                         <button data-toggle="tooltip" title="Create a schedule" type="button" class="btn btn-info" onclick="window.location.href='create_schedule'" style="color:white;">Create</button>
 	                      	 </div>
 	                      	 </div>
 	                      	 <div style="margin-bottom: 10px;">

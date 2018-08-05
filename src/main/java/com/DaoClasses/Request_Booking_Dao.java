@@ -13,7 +13,8 @@ import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
 
 public interface Request_Booking_Dao {
-	public String customer_booking(Customer_Booking[] cb) throws ParseException;
+	public String booking(int id);
+	public String customer_booking(Customer_Booking cb) throws ParseException;
 	public List<Booking_Master> get_all_booker(Session session,int from_id, int to_id, String time, String date);
 	public List<Map<String,Object>> get_all_bus(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public int delete_Schedule(Session session, int from_id,int to_id,String time, String date);

@@ -2,12 +2,14 @@
 	uri="http://www.springframework.org/security/tags"%>
 <aside class="sidebar">
                     <div class="sidebar-container">
-                        <div class="sidebar-header">
+                        <a href="current_schedule" class="no-style">
+                            <div class="sidebar-header">
                             <div class="brand2">
                 
                                 Shuttle Bus System
                             </div>
                         </div>
+                    </a>
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li id="scheduleMng" class="re">

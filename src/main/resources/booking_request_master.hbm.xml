@@ -16,6 +16,7 @@
     <property name="number_of_booking" column="number_of_booking"/>
     <property name="adult" column="adult"/>
     <property name="child" column="child"/>
+    <property name="total_cost" column="total_cost"/>
     <property name="description" column="description"/>
     <property name="user_id"  column="user_id"/>
     <property name="provided_time"  column="provided_time"/>

@@ -55,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		"/customer_home",
 			"/customer/**",
 		"/request_booking",
-		"/booking_history"
+		"/booking_history",
+			"/get_hash"
 		
    
     };

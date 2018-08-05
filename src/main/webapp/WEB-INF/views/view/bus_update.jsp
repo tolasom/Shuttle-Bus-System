@@ -26,8 +26,8 @@
                                             <label for="exampleInputEmail3">Description</label>
                                             <textarea rows="4" cols="100" class="form-inline boxed" id="description" maxlength="80"></textarea>
                                         </div>
-                                        <button class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)">Cancel</button> 
-                                        <button type="submit" class="btn btn-primary" on>Update</button>
+                                        <button data-toggle="tooltip" title="Back To Previous Page" class="btn btn-default" id="btnCancel" onclick="parent.history.go(-1)">Cancel</button> 
+                                        <button data-toggle="tooltip" title="Update Information" type="submit" class="btn btn-primary" on>Update</button>
                                        
                                         
                                     </form>

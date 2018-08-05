@@ -412,8 +412,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            String current = "From Booking_Master where dept_date >= current_date() and user_id="+id.getAuthentic();
-            String history = "From Booking_Master where dept_date < current_date() and user_id="+id.getAuthentic();
+            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id="+id.getAuthentic();
+            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and user_id="+id.getAuthentic();
             String request = "From Booking_Request_Master where " +
                     "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);

@@ -10,6 +10,7 @@ public class Customer_Booking {
 	private String description;
 	private String status;//book and request_book
 	private float total_cost;
+	private int booking_master_id;
 
 
 	public int getSource() {
@@ -91,5 +92,12 @@ public class Customer_Booking {
 	public void setTotal_cost(float total_cost) {
 		this.total_cost = total_cost;
 	}
-	
+
+	public int getBooking_master_id() {
+		return booking_master_id;
+	}
+
+	public void setBooking_master_id(int booking_master_id) {
+		this.booking_master_id = booking_master_id;
+	}
 }

@@ -2119,13 +2119,14 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Master where dept_date>=:localDate";
+            String queryString = "from Booking_Master where dept_date>=:localDate and payment=:payment";
             Query query = session.createQuery(queryString);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(dtf.format(localDate));
             query.setDate("localDate", date);
+            query.setString("payment", "Succeed");
             bookings=(List<Booking_Master>)query.list();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -2489,13 +2490,14 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Master where dept_date<:localDate";
+            String queryString = "from Booking_Master where dept_date<:localDate and payment=:payment";
             Query query = session.createQuery(queryString);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(dtf.format(localDate));
             query.setDate("localDate", date);
+            query.setString("payment", "Succeed");
             bookings=(List<Booking_Master>)query.list();
         } catch (RuntimeException e) {
             e.printStackTrace();
