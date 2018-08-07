@@ -19,16 +19,17 @@
         <script>
              window.token = document.getElementById("csrfToken").value
              window.headerName = document.getElementById("csrfHeader").value
+             sessionStorage.setItem("path","")
         </script>
         <form action="/sbs/logout" method="post" id="logoutForm">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <!--<script type="text/javascript" src="/sbs/resources/student/build/static/js/main.7245a47b.js"></script>
-        <link rel="stylesheet" href="/sbs/resources/student/build/static/css/main.d81bcc4c.css">-->
+        <script type="text/javascript" src="/resources/student/build/static/js/main.82faac0d.js"></script>
+        <link rel="stylesheet" href="/resources/student/build/static/css/main.4dd30cc9.css">
        <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
-        <script type="text/javascript" src="/sbs/resources/student/build/static/js/compressed.js"></script>
+        <!--<script type="text/javascript" src="/resources/student/build/static/js/compressed.js"></script>-->
 
     </body>
 </html>

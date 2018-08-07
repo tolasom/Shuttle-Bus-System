@@ -105,7 +105,7 @@ public class StudentDaoImpl implements StudentDao{
         int count_ticket = 0;
         int user_id = id.getAuthentic();
         try {
-                if(!isExited(user_id,book_data.getDeparture_date())){
+
                     Booking_Master booking_master = new Booking_Master();
                     booking_master.setUser_id(user_id);
                     booking_master.setFrom_id(book_data.getSource());
@@ -124,10 +124,10 @@ public class StudentDaoImpl implements StudentDao{
                     booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
                     session.update(booking_master);
                     count_ticket ++;
-                }
+
 
             if(book_data.getChoice()==2){
-                    if(!isExited(user_id,book_data.getReturn_date())){
+
                         Booking_Master booking_return = new Booking_Master();
                         booking_return.setUser_id(user_id);
                         booking_return.setCreated_at(created_at);
@@ -146,9 +146,6 @@ public class StudentDaoImpl implements StudentDao{
                         booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
                         session.update(booking_return);
                         count_ticket ++;
-                    }
-
-
 
             }
 
