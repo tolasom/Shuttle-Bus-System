@@ -16,6 +16,7 @@
 <script>
     window.token = document.getElementById("csrfToken").value
     window.headerName = document.getElementById("csrfHeader").value
+   
     sessionStorage.setItem("path","/")
 </script>
 <form action="/sbs/logout" method="post" id="logoutForm">

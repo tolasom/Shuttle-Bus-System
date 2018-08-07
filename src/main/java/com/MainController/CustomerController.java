@@ -8,18 +8,23 @@ import java.util.*;
 
 import com.DaoClasses.*;
 import com.ModelClasses.*;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.EntityClasses.Pickup_Location_Master;
 import com.EntityClasses.User_Info;
 import com.EntityClasses.Cost;
@@ -278,7 +283,7 @@ public class CustomerController {
 	}
 
 	//=========================PayWay Push Back Notification================================
-	@RequestMapping(value="/push_back_notification", method=RequestMethod.GET)
+	@RequestMapping(value="/push_back_notification", method=RequestMethod.POST)
 	public @ResponseBody String pushBackNotification(PushBackNotification pb) throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
 		System.out.println("Push back.............");
@@ -286,6 +291,7 @@ public class CustomerController {
 		Custom_Dao customer=new Custom_Imp();
 		ret =customer.pushBackNotification(pb);
 		return ret;
+		//return null;
 	}
 
 

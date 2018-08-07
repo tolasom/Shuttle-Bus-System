@@ -7,7 +7,6 @@ import getInfoLogin.IdUser;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;

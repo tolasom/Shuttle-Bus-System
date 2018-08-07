@@ -1,6 +1,7 @@
 package com.DaoClasses;
 
 import com.ModelClasses.*;
+
 import getInfoLogin.IdUser;
 
 import java.io.ByteArrayOutputStream; 
@@ -14,11 +15,13 @@ import java.util.*;
 
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+
 import com.EncryptionDecryption.Encryption;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Booking_Request_Master;
@@ -1994,7 +1997,7 @@ public class Custom_Imp implements Custom_Dao{
 				}
 				
 		        Map < String, Object > model = new HashMap < String, Object > ();
-		        model.put("name", user.get(0).getName());
+		        model.put("name", user.get(0).getUsername());
 		        model.put("booking_code", bm.getCode());
 		        model.put("email", user.get(0).getEmail());
 		        model.put("source", source.get(0).getName());
@@ -2122,8 +2125,11 @@ public class Custom_Imp implements Custom_Dao{
 					cb.setBooking_master_id(booking.getId());
 
 
-					if(c.isToday(booking.getDept_date())&&c.isLastDay(booking.getDept_time())){
-						//Check whether it is during 24 hours before departure time ==> Booking Request
+//					if((c.isToday(booking.getDept_date())&&c.isLastDay(booking.getDept_time()))   //With in 24 hours before departure tim 
+//							|| (c.isTomorrow(booking.getDept_date())&&c.isTimeBeforeNow(booking.getDept_time()))){
+					if(c.isStudentScheduleCreated(session2, booking)){
+						System.out.println("=====> Booking Request");
+						//Check whether student schedule is created ==> Booking Request
 						Request_Booking_Dao book=new Request_Booking();
 						String ret=book.customer_booking(session2,cb);
 						//Send Confirmation Email
@@ -2132,6 +2138,7 @@ public class Custom_Imp implements Custom_Dao{
 						}
 					}else{
 						//generate or regenerate schedule
+						System.out.println("=====> Customer Booking");
 						Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
 						String ret=cus.customer_schedule_generation(session2,cb);
 						//Send Confirmation Email
@@ -2156,6 +2163,33 @@ public class Custom_Imp implements Custom_Dao{
 		return "Success";
 	}
 
+	public Boolean isStudentScheduleCreated(Session session,Booking_Master book){
+		 List<Booking_Master> all_students = new ArrayList<Booking_Master>();
+		 Boolean created=false;
+	     try {
+	            all_students = session.createQuery("from Booking_Master where notification!='Cancelled' " +
+	                    "and description='student' and schedule_id!='0' and from_id=? " +
+	                    "and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
+	                    .setParameter(0, book.getFrom_id())
+	                    .setParameter(1, book.getTo_id())
+	                    .setTime(2, book.getDept_time())
+	                    .setDate(3, book.getDept_date()).list();
+	            System.out.println("All Booker: "+all_students.size());
+	            if(all_students.size()>0){
+	            	for(Booking_Master bm:all_students){
+	            		if(bm.getSchedule_id()!=0){
+	            			created=true;
+	            		}
+	            	}
+	            }else{
+	            	return false;  // No Student 
+	            }
+	        } catch (RuntimeException e) {
+	            e.printStackTrace();
+	        }
+	        return created;
+	}
+	
 	public void sendEmailQRCode(Session session2, Booking_Master booking){
 		Custom_Imp c=new Custom_Imp();
 		QR_Image_Gemerator qr_gen=new QR_Image_Gemerator();
@@ -2207,6 +2241,30 @@ public class Custom_Imp implements Custom_Dao{
 			return false;
 		}
 	}
+	public Boolean isTomorrow(Date date){
+		Custom_Imp ci=new Custom_Imp();
+		Date tmr=ci.TomorrowDate();
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		String tomorrow=f.format(tmr);
+		String dept_date=f.format(date);
+		if(tomorrow.equals(dept_date)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public Boolean isTimeBeforeNow(Date time) throws ParseException{
+		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+		Date current_time = f.parse(f.format(new Date()));
+		long difference = (current_time.getTime()-time.getTime())/(1000); // (second)
+		if (difference>0)
+			return false;
+		else
+			return true;
+	}
 
 	// Customer book shuttle bus with 24 hour before dept time
 	public Boolean isLastDay(java.sql.Time time) throws ParseException{
@@ -2236,13 +2294,12 @@ public class Custom_Imp implements Custom_Dao{
 //        	e.printStackTrace();
 //        }
 
-		java.sql.Time time =java.sql.Time.valueOf("22:05:00");
+		java.sql.Time time = java.sql.Time.valueOf("23:59:21");
 		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		Date current_time = f.parse(f.format(new Date()));
-		long difference = time.getTime() - current_time.getTime();
-		System.out.println(difference/(1000*60*60));
-
+		long difference = (current_time.getTime()-time.getTime())/(1000); // (second)
+		System.out.println(difference);
 
 	}
 
