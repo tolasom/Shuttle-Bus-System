@@ -215,10 +215,12 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setDescription("customer");
             new_booker.setEmail_confirm(false);
             new_booker.setQr_status(false);
+            new_booker.setBooking_request_id(id);
             new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
             session.save(new_booker);
+            
 
-            transactionID = c.transactionID(8, new_booker.getId());
+            transactionID = c.transactionID(15, new_booker.getId());
 
             new_booker.setTransaction_id(transactionID);
             new_booker.setCode(c.getBookingSequence(new_booker.getId()));
@@ -232,6 +234,9 @@ public class Request_Booking implements Request_Booking_Dao {
             trns1.commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
+            if (trns1 != null) {
+                trns1.rollback();
+            }
             return null;
         } finally {
             session.flush();
@@ -240,14 +245,9 @@ public class Request_Booking implements Request_Booking_Dao {
         return transactionID;
     }
 
-    public String customer_booking(Customer_Booking cb) throws ParseException {
+    public String customer_booking(Session session,Customer_Booking cb) throws ParseException {
         System.out.println("customer_booking");
-        Transaction trns = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
         try {
-            trns = session.beginTransaction();
-
             //======================== Start loop create schedule ====================================
             int total_seat_of_all_bus = 0;
             int number_of_passenger = 0;
@@ -398,15 +398,10 @@ public class Request_Booking implements Request_Booking_Dao {
                 }
             }
             //======================== End create schedule ====================================
-            trns.commit();
         } catch (RuntimeException e) {
-            e.printStackTrace();
-            trns.rollback();
+        	e.printStackTrace();
             return "error";
-        } finally {
-            session.flush();
-            session.close();
-        }
+        } 
         return "success";
     }
 
@@ -529,7 +524,6 @@ public class Request_Booking implements Request_Booking_Dao {
                 e.printStackTrace();
             }
         }
-
         return sch_with_users;
     }
     //Check Bus Available and not from the same route
@@ -810,11 +804,6 @@ public class Request_Booking implements Request_Booking_Dao {
             cb.setDestination(br.getDestination_id());
             cb.setNumber_of_seat(br.getNumber_of_booking());
             arr_cb[0] = cb;
-            System.out.println();
-            System.out.println(arr_cb[0].getDate());
-            System.out.println(arr_cb[0].getTime());
-            System.out.println(arr_cb[0].getSource());
-            System.out.println(arr_cb[0].getDestination());
             // book=cus.customer_booking(arr_cb);
             if (book.equals("success") || book.equals("over_bus_available") || book.equals("no_bus_available")) {
                 Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
@@ -822,15 +811,12 @@ public class Request_Booking implements Request_Booking_Dao {
                 int result = query.executeUpdate();
                 trns1.commit();
             }
-//            else if(book.equals("over_bus_available")||book.equals("no_bus_available")){
-//            	Query query = session.createQuery("update Booking_Request_Master set status='Rejected' where id = :id");
-//            	query.setParameter("id", id);
-//            	int result = query.executeUpdate();
-//            	trns1.commit();
-//            }
 
         } catch (RuntimeException e) {
-            e.printStackTrace();
+        	e.printStackTrace();
+            if (trns1 != null) {
+                trns1.rollback();
+            }
             return "error";
         } finally {
             session.flush();

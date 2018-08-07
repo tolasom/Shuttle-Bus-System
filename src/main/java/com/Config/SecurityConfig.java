@@ -65,6 +65,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		"/student/**",
 
     };
+	private static final String[] PAYMENT = {
+
+		"/push_back_notification",
+
+    };
 
 	
 	@Override
@@ -89,12 +94,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		   .and().csrf()
 		   .and().exceptionHandling().accessDeniedPage("/403");
         http.authorizeRequests()
-                .antMatchers(STUDENT_MATCHERS).access("hasRole('ROLE_STUDENT')").and().formLogin().loginPage("/login").failureUrl("/login?error")
+                .antMatchers(STUDENT_MATCHERS).access("hasRole('ROLE_STUDENT')")
+                .and().formLogin().loginPage("/login").failureUrl("/login?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutSuccessUrl("/login?logout")
                 .and().csrf()
                 .and().exceptionHandling().accessDeniedPage("/403");
+        http.csrf().ignoringAntMatchers(PAYMENT);
 	}
 	
 	@Bean

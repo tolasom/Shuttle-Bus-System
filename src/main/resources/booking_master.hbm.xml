@@ -31,6 +31,6 @@
     <property name="qr_name" column="qr_name"/>
     <property name="payment" column="payment"/>
     <property name="transaction_id" column="transaction_id"/>
-    
+    <property name="booking_request_id" column="booking_request_id"/>
  	</class>
 </hibernate-mapping>

@@ -118,6 +118,8 @@ public class StudentDaoImpl implements StudentDao{
                     booking_master.setCreated_at(created_at);
                     booking_master.setAdult(1);
                     booking_master.setChild(0);
+                    booking_master.setPayment("Succeed");
+                    booking_master.setBooking_request_id(0);
                     location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
                     booking_master.setDept_time(location_master.getDept_time());
                     session.save(booking_master);
@@ -140,6 +142,7 @@ public class StudentDaoImpl implements StudentDao{
                         booking_return.setChild(0);
                         booking_return.setAdult(0);
                         booking_return.setNumber_booking(1);
+                        booking_return.setPayment("Succeed");
                         location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
                         booking_return.setDept_time(location_master.getDept_time());
                         session.save(booking_return);
