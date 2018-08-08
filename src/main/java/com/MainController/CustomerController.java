@@ -159,13 +159,15 @@ public class CustomerController {
 	}
 	//=========================Request Book Now================================
 	@RequestMapping(value="/request_book_now", method=RequestMethod.POST)
-	public @ResponseBody String request_book_now(@RequestBody ID_Class id_class) throws ParseException {
+	public @ResponseBody Map<String,Object> request_book_now(@RequestBody ID_Class id_class) throws ParseException {
 		//Request_Booking_Dao req=new Request_Booking();
 		//String ret = req.request_book_now(id_class.getId());
 		//System.out.println(id_class.getId());
 		Request_Booking_Dao user =new Request_Booking();
 		String ret = user.booking(id_class.getId());
-		return ret;
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("transaction_id", ret);
+		return map;
 	}
 	//=========================Customer Request Booking Information================================
 	@RequestMapping(value="/customer_request_booking", method=RequestMethod.POST)
@@ -286,12 +288,12 @@ public class CustomerController {
 	@RequestMapping(value="/push_back_notification", method=RequestMethod.POST)
 	public @ResponseBody String pushBackNotification(PushBackNotification pb) throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
-		System.out.println("Push back.............");
+		System.out.println("-----> Push back.............");
 		String ret=null;
 		Custom_Dao customer=new Custom_Imp();
 		ret =customer.pushBackNotification(pb);
 		return ret;
-		//return null;
+//		return null;
 	}
 
 

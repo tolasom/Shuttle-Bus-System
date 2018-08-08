@@ -31,6 +31,10 @@ public class QR_Image_Gemerator {
           System.out.println(base64Val);
           writeByteToImageFile(base64Val, "./src/main/resources/img/6.png");  
           System.out.println("Saved the base64 as image in current directory with name image.png");  
+          
+          
+          
+        
      }  
      public Boolean qr_generator(Booking_Master bm) {        
     	System.out.println(bm.getQr());

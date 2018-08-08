@@ -26,10 +26,10 @@
             <input type="hidden" name="hash" id="hash"/>
             <input type="hidden" name="tran_id"  id="tran_id"/>
             <input type="hidden" name="amount" id="amount"/>
-            <input type="hidden" name="firstname" value="<%= firstName %>"/>
-            <input type="hidden" name="lastname" value="<%= lastName %>"/>
-            <input type="hidden" name="phone" value="<%= phone %>"/>
-            <input type="hidden" name="email" value="<%= email %>"/>
+            <input type="hidden" name="firstname" value=""/>
+            <input type="hidden" name="lastname" value=""/>
+            <input type="hidden" name="phone" value=""/>
+            <input type="hidden" name="email" value=""/>
         </form>
     </div>
     <!— end Modal content—>
