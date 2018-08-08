@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.web.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
@@ -207,6 +208,11 @@ public class SecurityController {
 		map.put("status", status);
 		return map;
 
+	}
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public String handleError405(HttpServletRequest request, Exception e) {
+		System.out.println("not support");
+		return "redirect:/login";
 	}
 
 	@ExceptionHandler(ResourceNotFoundException.class)

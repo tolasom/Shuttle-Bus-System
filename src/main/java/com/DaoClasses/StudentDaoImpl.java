@@ -510,10 +510,10 @@ public class StudentDaoImpl implements StudentDao{
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-           String hql = "From Booking_Master where dept_date='2018-7-2'";
+           String hql = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id=324";
            Query query = session.createQuery(hql);
 
-           System.out.println(query.list());
+           System.out.println(query.list().size());
         }
         catch (RuntimeException e) {
             e.printStackTrace();

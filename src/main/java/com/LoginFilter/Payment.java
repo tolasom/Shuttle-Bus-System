@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet Filter implementation class Payment
+ * Servlet CookieFilter implementation class Payment
  */
 public class Payment implements Filter {
 	public void destroy() {
@@ -30,8 +30,10 @@ public class Payment implements Filter {
 //		}else{
 //			System.out.println("----- Requester is not ABA Bank -----");
 //			return;
-//		}	 	
-		chain.doFilter(servletRequest, servletResponse);
+//		}
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		System.out.println(request.getParameter("ll"));
+		//chain.doFilter(servletRequest, servletResponse);
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {

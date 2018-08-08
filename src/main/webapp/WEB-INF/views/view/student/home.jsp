@@ -21,7 +21,7 @@
              window.headerName = document.getElementById("csrfHeader").value
              sessionStorage.setItem("path","")
         </script>
-        <form action="/sbs/logout" method="post" id="logoutForm">
+        <form action="/logout" method="post" id="logoutForm">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
