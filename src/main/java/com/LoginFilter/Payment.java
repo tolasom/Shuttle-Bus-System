@@ -1,6 +1,7 @@
 package com.LoginFilter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,7 +23,16 @@ public class Payment implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 		System.out.println("--------------- get payment ------------------");
 		System.out.println(servletRequest.getRemoteHost());
-		
+		//tran_id
+		System.out.println(servletRequest.getParameter("tran_id"));
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		Enumeration<String> param = request.getParameterNames();
+//		if(param != null){
+//			while(param.hasMoreElements()){
+//			System.out.println(param.nextElement());
+//			//param.nextElement();
+//			}
+//		}
 //		String bankOrigin="127.0.0.1";
 //		String requestOrigin=servletRequest.getRemoteHost();
 //		if(bankOrigin.equals(requestOrigin)){
