@@ -132,7 +132,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
     public String transactionID(int mount, int id) {
         SecureRandom random = new SecureRandom();
         System.out.println("id: " + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id));
-        return "vK" + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id);
+        return "vK" + (new BigInteger(mount * 5, random).toString(32))+"i" + String.valueOf(id);
     }
 
     //======================== Store Booking Record When user booked  ============================
@@ -175,7 +175,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
                 session.save(new_booker);
                 if (transactionID == null) {
-                    transactionID = c.transactionID(15, new_booker.getId());
+                    transactionID = c.transactionID(20-("vki"+new_booker.getId()).length(), new_booker.getId());
                 }
                 new_booker.setTransaction_id(transactionID);
                 new_booker.setCode(Customer_Schedule_Generation_Imp.getBookingSequence(new_booker.getId()));

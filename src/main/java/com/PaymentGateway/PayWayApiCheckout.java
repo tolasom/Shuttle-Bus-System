@@ -45,7 +45,7 @@ public class PayWayApiCheckout {
      *
      * @return string getHash
      */
-    public static String getHash(String transactionId, String amount) {
+    public String getHash(String transactionId, String amount) {
 
         /* Example in PHP code
         $s = hash_hmac('sha256', 'Message', 'secret', true);

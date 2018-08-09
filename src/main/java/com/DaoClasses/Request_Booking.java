@@ -169,7 +169,7 @@ public class Request_Booking implements Request_Booking_Dao {
     public String transactionID(int mount, int id) {
         SecureRandom random = new SecureRandom();
         System.out.println("id: " + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id));
-        return "vK" + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id);
+        return "vK" + (new BigInteger(mount * 5, random).toString(32)) +"i"+ String.valueOf(id);
     }
 
     //======================== Store Booking (After Request have confirmed by admin) Record When user booked  =================
@@ -220,7 +220,7 @@ public class Request_Booking implements Request_Booking_Dao {
             session.save(new_booker);
             
 
-            transactionID = c.transactionID(15, new_booker.getId());
+            transactionID = c.transactionID(20 - ("vki"+new_booker.getId()).length(), new_booker.getId());
 
             new_booker.setTransaction_id(transactionID);
             new_booker.setCode(c.getBookingSequence(new_booker.getId()));
