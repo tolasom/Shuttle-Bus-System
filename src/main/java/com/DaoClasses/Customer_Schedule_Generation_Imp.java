@@ -180,8 +180,6 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setTransaction_id(transactionID);
                 new_booker.setCode(Customer_Schedule_Generation_Imp.getBookingSequence(new_booker.getId()));
                 new_booker.setQr_name(c.Key(50, new_booker.getId()));
-
-
             }
             trns1.commit();
         } catch (RuntimeException e) {
