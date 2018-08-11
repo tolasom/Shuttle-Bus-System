@@ -9,20 +9,25 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import javax.servlet.http.*;
-@WebFilter(filterName = "CookieFilter",urlPatterns = "/*")
 public class CookieFilter implements javax.servlet.Filter {
     public void destroy() {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         String header = ((HttpServletRequest) req).getHeader("ajax");
+        String path = ((HttpServletRequest) req).getRequestURL().toString();
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         if(header!=null){
+            System.out.println(path);
+            System.out.println(auth.getAuthorities().toString());
+            System.out.println("header : " +header);
 
             if(( auth.getAuthorities().toString()).equals("[ROLE_ANONYMOUS]")){
                 HttpServletResponse httpResponse = (HttpServletResponse) resp;
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-                chain.doFilter(req, resp);
+                return;
             }else{
                 chain.doFilter(req, resp);
             }

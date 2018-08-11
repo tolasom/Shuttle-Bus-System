@@ -41,7 +41,7 @@ public class Payment implements Filter {
 //			System.out.println("----- Requester is not ABA Bank -----");
 //			return;
 //		}
-		//chain.doFilter(servletRequest, servletResponse);
+		chain.doFilter(servletRequest, servletResponse);
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {

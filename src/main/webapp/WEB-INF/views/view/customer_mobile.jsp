@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Shuttle Bus</title>
     <link rel="stylesheet" href="https://unpkg.com/react-md@1.2.13/dist/react-md.indigo-pink.min.css">
-    <!--<link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">-->
+    <link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">
 
 </head>
 <body>
@@ -31,9 +31,9 @@
 <!--<script type="text/javascript" src="/resources/build/static/js/bundle.js"></script>-->
 <!--<script type="text/javascript" src="/resources/build/static/js/comp.js"></script>
 <script type="text/javascript" src="/resources/build/static/js/compressed.js"></script>-->
-<!--<script type="text/javascript" src="/resources/build/static/js/main.3c2213b6.js"></script>-->
+<script type="text/javascript" src="/resources/build/static/js/main.8bbddc61.js"></script>
 <!--<link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">-->
-<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>
+<!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
 </body>
 
 </html>
