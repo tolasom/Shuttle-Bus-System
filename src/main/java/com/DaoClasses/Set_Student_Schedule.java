@@ -29,21 +29,21 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         return f.format(new Date());
 	}
 	public String DateTimeNow(){
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
 		return f.format(new Date());
 	}
 	public String TomorrowDateTime() throws ParseException{
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
 		System.out.println(f.format(new Date()));
-		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(f.format(new Date()));
+		Date dt = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss").parse(f.format(new Date()));
 		Calendar c = Calendar.getInstance();
 		c.setTime(dt);
 		c.add(Calendar.DATE, 1);
 		dt = c.getTime();
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		String tmrDateTimeString = sdf.format(dt);
 		System.out.println(tmrDateTimeString);
 		return tmrDateTimeString;
@@ -123,7 +123,9 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         	trns.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
-        	trns.rollback();
+            if (trns != null) {
+                trns.rollback();
+            }
         }finally {
             session.flush();
             session.close();
@@ -369,8 +371,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         	e.printStackTrace();
         }        
 	}	
-	
-	
+		
 	public void asign_to_existing_schedule(Session session,List<Booking_Master> list_stu,List<Schedule_Master> list_schedule){
 		System.out.println("---------------->");
     	System.out.println("---------------->asign_to_existing_schedule(");
@@ -464,7 +465,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
         Map<Object,List<Booking_Master>> sch_with_users=new HashMap<Object,List<Booking_Master>>();
         Set_Student_Schedule_Dao custom_imp=new Set_Student_Schedule();  
         Set_Student_Schedule c=new Set_Student_Schedule();
-//		java.sql.Timestamp.valueOf(c.DateTimeNow())
 		while(recursive){
 			int ib=0; //index of passenger
 			Boolean last_bus_choosing=true;
@@ -627,7 +627,8 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		System.out.println("get_all_booker");
 		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
 		try {
-            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' and from_id=? and to_id=? " +
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " +
+					"and payment='Succeed' and from_id=? and to_id=? " +
                     "and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
             		.setParameter(0,from_id).setParameter(1, to_id).
                             setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();
@@ -918,14 +919,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		return final_driver_list;
     }
     //======================== combination for choosing bus till here ============================
-
-
-	
-	
-	
-	
-	
-		
 	
 	public static void main(String args[]) throws ParseException{
 		Set_Student_Schedule_Dao stu=new Set_Student_Schedule();

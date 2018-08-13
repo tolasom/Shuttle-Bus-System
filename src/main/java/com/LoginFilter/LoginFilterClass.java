@@ -20,7 +20,7 @@ import com.EntityClasses.User_Info;
 import com.ModelClasses.IdentifyTypeUser;
 
 
-//@WebFilter(urlPatterns = {"/googleUser"}, description = "Session Checker Filter")
+//@WebFilter(urlPatterns = {"/googleUser"}, description = "Session Checker CookieFilter")
 public class LoginFilterClass implements Filter {
 
 	 public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,9 +31,6 @@ public class LoginFilterClass implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     	 HttpServletRequest httpRequest = (HttpServletRequest) request;  
     	 String email = httpRequest.getParameter("email"); 
-    	 
-    	 
-    	 
     	 chain.doFilter(request, response);
     }
 

@@ -4,12 +4,10 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import com.EntityClasses.*;
+import com.ModelClasses.PushBackNotification;
 import org.hibernate.Session;
 
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.User_Info;
 import com.ModelClasses.Customer_Booking;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
@@ -32,7 +30,6 @@ public interface Custom_Dao {
 	public List<List<Map<String,Object>>> choose_correct_bus(Custom_Imp booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus);
 	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np);
 	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np);
-	public String request_book_now(int id) throws ParseException;
 	public String cancel_booking_ticket(int id);
 	public String confirm_phone_number(UserModel cb);
 	public List<Map<String,Object>> get_qrcode(int id);
@@ -40,7 +37,6 @@ public interface Custom_Dao {
 	public List<Map<String,Object>> get_sch_bus_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info(int id);
 	public List<Map<String,Object>> get_sch_driver_info2(int id);
-	public List<Map<String,Object>> get_sch_bus_info2(int id);
 	public List<Map<String,Object>> same_date_differ_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_same_route(Session session,Customer_Booking cb,int from, int to) throws ParseException;
 	public List<Map<String,Object>> same_date_differ_rout(Session session,Customer_Booking cb,int from, int to) throws ParseException;
@@ -51,9 +47,9 @@ public interface Custom_Dao {
 	public List<User_Info> getAllD(List<Integer> idd);
 	public List<User_Info> check_valid_tocken(String token);
 	public Map<String, Object> check_and_send_email(String email);
-	public Boolean submit_new_password(UserModel user); 
-	public void send_email_qr_generator(Booking_Master bm);
-	public void send_QRCODE();
+	public Boolean submit_new_password(UserModel user);
 	public Map<String,Object> updatePhone(UserModel userModel);
+	public Cost Cost_Master();
+	public String pushBackNotification(PushBackNotification pb) throws ParseException;
 
 }

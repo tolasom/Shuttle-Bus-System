@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.web.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
@@ -36,8 +37,7 @@ public class SecurityController {
 	public String defaultPage() {
 
 		ModelAndView model = new ModelAndView();
-		
-		model.setViewName("project");
+
 
 		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		 if(!(auth.getPrincipal()=="anonymousUser")){
@@ -144,15 +144,30 @@ public class SecurityController {
 
 		ModelAndView model = new ModelAndView();
 
-		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			
-			model.addObject("username", userDetail.getUsername());
-
+		if(!(auth.getPrincipal()=="anonymousUser")){
+			UserDetails userDetails=(UserDetails) auth.getPrincipal();
+			Map<String ,Object> role= new HashMap<String ,Object>();
+			role.put("role1",userDetails.getAuthorities());
+			Object role2=(Object) role.get("role1");
+			StringBuffer userRole=new StringBuffer(role2.toString());
+			if ("[ROLE_ADMIN]".contentEquals(userRole))
+			{
+				model.setViewName("redirect:current_schedule");
+				return model;
+			}
+			if ("[ROLE_CUSTOMER]".contentEquals(userRole))
+			{
+				model.setViewName("redirect:customer");
+				return model;
+			}
+			if ("[ROLE_STUDENT]".contentEquals(userRole))
+			{
+				model.setViewName("redirect:student");
+				return model;
+			}
 		}
-		model.setViewName("security/403");
+		model.setViewName("login");
 		return model;
 
 	}
@@ -193,6 +208,11 @@ public class SecurityController {
 		map.put("status", status);
 		return map;
 
+	}
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public String handleError405(HttpServletRequest request, Exception e) {
+		System.out.println("not support");
+		return "redirect:/login";
 	}
 
 	@ExceptionHandler(ResourceNotFoundException.class)

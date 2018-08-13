@@ -14,6 +14,7 @@ public class Booking_Request_Master {
 	private int number_of_booking;
 	private int child;
 	private int adult;
+	private float total_cost;
 	private String provided_date;
 	private String provided_time;
 	private String description;
@@ -133,5 +134,12 @@ public class Booking_Request_Master {
 	public void setAdult(int adult) {
 		this.adult = adult;
 	}
-	
+
+	public float getTotal_cost() {
+		return total_cost;
+	}
+
+	public void setTotal_cost(float total_cost) {
+		this.total_cost = total_cost;
+	}
 }

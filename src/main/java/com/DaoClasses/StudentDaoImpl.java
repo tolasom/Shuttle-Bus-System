@@ -105,7 +105,7 @@ public class StudentDaoImpl implements StudentDao{
         int count_ticket = 0;
         int user_id = id.getAuthentic();
         try {
-                if(!isExited(user_id,book_data.getDeparture_date())){
+
                     Booking_Master booking_master = new Booking_Master();
                     booking_master.setUser_id(user_id);
                     booking_master.setFrom_id(book_data.getSource());
@@ -118,16 +118,18 @@ public class StudentDaoImpl implements StudentDao{
                     booking_master.setCreated_at(created_at);
                     booking_master.setAdult(1);
                     booking_master.setChild(0);
+                    booking_master.setPayment("Succeed");
+                    booking_master.setBooking_request_id(0);
                     location_master = (Location_Master) session.load(Location_Master.class,book_data.getSource());
                     booking_master.setDept_time(location_master.getDept_time());
                     session.save(booking_master);
                     booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
                     session.update(booking_master);
                     count_ticket ++;
-                }
+
 
             if(book_data.getChoice()==2){
-                    if(!isExited(user_id,book_data.getReturn_date())){
+
                         Booking_Master booking_return = new Booking_Master();
                         booking_return.setUser_id(user_id);
                         booking_return.setCreated_at(created_at);
@@ -140,15 +142,13 @@ public class StudentDaoImpl implements StudentDao{
                         booking_return.setChild(0);
                         booking_return.setAdult(0);
                         booking_return.setNumber_booking(1);
+                        booking_return.setPayment("Succeed");
                         location_master = (Location_Master) session.load(Location_Master.class,book_data.getDestination());
                         booking_return.setDept_time(location_master.getDept_time());
                         session.save(booking_return);
                         booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
                         session.update(booking_return);
                         count_ticket ++;
-                    }
-
-
 
             }
 
@@ -412,8 +412,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            String current = "From Booking_Master where dept_date >= current_date() and user_id="+id.getAuthentic();
-            String history = "From Booking_Master where dept_date < current_date() and user_id="+id.getAuthentic();
+            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id="+id.getAuthentic();
+            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and user_id="+id.getAuthentic();
             String request = "From Booking_Request_Master where " +
                     "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);
@@ -510,10 +510,10 @@ public class StudentDaoImpl implements StudentDao{
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-           String hql = "From Booking_Master where dept_date='2018-7-2'";
+           String hql = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id=324";
            Query query = session.createQuery(hql);
 
-           System.out.println(query.list());
+           System.out.println(query.list().size());
         }
         catch (RuntimeException e) {
             e.printStackTrace();

@@ -40,7 +40,7 @@ public class IdUser {
            System.out.println(query.list().size());
           	user = (User_Info) query.list().get(0);
         } catch (RuntimeException e) {
-        	
+        	return 0;
         }finally{
 			session.flush();
 			session.close();
