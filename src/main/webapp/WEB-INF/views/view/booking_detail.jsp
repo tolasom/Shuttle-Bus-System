@@ -78,7 +78,7 @@ load = function () {
     else
         $("#to").val(searchLocation(booking.to_id,locations));
 
-	$("#dept_date").val(formatDate(booking.dept_date));
+	$("#dept_date").val(booking.dept_date);
 	$("#dept_time").val(booking.dept_time);
 	$("#bookedOn").val(formatDate(booking.created_at));
 	$("#no_booking").val(booking.number_booking);
@@ -106,7 +106,7 @@ formatDate =function (date) {
     if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join('/');
+    return [month, day, year].join('/');
 };
 
 

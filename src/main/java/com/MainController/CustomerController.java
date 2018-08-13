@@ -221,7 +221,14 @@ public class CustomerController {
 			List<Map<String, Object>> map = customer.get_sch_driver_info2(id);
 			System.out.println("DDDDDDDDDD "+ id);
 			return map;
-		}	
+		}
+		//======================== Get Sch Driver Information base id================================
+		@RequestMapping(value="/get_sch_bus_info2", method=RequestMethod.GET)
+			public @ResponseBody List<Map<String,Object>> get_sch_bus_info2(int id) {
+			List<Map<String, Object>> map = customer.get_sch_bus_info2(id);
+			System.out.println("DDDDDDDDDD "+ id);
+			return map;
+		}		
 	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)

@@ -2,7 +2,7 @@
 <article class="content cards-page">
                     <div class="title-block">
                         <h3 class="title"> Bus Management </h3><br>
-                        <button data-toggle="tooltip" title="Create a bus" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button></div>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button></div>
                         <section class="section">
                        <div>
                                 <div class="card">
@@ -39,7 +39,7 @@
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content">
+      <div class="modal-content">     
         <div class="modal-header">
           <h4 class="modal-title center">Create a bus</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -130,6 +130,9 @@ goTO = function(){
 
 $(document).ready(function(){
 	$("#busMng").addClass("active");
+    var bootstrapjs = $("<script>");
+    $(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
+    $(bootstrapjs).appendTo('body');
 	$("#number_of_seat").keypress(function (e) {
 	     //if the letter is not digit then display error and don't type anything
 	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
