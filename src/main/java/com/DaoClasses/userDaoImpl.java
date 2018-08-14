@@ -2830,7 +2830,7 @@ public class userDaoImpl implements usersDao{
 		        mail.setMailSubject("Kirirom Shuttle Bus Booking Request");
 		 
 		        Map < String, Object > model = new HashMap < String, Object > ();
-		        model.put("fullname", new userDaoImpl().getCustomerByEmail(email).getUsername());
+		        model.put("name", new userDaoImpl().getCustomerByEmail(email).getUsername());
 		        model.put("email", email);
 		        mail.setModel(model);
 		        mail.setFile_name("booking_request_confirmed_email_template.txt");
@@ -2867,7 +2867,7 @@ public class userDaoImpl implements usersDao{
 		        mail.setMailSubject("Kirirom Shuttle Bus Booking Request");
 		 
 		        Map < String, Object > model = new HashMap < String, Object > ();
-		        model.put("fullname", new userDaoImpl().getCustomerByEmail(email).getUsername());
+		        model.put("name", new userDaoImpl().getCustomerByEmail(email).getUsername());
 		        model.put("email", email);
 		        mail.setModel(model);
 		        mail.setFile_name("booking_request_rejected_email_template.txt");

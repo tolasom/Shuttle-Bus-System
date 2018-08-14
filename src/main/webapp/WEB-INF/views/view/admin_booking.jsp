@@ -7,18 +7,28 @@
                          		<p class="title-description"> All current and future bookings </p> 
                          	</div>
                          	<div class="btn-group pull-right menulist">
-		                        <button type="button" data-toggle="tooltip" title="All Bookings" class="btn btn-info" id="allbtn" style="color:white;border-right:2px solid white;">All</button>
-		                        <button type="button" data-toggle="tooltip" title="All Customer Bookings" class="btn btn-info" id="customerbtn" style="color:white; border-right:2px solid white;"><i class="fa fa-users"></i></button>
-		                        <button type="button" data-toggle="tooltip" title="All Student Bookings" class="btn btn-info"  id="studentbtn" style="color:white;"><i class="fa fa-graduation-cap"></i></button>
+		                        <button type="button" data-toggle="tooltip" title="All Bookings" class="btn btn-info" id="allbtn" style="color:white;border-right:2px solid white;">All<span style="background-color: orange; margin-left: 6px; margin-right: -6px;" class="badge pull-right" id="allnotii"></span></button>
+		                        <button type="button" data-toggle="tooltip" title="All Customer Bookings" class="btn btn-info" id="customerbtn" style="color:white; border-right:2px solid white;"><i class="fa fa-users"></i><span style="background-color: orange; margin-left: 6px; margin-right: -6px;" class="badge pull-right" id="customernotii"></span></button>
+		                        <button type="button" data-toggle="tooltip" title="All Student Bookings" class="btn btn-info"  id="studentbtn" style="color:white;"><i class="fa fa-graduation-cap"></i><span style="background-color: orange; margin-left: 6px; margin-right: -6px;" class="badge pull-right" id="studentnotii"></span></button>
 		                    </div>
                          	
                          </div>
                          
-                       
-	                         <div style="margin-bottom: 10px;">
+                       		<div style="display: flex;flex-direction: column;">
+                       			<div style="margin-bottom: 10px;">
 		                         <button type="button" data-toggle="tooltip" title="Historical Bookings" class="btn btn-pill-right btn-info pull-right" style="color:white;" onclick="location.href='historical_booking';">View all historical bookings <i class="fa fa-angle-right"></i></button>
-		                          <button data-toggle="tooltip" title="Assign Bookings To New Schedule" class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
+
+		                          
+
+		                          <button type="button" data-toggle="modal" data-target="#filterModal" class="btn btn-info pull-left" style="color:white;">Filters <i class="fa fa-filter"></i></button>
 		                         
+	                      	 </div>
+	                      	 <button data-toggle="tooltip" title="Assign Bookings To New Schedule" class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white; width: 180px;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
+                       		</div>
+	                         
+
+	                      	 <div>
+	                      	 
 	                      	 </div>
 	                      	 </div>
 
@@ -71,6 +81,60 @@
                         <table id="get_user_info"></table>
                     </div>
       </div>
+
+
+
+
+
+
+      <div class="modal fade" id="filterModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title center">Which bookings?</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="filterForm">
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label">From (Source Location)</label>
+                                            <select class="form-control boxed" id="ffrom">
+                                            	<option></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">To (Destination Location)</label>
+                                            <select class="form-control boxed" id="fto">
+                                            	<option></option>
+                                            </select>
+                                        </div>
+                                        
+                                         <div class="form-group">
+                                            <label class="control-label">Departure Date</label>
+                                            <input type="text" name ="date" class="form-control boxed" id="fdeptdate"> </div>
+                                         <div class="form-group">
+                                            <label class="control-label">User Type</label>
+                                            <select class="form-control boxed" id="fuser">
+                                            	<option value=""></option>
+                                                <option value="customer">Customer</option>
+                                                <option value="student">Student</option>
+                                            </select> 
+                                            </div>
+                                         
+                                            <button type="submit" id="bsubmit" class="btn btn-default" style="display:none;">Create</button>
+                                        	</form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" style="color:black;" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button onClick="goTO()" class="btn btn-info">Done!</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 </body>
 
 <script>
@@ -85,8 +149,15 @@ load = function(){
 			locations = response.locations;
 			customers = response.customers;
 			console.log(locations)
+			var no_student = 0
+			var no_customer = 0
 			for (var i=0;i<bookings.length;i++)
 				{
+				if (bookings[i].description=="student")
+					no_student++
+				else
+					no_customer++
+
 				var color="";
 				var cb="<td></td>";
 				if(bookings[i].notification=="Unassigned")
@@ -95,7 +166,7 @@ load = function(){
 						cb = '<td class="unhoverr"><label class="item-check" id="select-all-items"><input type="checkbox" class="checkbox">'
     					+'<span></span></label></td>';
     				}
-				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'"from="'+bookings[i].from_id+'"'+
+				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'" deptdate="'+formatDate(bookings[i].dept_date)+'" from="'+bookings[i].from_id+'"'+
 				'destination="'+bookings[i].destination_id+'"'+'source="'+bookings[i].source_id+'"'+'to="'+bookings[i].to_id+'"'+'data-url="booking_detail?id='+bookings[i].id+'">'
 									+cb
 									+'<td>'+(i+1)+'</td>'
@@ -108,6 +179,14 @@ load = function(){
 									+'<td>'+bookings[i].description+'</td></tr>';
 				$("#allBooking").append(booking);				
 				}
+
+				$("#studentnotii").text(no_student);
+				$("#customernotii").text(no_customer);
+				$("#allnotii").text(no_customer+no_student);
+
+				for(i=0; i<locations.length; i++)                   
+        			$("#ffrom").append("<option value="+locations[i].id+">"+locations[i].name+" </option>");
+ 
 			$(".checkbox").on('click', function(e) {
 				var a = $(this).parents(".hoverr")[0];
 				$(a).toggleClass("selected");
@@ -172,6 +251,9 @@ $("#moveBtn").hide();
 
 $(document).ready(function(){
 	$("#bookingMng").addClass("active");
+	$("[name=date]").keydown(function (event) {
+            event.preventDefault();
+        });
 	$("#txtbox").keyup(function(){
 		   
 		   
@@ -203,34 +285,154 @@ $(document).ready(function(){
 		     	}
 		    });
 
+
+	$("#ffrom").change(function(){
+		var input  = this.value;
+		var location_id;
+		$('#fto').children('option:not(:first)').remove();
+		for(i=0; i<locations.length; i++)
+			{
+			if(locations[i].id==input)
+				location_id = locations[i].id;
+				
+			}
+		for(i=0; i<locations.length; i++)
+		{
+		if(locations[i].id==location_id)
+			{
+			
+			}
+		else
+			$("#fto").append("<option value="+locations[i].id+">"+locations[i].name+" </option>");
+			
+		}	
+	    
+	});
+
+	$('#filterModal').on('show.bs.modal', function() {
+    	$("#fdeptdate").val("")
+	});
+
+
+
+	$("#filterForm").on('submit',function(e){
+		count=0;
+		e.preventDefault();
+        
+		from = $("#ffrom").val()
+		to = $("#fto").val()
+		filter_date = $("#fdeptdate").val()
+		filter_user = $("#fuser").val()
+
+		if(from==""||from==null)
+		{
+            count++;
+            from = 0;
+        }
+        else
+            from = parseInt(from);
+		if(to==""||to==null)
+		{
+            count++;
+            to = 0;
+        }
+        else
+            to = parseInt(to);
+		if(filter_date==""||filter_date==null)
+			{
+                count++;
+                filter_date = "";
+            }
+		if(filter_user=="" || filter_user==null)
+			count++;
+
+		if(count>=4)
+			{
+			swal("Action Disallowed!", "Please fill out at least one field!", "error")
+			return
+			}
+		else
+			{
+				$(".search").each(function(){
+							$(this).show();
+				});
+				if(from!=0)
+					{
+						$(".search").each(function(){
+							if($(this).attr("from")!=from)
+							$(this).hide();
+						});
+					}
+
+				if(to!=0)
+					{
+						$(".search").each(function(){
+							if($(this).attr("to")!=to)
+							$(this).hide();
+						});
+					}
+				if(filter_date!="")
+					{
+						$(".search").each(function(){
+							if($(this).attr("deptdate")!=filter_date)
+							$(this).hide();
+						});
+					}
+				if(filter_user!="")
+					{
+						if(filter_user=="customer")
+							filter_user = "student"
+						else
+							filter_user = "customer"
+						
+						$("."+filter_user).each(function(){
+						    	 $(this).hide();
+						  });	
+						
+					}
+				$('#filterModal').modal('toggle');
+
+			}
+
+
+		
+
+
+	});
+	
+	
 	$("#customerbtn").on('click', function(e) {
 		   
 		  $("#allbtn").removeClass("active");
 		  $("#studentbtn").removeClass("active");
 		  $("#customerbtn").addClass("active");
 
+		  $(".search").each(function(){
+				$(this).show();
+				});
+
 		  $(".customer").each(function(){
 		    	 $(this).show();
 		  });
 
-		  $(".student").each(function(){
-		    	 $(this).show();
-		  });
 		  $(".student").each(function(){
 		    	 $(this).hide();
 		  });
 		  
 	});
+	
+
 
 	$("#studentbtn").on('click', function(e) {
 		   
-		  $("#customerbtn").removeClass("active");
 		  $("#allbtn").removeClass("active");
+		  $("#customerbtn").removeClass("active");
 		  $("#studentbtn").addClass("active");
-		   
-		  $(".customer").each(function(){
-		    	 $(this).show();
-		  });
+
+		  $(".search").each(function(){
+			$(this).show();
+				});
+
 		  $(".student").each(function(){
 		    	 $(this).show();
 		  });
@@ -388,7 +590,7 @@ formatDate =function (date) {
     if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
 
-    return [month, day, year].join('-');
+    return [month, day, year].join('/');
 };
 
 function searchLocation(id, myArray){
@@ -428,5 +630,8 @@ function searchBooking3(id, myArray){
             return myArray[i].code;
         }
     }
+}
+goTO = function(){
+    $('#bsubmit').trigger('click');
 }
 </script>
