@@ -35,7 +35,7 @@
 <!— Make a copy this javaScript to paste into your site—>
 <!— Note: these javaScript files are using for only integration testing—>
     <link rel="stylesheet" href="/resources/css/pop_up.css"/>
-    <link rel="stylesheet" href="https://payway-dev.ababank.com/checkout-popup.html?file=css"/>
+    <!--<link rel="stylesheet" href="https://payway-dev.ababank.com/checkout-popup.html?file=css"/>-->
 <!-- <script src="file:///home/hanako/Desktop/checkout-popup.js"></script> -->
 <spring:url value="/resources/js/checkout-popup.js" var="CheckOut"/>
 <script src="${CheckOut}"></script>
