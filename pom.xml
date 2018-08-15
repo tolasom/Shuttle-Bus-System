@@ -9,7 +9,7 @@
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <!-- <name>SBBS Maven Webapp</name> -->
-  <name>SBBS Maven Webapp</name>
+  <name>SBBS V1.5 Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
   <properties>
