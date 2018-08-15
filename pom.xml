@@ -3,10 +3,10 @@
   <modelVersion>4.0.0</modelVersion>
   <!-- <groupId>sbbs</groupId> -->
   <!--groupId>com.java</groupId -->
-  <groupId>ShuttleBus</groupId>
+  <groupId>shuttlebus</groupId>
   <!-- <artifactId>SBBS</artifactId> -->
   <!-- SpringRegister3 -->
-  <artifactId>SBBS V1.5</artifactId>
+  <artifactId>ShuttleBusSystem</artifactId>
   <!--artifactId>SBBS</artifactId-->
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
