@@ -10,7 +10,8 @@ jdk:
   - oraclejdk8 -X
   
 script:
-  - sonar-scanner -X
+  - jdk_switcher use oraclejdk8
+  # - sonar-scanner -X
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 cache:
   directories:
