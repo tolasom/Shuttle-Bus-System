@@ -30,7 +30,7 @@
 
                                         
                                         <div class="form-group col-md-12" style="margin-bottom:2%;">
-                                            <button data-toggle="tooltip" title="Create a departure date" type="submit" id="create" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button>                                  
+                                            <button type="submit" id="create" class="btn btn-info" data-toggle="modal" data-target="#myModal">Create</button>                                  
                                         </div>
                     </section>
                     
