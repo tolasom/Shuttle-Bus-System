@@ -103,8 +103,8 @@ public class CustomerController {
 
 	//=========================Location Information================================
 		@RequestMapping(value="/location_data", method=RequestMethod.GET)
-			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
-			Map<String, Map<String, List<Pickup_Location_Master>>> map = customer.location();
+			public @ResponseBody Map<String, Object> location1() {
+			Map<String,Object> map = customer.location();
 			return map;
 		}
 	//=========================Departure Time Information================================
