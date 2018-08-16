@@ -51,5 +51,6 @@ public interface Custom_Dao {
 	public Map<String,Object> updatePhone(UserModel userModel);
 	public Cost Cost_Master();
 	public String pushBackNotification(PushBackNotification pb) throws ParseException;
+	public List<Map<String,Object>> get_sch_bus_info2(int id);
 
 }
