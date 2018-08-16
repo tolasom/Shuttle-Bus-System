@@ -2,14 +2,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <!-- <groupId>sbbs</groupId> -->
-  <groupId>com.java</groupId>
+  <!--groupId>com.java</groupId -->
+  <groupId>shuttlebus</groupId>
   <!-- <artifactId>SBBS</artifactId> -->
   <!-- SpringRegister3 -->
-  <artifactId>SBBS</artifactId>
+  <artifactId>ShuttleBusSystem</artifactId>
+  <!--artifactId>SBBS</artifactId-->
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <!-- <name>SBBS Maven Webapp</name> -->
-  <name>SBBS Maven Webapp</name>
+  <name>ShuttleBus Web</name>
   <url>http://maven.apache.org</url>
   
   <properties>
