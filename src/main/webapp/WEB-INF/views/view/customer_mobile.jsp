@@ -5,12 +5,12 @@
 <!DOCTYPE html><html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000"><link rel="manifest" href="/resources/build/manifest.json">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Shuttle Bus</title>
     <link rel="stylesheet" href="https://unpkg.com/react-md@1.2.13/dist/react-md.indigo-pink.min.css">
-    <link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">
+
 
 </head>
 <body>
@@ -31,9 +31,9 @@
 <!--<script type="text/javascript" src="/resources/build/static/js/bundle.js"></script>-->
 <!--<script type="text/javascript" src="/resources/build/static/js/comp.js"></script>
 <script type="text/javascript" src="/resources/build/static/js/compressed.js"></script>-->
-<!--<script type="text/javascript" src="/resources/build/static/js/main.f5eac721.js"></script>-->
-<!--<link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">-->
-<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>
+<script type="text/javascript" src="/resources/build/static/js/main.41c074b3.js"></script>
+<link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">
+<!--<script type="text/javascript" src="http://10.10.10.103:3000/static/js/bundle.js"></script>-->
 </body>
 
 </html>

@@ -8,6 +8,7 @@
         <meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json">
         <link rel="shortcut icon" href="/favicon.ico">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/react-md@1.2.13/dist/react-md.indigo-pink.min.css">
         <title>Student</title>
     </head>
     <body>
@@ -26,7 +27,7 @@
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <script type="text/javascript" src="/resources/student/build/static/js/main.02d527b8.js"></script>
+        <script type="text/javascript" src="/resources/student/build/static/js/main.938219e8.js"></script>
         <link rel="stylesheet" href="/resources/student/build/static/css/main.4dd30cc9.css">
        <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
         <!--<script type="text/javascript" src="/resources/student/build/static/js/compressed.js"></script>-->
