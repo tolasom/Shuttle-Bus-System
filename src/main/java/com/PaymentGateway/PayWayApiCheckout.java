@@ -1,9 +1,14 @@
 package com.PaymentGateway;
 
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.apache.commons.codec.binary.Base64;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -35,7 +40,14 @@ public class PayWayApiCheckout {
     */
     private static String ABA_PAYWAY_MERCHANT_ID = "vkirirom";
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | ABA PayWay API URL
+    |--------------------------------------------------------------------------
+    | API URL that is provided by PayWay must be required in your post form
+    |
+    */
+    private static String ABA_PAYWAY_API_CHECK_TRANSACTION_URL="https://payway-dev.ababank.com/api/pwvkiriromv/check/transaction/";
     /*
      * Returns the getHash
      * For PayWay security, you must follow the way of encryption for hash.
@@ -65,7 +77,6 @@ public class PayWayApiCheckout {
             Mac sha256_HMAC = Mac.getInstance("HmacSHA512");
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA512");
             sha256_HMAC.init(secret_key);
-
             String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
             System.out.println("Hash: "+hash);
             return hash;
@@ -87,10 +98,34 @@ public class PayWayApiCheckout {
         return ABA_PAYWAY_API_URL;
     }
 
+    
+    public static String getHashForCheckTransaction(String transactionId) {
 
-    public static void main(String args[]){
-        float number = 888;
-        String numberAsString = String.format ("%.2f", number);
-        System.out.println(numberAsString);
+        System.out.println("-----> getHash for check tran_id");
+        System.out.println("T_ID: "+transactionId);
+
+        try {
+            String secret = ABA_PAYWAY_API_KEY;
+            String message = ABA_PAYWAY_MERCHANT_ID + transactionId;
+
+            Mac sha256_HMAC = Mac.getInstance("HmacSHA512");
+            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA512");
+            sha256_HMAC.init(secret_key);
+
+            String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
+            System.out.println("Hash: "+hash);
+            return hash;
+        }
+        catch (Exception e){
+            System.out.println("Error");
+            return null;
+        }
     }
+    
+    public static void main(String[] args) throws IOException {
+    	System.out.println(getHashForCheckTransaction("vKshj6pklee7pqnik43"));
+    }
+
+    	
+    
 }

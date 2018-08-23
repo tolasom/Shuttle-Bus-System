@@ -2000,29 +2000,30 @@ public class Custom_Imp implements Custom_Dao{
 						Booking_Request_Master brm= (Booking_Request_Master) session1.load(Booking_Request_Master.class,bm.getBooking_request_id());
 						brm.setEnabled(false);
 						session1.update(brm);						
-//						Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-//			            query.setParameter("id", id);
-//			            int result = query.executeUpdate();
 					}
 				}
-				trns1.commit();
-				System.out.println("================> End pushBackNotification 1");
-			}catch (RuntimeException e) {
-				e.printStackTrace();
-	        	if (trns1 != null) {
-	                trns1.rollback();
-	            }
-				return null;
-			} finally {
-				session1.flush();
-				session1.close();
-			}
-
-			//================= Assign Schedule and Send Confirmation Email to user ================
-			Transaction trns2 = null;
-			Session session2 = HibernateUtil.getSessionFactory().openSession();
-			try {
-				trns2 =  session2.beginTransaction();
+				
+				
+//				trns1.commit();
+//				System.out.println("================> End pushBackNotification 1");
+//			}catch (RuntimeException e) {
+//				e.printStackTrace();
+//	        	if (trns1 != null) {
+//	                trns1.rollback();
+//	            }
+//				return null;
+//			} finally {
+//				session1.flush();
+//				session1.close();
+//			}
+//
+//			//================= Assign Schedule and Send Confirmation Email to user ================
+//			Transaction trns2 = null;
+//			Session session2 = HibernateUtil.getSessionFactory().openSession();
+//			try {
+//				trns2 =  session2.beginTransaction();
+				
+				
 				// Schedule Generation
 				Custom_Imp c=new Custom_Imp();
 				for (Booking_Master booking: bookings){
@@ -2041,37 +2042,37 @@ public class Custom_Imp implements Custom_Dao{
 
 //					if((c.isToday(booking.getDept_date())&&c.isLastDay(booking.getDept_time()))   //With in 24 hours before departure tim 
 //							|| (c.isTomorrow(booking.getDept_date())&&c.isTimeBeforeNow(booking.getDept_time()))){
-					if(c.isStudentScheduleCreated(session2, booking)){
+					if(c.isStudentScheduleCreated(session1, booking)){
 						System.out.println("=====> Booking Request");
 						//Check whether student schedule is created ==> Booking Request
 						Request_Booking_Dao book=new Request_Booking();
-						String ret=book.customer_booking(session2,cb);
+						String ret=book.customer_booking(session1,cb);
 						//Send Confirmation Email
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(session2,booking);
+							sendEmailQRCode(session1,booking);
 						}
 					}else{
 						//generate or regenerate schedule
 						System.out.println("=====> Customer Booking");
 						Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
-						String ret=cus.customer_schedule_generation(session2,cb);
+						String ret=cus.customer_schedule_generation(session1,cb);
 						//Send Confirmation Email
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(session2,booking);
+							sendEmailQRCode(session1,booking);
 						}
 					}
 				}
-				trns2.commit();
+				trns1.commit();
 				System.out.println("================> End pushBackNotification 2");
 			}catch (RuntimeException e) {
 				e.printStackTrace();
-	        	if (trns2 != null) {
-	                trns2.rollback();
+	        	if (trns1 != null) {
+	                trns1.rollback();
 	            }
 				return "error";
 			} finally {
-				session2.flush();
-				session2.close();
+				session1.flush();
+				session1.close();
 			}
 		}
 		return "Success";

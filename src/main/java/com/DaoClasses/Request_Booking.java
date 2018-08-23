@@ -227,10 +227,6 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setQr_name(c.Key(50, new_booker.getId()));
 
 
-            Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-            query.setParameter("id", id);
-            int result = query.executeUpdate();
-
             trns1.commit();
         } catch (RuntimeException e) {
             e.printStackTrace();

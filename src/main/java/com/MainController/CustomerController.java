@@ -290,6 +290,8 @@ public class CustomerController {
 			throws ParseException{
 		//String ret = customer.customer_request_booking(cb);
 		System.out.println("-----> Push back.............");
+		System.out.println("Tran Id"+pb.getTran_id());
+		System.out.println("Tran Id"+pb.getStatus());
 		String ret=null;
 		Custom_Dao customer=new Custom_Imp();
 		ret =customer.pushBackNotification(pb);
