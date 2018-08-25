@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.EntityClasses.*;
-import com.ModelClasses.B_Model;
-import com.ModelClasses.Schedule_Model;
-import com.ModelClasses.UserModel;
+import com.ModelClasses.*;
 
 import java.text.ParseException;
 
@@ -72,4 +70,7 @@ public interface usersDao {
 	public int deleteDate(int id);
 	public int updateDate(Batch_Master batch);
 	public Map<String, String> moveToRental(Schedule_Model model);
+	public Cost getAllPrices();
+	public int updateCost(Cost cost);
+	public int saveCost(Cost cost);
 }

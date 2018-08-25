@@ -114,6 +114,7 @@ public class AdminController {
 	public ModelAndView admin_profile() {
 		return new ModelAndView("admin_profile");
 	}
+	
 	@RequestMapping(value="/student_home", method=RequestMethod.GET)
 	public ModelAndView Student_Home() {
 		return new ModelAndView("student_home");
@@ -502,6 +503,45 @@ public class AdminController {
 		}
 		return map;
 		}
+
+
+		@RequestMapping(value="/createPrice", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toSavePrice(Cost cost) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.saveCost(cost);
+		if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","Prices have just been created successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs!");
+		}
+		return map;
+		}
+
+
+
+		@RequestMapping(value="/updatePrice", method=RequestMethod.GET)
+		public @ResponseBody Map<String,Object> toUpdatePrice(Cost cost) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.updateCost(cost);
+		if(check==1)
+		{
+			map.put("status","1");
+			map.put("message","Prices have just been updated successfully!");
+		}
+		else
+		{
+			map.put("status","5");
+			map.put("message","Technical problem occurs!");
+		}
+		return map;
+		}
+
+
 
 
 
@@ -968,6 +1008,20 @@ public class AdminController {
 		}
 		return new ModelAndView("departure_date","data",json);
 	}
+	@RequestMapping(value="/pricemng", method=RequestMethod.GET)
+	public ModelAndView pricemng() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("price", usersService1.getAllPrices());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("pricemng","data",json);
+	}
+	
 	
 //====================To save location============================
 	@RequestMapping(value="/createPickUpLocation", method=RequestMethod.GET)

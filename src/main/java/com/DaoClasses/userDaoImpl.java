@@ -58,25 +58,9 @@ import org.springframework.stereotype.Repository;
 import com.EncryptionDecryption.Decryption;
 import com.EncryptionDecryption.Encryption;
 import com.EncryptionDecryption.SecretKeyClass;
-import com.EntityClasses.Batch_Master;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Dept_Time_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.UserRole;
-import com.EntityClasses.User_Info;
+import com.EntityClasses.*;
 import com.HibernateUtil.HibernateUtil;
-import com.ModelClasses.B_Model;
-import com.ModelClasses.Customer_Booking;
-import com.ModelClasses.IdentifyTypeUser;
-import com.ModelClasses.Mail;
-import com.ModelClasses.Project_Model;
-import com.ModelClasses.Reset_Password;
-import com.ModelClasses.Schedule_Model;
-import com.ModelClasses.UserModel;
+import com.ModelClasses.*;
 import com.client_mail.ApplicationConfig;
 //import com.ServiceClasses.usersService;
 //import com.client_mail.ApplicationConfig;
@@ -827,6 +811,25 @@ public class userDaoImpl implements usersDao{
             session.close();
         }
         return p;
+        
+    }
+    public Cost getAllPrices(){
+        Cost cost = new Cost();
+        Transaction trns16 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns16 = session.beginTransaction();
+            Query query = session.createQuery("from Cost");
+            cost = (Cost)query.uniqueResult();
+            System.out.println("Costttttt "+cost);
+            } catch (RuntimeException e) {
+            e.printStackTrace();
+            return cost;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return cost;
         
     }
 	public List<Location_Master> getAllLocations(){
@@ -1909,6 +1912,59 @@ public class userDaoImpl implements usersDao{
         }
         return 1;
     }
+
+    public int saveCost(Cost cost){
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            Timestamp created_at = new Timestamp(System.currentTimeMillis());
+            cost.setCreated_at(created_at);
+            session.save(cost);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
+    public int updateCost(Cost cost){
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            Timestamp updated_at = new Timestamp(System.currentTimeMillis());
+            String queryString = "FROM Cost";
+            Query query = session.createQuery(queryString);
+            Cost n_cost=(Cost)query.list().get(0);
+            n_cost.setAdult(cost.getAdult());
+            n_cost.setChild(cost.getChild());
+            n_cost.setUpdated_at(updated_at);
+            session.update(n_cost);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 5;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
+
 
 
 

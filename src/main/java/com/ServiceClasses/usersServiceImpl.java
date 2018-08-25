@@ -199,6 +199,15 @@ public class usersServiceImpl implements usersService{
 	public Map<String, String> moveToRental(Schedule_Model model){
 		return usersDao1.moveToRental(model);
 	}
+	public Cost getAllPrices(){
+		return usersDao1.getAllPrices();
+	}
+	public int updateCost(Cost cost){
+		return usersDao1.updateCost(cost);
+	}
+	public int saveCost(Cost cost){
+		return usersDao1.saveCost(cost);
+	}
 }
 
 

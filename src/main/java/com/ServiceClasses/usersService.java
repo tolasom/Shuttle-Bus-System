@@ -3,16 +3,10 @@ package com.ServiceClasses;
 import java.text.ParseException;
 import java.util.List;
 
-import com.EntityClasses.Batch_Master;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Bus_Master;
-
 import java.util.Map;
 
 import com.EntityClasses.*;
-import com.ModelClasses.B_Model;
-import com.ModelClasses.Schedule_Model;
-import com.ModelClasses.UserModel;
+import com.ModelClasses.*;
 
 
 public interface usersService {
@@ -74,4 +68,7 @@ public interface usersService {
 	public int deleteDate(int id);
 	public int updateDate(Batch_Master batch);
 	public Map<String, String> moveToRental(Schedule_Model model);
+	public Cost getAllPrices();
+	public int updateCost(Cost cost);
+	public int saveCost(Cost cost);
 }
