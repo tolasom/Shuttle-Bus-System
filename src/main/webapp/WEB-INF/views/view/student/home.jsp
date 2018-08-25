@@ -30,7 +30,7 @@
         <script type="text/javascript" src="/resources/student/build/static/js/main.938219e8.js"></script>
         <link rel="stylesheet" href="/resources/student/build/static/css/main.4dd30cc9.css">
        <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
-        <!--<script type="text/javascript" src="/resources/student/build/static/js/compressed.js"></script>-->
+
 
     </body>
 </html>
