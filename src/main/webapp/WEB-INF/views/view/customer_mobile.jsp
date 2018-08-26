@@ -20,8 +20,11 @@
 <script>
     window.token = document.getElementById("csrfToken").value
     window.headerName = document.getElementById("csrfHeader").value
-   
     sessionStorage.setItem("path","/")
+    if(!sessionStorage.getItem("intro")){
+        sessionStorage.setItem("intro",'true');
+    }
+
 </script>
 <form action="/logout" method="post" id="logoutForm">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -31,9 +34,9 @@
 <!--<script type="text/javascript" src="/resources/build/static/js/bundle.js"></script>-->
 <!--<script type="text/javascript" src="/resources/build/static/js/comp.js"></script>
 <script type="text/javascript" src="/resources/build/static/js/compressed.js"></script>-->
-<script type="text/javascript" src="/resources/build/static/js/main.41c074b3.js"></script>
-<link rel="stylesheet" href="/resources/build/static/css/main.f1e2f445.css">
-<!--<script type="text/javascript" src="http://10.10.10.103:3000/static/js/bundle.js"></script>-->
+<script type="text/javascript" src="/resources/build/static/js/main.6280b515.js"></script>
+<link rel="stylesheet" href="/resources/build/static/css/main.18dc56c1.css">
+<!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
 </body>
 
 </html>
