@@ -10,26 +10,18 @@
     <!— Modal content —>
     <div class="aba-modal-content">
 
-        <!-- Include PHP class -->
+
         <%@ page import="com.PaymentGateway.PayWayApiCheckout" %>
-        <%
-            String transactionId = "000009";
-            String amount = "2.00";
-            String firstName = "Chheun";
-            String lastName = "Bunrath";
-            String phone = "016680644";
-            String email = "chheun.bunrath@ababank.com";
-        %>
 
         <form method="POST" target="aba_webservice"
               action="<% out.print(PayWayApiCheckout.getApiUrl()); %>" id="aba_merchant_request">
-            <input type="hidden" name="hash" id="hash"/>
-            <input type="hidden" name="tran_id"  id="tran_id"/>
-            <input type="hidden" name="amount" id="amount"/>
-            <input type="hidden" name="firstname" value=""/>
-            <input type="hidden" name="lastname" value=""/>
-            <input type="hidden" name="phone" value=""/>
-            <input type="hidden" name="email" value=""/>
+            <input type="hidden" name="hash" id="hash" />
+            <input type="hidden" name="tran_id" id="tran_id"/>
+            <input type="hidden" name="amount" id="amount" />
+            <input type="hidden" name="firstname" id="first_name"/>
+            <input type="hidden" name="lastname" id="last_name"/>
+            <input type="hidden" name="phone" id="phone"/>
+            <input type="hidden" name="email" id="email"/>
         </form>
     </div>
     <!— end Modal content—>
@@ -42,7 +34,8 @@
 
 <!— Make a copy this javaScript to paste into your site—>
 <!— Note: these javaScript files are using for only integration testing—>
-<link rel="stylesheet" href="https://payway-dev.ababank.com/checkout-popup.html?file=css"/>
+    <link rel="stylesheet" href="/resources/css/pop_up.css"/>
+    <!--<link rel="stylesheet" href="https://payway-dev.ababank.com/checkout-popup.html?file=css"/>-->
 <!-- <script src="file:///home/hanako/Desktop/checkout-popup.js"></script> -->
 <spring:url value="/resources/js/checkout-popup.js" var="CheckOut"/>
 <script src="${CheckOut}"></script>

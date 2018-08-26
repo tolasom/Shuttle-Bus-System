@@ -254,22 +254,23 @@ public class Custom_Imp implements Custom_Dao{
         }
 		return map;
 	}
-	public Map<String, Map<String, List<Pickup_Location_Master>>> location(){
-		Transaction trns1 = null;
+	public Map<String, Object> location(){
+
         Session session = HibernateUtil.getSessionFactory().openSession();       
 		List<Location_Master> locat = new ArrayList<Location_Master>();
-		Map<String,Map<String, List<Pickup_Location_Master>>> pickup=new HashMap<String,Map<String, List<Pickup_Location_Master>>>();
-		Map<String, List<Pickup_Location_Master>> list= new HashMap<String, List<Pickup_Location_Master>>();
+		Map<String,Object> pickup=new HashMap<String,Object>();
+		Map<String, Object> list= new HashMap<String, Object>();
 		List<Pickup_Location_Master> pick= new ArrayList<Pickup_Location_Master>();
 		try {
-            trns1 = session.beginTransaction();
-            locat = session.createQuery("from Location_Master where enabled=?").setBoolean(0, true).list();
+
+            locat = session.createQuery("from Location_Master L where L.enabled=? ORDER BY L.id")
+					.setBoolean(0, true).list();
             System.out.println(locat.get(0).getId());
             for(int i=0;i<locat.size();i++){
             	pick = session.createQuery("from Pickup_Location_Master where location_id=? and enabled=? and permanent=?")
 						.setParameter(0, locat.get(i).getId()).setBoolean(1, true).setBoolean(2,true).list();
-            	System.out.println(pick.size());
-            	list.put(locat.get(i).getName().toString(), pick);
+            	list.put(i+locat.get(i).getName().toString(), pick);
+
             }
             pickup.put("location", list);
             System.out.println(pickup);

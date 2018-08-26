@@ -114,7 +114,7 @@ var s_code;
 load = function () {
 	$('.sameheight-item').attr( "style", "" );
 	var bootstrapjs = $("<script>");
-  	$(bootstrapjs).attr('src', '/sbs/resources/Bootstrap/js/bootstrap.min.js');
+  	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
  	$(bootstrapjs).appendTo('body');
 	var data = ${data};
     console.log(data)

@@ -20,7 +20,7 @@ import com.EntityClasses.User_Info;
 import com.ModelClasses.IdentifyTypeUser;
 
 
-//@WebFilter(urlPatterns = {"/googleUser"}, description = "Session Checker Filter")
+//@WebFilter(urlPatterns = {"/googleUser"}, description = "Session Checker CookieFilter")
 public class LoginFilterClass implements Filter {
 
 	 public void init(FilterConfig filterConfig) throws ServletException {

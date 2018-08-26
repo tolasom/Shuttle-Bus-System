@@ -14,7 +14,7 @@ import com.ModelClasses.UserModel;
 
 public interface Custom_Dao {
 	Map<String,Object> user_info();
-	public Map<String, Map<String, List<Pickup_Location_Master>>> location();
+	public Map<String, Object> location();
 	public Map<String, Map<String, List<Pickup_Location_Master>>> check_location(int id);
 	public String customer_booking(Customer_Booking[] cb) throws ParseException;
 	public List<Map<String,Object>> departure_time_info();
@@ -50,6 +50,7 @@ public interface Custom_Dao {
 	public Boolean submit_new_password(UserModel user);
 	public Map<String,Object> updatePhone(UserModel userModel);
 	public Cost Cost_Master();
+	public List<Map<String,Object>> get_sch_bus_info2(int id);
 	public String pushBackNotification(PushBackNotification pb) throws ParseException;
 
 }

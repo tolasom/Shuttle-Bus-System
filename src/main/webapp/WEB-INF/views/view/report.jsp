@@ -80,7 +80,7 @@ var locations;
 
 $(document).ready(function(){
 	var bootstrapjs = $("<script>");
-  	$(bootstrapjs).attr('src', '/sbs/resources/Bootstrap/js/bootstrap.min.js');
+  	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
 	$("#breport").addClass("active");
 	$('#myModal').on('hide.bs.modal', function (e) {

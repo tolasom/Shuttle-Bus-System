@@ -103,8 +103,8 @@ public class CustomerController {
 
 	//=========================Location Information================================
 		@RequestMapping(value="/location_data", method=RequestMethod.GET)
-			public @ResponseBody Map<String, Map<String, List<Pickup_Location_Master>>> location1() {
-			Map<String, Map<String, List<Pickup_Location_Master>>> map = customer.location();
+			public @ResponseBody Map<String, Object> location1() {
+			Map<String,Object> map = customer.location();
 			return map;
 		}
 	//=========================Departure Time Information================================
@@ -228,7 +228,14 @@ public class CustomerController {
 			List<Map<String, Object>> map = customer.get_sch_driver_info2(id);
 			System.out.println("DDDDDDDDDD "+ id);
 			return map;
-		}	
+		}
+		//======================== Get Sch Driver Information base id================================
+		@RequestMapping(value="/get_sch_bus_info2", method=RequestMethod.GET)
+			public @ResponseBody List<Map<String,Object>> get_sch_bus_info2(int id) {
+			List<Map<String, Object>> map = customer.get_sch_bus_info2(id);
+			System.out.println("DDDDDDDDDD "+ id);
+			return map;
+		}		
 	
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)

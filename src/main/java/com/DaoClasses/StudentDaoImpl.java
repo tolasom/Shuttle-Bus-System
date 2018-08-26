@@ -105,7 +105,7 @@ public class StudentDaoImpl implements StudentDao{
         int count_ticket = 0;
         int user_id = id.getAuthentic();
         try {
-                if(!isExited(user_id,book_data.getDeparture_date())){
+
                     Booking_Master booking_master = new Booking_Master();
                     booking_master.setUser_id(user_id);
                     booking_master.setFrom_id(book_data.getSource());
@@ -126,10 +126,10 @@ public class StudentDaoImpl implements StudentDao{
                     booking_master.setCode(Custom_Imp.getBookingSequence(booking_master.getId()));
                     session.update(booking_master);
                     count_ticket ++;
-                }
+
 
             if(book_data.getChoice()==2){
-                    if(!isExited(user_id,book_data.getReturn_date())){
+
                         Booking_Master booking_return = new Booking_Master();
                         booking_return.setUser_id(user_id);
                         booking_return.setCreated_at(created_at);
@@ -149,9 +149,6 @@ public class StudentDaoImpl implements StudentDao{
                         booking_return.setCode(Custom_Imp.getBookingSequence(booking_return.getId()));
                         session.update(booking_return);
                         count_ticket ++;
-                    }
-
-
 
             }
 
@@ -377,10 +374,15 @@ public class StudentDaoImpl implements StudentDao{
                 if(booking_master.getSchedule_id() !=0 ){
                     Schedule_Master schedule_master =
                             (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
+                    System.out.println("Driver Id:"+(schedule_master.getDriver_id()!=0));
+                    System.out.println("code:"+schedule_master.getCode());
                     if(schedule_master.getDriver_id()!=0){
                         User_Info user_info =
                                 (User_Info) session.load(User_Info.class,schedule_master.getDriver_id());
-                        map.put("driver",user_info.getName());
+                        System.out.println(user_info.getName());
+                        map.put("driver_name",user_info.getUsername());
+                        map.put("driver_phone",user_info.getPhone_number());
+                        map.put("driver_email",user_info.getEmail());
                     }
                     if(schedule_master.getBus_id()!=0){
                         Bus_Master bus_master =
@@ -415,8 +417,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id="+id.getAuthentic();
-            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and user_id="+id.getAuthentic();
+            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and notification='Booked' and user_id="+id.getAuthentic();
+            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and notification='Booked' and user_id="+id.getAuthentic();
             String request = "From Booking_Request_Master where " +
                     "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);
@@ -513,10 +515,10 @@ public class StudentDaoImpl implements StudentDao{
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-           String hql = "From Booking_Master where dept_date='2018-7-2'";
+           String hql = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id=324";
            Query query = session.createQuery(hql);
 
-           System.out.println(query.list());
+           System.out.println(query.list().size());
         }
         catch (RuntimeException e) {
             e.printStackTrace();

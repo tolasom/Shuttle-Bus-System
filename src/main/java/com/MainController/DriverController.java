@@ -134,7 +134,10 @@ public class DriverController {
             	for(int j=0;j<pass.size();j++){
             		User_Info passenger=new User_Info();
 	            	passenger = (User_Info) session.createQuery("from User_Info where id=?").setParameter(0, pass.get(j).getUser_id()).list().get(0);
-	            	UserRole Role = (UserRole) passenger.getUserRole();
+	            	int idd = pass.get(j).getUser_id();
+	            	UserRole Role = (UserRole) session.load(UserRole.class,idd);
+
+	            	//UserRole Role = (UserRole) passenger.getUserRole();
 	            	
             		Map<String, Object> map_pass = new HashMap<String, Object>();
             		map_pass.put("id", pass.get(j).getId());
