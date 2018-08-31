@@ -34,9 +34,9 @@
 <!--<script type="text/javascript" src="/resources/build/static/js/bundle.js"></script>-->
 <!--<script type="text/javascript" src="/resources/build/static/js/comp.js"></script>
 <script type="text/javascript" src="/resources/build/static/js/compressed.js"></script>-->
-<script type="text/javascript" src="/resources/build/static/js/main.6280b515.js"></script>
-<link rel="stylesheet" href="/resources/build/static/css/main.18dc56c1.css">
-<!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
+<!--<script type="text/javascript" src="/resources/build/static/js/main.6280b515.js"></script>
+<link rel="stylesheet" href="/resources/build/static/css/main.18dc56c1.css">-->
+<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>
 </body>
 
 </html>

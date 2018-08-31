@@ -144,6 +144,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         try {
             trns1 = session.beginTransaction();
             for (Customer_Booking cb : cbooking) {
+                System.out.println(cb.getPay());
+                String pay = cb.getPay().equals("cash")?"Cash":"Pending";
                 Pickup_Location_Master pick_source;
                 pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
                         .setParameter(0, cb.getSource()).list().get(0);
@@ -172,7 +174,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setEmail_confirm(false);
                 new_booker.setQr_status(false);
                 new_booker.setBooking_request_id(0);
-                new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
+                new_booker.setPayment(pay); // There are three type of payment status -> Pending, Succeed, Failed
                 session.save(new_booker);
                 if (transactionID == null) {
                     transactionID = c.transactionID(20-("vki"+new_booker.getId()).length(), new_booker.getId());

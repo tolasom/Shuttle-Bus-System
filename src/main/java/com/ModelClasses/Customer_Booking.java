@@ -11,6 +11,7 @@ public class Customer_Booking {
 	private String status;//book and request_book
 	private float total_cost;
 	private int booking_master_id;
+	private String pay;
 
 
 	public int getSource() {
@@ -99,5 +100,13 @@ public class Customer_Booking {
 
 	public void setBooking_master_id(int booking_master_id) {
 		this.booking_master_id = booking_master_id;
+	}
+
+	public String getPay() {
+		return pay;
+	}
+
+	public void setPay(String pay) {
+		this.pay = pay;
 	}
 }
