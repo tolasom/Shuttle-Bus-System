@@ -2123,7 +2123,7 @@ public class Custom_Imp implements Custom_Dao{
         	if(user.size()>0&&pickUp.size()>0&&source.size()>0
         			&&drop_off.size()>0&&destination.size()>0){
         		Mail mail = new Mail();
-		        mail.setMailFrom("maimom2222@gmail.com");
+		        mail.setMailFrom("nanaresearch9@gmail.com");
 		        mail.setMailTo(user.get(0).getEmail());
 		        mail.setMailSubject("vKirirom Shuttle Bus Booked Confirmation");
 		        mail.setFile_name("qr_code_template.txt");
@@ -2265,12 +2265,19 @@ public class Custom_Imp implements Custom_Dao{
 //        	e.printStackTrace();
 //        }
 
-		java.sql.Time time = java.sql.Time.valueOf("23:59:21");
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
-		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
-		Date current_time = f.parse(f.format(new Date()));
-		long difference = (current_time.getTime()-time.getTime())/(1000); // (second)
-		System.out.println(difference);
+//		java.sql.Time time = java.sql.Time.valueOf("23:59:21");
+//		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+//		f.setTimeZone(TimeZone.getTimeZone("GMT+7:00"));
+//		Date current_time = f.parse(f.format(new Date()));
+//		long difference = (current_time.getTime()-time.getTime())/(1000); // (second)
+//		System.out.println(difference);
+		
+		ByteArrayOutputStream out = QRCode.from("helloworld").to(ImageType.PNG).stream();  
+		byte[] test = out.toByteArray();
+		String encodedImage = Base64.getEncoder().encodeToString(test);
+		System.out.println(encodedImage);
+		byte[] imgBytes = Base64.getDecoder().decode(encodedImage);
+		System.out.println(imgBytes);
 
 	}
 

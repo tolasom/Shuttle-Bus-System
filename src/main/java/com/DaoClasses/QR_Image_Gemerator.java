@@ -25,11 +25,11 @@ public class QR_Image_Gemerator {
           // TODO Auto-generated method stub  
           Scanner s=new Scanner(System.in);  
           System.out.println("Enter base64 string to be converted to image"); 
-          //iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn+1GIAAAApElEQVR42u3VMQ7DMAwDQP6A//+lxm4qxbZoPZpOtwQGnNxg2JSMoNfngRsugALQgKcYPN5TCoVqlqcTqOIFUGcwQ9/raTdB6XrN39Q3wc9saqn+HhQbZM2cg96ISYk5tMNRqRCDDkZH9Ak5AfeKztfIYTp/9oaOwcXWkqwDeOWszTGH6Xr4CpzB2jAZqNDf6gdgU/P+XuRdmJCbBDuG+x/1b3gCOSaFcLrWXbIAAAAASUVORK5CYII
-          String base64=s.nextLine();  
+          String base64="iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn+1GIAAAApElEQVR42u3VMQ7DMAwDQP6A//+lxm4qxbZoPZpOtwQGnNxg2JSMoNfngRsugALQgKcYPN5TCoVqlqcTqOIFUGcwQ9/raTdB6XrN39Q3wc9saqn+HhQbZM2cg96ISYk5tMNRqRCDDkZH9Ak5AfeKztfIYTp/9oaOwcXWkqwDeOWszTGH6Xr4CpzB2jAZqNDf6gdgU/P+XuRdmJCbBDuG+x/1b3gCOSaFcLrWXbIAAAAASUVORK5CYII";
+          //String base64=s.nextLine();  
           byte[] base64Val=convertToImg(base64);  
           System.out.println(base64Val);
-          writeByteToImageFile(base64Val, "./src/main/resources/img/6.png");  
+          writeByteToImageFile(base64Val, "D:/Directory1/6.png");  
           System.out.println("Saved the base64 as image in current directory with name image.png");  
           
           
@@ -50,8 +50,11 @@ public class QR_Image_Gemerator {
          
         byte[] base64Val;
 		try {
+			//Create New Folder
+			new File("D:\\Directory_Test").mkdir();
+			
 			base64Val = convertToImg(encodedImage);
-			writeByteToImageFile(base64Val, "./src/main/resources/img/"+bm.getQr_name()+".png");
+			writeByteToImageFile(base64Val, "D:/Directory_Test/"+bm.getQr_name()+".png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
