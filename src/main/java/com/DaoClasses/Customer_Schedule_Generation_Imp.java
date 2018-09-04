@@ -160,7 +160,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setDestination_id(pick_destin.getId());
                 new_booker.setTo_id(pick_destin.getLocation_id());
                 new_booker.setDept_time(java.sql.Time.valueOf(cb.getTime()));
-                new_booker.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+                new_booker.setDept_date(java.sql.Timestamp.valueOf(cb.getDate()));
                 new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                 new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                 new_booker.setUser_id(user.getAuthentic());
