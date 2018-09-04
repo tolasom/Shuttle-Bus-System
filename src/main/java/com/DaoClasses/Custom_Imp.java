@@ -1758,7 +1758,7 @@ public class Custom_Imp implements Custom_Dao{
             book.setFrom_id(pick_source.getLocation_id());
             book.setDestination_id(cb.getDestination());
             book.setTo_id(pick_destin.getLocation_id());
-            book.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+            book.setDept_date(java.sql.Timestamp.valueOf(cb.getDate()+" "+cb.getTime()));
             book.setDept_time(java.sql.Time.valueOf(cb.getTime()));
             book.setNumber_of_booking(cb.getNumber_of_seat());
             book.setAdult(cb.getAdult());
