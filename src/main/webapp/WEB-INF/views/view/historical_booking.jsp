@@ -42,7 +42,7 @@
                                                 <table class="table table-striped table-bordered table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>No</th>
+                                                            
                                                             <th>Code</th>
                                                             <th>Name</th>
                                                             <th>From</th>
@@ -141,6 +141,7 @@ load = function(){
 			bookings = response.bookings;
 			locations = response.locations;
 			customers = response.customers;
+			all = bookings.length
 			
 			console.log(locations)
 			var no_student = 0
@@ -156,7 +157,7 @@ load = function(){
 
 				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'" deptdate="'+formatDate(bookings[i].dept_date)+'" from="'+bookings[i].from_id+'"'+
 				'destination="'+bookings[i].destination_id+'"'+'source="'+bookings[i].source_id+'"'+'to="'+bookings[i].to_id+'"'+'data-url="booking_detail?id='+bookings[i].id+'">'
-									+'<td>'+(i+1)+'</td>'
+									
 									+'<td>'+bookings[i].code+'</td>'
 									+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
 									+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
@@ -360,6 +361,12 @@ $(document).ready(function(){
 						  });	
 						
 					}
+					var c = 0
+				$(".search").each(function(){
+							if($(this).attr("style") == 'display: none;')
+								c++
+					});
+				swal("Filtering Done!", all-c+" bookings found!", "success")
 					$('#filterModal').modal('toggle');
 
 			}

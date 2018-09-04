@@ -31,6 +31,8 @@
          <mapping resource ="booking_request_master.hbm.xml"/>
          <mapping resource ="dept_time_master.hbm.xml"/>
         <mapping resource ="cost_master.hbm.xml"/>
+        <mapping resource ="refund_master.hbm.xml"/>
+
          
          
     </session-factory>

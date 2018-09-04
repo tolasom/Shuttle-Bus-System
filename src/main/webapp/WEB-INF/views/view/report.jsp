@@ -2,9 +2,45 @@
 <article class="content cards-page">                   
                   
 	                      	
-                    <section class="section">
+                   <section class="section">
                         <div class="row">
-                           
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title-block">
+                                            <h3 class="title"> Bookings Report </h3>
+                                            
+                                        </div>
+                                        <section class="example">
+                                            <div class="table-responsive">
+                                                <table id="tt" class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Code</th>
+                                                            <th>Name</th>
+                                                            <th>From</th>
+                                                            <th>To</th>
+                                                            <th>Departure Date</th>
+                                                            <th>Departure Time</th>
+                                                            <th>Number of bookings</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="allBooking">
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div class="col-md-12">
+                                <button class="btn btn-info pull-right" onClick="generateReport()"  style="color:white;" id="moveBtn"> <i class="fa fa-bar-chart"></i> Generate Report</button>
+                            </div>
+                                </div>
+
+                            </div> 
+
                         </div>
                     </section>
                 </article>
@@ -23,7 +59,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title center">Which bookings?</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" onClick="closeModal()" class="close" >&times;</button>
         </div>
         <div class="modal-body">
           <form id="myForm">
@@ -61,7 +97,7 @@
                                         	</form>
         </div>
         <div class="modal-footer">
-          <button type="button" style="color:black;" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" onClick="closeModal()" style="color:black;" class="btn btn-default">Close</button>
           <button onClick="goTO()" class="btn btn-info">View Before Generating</button>
         </div>
       </div>
@@ -83,9 +119,7 @@ $(document).ready(function(){
   	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
 	$("#breport").addClass("active");
-	$('#myModal').on('hide.bs.modal', function (e) {
-		window.location.href = "current_schedule";
-	})
+	
 	
     $(".ir2").slideToggle();
     $("#ddr1").toggleClass("irr2");
@@ -167,41 +201,61 @@ $(document).ready(function(){
                     notification:status
 
                 }
-            window.location = "reportSubmit?data="+data;
-			// $.ajax({
-   //  		url:'reportSubmit',
-   //  		type:'GET',
-   //  		data:{	from_id:from,
-   //  				to_id:to,
-   //  				dept_date:date,
-   //  				n:time,
-   //                  notification:status
+			$.ajax({
+    		url:'reportSubmit',
+    		type:'GET',
+    		data:{	from_id:from,
+    				to_id:to,
+    				dept_date:date,
+    				n:time,
+                    notification:status
 
-   //  			},
-   //  		traditional: true,			
-   //  		success: function(response){
-   //                  var data = JSON.stringify(response.message);
-   //                   if(response.message.length>0)
-   //                  {
-   //                      setTimeout(function() {
-   //                          swal({
-   //                              title: "Done!",
-   //                              text: response.message.length+" bookings were found!",
-   //                              type: "success"
-   //                          }, function() {
-   //                              window.location = "bookingReport2?data="+data;
-   //                          });
-   //                      }, 10);
-   //                  }
-   //                  else 
-   //                      swal("Oops!", "No bookings as you required!", "error")
-   //                },
-   //  		error: function(err){
-   //  				console.log(JSON.stringify(err));
+    			},
+    		traditional: true,			
+    		success: function(response)
+              {
+                  if(response.bookings.length>0)
+                    {
+                        setTimeout(function() {
+                            swal({
+                                title: "Done!",
+                                text: response.bookings.length+" bookings were found!",
+                                type: "success"
+                            }, function() {
+                                bookings = response.bookings;
+                                locations = response.locations;
+                                customers = response.customers;
+                        
+                                for (var i=0;i<bookings.length;i++)
+                                    {
+                                    var booking = '<tr class="hoverr search" s-title="'+bookings[i].code+'" data-url="booking_detail?id='+bookings[i].id+'"><td>'+(i+1)+'</td>'
+                                                        +'<td>'+bookings[i].code+'</td>'
+                                                        +'<td>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
+                                                        +'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
+                                                        +'<td>'+searchLocation(bookings[i].to_id,locations)+'</td>'
+                                                        +'<td>'+formatDate(bookings[i].dept_date)+'</td>'
+                                                        +'<td>'+bookings[i].dept_time+'</td>'
+                                                        +'<td>'+bookings[i].number_booking+'</td>'
+                                                        +'<td>'+bookings[i].notification+'</td></tr>';
+                                    $("#allBooking").append(booking);               
+                                    }
+                                $('#myModal').modal('toggle');
+
+                                $(".hoverr").on('click', function() {
+                                    location.href=$(this).attr('data-url');
+                                });
+                            });
+                        }, 10);
+                    }
+                    else 
+                        swal("Oops!", "No bookings as you required!", "error")
+                  },
+    		error: function(err){
+    				console.log(JSON.stringify(err));
     				
-   //  				}
+    				}
     		
-   //  			});	
+    			});	
 			}
 		
 	});
@@ -228,6 +282,11 @@ goTO = function(){
     $('#bsubmit').trigger('click');
 }
 
+
+closeModal = function(){
+    window.location.href = "current_schedule";
+}
+
 function toDate(dStr,format) {
     var now = new Date();
     console.log(dStr)
@@ -238,5 +297,50 @@ function toDate(dStr,format) {
         return now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
     }else 
         return "Invalid Format";
+}
+
+formatDate =function (date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+    return [month, day, year].join('-');
+};
+
+function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchDriver(id, myArray){
+    if(id==0)
+        return"";
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchBus(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].model;
+        }
+    }
+}
+function searchCustomer(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
 }
 </script>
