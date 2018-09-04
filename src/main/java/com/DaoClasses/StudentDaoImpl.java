@@ -374,10 +374,15 @@ public class StudentDaoImpl implements StudentDao{
                 if(booking_master.getSchedule_id() !=0 ){
                     Schedule_Master schedule_master =
                             (Schedule_Master) session.load(Schedule_Master.class,booking_master.getSchedule_id());
+                    System.out.println("Driver Id:"+(schedule_master.getDriver_id()!=0));
+                    System.out.println("code:"+schedule_master.getCode());
                     if(schedule_master.getDriver_id()!=0){
                         User_Info user_info =
                                 (User_Info) session.load(User_Info.class,schedule_master.getDriver_id());
-                        map.put("driver",user_info.getName());
+                        System.out.println(user_info.getName());
+                        map.put("driver_name",user_info.getUsername());
+                        map.put("driver_phone",user_info.getPhone_number());
+                        map.put("driver_email",user_info.getEmail());
                     }
                     if(schedule_master.getBus_id()!=0){
                         Bus_Master bus_master =
@@ -412,8 +417,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id="+id.getAuthentic();
-            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and user_id="+id.getAuthentic();
+            String current = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and notification='Booked' and user_id="+id.getAuthentic();
+            String history = "From Booking_Master where dept_date < current_date() and payment='Succeed' and notification='Booked' and user_id="+id.getAuthentic();
             String request = "From Booking_Request_Master where " +
                     "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);

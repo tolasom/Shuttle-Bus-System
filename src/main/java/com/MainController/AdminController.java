@@ -158,38 +158,8 @@ public class AdminController {
 	public ModelAndView admin_booking() {
 		return new ModelAndView("admin_booking");
 	}
-	@RequestMapping(value="/bookingReport2", method=RequestMethod.GET)
-	public ModelAndView bookingReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("bookings", data);
-		map.put("locations", usersService1.getAllLocations());
-		map.put("p_locations", usersService1.getAllPickUpLocations());
-		map.put("customers", usersService1.getAlCustomers());
-		ObjectMapper mapper = new ObjectMapper();
-		String json="";
-		try {
-			json = mapper.writeValueAsString(map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ModelAndView("bookingReport2","data",json);
-	}
-	@RequestMapping(value="/scheduleReport2", method=RequestMethod.GET)
-	public ModelAndView scheduleReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("schedules", data);
-		map.put("locations", usersService1.getAllLocations());
-		map.put("buses", usersService1.getAllBuses());
-		map.put("drivers", usersService1.getAlDrivers());
-		ObjectMapper mapper = new ObjectMapper();
-		String json="";
-		try {
-			json = mapper.writeValueAsString(map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ModelAndView("scheduleReport2","data",json);
-	}
+	
+	
 //=========================Returns historical_booking_requestt view================================
 	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
 	public ModelAndView historical_booking_request() {
@@ -278,6 +248,47 @@ public class AdminController {
 		}
 		return new ModelAndView("booking_detail","data",json);
 	}
+
+
+
+	@RequestMapping(value="/refund_detail", method=RequestMethod.GET)
+	public ModelAndView refund_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id, @RequestParam(value = "rid", required=true, defaultValue = "0") Integer rid) {
+		Booking_Master booking = usersService1.getBookingById(id);
+		B_Model model = new B_Model();
+		model.setN(usersService1.getCustomerById(booking.getUser_id()).getName());
+		model.setCode(booking.getCode());
+		model.setCreated_at(booking.getCreated_at().toString());
+		model.setDept_date(booking.getDept_date().toString());
+		model.setDept_time(booking.getDept_time());
+		model.setDescription(booking.getDescription());
+		model.setId(booking.getId());
+		model.setDestination_id(booking.getDestination_id());
+		model.setNotification(booking.getNotification());
+		model.setNumber_booking(booking.getNumber_booking());
+		model.setQr(rid.toString());
+		model.setSchedule_id(booking.getSchedule_id());
+		model.setSource_id(booking.getSource_id());
+		//model.setUpdated_at(booking.getUpdated_at().toString());
+		model.setUser_id(booking.getUser_id());
+		model.setFrom_id(booking.getFrom_id());
+		model.setTo_id(booking.getTo_id());
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("booking", model);
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("refund_detail","data",json);
+	}
+
+
+
 	
 	
 	
@@ -442,18 +453,62 @@ public class AdminController {
 	public @ResponseBody Map<String,Object> reportSubmit(B_Model booking) throws Exception{
 		Map<String,Object> map = new HashMap<String,Object>();
 		System.out.println(booking.getFrom_id()+"  "+booking.getTo_id()+"  "+booking.getDept_date()+"  "+booking.getN()+"  "+booking.getNotification());
-		map.put("message",usersService1.getBookingReporting(booking));
+		map.put("bookings",usersService1.getBookingReporting(booking));
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
 		return map;
 		}
+
+
+	@RequestMapping(value="/bookingReport2", method=RequestMethod.GET)
+	public ModelAndView bookingReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("bookings", data);
+		map.put("locations", usersService1.getAllLocations());
+		map.put("p_locations", usersService1.getAllPickUpLocations());
+		map.put("customers", usersService1.getAlCustomers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("bookingReport2","data",json);
+	}
+
 
 
 	@RequestMapping(value="/sReportSubmit", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> sReportSubmit(B_Model booking) throws Exception{
 		Map<String,Object> map = new HashMap<String,Object>();
 		System.out.println(booking.getFrom_id()+"  "+booking.getTo_id()+"  "+booking.getDept_date()+"  "+booking.getN()+"  "+booking.getNotification());
-		map.put("message",usersService1.getScheduleReporting(booking));
+		map.put("schedules",usersService1.getScheduleReporting(booking));
+		map.put("locations", usersService1.getAllLocations());
+		map.put("buses", usersService1.getAllBuses());
+		map.put("drivers", usersService1.getAlDrivers());
 		return map;
-		}	
+		}
+
+
+
+	@RequestMapping(value="/scheduleReport2", method=RequestMethod.GET)
+	public ModelAndView scheduleReport2(@RequestParam(value = "data", required=true, defaultValue = "null") String data) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("schedules", data);
+		map.put("locations", usersService1.getAllLocations());
+		map.put("buses", usersService1.getAllBuses());
+		map.put("drivers", usersService1.getAlDrivers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("scheduleReport2","data",json);
+	}	
 
 
 
@@ -824,6 +879,55 @@ public class AdminController {
 		return map;
 		}
 	
+
+
+	@RequestMapping(value="/ignoreRefund", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> ignoreRefund(Refund_Master refund) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.ignoreRefund(refund);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+			
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This refund has just been rejected successfully");
+			// User_Info user = usersService1.getCustomerById(request.getUser_id());
+			// String email = user.getEmail();
+			// usersService1.rejectedRequest(email);
+		}
+		
+		return map;
+		}
+
+
+
+	@RequestMapping(value="/payBooking", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> payBooking(Booking_Master booking) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.payBooking(booking);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+			
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This booking has just been paid successfully!");
+			// User_Info user = usersService1.getCustomerById(request.getUser_id());
+			// String email = user.getEmail();
+			// usersService1.rejectedRequest(email);
+		}
+		
+		return map;
+		}
+
+
 	
 	
 //====================To update bus============================
@@ -1246,6 +1350,53 @@ public class AdminController {
 		}
 		return new ModelAndView("schedule_list","data",json);
 	}
+
+
+
+
+	@RequestMapping(value="/refund_list", method=RequestMethod.GET)
+	public ModelAndView refund_list() throws ParseException{
+		List<Refund_Master> refunds =  usersService1.getAllRefunds();
+		List<Booking_Master> bookings = new ArrayList<Booking_Master>();
+		for (Refund_Master refund:refunds)
+		{
+			Booking_Master booking = usersService1.getBookingById(refund.getBooking_id());
+			bookings.add(booking);
+		}
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("refunds", refunds);
+		map.put("bookings", bookings);
+		map.put("customers", usersService1.getAlCustomers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("refund_list","data",json);
+	}
+
+
+
+	@RequestMapping(value="/unpaid_booking_list", method=RequestMethod.GET)
+	public ModelAndView unpaid_booking_list() throws ParseException{
+		List<Booking_Master> bookings =  usersService1.getAllUnpaidBookings();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("bookings", bookings);
+		map.put("customers", usersService1.getAlCustomers());
+		ObjectMapper mapper = new ObjectMapper();
+		String json="";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("unpaid_booking_list","data",json);
+	}
+
+
+
 	
 	
 	@RequestMapping(value="/getAllLocations", method=RequestMethod.GET)

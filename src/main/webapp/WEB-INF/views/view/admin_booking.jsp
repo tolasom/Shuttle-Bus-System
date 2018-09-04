@@ -25,6 +25,23 @@
 	                      	 </div>
 	                      	 <button data-toggle="tooltip" title="Assign Bookings To New Schedule" class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white; width: 180px;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
                        		</div>
+
+
+
+                       		<div style="display: flex;flex-direction: column;">
+                       			<div style="margin-bottom: 10px;">
+		                         <button type="button" class="btn btn-info pull-left" style="color:white;" onclick="location.href='refund_list';">Booking Refunds </button>
+
+		                          
+
+		                          <button type="button" class="btn btn-info pull-left" style="color:white; margin-left: 10px;" onclick="location.href='unpaid_booking_list';">Unpaid Bookings</button>
+		                         
+	                      	 </div>
+	                      	 
+                       		</div>
+
+
+
 	                         
 
 	                      	 <div>

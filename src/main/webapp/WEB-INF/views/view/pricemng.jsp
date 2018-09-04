@@ -9,7 +9,7 @@
                                             <h3 class="title"> All Prices </h3>
                                         </div>
                                         <section class="example">
-                                            <table class="table table-striped table-bordered table-hover">
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -52,10 +52,10 @@
           <form id="createForm">
                                         <div class="form-group">
                                             <label class="control-label">Adult</label>
-                                            <input type="number" class="form-control boxed" id="adultc"required> </div>
+                                            <input type="text" maxlength="2" class="form-control boxed nonly" id="adultc"required> </div>
                                         <div class="form-group">
                                             <label class="control-label">Child</label>
-                                            <input type="number" class="form-control boxed" id="childc"required> </div>
+                                            <input type="text" maxlength="2" class="form-control boxed nonly" id="childc"required> </div>
                                          <button type="submit" id="createsubmit" class="btn btn-default" style="display:none;">Create</button>
                                     </form>
         </div>
@@ -83,10 +83,10 @@
           <form id="updateForm">
                                         <div class="form-group">
                                             <label class="control-label">Adult</label>
-                                            <input type="number" class="form-control boxed" id="adultu"required> </div>
+                                            <input type="text" maxlength="2" class="form-control boxed nonly" id="adultu"required> </div>
                                         <div class="form-group">
                                             <label class="control-label">Child</label>
-                                            <input type="number" class="form-control boxed" id="childu"required> </div>
+                                            <input type="text" maxlength="2" class="form-control boxed nonly" id="childu"required> </div>
                                          <button type="submit" id="updatesubmit" class="btn btn-default" style="display:none;">Update</button>
                                     </form>
         </div>
@@ -136,6 +136,15 @@ $(document).ready(function(){
                         $("#dds1").toggleClass("irr");
                         $("#dds2").toggleClass("irr");
     $( "#settingMng" ).off();
+
+    $(".nonly").keypress(function (e) {
+         //if the letter is not digit then display error and don't type anything
+         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //display error message
+            $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                   return false;
+        }
+       });
    
     
 

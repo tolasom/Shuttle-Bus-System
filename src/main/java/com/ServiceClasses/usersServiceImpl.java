@@ -208,6 +208,20 @@ public class usersServiceImpl implements usersService{
 	public int saveCost(Cost cost){
 		return usersDao1.saveCost(cost);
 	}
+	public List<Booking_Master> getAllUnpaidBookings()
+	{
+		return usersDao1.getAllUnpaidBookings();
+	}
+	public List<Refund_Master> getAllRefunds()
+	{
+		return usersDao1.getAllRefunds();
+	}
+	public int ignoreRefund(Refund_Master refund){
+		return usersDao1.ignoreRefund(refund);
+	}
+	public int payBooking(Booking_Master booking){
+		return usersDao1.payBooking(booking);
+	}
 }
 
 

@@ -1,10 +1,43 @@
 <body onload="load()">
 <article class="content cards-page">                   
-                  
-	                      	
-                    <section class="section">
+             <section class="section">
                         <div class="row">
-                           
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title-block">
+                                            <h3 class="title"> Schedules Report </h3>
+                                            
+                                        </div>
+                                        <section class="example">
+                                            <div class="table-responsive">
+                                                <table id="tt" class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Code</th>
+                                                            <th>Bus</th>
+                                                            <th>Driver</th>
+                                                            <th>From</th>
+                                                            <th>To</th>
+                                                            <th>Departure Date</th>
+                                                            <th>Departure Time</th>
+                                                            <th>Number of bookings</th>
+                                                           
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="allSchedules">
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </section>
+                                        <div class="col-md-12">
+                                <button class="btn btn-info pull-right" onClick="generateReport()"  style="color:white;" id="moveBtn"> <i class="fa fa-bar-chart"></i> Generate Report</button>
+                            </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </article>
@@ -23,7 +56,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title center">Which schedules?</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button onClick="closeModal()" type="button" class="close">&times;</button>
         </div>
         <div class="modal-body">
           <form id="myForm">
@@ -66,7 +99,7 @@
                                         	</form>
         </div>
         <div class="modal-footer">
-          <button type="button" style="color:black;" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button onClick="closeModal()" type="button" style="color:black;" class="btn btn-default">Close</button>
           <button onClick="goTO()" class="btn btn-info">View Before Generating</button>
         </div>
       </div>
@@ -88,9 +121,9 @@ $(document).ready(function(){
   	$(bootstrapjs).attr('src', '/resources/Bootstrap/js/bootstrap.min.js');
   	$(bootstrapjs).appendTo('body');
 	$("#sreport").addClass("active");
-	$('#myModal').on('hide.bs.modal', function (e) {
-		window.location.href = "current_schedule";
-	})
+	// $('#myModal').on('hide.bs.modal', function (e) {
+	// 	window.location.href = "current_schedule";
+	// })
 	
     $(".ir2").slideToggle();
     $("#ddr1").toggleClass("irr2");
@@ -189,16 +222,38 @@ $(document).ready(function(){
     			},
     		traditional: true,			
     		success: function(response){
-                    var data = JSON.stringify(response.message);
-                     if(response.message.length>0)
+                     if(response.schedules.length>0)
                     {
                         setTimeout(function() {
                             swal({
                                 title: "Done!",
-                                text: response.message.length+" schedules were found!",
+                                text: response.schedules.length+" schedules were found!",
                                 type: "success"
                             }, function() {
-                                window.location = "scheduleReport2?data="+data;
+
+                                var schedules = response.schedules;
+                                var locations = response.locations;
+                                var buses = response.buses;
+                                var drivers  = response.drivers;
+                                for (var i=0;i<schedules.length;i++)
+                                        {
+                                        var schedule = '<tr search" s-title="'+schedules[i].code+'" data-url="schedule_detail?id='+schedules[i].id+'"><td>'+(i+1)+'</td>'
+                                                            +'<td>'+schedules[i].code+'</td>'
+                                                            +'<td>'+searchBus(schedules[i].bus_id,buses)+'</td>'
+                                                            +'<td>'+searchDriver(schedules[i].driver_id,drivers)+'</td>'
+                                                            +'<td>'+searchLocation(schedules[i].from_id,locations)+'</td>'
+                                                            +'<td>'+searchLocation(schedules[i].to_id,locations)+'</td>'
+                                                            +'<td>'+formatDate(schedules[i].dept_date)+'</td>'
+                                                            +'<td>'+schedules[i].dept_time+'</td>'
+                                                            +'<td>'+schedules[i].number_booking+'</td></tr>';
+                                        $("#allSchedules").append(schedule);                
+                                        }
+                                        $('#myModal').modal('toggle');
+                                        $( ".unhoverr" ).on('click', function(e) {
+                                            e.stopPropagation();    
+                                            var s_id = parseInt($(this).attr('data-url'));
+                                            deleteSchedule(s_id);
+                                        });
                             });
                         }, 10);
                     }
@@ -243,6 +298,10 @@ goTO = function(){
     $('#bsubmit').trigger('click');
 }
 
+closeModal = function(){
+    window.location.href = "current_schedule";
+}
+
 function toDate(dStr,format) {
     var now = new Date();
     console.log(dStr)
@@ -254,4 +313,59 @@ function toDate(dStr,format) {
     }else 
         return "Invalid Format";
 }
+
+formatDate =function (date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+    return [month, day, year].join('-');
+};
+
+function searchLocation(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchDriver(id, myArray){
+    if(id==0)
+        return"";
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].name;
+        }
+    }
+}
+
+function searchBus(id, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === id) {
+            return myArray[i].model;
+        }
+    }
+}
+
+
+
+generateReport = function()
+{
+            var data_type = 'data:application/vnd.ms-excel';
+            var table_div = document.getElementById('tt');
+            var table_html = table_div.outerHTML.replace(/ /g, '%20');
+        
+            var a = document.createElement('a');
+            a.href = data_type + ', ' + table_html;
+            a.download = 'Schedules_Report' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+            a.click();
+       
+}
+
+
 </script>

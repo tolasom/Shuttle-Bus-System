@@ -73,4 +73,8 @@ public interface usersDao {
 	public Cost getAllPrices();
 	public int updateCost(Cost cost);
 	public int saveCost(Cost cost);
+	public List<Booking_Master> getAllUnpaidBookings();
+	public List<Refund_Master> getAllRefunds();
+	public int ignoreRefund(Refund_Master refund);
+	public int payBooking(Booking_Master booking);
 }

@@ -64,6 +64,7 @@ $(document).ready(function(){
 
 load = function(){
 	var response = ${data};
+    s2 = response
     var schedules = JSON.parse(response.schedules);
     var locations = response.locations;
     var buses = response.buses;

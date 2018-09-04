@@ -55,9 +55,7 @@ import org.springframework.stereotype.Repository;
 
 
 //import org.springframework.stereotype.Service;
-import com.EncryptionDecryption.Decryption;
-import com.EncryptionDecryption.Encryption;
-import com.EncryptionDecryption.SecretKeyClass;
+import com.EncryptionDecryption.*;
 import com.EntityClasses.*;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.*;
@@ -2129,7 +2127,64 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
-	
+	public int ignoreRefund(Refund_Master refund){
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Refund_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",refund.getId());
+            Refund_Master r  = (Refund_Master) query.uniqueResult();
+            
+            r.setStatus("Ignored");
+            session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+    public int payBooking(Booking_Master booking){
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Booking_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",booking.getId());
+            Booking_Master r  = (Booking_Master) query.uniqueResult();
+            
+            r.setPayment("Succeed");
+            session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
+
+
+
+
+
+
 	public int savePickUpLocation(Pickup_Location_Master p_location){
 		List <Pickup_Location_Master> p_locations  = new ArrayList<Pickup_Location_Master>();
 		List <Location_Master> locations  = new ArrayList<Location_Master>();
@@ -2169,13 +2224,15 @@ public class userDaoImpl implements usersDao{
 		return 1;
 		
 	}
-	public List <Booking_Master> getAllCurrentBookings(){
-		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+
+
+    public List <Booking_Master> getAllHistoricalBookings(){
+        List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
         Transaction trns19 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Master where dept_date>=:localDate and payment=:payment and notification!=:notification";
+            String queryString = "from Booking_Master where dept_date<:localDate and (payment=:payment or payment=:payment2) and notification !=:notification";
             Query query = session.createQuery(queryString);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
@@ -2183,6 +2240,36 @@ public class userDaoImpl implements usersDao{
             System.out.println(dtf.format(localDate));
             query.setDate("localDate", date);
             query.setString("payment", "Succeed");
+            query.setString("payment2", "Cash");
+            query.setString("notification", "Cancelled");
+            bookings=(List<Booking_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return bookings;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return bookings;
+        
+    }
+
+
+	public List <Booking_Master> getAllCurrentBookings(){
+		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Master where dept_date>=:localDate and (payment=:payment or payment=:payment2) and notification!=:notification";
+            Query query = session.createQuery(queryString);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(dtf.format(localDate));
+            query.setDate("localDate", date);
+            query.setString("payment", "Succeed");
+            query.setString("payment2", "Cash"); 
             query.setString("notification", "Cancelled");
             bookings=(List<Booking_Master>)query.list();
         } catch (RuntimeException e) {
@@ -2195,6 +2282,59 @@ public class userDaoImpl implements usersDao{
         return bookings;
 		
 	}
+
+
+
+
+    public List <Booking_Master> getAllUnpaidBookings(){
+        List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Booking_Master where payment=:payment and notification!=:notification";
+            Query query = session.createQuery(queryString);
+            query.setString("payment", "Cash"); 
+            query.setString("notification", "Cancelled");
+            bookings=(List<Booking_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return bookings;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return bookings;
+        
+    }
+
+
+
+
+    public List <Refund_Master> getAllRefunds(){
+        List <Refund_Master> refunds  = new ArrayList<Refund_Master>();
+        Transaction trns19 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns19 =  session.beginTransaction();
+            String queryString = "from Refund_Master where status=:status";
+            Query query = session.createQuery(queryString);
+            query.setString("status", "Pending"); 
+            refunds=(List<Refund_Master>)query.list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return refunds;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return refunds;
+        
+    }
+
+
+
+
 	
 	
 	
@@ -2541,32 +2681,7 @@ public class userDaoImpl implements usersDao{
 	
 	
 	
-	public List <Booking_Master> getAllHistoricalBookings(){
-		List <Booking_Master> bookings  = new ArrayList<Booking_Master>();
-        Transaction trns19 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Master where dept_date<:localDate and payment=:payment and notification !=:notification";
-            Query query = session.createQuery(queryString);
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = LocalDate.now();
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.println(dtf.format(localDate));
-            query.setDate("localDate", date);
-            query.setString("payment", "Succeed");
-            query.setString("notification", "Cancelled");
-            bookings=(List<Booking_Master>)query.list();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return bookings;
-        } finally {
-            session.flush();
-            session.close();
-        }
-        return bookings;
-		
-	}
+
 	
 	
 	
