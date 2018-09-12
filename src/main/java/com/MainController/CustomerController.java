@@ -240,8 +240,8 @@ public class CustomerController {
 	//=========================To Cancel Booking Ticket================================
 	@RequestMapping(value="/cancel_booking_ticket", method=RequestMethod.POST)
 		public @ResponseBody String cancel_booking_ticket(@RequestBody ID_Class id_delete) {
-
-		String ret = customer.cancel_booking_ticket(id_delete.getId());
+		System.out.println("percentage"+id_delete.getPercentage());
+		String ret = customer.cancel_booking_ticket(id_delete.getId(), id_delete.getPercentage());
 		return ret;
 	}
 
@@ -258,6 +258,8 @@ public class CustomerController {
 		List<Map<String, Object>> ret = customer.get_qrcode(id);
 		return ret;
 	}
+
+
 
 	//=========================To update customer phone number================================
 	@RequestMapping(value="/update_phone", method=RequestMethod.POST)
@@ -313,7 +315,7 @@ public class CustomerController {
 		
 		//Push back notification
 		PushBackNotification pb=new PushBackNotification();
-		pb.setTran_id("vKh9fe9a1b2g91cflei5");
+		pb.setTran_id("vKl1ofh5p80440koji11");
 		pb.setStatus("0");
 		System.out.println("-----> Push back.............");
 		System.out.println("Tran Id"+pb.getTran_id());

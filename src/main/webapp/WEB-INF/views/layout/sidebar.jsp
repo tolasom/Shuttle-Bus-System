@@ -62,6 +62,10 @@
                                     <a href="departure_date">
                                         <span style="margin-left: 30px;"> Manage Departure Date</span> </a>
                                 </li>
+                                <li id="priceMng" class="irr ir">
+                                    <a href="pricemng">
+                                        <span style="margin-left: 30px;"> Manage Prices</span> </a>
+                                </li>
                                 
 
                                     

@@ -6,10 +6,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
         <meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json">
-        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="/resources/icon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/resources/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/resources/icon/favicon-16x16.png">
+        <link rel="manifest" href="/resources/icon/site.webmanifest">
+        <link rel="mask-icon" href="/resources/icon/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/react-md@1.2.13/dist/react-md.indigo-pink.min.css">
-        <title>Student</title>
+        <title>Shuttle Bus Booking</title>
     </head>
     <body>
 
@@ -27,9 +32,9 @@
         </form>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <!--<script type="text/javascript" src="/resources/student/build/static/js/main.938219e8.js"></script>
-        <link rel="stylesheet" href="/resources/student/build/static/css/main.4dd30cc9.css">-->
-       <script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>
+        <script type="text/javascript" src="/resources/student/build/static/js/main.8d50fc5c.js"></script>
+        <link rel="stylesheet" href="/resources/student/build/static/css/main.4dd30cc9.css">
+       <!--<script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>-->
 
 
     </body>

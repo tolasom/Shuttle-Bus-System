@@ -4,6 +4,7 @@ public class ID_Class {
 
     private int id;
     private String payment;
+    private int percentage;
 
     public int getId() {
         return id;
@@ -21,4 +22,11 @@ public class ID_Class {
 		this.payment = payment;
 	}
     
+    public int getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(int percentage) {
+        this.percentage = percentage;
+    }
 }

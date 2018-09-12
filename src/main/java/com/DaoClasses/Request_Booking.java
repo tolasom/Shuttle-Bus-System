@@ -218,7 +218,7 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setDept_date(cb.getDept_date());
             new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-            new_booker.setUser_id(1);
+            new_booker.setUser_id(cb.getUser_id());
             new_booker.setNumber_booking(total_passenger);
             new_booker.setNotification("Booked");
             new_booker.setSchedule_id(0);
@@ -262,6 +262,11 @@ public class Request_Booking implements Request_Booking_Dao {
             	Booking_Master bm= (Booking_Master) session2.load(Booking_Master.class,new_booker.getId());
             	bm.setPayment("Cash");
 				session2.update(bm);
+				//If it is booking request --> update Booking Request Master
+				Booking_Request_Master brm= (Booking_Request_Master) session2.load(Booking_Request_Master.class
+						,id_class.getId());
+				brm.setEnabled(false);
+				session2.update(brm);	
             	
             	System.out.println("Generate Schedule 3");
         		Customer_Booking cb=new Customer_Booking();

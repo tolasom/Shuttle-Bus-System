@@ -25,6 +25,23 @@
 	                      	 </div>
 	                      	 <button data-toggle="tooltip" title="Assign Bookings To New Schedule" class="btn btn-warning pull-left" onClick="confirmMove()" style="color:white; width: 180px;" id="moveBtn">Assign Schedule <i class="fa fa-exchange"></i></button>
                        		</div>
+
+
+
+                       		<div style="display: flex;flex-direction: column;">
+                       			<div style="margin-bottom: 10px;">
+		                         <button type="button" class="btn btn-info pull-left" style="color:white;" onclick="location.href='refund_list';">Booking Refunds </button>
+
+		                          
+
+		                          <button type="button" class="btn btn-info pull-left" style="color:white; margin-left: 10px;" onclick="location.href='unpaid_booking_list';">Unpaid Bookings</button>
+		                         
+	                      	 </div>
+	                      	 
+                       		</div>
+
+
+
 	                         
 
 	                      	 <div>
@@ -53,7 +70,7 @@
                                                     <thead>
                                                         <tr>
                                                         	<th></th>
-                                                            <th>No</th>
+                                           
                                                             <th>Code</th>
                                                             <th>Name</th>
                                                             <th>From</th>
@@ -148,6 +165,7 @@ load = function(){
 			bookings = response.bookings;
 			locations = response.locations;
 			customers = response.customers;
+			all = bookings.length
 			console.log(locations)
 			var no_student = 0
 			var no_customer = 0
@@ -169,7 +187,7 @@ load = function(){
 				var booking = '<tr class="hoverr search '+bookings[i].description+'" tofind="'+bookings[i].id+'"style="'+color+'"s-title="'+bookings[i].code+searchCustomer(bookings[i].user_id,customers).toLowerCase()+'" deptdate="'+formatDate(bookings[i].dept_date)+'" from="'+bookings[i].from_id+'"'+
 				'destination="'+bookings[i].destination_id+'"'+'source="'+bookings[i].source_id+'"'+'to="'+bookings[i].to_id+'"'+'data-url="booking_detail?id='+bookings[i].id+'">'
 									+cb
-									+'<td>'+(i+1)+'</td>'
+									
 									+'<td>'+bookings[i].code+'</td>'
 									+'<td class="user_info" style="color:blue" data='+bookings[i].user_id+'>'+searchCustomer(bookings[i].user_id,customers)+'</td>'
 									+'<td>'+searchLocation(bookings[i].from_id,locations)+'</td>'
@@ -390,6 +408,12 @@ $(document).ready(function(){
 						  });	
 						
 					}
+				var c = 0
+				$(".search").each(function(){
+							if($(this).attr("style") == 'display: none;')
+								c++
+					});
+				swal("Filtering Done!", all-c+" bookings found!", "success")
 				$('#filterModal').modal('toggle');
 
 			}

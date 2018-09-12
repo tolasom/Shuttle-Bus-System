@@ -1,5 +1,6 @@
 package com.DaoClasses;
 
+import com.EntityClasses.*;
 import com.ModelClasses.*;
 
 import getInfoLogin.IdUser;
@@ -23,16 +24,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.EncryptionDecryption.Encryption;
-import com.EntityClasses.Booking_Master;
-import com.EntityClasses.Booking_Request_Master;
-import com.EntityClasses.Bus_Master;
-import com.EntityClasses.Dept_Time_Master;
-import com.EntityClasses.Location_Master;
-import com.EntityClasses.Pickup_Location_Master;
-import com.EntityClasses.Schedule_Master;
-import com.EntityClasses.UserRole;
-import com.EntityClasses.User_Info;
-import com.EntityClasses.Cost;
 import com.HibernateUtil.HibernateUtil;
 import com.client_mail.ApplicationConfig;
 import com.client_mail.MailService;
@@ -1757,7 +1748,7 @@ public class Custom_Imp implements Custom_Dao{
             book.setFrom_id(pick_source.getLocation_id());
             book.setDestination_id(cb.getDestination());
             book.setTo_id(pick_destin.getLocation_id());
-            book.setDept_date(java.sql.Date.valueOf(cb.getDate()));
+            book.setDept_date(java.sql.Timestamp.valueOf(cb.getDate()+" "+cb.getTime()));
             book.setDept_time(java.sql.Time.valueOf(cb.getTime()));
             book.setNumber_of_booking(cb.getNumber_of_seat());
             book.setAdult(cb.getAdult());
@@ -1783,12 +1774,16 @@ public class Custom_Imp implements Custom_Dao{
 	}
 	public String cancel_request_booking(int id){
 		Transaction trns1 = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();     
+        Session session = HibernateUtil.getSessionFactory().openSession();
+		Refund_Master refund_master = new Refund_Master();
 		try {
             trns1 = session.beginTransaction();
             Query query = session.createQuery("update Booking_Request_Master set enabled='false' where id = :id");
-        	query.setParameter("id", id);
+
+            query.setParameter("id", id);
+
         	int result = query.executeUpdate();
+
         	trns1.commit();
         } catch (RuntimeException e) {
         	e.printStackTrace();
@@ -1826,40 +1821,68 @@ public class Custom_Imp implements Custom_Dao{
         }              
 		return "success";
 	}
-	public String cancel_booking_ticket(int id){
+	public String cancel_booking_ticket(int id,int percentage){
+		System.out.println("get cancel");
 		Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();     
-        List<Booking_Master> bo=new ArrayList<Booking_Master>();
+
         List<Map<String,Object>> all_bus =new ArrayList<Map<String,Object>>();  
-        List<Schedule_Master> schedule=new ArrayList<Schedule_Master>();
+
         String book;
+        Refund_Master refund_master = new Refund_Master();
+
 		try {
             trns1 = session.beginTransaction();
             
-            bo=session.createQuery("from Booking_Master where id=:id")
-					.setParameter("id", id).list();
-            
-            if(bo.size()>0){
-            	schedule=session.createQuery("from Schedule_Master where id=:id")
-    					.setParameter("id", bo.get(0).getSchedule_id()).list();
-            	
-            	Query query = session.createQuery("update Booking_Master set notification='Cancelled'" +
-        				" where id = :id");
+            //bo=session.createQuery("from Booking_Master where id=:id")
+					//.setParameter("id", id).list();
+            Booking_Master bo = (Booking_Master) session.load(Booking_Master.class,id);
+            System.out.println(bo);
+            Booking_Master booking_master = (Booking_Master) session.load(Booking_Master.class,id);
+            boolean status = booking_master.getPayment().equals("Succeed")?true:false;
+            if(bo != null){
+            	System.out.println(bo.getSchedule_id());
+            	//schedule=session.createQuery("from Schedule_Master where id=:id")
+    					//.setParameter("id", bo.getSchedule_id()).list();
+
+                Query query = session.createQuery("update Booking_Master set " +
+                        "notification='Cancelled'" +
+                        " where id = :id");
                 query.setParameter("id", id);
                 int result = query.executeUpdate();
-                if(schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking()==0){
-                	Query query1 = session.createQuery("delete Schedule_Master where id=:id");
-                	query1.setParameter("id", schedule.get(0).getId());
-                	int result1 = query1.executeUpdate();
-                }else{
-                	Query query1 = session.createQuery("update Schedule_Master set number_booking=:num_booking, remaining_seat=:remain_seat, number_customer=:number_customer" +
-            				" where id = :id");
-                    query1.setParameter("num_booking", schedule.get(0).getNumber_booking()-bo.get(0).getNumber_booking());
-                    query1.setParameter("remain_seat", schedule.get(0).getRemaining_seat()+bo.get(0).getNumber_booking());
-                    query1.setParameter("number_customer", schedule.get(0).getNumber_customer()-bo.get(0).getNumber_booking());
-                    query1.setParameter("id", schedule.get(0).getId());
-                    int result1 = query1.executeUpdate();
+                if(bo.getSchedule_id() != 0){
+                    Schedule_Master schedule = (Schedule_Master)
+                            session.load(Schedule_Master.class,bo.getSchedule_id());
+
+                    if(schedule != null){
+                        if(schedule.getNumber_booking()-bo.getNumber_booking()==0){
+                            Query query1 = session.createQuery("delete Schedule_Master where id=:id");
+                            query1.setParameter("id", schedule.getId());
+                            int result1 = query1.executeUpdate();
+                        }else{
+                            Query query1 = session.createQuery("update Schedule_Master set " +
+                                    "number_booking=:num_booking, remaining_seat=:remain_seat, " +
+                                    "=:number_customer" +
+                                    " where id = :id");
+                            query1.setParameter("num_booking", schedule.getNumber_booking()
+                                    -bo.getNumber_booking());
+                            query1.setParameter("remain_seat", schedule.getRemaining_seat()
+                                    +bo.getNumber_booking());
+                            query1.setParameter("number_customer", schedule.getNumber_customer()
+                                    -bo.getNumber_booking());
+                            query1.setParameter("id", schedule.getId());
+                            int result1 = query1.executeUpdate();
+                        }
+                    }
                 }
+
+
+                if(status){
+                	refund_master.setPercentage(percentage);
+                	refund_master.setBooking_id(id);
+                	refund_master.setStatus("Pending");
+                	session.save(refund_master);
+				}
                 
                 trns1.commit();  
             }else{
@@ -2069,7 +2092,6 @@ public class Custom_Imp implements Custom_Dao{
 	                    .setParameter(1, book.getTo_id())
 	                    .setTime(2, book.getDept_time())
 	                    .setDate(3, book.getDept_date()).list();
-	            System.out.println("All Booker: "+all_students.size());
 	            if(all_students.size()>0){
 	            	for(Booking_Master bm:all_students){
 	            		if(bm.getSchedule_id()!=0){
