@@ -2,32 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="06345a70-3328-4d36-a0c8-0657007cf460" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/error/404.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.34a0b769.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.8d50fc5c.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.8d50fc5c.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Dao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/Custom_Imp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/DaoClasses/StudentDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MainController/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ModelClasses/ID_Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ModelClasses/ID_Class.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/student/home.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.b6b97e8e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.b6b97e8e.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.34a0b769.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/student/build/asset-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/student/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/student/build/service-worker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.c7b29595.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/student/build/static/js/main.c7b29595.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/asset-manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/image/user.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/service-worker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/css/main.18dc56c1.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/css/main.18dc56c1.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.34a0b769.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/build/static/js/main.34a0b769.js.map" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,8 +42,8 @@
       <file leaf-file-name="customer_mobile.jsp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
+            <state relative-caret-position="326">
+              <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
             </state>
           </provider>
         </entry>
@@ -277,13 +263,6 @@
               <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -334,98 +313,6 @@
               <item name="build" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
               <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SpringRegister3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Shuttle-Bus-System" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="student" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -442,14 +329,14 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/webapp/resources" />
+      <recent name="$PROJECT_DIR$/src/main/webapp/resources/student" />
+      <recent name="$PROJECT_DIR$/src/main/webapp/resources/build/static/js" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/webapp/resources" />
       <recent name="$PROJECT_DIR$/src/main/webapp/resources/student" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/webapp/resources/student" />
-      <recent name="$PROJECT_DIR$/src/main/webapp/resources" />
-      <recent name="$PROJECT_DIR$/src/main/webapp/resources/build/static/js" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -612,15 +499,16 @@
       <workItem from="1536561561690" duration="7373000" />
       <workItem from="1536637902376" duration="1033000" />
       <workItem from="1536647385968" duration="1445000" />
-      <workItem from="1536724740797" duration="950000" />
+      <workItem from="1536724740797" duration="1437000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155925000" />
+    <option name="totallyTimeSpent" value="156412000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="650" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.50151056" side_tool="true" weight="0.8150087" />
@@ -641,9 +529,9 @@
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.66841185" />
       <window_info anchor="bottom" id="Spring" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49848944" visible="true" weight="0.8155515" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49848944" weight="0.8155515" />
       <window_info id="Persistence" order="2" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991274" visible="true" weight="0.41238672" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4991274" visible="true" weight="0.41238672" />
       <window_info id="Web" order="7" sideWeight="0.5008726" side_tool="true" weight="0.26510575" />
       <window_info anchor="right" id="Theme Preview" order="7" />
       <window_info id="Favorites" order="6" side_tool="true" />
@@ -935,8 +823,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/view/customer_mobile.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
+        <state relative-caret-position="326">
+          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>
