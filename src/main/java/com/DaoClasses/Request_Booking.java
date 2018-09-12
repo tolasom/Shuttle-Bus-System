@@ -3,7 +3,10 @@ package com.DaoClasses;
 import com.EntityClasses.*;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.ID_Class;
+
 import getInfoLogin.IdUser;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -171,21 +174,31 @@ public class Request_Booking implements Request_Booking_Dao {
         System.out.println("id: " + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id));
         return "vK" + (new BigInteger(mount * 5, random).toString(32)) +"i"+ String.valueOf(id);
     }
+    
+    public static String dateToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+		return f.format(date);
+	}
+
+	public static String timeToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("HH:mm:ss");
+		return f.format(date);
+	}
 
     //======================== Store Booking (After Request have confirmed by admin) Record When user booked  =================
-    public String booking(int id) {
-
+    public String booking(ID_Class id_class) throws ParseException {
+    	
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction trns1 = null;
         Booking_Request_Master book = new Booking_Request_Master();
-        //Customer_Booking cb=new Customer_Booking();
+        Booking_Master new_booker = new Booking_Master();
         Request_Booking c = new Request_Booking();
         String transactionID = null;
         try {
             trns1 = session.beginTransaction();
-
+           
             Booking_Request_Master cb = (Booking_Request_Master) session.createQuery("from Booking_Request_Master where id=?")
-                    .setParameter(0, id).list().get(0);
+                    .setParameter(0, id_class.getId()).list().get(0);
 
 
             Pickup_Location_Master pick_source = new Pickup_Location_Master();
@@ -195,8 +208,8 @@ public class Request_Booking implements Request_Booking_Dao {
             pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
                     .setParameter(0, cb.getDestination_id()).list().get(0);
 
-
-            Booking_Master new_booker = new Booking_Master();
+            int total_passenger=cb.getChild()+(cb.getAdult()*2);         
+            
             new_booker.setSource_id(pick_source.getId());
             new_booker.setFrom_id(pick_source.getLocation_id());
             new_booker.setDestination_id(pick_destin.getId());
@@ -206,7 +219,7 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
             new_booker.setUser_id(1);
-            new_booker.setNumber_booking(cb.getNumber_of_booking());
+            new_booker.setNumber_booking(total_passenger);
             new_booker.setNotification("Booked");
             new_booker.setSchedule_id(0);
             new_booker.setAdult(cb.getAdult());
@@ -215,7 +228,7 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setDescription("customer");
             new_booker.setEmail_confirm(false);
             new_booker.setQr_status(false);
-            new_booker.setBooking_request_id(id);
+            new_booker.setBooking_request_id(id_class.getId());
             new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
             session.save(new_booker);
             
@@ -225,8 +238,6 @@ public class Request_Booking implements Request_Booking_Dao {
             new_booker.setTransaction_id(transactionID);
             new_booker.setCode(c.getBookingSequence(new_booker.getId()));
             new_booker.setQr_name(c.Key(50, new_booker.getId()));
-
-
             trns1.commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -238,6 +249,57 @@ public class Request_Booking implements Request_Booking_Dao {
             session.flush();
             session.close();
         }
+        
+        System.out.println("Generate Schedule");
+        // Generate Schedule for this booker
+        Transaction trns2 = null;
+        Session session2 = HibernateUtil.getSessionFactory().openSession();
+        try{
+        	trns2 = session2.beginTransaction();	
+            if(id_class.getPayment().equals("cash")){
+
+            	// Update Booking Status with new session
+            	Booking_Master bm= (Booking_Master) session2.load(Booking_Master.class,new_booker.getId());
+            	bm.setPayment("Cash");
+				session2.update(bm);
+            	
+            	System.out.println("Generate Schedule 3");
+        		Customer_Booking cb=new Customer_Booking();
+				cb.setDate(dateToString(new_booker.getDept_date()));
+				cb.setTime(timeToString(new_booker.getDept_time()));
+				cb.setSource(new_booker.getSource_id());
+				cb.setDestination(new_booker.getDestination_id());
+				cb.setNumber_of_seat(new_booker.getNumber_booking());
+				cb.setAdult(new_booker.getAdult());
+				cb.setChild(new_booker.getChild());
+				cb.setStatus("Booked");
+				cb.setTotal_cost(new_booker.getTotal_cost());
+				cb.setBooking_master_id(new_booker.getId());
+				
+            	//generate or regenerate schedule
+				System.out.println("=====> Booking Request");
+				//Check whether student schedule is created ==> Booking Request
+				Request_Booking_Dao qb=new Request_Booking();
+				String ret1=qb.customer_booking(session2,cb);
+				//Send Confirmation Email
+				System.out.println("Return: "+ret1);
+				if (ret1.equals("success") || ret1.equals("over_bus_available") || ret1.equals("no_bus_available")) {
+					QR_Image_Gemerator.sendEmailQRCode(session2,new_booker);
+				}
+            }
+            trns2.commit();
+	    } catch (RuntimeException e) {
+	        e.printStackTrace();
+	        if (trns2 != null) {
+	            trns2.rollback();
+	        }
+	        return null;
+	    } finally {
+	    	session2.flush();
+	    	session2.close();
+	    }
+        
+        
         return transactionID;
     }
 
@@ -326,6 +388,7 @@ public class Request_Booking implements Request_Booking_Dao {
                             int delete = delete_Schedule(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());    // 5. Delete old Schedule
 
                             System.out.println(booking.list_bus_choosen);
+                            session.clear();// Must be clear before create new schedule_master record
                             for (int h = 0; h < sch_with_users.size(); h++) {
                                 int num_booking = 0;
                                 int num_customer = 0;
@@ -341,7 +404,7 @@ public class Request_Booking implements Request_Booking_Dao {
                                 sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                                 sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                                 sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-
+                                
                                 session.save(sch);
                                 for (int y = 0; y < sch_with_users.get(h).size(); y++) {
                                     System.out.println("kkkkk1122");
@@ -563,7 +626,7 @@ public class Request_Booking implements Request_Booking_Dao {
         List<Booking_Master> all_booker1 = new ArrayList<Booking_Master>();
         try {
             all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " +
-                    "and payment='Succeed' and schedule_id!='0' and from_id=? " +
+                    "and (payment='Succeed' or payment='Cash') and schedule_id!='0' and from_id=? " +
                     "and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
                     .setParameter(0, from_id).setParameter(1, to_id)
                     .setTime(2, java.sql.Time.valueOf(time))

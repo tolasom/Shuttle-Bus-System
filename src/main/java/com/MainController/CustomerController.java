@@ -164,7 +164,7 @@ public class CustomerController {
 		//String ret = req.request_book_now(id_class.getId());
 		//System.out.println(id_class.getId());
 		Request_Booking_Dao user =new Request_Booking();
-		String ret = user.booking(id_class.getId());
+		String ret = user.booking(id_class);
 		Map<String,Object> map=new HashMap<String, Object>();
 		map.put("transaction_id", ret);
 		return map;
@@ -303,21 +303,24 @@ public class CustomerController {
 		Custom_Dao customer=new Custom_Imp();
 		ret =customer.pushBackNotification(pb);
 		return ret;
-//		return null;
 	}
 
-
-	//Send QR code to home that not yet send out
-//	@Scheduled(cron="* */30 * * * *")
-//	public void sendEmail(){
-//      System.out.println("Started send QR code to home that not yet send out");
-//      customer.send_QRCODE();
-//	}
 	
-	public static void main(String args[]){
-		Custom_Dao cus=new Custom_Imp();
-		//cus.send_QRCODE();
-		System.out.println("End.....");
+	public static void main(String args[]) throws ParseException{
+//		Custom_Dao cus=new Custom_Imp();
+//		//cus.send_QRCODE();
+//		System.out.println("End.....");
+		
+		//Push back notification
+		PushBackNotification pb=new PushBackNotification();
+		pb.setTran_id("vKh9fe9a1b2g91cflei5");
+		pb.setStatus("0");
+		System.out.println("-----> Push back.............");
+		System.out.println("Tran Id"+pb.getTran_id());
+		System.out.println("Tran Id"+pb.getStatus());
+		String ret=null;
+		Custom_Dao customer=new Custom_Imp();
+		ret =customer.pushBackNotification(pb);
 	}
 	
 	

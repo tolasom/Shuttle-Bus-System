@@ -114,7 +114,6 @@ public class Custom_Imp implements Custom_Dao{
 			        
 		        	Mail mail = new Mail();
 			        mail.setMailFrom("nanaresearch9@gmail.com");
-
 			        mail.setMailTo(user.getEmail());
 			        mail.setMailSubject("vKirirom Shuttle Bus Password Reset");
 			        mail.setFile_name("forget_password_template.txt");
@@ -1995,7 +1994,6 @@ public class Custom_Imp implements Custom_Dao{
 					Booking_Master bm= (Booking_Master) session1.load(Booking_Master.class,booking.getId());
 					bm.setPayment("Succeed");
 					session1.update(bm);
-					
 					//If it is booking request --> update Booking Request Master
 					if(bm.getBooking_request_id()!=0){
 						Booking_Request_Master brm= (Booking_Request_Master) session1.load(Booking_Request_Master.class,bm.getBooking_request_id());
@@ -2003,27 +2001,6 @@ public class Custom_Imp implements Custom_Dao{
 						session1.update(brm);						
 					}
 				}
-				
-				
-//				trns1.commit();
-//				System.out.println("================> End pushBackNotification 1");
-//			}catch (RuntimeException e) {
-//				e.printStackTrace();
-//	        	if (trns1 != null) {
-//	                trns1.rollback();
-//	            }
-//				return null;
-//			} finally {
-//				session1.flush();
-//				session1.close();
-//			}
-//
-//			//================= Assign Schedule and Send Confirmation Email to user ================
-//			Transaction trns2 = null;
-//			Session session2 = HibernateUtil.getSessionFactory().openSession();
-//			try {
-//				trns2 =  session2.beginTransaction();
-				
 				
 				// Schedule Generation
 				Custom_Imp c=new Custom_Imp();
@@ -2049,17 +2026,19 @@ public class Custom_Imp implements Custom_Dao{
 						Request_Booking_Dao book=new Request_Booking();
 						String ret=book.customer_booking(session1,cb);
 						//Send Confirmation Email
+						System.out.println("Return: "+ret);
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(session1,booking);
+							QR_Image_Gemerator.sendEmailQRCode(session1,booking);
 						}
 					}else{
 						//generate or regenerate schedule
 						System.out.println("=====> Customer Booking");
 						Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
 						String ret=cus.customer_schedule_generation(session1,cb);
+						System.out.println("Return: "+ret);
 						//Send Confirmation Email
 						if (ret.equals("success") || ret.equals("over_bus_available") || ret.equals("no_bus_available")) {
-							sendEmailQRCode(session1,booking);
+							QR_Image_Gemerator.sendEmailQRCode(session1,booking);
 						}
 					}
 				}
@@ -2127,15 +2106,6 @@ public class Custom_Imp implements Custom_Dao{
 		        mail.setMailTo(user.get(0).getEmail());
 		        mail.setMailSubject("vKirirom Shuttle Bus Booked Confirmation");
 		        mail.setFile_name("qr_code_template.txt");
-		 
-		        
-		        //Take current IP
-//		        InetAddress ip = null;
-//				try {
-//					ip = InetAddress.getLocalHost();
-//				} catch (UnknownHostException e) {
-//					e.printStackTrace();
-//				}
 				
 		        Map < String, Object > model = new HashMap < String, Object > ();
 		        model.put("name", user.get(0).getUsername());

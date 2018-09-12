@@ -9,11 +9,12 @@ import org.hibernate.Session;
 import com.EntityClasses.Booking_Master;
 import com.EntityClasses.Pickup_Location_Master;
 import com.ModelClasses.Customer_Booking;
+import com.ModelClasses.ID_Class;
 import com.ModelClasses.New_Pickup_Location;
 import com.ModelClasses.UserModel;
 
 public interface Request_Booking_Dao {
-	public String booking(int id);
+	public String booking(ID_Class id_class) throws ParseException;
 	public String customer_booking(Session session,Customer_Booking cb) throws ParseException;
 	public List<Booking_Master> get_all_booker(Session session,int from_id, int to_id, String time, String date);
 	public List<Map<String,Object>> get_all_bus(Session session,Customer_Booking cb,int from, int to) throws ParseException;

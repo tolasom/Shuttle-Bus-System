@@ -292,6 +292,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	                        	List<Integer> list_assign=new ArrayList<Integer>();
 	                        	System.out.println(booking.list_bus_choosen);
 	                        	List<Integer> except_sch_id=new ArrayList<Integer>();
+	                        	session.clear();// Must be clear before create new schedule_master record
 	                        	for(int h=0;h<sch_with_users.size();h++){
 	                        		int num_booking=0;
 	                        		int num_customer=0;
@@ -365,8 +366,6 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 	        	        }
 	              	}
 				}
-				
-
         } catch (RuntimeException e) {
         	e.printStackTrace();
         }        
@@ -628,7 +627,7 @@ public class Set_Student_Schedule implements Set_Student_Schedule_Dao{
 		List<Booking_Master> all_booker1=new ArrayList<Booking_Master>();    
 		try {
             all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " +
-					"and payment='Succeed' and from_id=? and to_id=? " +
+					"and (payment='Succeed' or payment='Cash') and from_id=? and to_id=? " +
                     "and dept_time=? and dept_date=? order by number_booking desc, created_at ASC")
             		.setParameter(0,from_id).setParameter(1, to_id).
                             setTime(2, java.sql.Time.valueOf(time)).setDate(3,java.sql.Date.valueOf(date)).list();

@@ -3,10 +3,13 @@ package com.DaoClasses;
 import com.EntityClasses.*;
 import com.HibernateUtil.HibernateUtil;
 import com.ModelClasses.Customer_Booking;
+
 import getInfoLogin.IdUser;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -134,24 +137,35 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         System.out.println("id: " + (new BigInteger(mount * 5, random).toString(32)) + String.valueOf(id));
         return "vK" + (new BigInteger(mount * 5, random).toString(32))+"i" + String.valueOf(id);
     }
+    public static String dateToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+		return f.format(date);
+	}
+
+	public static String timeToString(Date date){
+		SimpleDateFormat f=new SimpleDateFormat("HH:mm:ss");
+		return f.format(date);
+	}
 
     //======================== Store Booking Record When user booked  ============================
-    public String booking(Customer_Booking[] cbooking) {
+    public String booking(Customer_Booking[] cbooking) throws ParseException {
+    	System.out.println("Booking()-------------------->");
+    	int total_passenger=cbooking[0].getChild()+(cbooking[0].getAdult()*2);
         Transaction trns1 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Customer_Schedule_Generation_Imp c = new Customer_Schedule_Generation_Imp();
+        List<Booking_Master> lbm=new ArrayList<Booking_Master>();
         String transactionID = null;
         try {
             trns1 = session.beginTransaction();
             for (Customer_Booking cb : cbooking) {
                 System.out.println(cb.getPay());
-                String pay = cb.getPay().equals("cash")?"Cash":"Pending";
                 Pickup_Location_Master pick_source;
-                pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
-                        .setParameter(0, cb.getSource()).list().get(0);
+                pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master "
+                		+ "where id=?").setParameter(0, cb.getSource()).list().get(0);
                 Pickup_Location_Master pick_destin;
-                pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
-                        .setParameter(0, cb.getDestination()).list().get(0);
+                pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master "
+                		+ "where id=?").setParameter(0, cb.getDestination()).list().get(0);
 
 
                 Booking_Master new_booker = new Booking_Master();
@@ -164,7 +178,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                 new_booker.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                 new_booker.setUser_id(user.getAuthentic());
-                new_booker.setNumber_booking(cb.getNumber_of_seat());
+                new_booker.setNumber_booking(total_passenger);
                 new_booker.setNotification("Booked");
                 new_booker.setSchedule_id(0);
                 new_booker.setAdult(cb.getAdult());
@@ -174,7 +188,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setEmail_confirm(false);
                 new_booker.setQr_status(false);
                 new_booker.setBooking_request_id(0);
-                new_booker.setPayment(pay); // There are three type of payment status -> Pending, Succeed, Failed
+                new_booker.setPayment("Pending"); // There are three type of payment status -> Pending, Succeed, Failed
                 session.save(new_booker);
                 if (transactionID == null) {
                     transactionID = c.transactionID(20-("vki"+new_booker.getId()).length(), new_booker.getId());
@@ -182,6 +196,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 new_booker.setTransaction_id(transactionID);
                 new_booker.setCode(Customer_Schedule_Generation_Imp.getBookingSequence(new_booker.getId()));
                 new_booker.setQr_name(c.Key(50, new_booker.getId()));
+                lbm.add(new_booker);
+
             }
             trns1.commit();
         } catch (RuntimeException e) {
@@ -194,6 +210,58 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
             session.flush();
             session.close();
         }
+        
+        System.out.println("Generate Schedule");
+        // Generate Schedule for this booker
+        Transaction trns2 = null;
+        Session session2 = HibernateUtil.getSessionFactory().openSession();
+        try{
+        	trns2 = session2.beginTransaction();	
+            if(cbooking[0].getPay().equals("cash")){
+            	System.out.println("Generate Schedule 2");
+            	for(Booking_Master bm: lbm){
+            		
+            		// Update Booking Status with new session
+            		Booking_Master book= (Booking_Master) session2.load(Booking_Master.class,bm.getId());
+					book.setPayment("Cash");
+					session2.update(book);
+
+            		System.out.println("Generate Schedule 3");
+            		Customer_Booking cb=new Customer_Booking();
+    				cb.setDate(dateToString(bm.getDept_date()));
+    				cb.setTime(timeToString(bm.getDept_time()));
+    				cb.setSource(bm.getSource_id());
+    				cb.setDestination(bm.getDestination_id());
+    				cb.setNumber_of_seat(bm.getNumber_booking());
+    				cb.setAdult(bm.getAdult());
+    				cb.setChild(bm.getChild());
+    				cb.setStatus("Booked");
+    				cb.setTotal_cost(bm.getTotal_cost());
+    				cb.setBooking_master_id(bm.getId());
+    				
+                	//generate or regenerate schedule
+    				System.out.println("=====> Customer Booking");
+    				Customer_Schedule_Generation_Dao cus=new Customer_Schedule_Generation_Imp();
+    				String ret=cus.customer_schedule_generation(session2,cb);
+    				System.out.println("Return: "+ret);
+    				//Send Confirmation Email
+    				if (ret.equals("success") || ret.equals("over_bus_available") 
+    						|| ret.equals("no_bus_available")) {
+    					QR_Image_Gemerator.sendEmailQRCode(session2,bm);
+    				}
+                }
+            }
+            trns2.commit();
+	    } catch (RuntimeException e) {
+	        e.printStackTrace();
+	        if (trns2 != null) {
+	            trns2.rollback();
+	        }
+	        return null;
+	    } finally {
+	    	session2.flush();
+	    	session2.close();
+	    }
         return transactionID;
     }
 
@@ -216,11 +284,14 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
             booking.total_bus = 0;
 
             Pickup_Location_Master pick_source = new Pickup_Location_Master();
-            pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getSource()).list().get(0);
+            pick_source = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+            		.setParameter(0, cb.getSource()).list().get(0);
             Pickup_Location_Master pick_destin = new Pickup_Location_Master();
-            pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?").setParameter(0, cb.getDestination()).list().get(0);
+            pick_destin = (Pickup_Location_Master) session.createQuery("from Pickup_Location_Master where id=?")
+            		.setParameter(0, cb.getDestination()).list().get(0);
 
-            schedule = session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and to_id=:to and from_id=:from")
+            schedule = session.createQuery("from Schedule_Master where dept_date=:date and dept_time=:time and "
+            		+ "to_id=:to and from_id=:from")
                     .setDate("date", java.sql.Date.valueOf(cb.getDate()))
                     .setTime("time", java.sql.Time.valueOf(cb.getTime()))
                     .setParameter("to", pick_destin.getLocation_id())
@@ -257,7 +328,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                 //1. query list of all available bus (result must be in order number of seat for small to big )
                 all_bus = custom_imp.get_all_bus(session, cb, pick_source.getLocation_id(), pick_destin.getLocation_id());
                 //2. get all bookers
-                all_booker1 = custom_imp.get_all_booker(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());
+                all_booker1 = custom_imp.get_all_booker(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), 
+                		cb.getTime(), cb.getDate());
           
                 //3. Find out number of total passengers in DB
                 for (int p = 0; p < all_booker1.size(); p++) {
@@ -280,16 +352,25 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                             //return "over_bus_available";
                         } else {
                             //Get List Existing Driver Assign match with Bus
-                            List<Integer> existing_bus_driver = custom_imp.get_existing_bus_and_driver(booking, session, cb, pick_source.getLocation_id(), pick_destin.getLocation_id());
+                            List<Integer> existing_bus_driver = custom_imp.get_existing_bus_and_driver(booking, session, 
+                            		cb, pick_source.getLocation_id(), pick_destin.getLocation_id());
                             //7.Delete Schedule
-                            int delete = delete_Schedule(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), cb.getTime(), cb.getDate());    // 5. Delete old Schedule
+                            int delete = delete_Schedule(session, pick_source.getLocation_id(), pick_destin.getLocation_id(), 
+                            		cb.getTime(), cb.getDate());    
 
                             System.out.println(booking.list_bus_choosen);
+                            System.out.println("sch_with_users: "+sch_with_users.size());
+                            System.out.println("sch_with_users: "+sch_with_users.get(0).get(0));
+                            // 8. Create new schedule
+                            session.clear();// Must be clear before create new schedule_master record
                             for (int h = 0; h < sch_with_users.size(); h++) {
+                            	System.out.println("First for loop 1");
                                 int num_booking = 0;
                                 int num_customer = 0;
                                 int number_stu = 0;
+                                System.out.println("First for loop 2");
                                 Schedule_Master sch = new Schedule_Master();
+                                sch.setId(12345);
                                 sch.setBus_id(Integer.valueOf((String) booking.list_bus_choosen.get(0).get(h).get("id")));
                                 sch.setDriver_id(existing_bus_driver.get(h));
                                 sch.setSource_id(pick_source.getId());
@@ -300,11 +381,15 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                                 sch.setDept_time(java.sql.Time.valueOf(cb.getTime()));
                                 sch.setCreated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
                                 sch.setUpdated_at(java.sql.Timestamp.valueOf(c.DateTimeNow()));
-
+                                System.out.println("First for loop 11");
+                                
                                 session.save(sch);
+                                System.out.println("POPO: "+ sch_with_users.get(h).size());
                                 for (int y = 0; y < sch_with_users.get(h).size(); y++) {
                                     System.out.println("kkkkk");
+                                    System.out.println(sch_with_users.get(h).get(0));
                                     num_booking += sch_with_users.get(h).get(y).getNumber_booking();
+                                    
                                     if (sch_with_users.get(h).get(y).getDescription().equals("customer")) {
                                         num_customer += sch_with_users.get(h).get(y).getNumber_booking();
                                     } else       //student
@@ -314,7 +399,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                                     Query query = session.createQuery("update Booking_Master set schedule_id = :sch_id, qr= :qr" +
                                             " where id = :id");
                                     query.setParameter("sch_id", sch.getId());
-                                    query.setParameter("qr", pick_source.getLocation_id() + "" + pick_destin.getLocation_id() + "" + cb.getDate() + "" + cb.getTime() + "" + sch_with_users.get(h).get(y).getId());
+                                    query.setParameter("qr", pick_source.getLocation_id() + "" + pick_destin.getLocation_id() 
+                                    		+ "" + cb.getDate() + "" + cb.getTime() + "" + sch_with_users.get(h).get(y).getId());
                                     query.setParameter("id", sch_with_users.get(h).get(y).getId());
                                     int result = query.executeUpdate();
                                 }
@@ -325,14 +411,14 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                                 sch.setNumber_staff(0);
                                 sch.setNumber_student(number_stu);
                                 sch.setCode(Customer_Schedule_Generation_Imp.getScheduleSequence(sch.getId()));
-//                                for (int y = 0; y < sch_with_users.get(h).size(); y++) {
-//                                    System.out.print(sch_with_users.get(h).get(y).getId() + " ");
-//                                }
-//                                System.out.println(" ");
-//                                for (int y = 0; y < sch_with_users.get(h).size(); y++) {
-//                                    System.out.print(sch_with_users.get(h).get(y).getNumber_booking() + " ");
-//                                }
-//                                System.out.println(" ");
+                                for (int y = 0; y < sch_with_users.get(h).size(); y++) {
+                                    System.out.print(sch_with_users.get(h).get(y).getId() + " ");
+                                }
+                                System.out.println(" ");
+                                for (int y = 0; y < sch_with_users.get(h).size(); y++) {
+                                    System.out.print(sch_with_users.get(h).get(y).getNumber_booking() + " ");
+                                }
+                                System.out.println(" ");
                             }
                         }
                     } else {
@@ -350,6 +436,7 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
             }
             //======================== End loop create schedule ====================================
         } catch (RuntimeException e) {
+        	e.printStackTrace();
             return "error";
         }
         return "success";
@@ -414,7 +501,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
                         List<Booking_Master> user_each_bus = new ArrayList<Booking_Master>();
                         next_total_seat_of_bus_chosen += Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat"));
                         int total_pass_each_sch = 0;
-                        for (int j = 0; j < all_booker1.size() && total_pass_each_sch < Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat")); j++) {
+                        for (int j = 0; j < all_booker1.size() 
+                        		&& total_pass_each_sch < Integer.valueOf((String) booking.list_bus_choosen.get(0).get(i).get("number_of_seat")); j++) {
                             Boolean status_assign = true;
                             //check user already assign or not yet(if already assign break loop;
                             for (int k = 0; k < user_sch_assign.size(); k++) {
@@ -520,10 +608,12 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
         System.out.println("get_all_booker");
         List<Booking_Master> all_booker1 = new ArrayList<Booking_Master>();
         try {
-            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " +
-                    "and description='customer' and payment='Succeed' and schedule_id!='0' and from_id=? " +
-                    "and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
-                    .setParameter(0, from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time)).setDate(3, java.sql.Date.valueOf(date)).list();
+            all_booker1 = session.createQuery("from Booking_Master where notification!='Cancelled' " 
+            		+"and description='customer' and (payment='Succeed' or payment='Cash') "
+                    +"and schedule_id!='0' and from_id=? " 
+                    +"and to_id=? and dept_time=? and dept_date=? order by number_booking desc")
+                    .setParameter(0, from_id).setParameter(1, to_id).setTime(2, java.sql.Time.valueOf(time))
+                    .setDate(3, java.sql.Date.valueOf(date)).list();
             System.out.println("All Booker: "+all_booker1.size());
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -782,7 +872,8 @@ public class Customer_Schedule_Generation_Imp implements Customer_Schedule_Gener
     public int delete_Schedule(Session session, int from_id, int to_id, String time, String date) {
         System.out.println("delete_Schedule");
         try {
-            Query q = session.createQuery("delete Schedule_Master where from_id=? and to_id=? and dept_time=? and dept_date=?");
+            Query q = session.createQuery("delete Schedule_Master where from_id=? and to_id=? "
+            		+ "and dept_time=? and dept_date=?");
             q.setParameter(0, from_id);
             q.setParameter(1, to_id);
             q.setTime(2, java.sql.Time.valueOf(time));
