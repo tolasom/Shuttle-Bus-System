@@ -17,4 +17,5 @@ public interface StudentDao {
     public List<Integer> listBookedDate();
     public Map<String,Object> cancel_ticket(ID_Class id_class);
     public Map<String,Object> remainingTicket();
+    public Map<String,Object> Notification();
 }

@@ -67,6 +67,11 @@ public class StudentController {
     @ResponseBody public Map<String,Object> studentCancel(@RequestBody ID_Class id_class)
     { return studentDao.cancel_ticket(id_class);}
 
+    @RequestMapping(value="/notification", method=RequestMethod.GET)
+    public @ResponseBody Map<String, Object> Notification() {
+        return studentDao.Notification();
+    }
+
     //@Scheduled(cron="*/5 * * * * *")
     //public void updateEmployeeInventory() {
        // System.out.println("Started cron job 1");

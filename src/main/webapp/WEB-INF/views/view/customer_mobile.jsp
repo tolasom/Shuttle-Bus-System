@@ -7,8 +7,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000"><link rel="manifest" href="/resources/build/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="/resources/icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/resources/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/resources/icon/favicon-16x16.png">
+    <link rel="manifest" href="/resources/icon/site.webmanifest">
+    <link rel="mask-icon" href="/resources/icon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Shuttle Bus</title>
+    <title>Shuttle Bus Booking</title>
     <link rel="stylesheet" href="https://unpkg.com/react-md@1.2.13/dist/react-md.indigo-pink.min.css">
 
 
@@ -34,7 +40,7 @@
 <!--<script type="text/javascript" src="/resources/build/static/js/bundle.js"></script>-->
 <!--<script type="text/javascript" src="/resources/build/static/js/comp.js"></script>
 <script type="text/javascript" src="/resources/build/static/js/compressed.js"></script>-->
-<!--<script type="text/javascript" src="/resources/build/static/js/main.b6b97e8e.js"></script>
+<!--<script type="text/javascript" src="/resources/build/static/js/main.34a0b769.js"></script>
 <link rel="stylesheet" href="/resources/build/static/css/main.18dc56c1.css">-->
 <script type="text/javascript" src="http://localhost:3000/static/js/bundle.js"></script>
 </body>
