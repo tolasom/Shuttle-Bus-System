@@ -94,6 +94,27 @@ public class StudentDaoImpl implements StudentDao{
          }
          return map_location;
     }
+    public Map<String,Object> Notification(){
+       Map<String,Object> map= new HashMap<String, Object>();
+        Transaction trns1 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Booking_Request_Master where dept_date >= CURRENT_TIMESTAMP and enabled='true' and status='Confirmed' and " +
+                    "user_id="+id.getAuthentic();
+            Query query = session.createQuery(hql);
+            List<Booking_Request_Master> booking_request_masterList  = query.list();
+            map.put("notification",booking_request_masterList.size());
+            System.out.println(booking_request_masterList.size());
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        finally {
+            session.flush();
+            session.close();
+        }
+        return map;
+    }
 
     public Map<String,Object> student_booking(Student_Booking book_data){
 
@@ -216,6 +237,7 @@ public class StudentDaoImpl implements StudentDao{
                  map.put("number_of_seats",booking_master.getNumber_booking());
                  map.put("schedule_id",booking_master.getId());
                  map.put("status",booking_master.getNotification());
+                 map.put("dept_time",booking_master.getDept_time());
                  location_master = (Location_Master)
                          session.load(Location_Master.class,booking_master.getTo_id());
                  map.put("destination_name",location_master.getName());
@@ -347,7 +369,7 @@ public class StudentDaoImpl implements StudentDao{
                 map.put("id",booking_master.getId());
                 map.put("status",booking_master.getNotification());
                 map.put("code",booking_master.getCode());
-
+                map.put("pay",booking_master.getPayment());
 
                 location_master = (Location_Master) session.load(Location_Master.class,booking_master.getFrom_id());
                 if(location_master.getId() !=0){
@@ -417,8 +439,8 @@ public class StudentDaoImpl implements StudentDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            String current = "From Booking_Master where dept_date >= current_date() and payment in ('Succeed','Cash') and notification='Booked' and user_id="+id.getAuthentic();
-            String history = "From Booking_Master where dept_date < current_date() and payment in ('Succeed','Cash') and notification='Booked' and user_id="+id.getAuthentic();
+            String current = "From Booking_Master where dept_date >= CURRENT_TIMESTAMP and payment in ('Succeed','Cash') and notification='Booked' and user_id="+id.getAuthentic();
+            String history = "From Booking_Master where dept_date < CURRENT_TIMESTAMP and payment in ('Succeed','Cash') and notification='Booked' and user_id="+id.getAuthentic();
             String request = "From Booking_Request_Master where " +
                     "dept_date >= current_date() and enabled='true' and user_id="+id.getAuthentic();
             Query query = session.createQuery(current);
@@ -515,10 +537,8 @@ public class StudentDaoImpl implements StudentDao{
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-           String hql = "From Booking_Master where dept_date >= current_date() and payment='Succeed' and user_id=324";
-           Query query = session.createQuery(hql);
-
-           System.out.println(query.list().size());
+            StudentDaoImpl studentDao = new StudentDaoImpl();
+            studentDao.Notification();
         }
         catch (RuntimeException e) {
             e.printStackTrace();

@@ -30,7 +30,7 @@ public interface Custom_Dao {
 	public List<List<Map<String,Object>>> choose_correct_bus(Custom_Imp booking,List<Map<String,Object>> all_bus, Pickup_Location_Master pick_source, Pickup_Location_Master pick_destin, int number_of_passenger, int total_seat_of_all_bus);
 	public Map<String, Map<String, List<Pickup_Location_Master>>> create_custom_pickup_location(New_Pickup_Location np);
 	public Map<String, Object> create_custom_dropoff_location(New_Pickup_Location np);
-	public String cancel_booking_ticket(int id);
+	public String cancel_booking_ticket(int id,int percentage);
 	public String confirm_phone_number(UserModel cb);
 	public List<Map<String,Object>> get_qrcode(int id);
 	public List<Map<String,Object>> get_request_booking_id(int id);

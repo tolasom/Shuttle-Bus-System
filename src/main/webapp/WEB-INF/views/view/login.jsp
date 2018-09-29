@@ -13,7 +13,7 @@
 
     <spring:url value="/resources/Bootstrap/css/style.css" var="loginStyle"/>
     <link rel="stylesheet"  type="text/css" href="${loginStyle}">
-    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>-->
     <script type="text/javascript" src="/resources/Bootstrap/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

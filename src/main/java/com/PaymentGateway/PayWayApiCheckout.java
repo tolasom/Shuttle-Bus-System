@@ -1,16 +1,7 @@
 package com.PaymentGateway;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
+
 import org.apache.commons.codec.binary.Base64;
-
-
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -42,7 +33,14 @@ public class PayWayApiCheckout {
     */
     private static String ABA_PAYWAY_MERCHANT_ID = "vkirirom";
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | ABA PayWay API URL
+    |--------------------------------------------------------------------------
+    | API URL that is provided by PayWay must be required in your post form
+    |
+    */
+    private static String ABA_PAYWAY_API_CHECK_TRANSACTION_URL="https://payway-dev.ababank.com/api/pwvkiriromv/check/transaction/";
     /*
      * Returns the getHash
      * For PayWay security, you must follow the way of encryption for hash.
@@ -72,7 +70,6 @@ public class PayWayApiCheckout {
             Mac sha256_HMAC = Mac.getInstance("HmacSHA512");
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA512");
             sha256_HMAC.init(secret_key);
-
             String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
             System.out.println("Hash: "+hash);
             return hash;
@@ -94,6 +91,33 @@ public class PayWayApiCheckout {
         return ABA_PAYWAY_API_URL;
     }
 
+    
+    public static String getHashForCheckTransaction(String transactionId) {
+
+        System.out.println("-----> getHash for check tran_id");
+        System.out.println("T_ID: "+transactionId);
+
+        try {
+            String secret = ABA_PAYWAY_API_KEY;
+            String message = ABA_PAYWAY_MERCHANT_ID + transactionId;
+
+            Mac sha256_HMAC = Mac.getInstance("HmacSHA512");
+            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA512");
+            sha256_HMAC.init(secret_key);
+
+            String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
+            System.out.println("Hash: "+hash);
+            return hash;
+        }
+        catch (Exception e){
+            System.out.println("Error");
+            return null;
+        }
+    }
+    
+//    public static void main(String[] args) throws IOException {
+//    	System.out.println(getHashForCheckTransaction("vKshj6pklee7pqnik43"));
+//=======
     public String getHashTransaction(String transactionId) {
 
         /* Example in PHP code
@@ -126,29 +150,33 @@ public class PayWayApiCheckout {
     }
 
 
-    public static void main(String args[]){
-       PayWayApiCheckout payWayApiCheckout = new PayWayApiCheckout();
-       String transaction_id = "vKva5dsguj0vi8ti1097";
-       String hash = payWayApiCheckout.getHashTransaction(transaction_id);
-        HttpURLConnection connection = null;
+//    public static void main(String args[]){
+//       PayWayApiCheckout payWayApiCheckout = new PayWayApiCheckout();
+//       String transaction_id = "vKva5dsguj0vi8ti1097";
+//       String hash = payWayApiCheckout.getHashTransaction(transaction_id);
+//        HttpURLConnection connection = null;
+//
+//
+//            try {
+//                String targetURL = "https://payway-dev.ababank.com/api/pwvkiriromv/check/transaction/";
+//                String urlParameters = "tran_id=" + transaction_id + "&hash=" + hash;
+//
+//                HttpResponse<JsonNode> jsonResponse = Unirest.post(targetURL)
+//                        .header("accept", "application/json")
+//                        .queryString("tran_id", transaction_id)
+//                        .queryString("hash",hash)
+//                        .field("tran_id", transaction_id)
+//                        .field("hash", hash)
+//                        .asJson();
+//                System.out.println("hello");
+//
+//            }
+//            catch (Exception e){
+//            e.printStackTrace();
+//            }
 
+//    }
 
-            try {
-                String targetURL = "https://payway-dev.ababank.com/api/pwvkiriromv/check/transaction/";
-                String urlParameters = "tran_id=" + transaction_id + "&hash=" + hash;
-
-                HttpResponse<JsonNode> jsonResponse = Unirest.post(targetURL)
-                        .header("accept", "application/json")
-                        .queryString("tran_id", transaction_id)
-                        .queryString("hash",hash)
-                        .field("tran_id", transaction_id)
-                        .field("hash", hash)
-                        .asJson();
-                System.out.println("hello");
-
-            }
-            catch (Exception e){
-            e.printStackTrace();
-            }
-    }
+    	
+    
 }
