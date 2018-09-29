@@ -136,7 +136,7 @@
   
   
                     </div>
- 					<section class="section">
+ 					<!-- section class="section">
                         <div class="row sameheight-container">
                             <div class="col-md-12">
                                 <div class="card sameheight-item">
@@ -151,7 +151,12 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </section> -->
+                    <section class="example">
+                                            <div class="alltables">
+
+                                            </div>
+                                        </section>
                     </article>
 </body>
 <script>
@@ -171,33 +176,34 @@ load = function(){
 			console.log(response);
 			locations = response.locations;
 			p_locations = response.p_locations;
-    		var count=0;
-    		var rrow=1;
-    		if(locations.length<3)
-    			count=3;
-    		else count = locations.length;
-    		for (var j=0;j<=parseInt(count/3);j++)
-    			{
-    			var row = '<div class="row" id="row'+(parseInt(j)+1)+'"></div>';
-    			$("#allLocation").append(row);
-    			}
     		for(var i=0;i<locations.length;i++)
     			{
+                var l_card = '<table class="table table-bordered">'+
+                                '<thead>'+
+                                    '<tr>'+
+                                        '<th style="background-color:grey;">'+locations[i].name+'</th>'+
+                                            '<th><i class="fa fa-trash"></i></th>'+
+                                    '</tr>'+
+                                '</thead>'+
+                                '<tbody id="location'+locations[i].id+'">'+
+                                '</tbody></table>';
     			var card = '<div class="col-md-4">'+
 					'<div class="box-placeholder"><h3>'+locations[i].name+'</h3><a data-toggle="modal" data-target="#myModal3" onClick="assignValue2('+locations[i].id+')">Edit</a><a href="javascript:delLocation('+locations[i].id+')\">Delete</a><br>'+
 					'<a data-toggle="modal" data-target="#myModal2" onClick="assignValue('+locations[i].id+')">Create a pick up location</a>'+'<div id="'+locations[i].id+'"></div>'+
 				 '</div>';
+                $(".alltables").append(l_card);
     			
-				if(i<3)
-					$("#row1").append(card);
-				else
-					$("#row"+(parseInt(i/3)+1)).append(card);
-					
     			}
-    		for (var k=0;k<p_locations.length;k++)
+    		for (var i=0;i<p_locations.length;i++)
     			{
-    			var p_card = '<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[k].id+')">'+p_locations[k].name+'</a><a href="javascript:delPickUp('+p_locations[k].id+')\">Delete</a><br>';
-    			$("#" + p_locations[k].location_id).append(p_card);
+    			// var card = '<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[k].id+')">'+p_locations[k].name+'</a><a href="javascript:delPickUp('+p_locations[k].id+')\">Delete</a><br>';
+    			
+                var p_card = '<tr>'+
+                                '<td>'+p_locations[i].name+'<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[i].id+')"><i class="fa fa-edit"></i></a>'+'</td>'+
+                                '<td><a href="javascript:delPickUp('+p_locations[i].id+')\"><i class="fa fa-trash"></i></a></td>'+
+                            '</tr>';
+                $("#location" + p_locations[i].location_id).append(p_card);
+
     			}
 			
 			
@@ -275,6 +281,7 @@ goTO4 = function(){
 
 $(document).ready(function(){
 	$("#locationMng").addClass("active");
+    $(".sameheight-item").removeAttr("style");
 	$("#myForm").on('submit',function(e){
 		console.log("Fired")
 		e.preventDefault();

@@ -222,6 +222,9 @@ public class usersServiceImpl implements usersService{
 	public int payBooking(Booking_Master booking){
 		return usersDao1.payBooking(booking);
 	}
+	public int doneRefund(Refund_Master refund){
+		return usersDao1.doneRefund(refund);	
+	}
 }
 
 

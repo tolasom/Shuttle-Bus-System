@@ -80,7 +80,7 @@ load = function () {
 
 	$("#dept_date").val(booking.dept_date);
 	$("#dept_time").val(booking.dept_time);
-	$("#bookedOn").val(formatDate(booking.created_at));
+	$("#bookedOn").val(booking.created_at);
 	$("#no_booking").val(booking.number_booking);
 	
 	

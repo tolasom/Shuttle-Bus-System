@@ -9,6 +9,7 @@
                                         <h3 class="title"> Booking Information </h3>
                                         <div id="actionn" style="margin-top: 30px;">
                                         <button type="button" class="btn btn-oval btn-success pull-left" onClick="goTO()" style="color:white;margin: 0 1% 0 2%;">Refund Now!</button>
+                                        <button type="button" class="btn btn-oval btn-success pull-left" onClick="doneRefund()" style="color:white;margin: 0 2% 0 1%;">Done!</button>
                                         <button type="button" class="btn btn-oval btn-danger pull-left" onClick="ignore()" style="color:white;">Ignore</button>
                                         </div>                  
                       
@@ -86,7 +87,7 @@ load = function () {
 
 	$("#dept_date").val(booking.dept_date);
 	$("#dept_time").val(booking.dept_time);
-	$("#bookedOn").val(formatDate(booking.created_at));
+	$("#bookedOn").val(booking.created_at);
 	$("#no_booking").val(booking.number_booking);
 	
 	
@@ -141,6 +142,43 @@ ignore = function(){
             }); 
     
 }
+
+
+doneRefund = function(){
+    
+    $.ajax({
+        url:'doneRefund',
+        type:'GET',
+        data:{  id:parseInt(rid)   },
+        traditional: true,          
+        success: function(response){
+                if(response.status=="1")
+                    {
+                    setTimeout(function() {
+                        swal({
+                            title: "Done!",
+                            text: response.message,
+                            type: "success"
+                        }, function() {
+                            window.location = "admin_booking";
+                        });
+                    }, 10);
+                    
+                    }
+                //var obj = jQuery.parseJSON(response);
+                else 
+                    swal("Oops!", response.message, "error")    
+                
+                },
+        error: function(err){
+                console.log(JSON.stringify(err));
+                
+                }
+        
+            }); 
+    
+}
+
 
 
 formatDate =function (date) {

@@ -30,11 +30,11 @@
 
                        		<div style="display: flex;flex-direction: column;">
                        			<div style="margin-bottom: 10px;">
-		                         <button type="button" class="btn btn-info pull-left" style="color:white;" onclick="location.href='refund_list';">Booking Refunds </button>
+		                         <button type="button" class="btn btn-info pull-left" style="color:white;" onclick="location.href='refund_list';">Booking Refunds <span style="background-color: red; margin-left:7px;" class="badge pull-right" id="refundnoti"></span> </button>
 
 		                          
 
-		                          <button type="button" class="btn btn-info pull-left" style="color:white; margin-left: 10px;" onclick="location.href='unpaid_booking_list';">Unpaid Bookings</button>
+		                          <button type="button" class="btn btn-info pull-left" style="color:white; margin-left: 10px;" onclick="location.href='unpaid_booking_list';">Unpaid Bookings <span style="background-color: red; margin-left:7px;" class="badge pull-right" id="unpaidnoti"></span></button>
 		                         
 	                      	 </div>
 	                      	 
@@ -165,6 +165,12 @@ load = function(){
 			bookings = response.bookings;
 			locations = response.locations;
 			customers = response.customers;
+			unpaid = response.unpaid;
+			refund = response.refund;
+			if(unpaid.length>0)
+                $("#unpaidnoti").text(unpaid.length);
+            if(refund.length>0)
+                $("#refundnoti").text(refund.length);
 			all = bookings.length
 			console.log(locations)
 			var no_student = 0

@@ -361,11 +361,6 @@ public class AdminController {
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		if (diffDays>=2)
 			screen+="2";
-		System.out.println("D1 "+d1);
-		System.out.println("D2 "+d2);
-		System.out.println("OUTTTTTTTT "+screen);
-		System.out.println(schedule.getDept_date());
-		System.out.println(diffDays);
 		ObjectMapper mapper = new ObjectMapper();
 		String json="";
 		try {
@@ -903,6 +898,28 @@ public class AdminController {
 		return map;
 		}
 
+		@RequestMapping(value="/doneRefund", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> doneRefund(Refund_Master refund) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		int check = usersService1.doneRefund(refund);
+		if(check==0)
+		{
+			map.put("status","0");
+			map.put("message","Technical problem occurs!");
+			
+		}
+		else
+		{
+			map.put("status","1");
+			map.put("message","This refund status has just been updated successfully");
+			// User_Info user = usersService1.getCustomerById(request.getUser_id());
+			// String email = user.getEmail();
+			// usersService1.rejectedRequest(email);
+		}
+		
+		return map;
+		}
+
 
 
 	@RequestMapping(value="/payBooking", method=RequestMethod.GET)
@@ -1178,6 +1195,8 @@ public class AdminController {
 			map.put("locations", list2);
 			map.put("bookings", list);
 			map.put("customers", usersService1.getAlCustomers());
+			map.put("unpaid", usersService1.getAllUnpaidBookings());
+			map.put("refund", usersService1.getAllRefunds());
 			}
 			else
 				map.put("message","Data not found");			

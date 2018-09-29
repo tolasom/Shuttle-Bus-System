@@ -60,13 +60,17 @@ load = function(){
                                     +'<td>'+formatDate(bookings[i].dept_date)+'</td>'
                                     +'<td>'+bookings[i].dept_time+'</td>'
                                     +'<td>'+searchRefund(bookings[i].id, refunds)+' %'+'</td>'
-                                    +'<td style="color:#F6B352;">'+bookings[i].transaction_id+'</td></tr>';
+                                    +'<td style="color:#F6B352;" class="unhover">'+bookings[i].transaction_id+'</td></tr>';
                 $("#allRefunds").append(booking);               
                 }
 
                 $(".hoverr").on('click', function() {
                 location.href=$(this).attr('data-url');
                 });
+
+                $( ".unhover" ).on('click', function(e) {
+                e.stopPropagation();    
+            });
                 
                  $( ".user_info" ).on('click', function(e) {
                  console.log("KK");

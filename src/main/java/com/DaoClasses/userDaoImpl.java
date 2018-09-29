@@ -2153,6 +2153,32 @@ public class userDaoImpl implements usersDao{
         return 1;
     }
 
+    public int doneRefund(Refund_Master refund){
+        Transaction trns7 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns7 = session.beginTransaction();
+            String queryString = "FROM Refund_Master where id=:id";
+            Query query = session.createQuery(queryString);
+            query.setInteger("id",refund.getId());
+            Refund_Master r  = (Refund_Master) query.uniqueResult();
+            
+            r.setStatus("Done");
+            session.update(r);  
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (trns7 != null) {
+                trns7.rollback();
+            }
+            e.printStackTrace();
+            return 0;
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return 1;
+    }
+
     public int payBooking(Booking_Master booking){
         Transaction trns7 = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -2366,7 +2392,7 @@ public class userDaoImpl implements usersDao{
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns19 =  session.beginTransaction();
-            String queryString = "from Booking_Request_Master where dept_date>=:localDate and status=:status";
+            String queryString = "from Booking_Request_Master where dept_date>=:localDate and status=:status and enabled=:enabled";
             Query query = session.createQuery(queryString);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate localDate = LocalDate.now();
@@ -2374,6 +2400,7 @@ public class userDaoImpl implements usersDao{
             System.out.println(dtf.format(localDate));
             query.setDate("localDate", date);
             query.setString("status", "Pending");
+            query.setBoolean("enabled", true);
             requests=(List<Booking_Request_Master>)query.list();
         } catch (RuntimeException e) {
             e.printStackTrace();
