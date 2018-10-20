@@ -76,4 +76,5 @@ public interface usersService {
 	public int ignoreRefund(Refund_Master refund);
 	public int payBooking(Booking_Master booking);
 	public int doneRefund(Refund_Master refund);
+	public List<User_Info> getAllStudents();
 }

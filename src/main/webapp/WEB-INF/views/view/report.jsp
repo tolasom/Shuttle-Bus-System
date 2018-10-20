@@ -343,4 +343,16 @@ function searchCustomer(id, myArray){
         }
     }
 }
+generateReport = function()
+{
+            var data_type = 'data:application/vnd.ms-excel';
+            var table_div = document.getElementById('tt');
+            var table_html = table_div.outerHTML.replace(/ /g, '%20');
+        
+            var a = document.createElement('a');
+            a.href = data_type + ', ' + table_html;
+            a.download = 'Bookings_Report' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+            a.click();
+       
+}
 </script>

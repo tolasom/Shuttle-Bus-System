@@ -225,6 +225,9 @@ public class usersServiceImpl implements usersService{
 	public int doneRefund(Refund_Master refund){
 		return usersDao1.doneRefund(refund);	
 	}
+	public List<User_Info> getAllStudents(){
+		return usersDao1.getAllStudents();
+	}
 }
 
 

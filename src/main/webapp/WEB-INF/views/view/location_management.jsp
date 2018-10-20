@@ -153,9 +153,23 @@
                         </div>
                     </section> -->
                     <section class="example">
+                         <div>
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="card-title-block">
+                                            <h3 class="title"> All Locations and Pick Up Locations </h3>
+                                        </div>
+                                        <section class="example">
                                             <div class="alltables">
 
                                             </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                                                    
                                         </section>
                     </article>
 </body>
@@ -181,25 +195,20 @@ load = function(){
                 var l_card = '<table class="table table-bordered">'+
                                 '<thead>'+
                                     '<tr>'+
-                                        '<th style="background-color:grey;">'+locations[i].name+'</th>'+
-                                            '<th><i class="fa fa-trash"></i></th>'+
+                                        '<th style="background-color:grey; color:white;">'+locations[i].name+'<a data-toggle="modal" data-target="#myModal3" onClick="assignValue2('+locations[i].id+')"><i class="fa fa-edit" style=" margin-left: 10px;"></i></a><a data-toggle="modal" data-target="#myModal2" onClick="assignValue('+locations[i].id+')"><button type="button" class="btn btn-info btn-sm pull-right" style="padding:0.25rem 0.25rem; font-size:0.5rem; color:white;">Create Pick Up Location</button></a>'+'</th>'+
+                                            '<th><a href="javascript:delLocation('+locations[i].id+')\"><i style="color:#e85a71;" class="fa fa-trash"></i></a></th>'+
                                     '</tr>'+
                                 '</thead>'+
                                 '<tbody id="location'+locations[i].id+'">'+
                                 '</tbody></table>';
-    			var card = '<div class="col-md-4">'+
-					'<div class="box-placeholder"><h3>'+locations[i].name+'</h3><a data-toggle="modal" data-target="#myModal3" onClick="assignValue2('+locations[i].id+')">Edit</a><a href="javascript:delLocation('+locations[i].id+')\">Delete</a><br>'+
-					'<a data-toggle="modal" data-target="#myModal2" onClick="assignValue('+locations[i].id+')">Create a pick up location</a>'+'<div id="'+locations[i].id+'"></div>'+
-				 '</div>';
                 $(".alltables").append(l_card);
     			
     			}
     		for (var i=0;i<p_locations.length;i++)
     			{
-    			// var card = '<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[k].id+')">'+p_locations[k].name+'</a><a href="javascript:delPickUp('+p_locations[k].id+')\">Delete</a><br>';
     			
                 var p_card = '<tr>'+
-                                '<td>'+p_locations[i].name+'<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[i].id+')"><i class="fa fa-edit"></i></a>'+'</td>'+
+                                '<td style=" padding-left: 40px;">'+p_locations[i].name+'<a data-toggle="modal" data-target="#myModal4" onClick="assignValue3('+p_locations[i].id+')"><i class="fa fa-edit" style=" margin-left: 10px;"></i></a>'+'</td>'+
                                 '<td><a href="javascript:delPickUp('+p_locations[i].id+')\"><i class="fa fa-trash"></i></a></td>'+
                             '</tr>';
                 $("#location" + p_locations[i].location_id).append(p_card);

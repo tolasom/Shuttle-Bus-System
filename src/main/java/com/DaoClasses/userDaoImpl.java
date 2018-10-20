@@ -365,6 +365,38 @@ public class userDaoImpl implements usersDao{
 		}
         return users;
     } 
+
+    public List<User_Info> getAllStudents() {
+        List<User_Info> users= new ArrayList<User_Info>();
+        Transaction trns25 = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try{
+            List<Map<String,Object>> list_map = new ArrayList<Map<String,Object>>();
+            trns25  = session.beginTransaction();
+            String queryString  = "from UserRole where role=:role";
+            Query query = session.createQuery(queryString);
+            query.setString("role", "ROLE_STUDENT");
+            List<UserRole> roles = query.list();
+            for(int i=0;i<roles.size();i++)
+            {
+                User_Info user1 = new User_Info();
+                User_Info user = roles.get(i).getUser_info();
+                user1.setId(user.getId());
+                user1.setUsername(user.getUsername());
+                users.add(user1);
+            }
+            
+        }
+        catch(RuntimeException e)
+        {
+            e.printStackTrace();            
+        }
+        finally{
+            session.flush();
+            session.close();
+        }
+        return users;
+    } 
 	
 	
 	public List<User_Info> getAlDrivers() {

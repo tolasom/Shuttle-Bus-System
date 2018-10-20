@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.EntityClasses.*;
-import com.ModelClasses.UserModel;
+import com.ModelClasses.*;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.DaoClasses.userDaoImpl;
-import com.ModelClasses.B_Model;
-import com.ModelClasses.Schedule_Model;
 import com.ServiceClasses.usersService;
 
 @Controller
@@ -108,6 +106,10 @@ public class AdminController {
 	@RequestMapping(value="/bus_management", method=RequestMethod.GET)
 	public ModelAndView viewBusMng() {
 		return new ModelAndView("bus_management");
+	}
+	@RequestMapping(value="/ticketmng", method=RequestMethod.GET)
+	public ModelAndView ticketmng() {
+		return new ModelAndView("ticketmng");
 	}
 	
 	@RequestMapping(value="/admin_profile", method=RequestMethod.GET)
@@ -1176,6 +1178,29 @@ public class AdminController {
 			 		
 			if (list != null)
 				map.put("buses", list);
+			else
+				map.put("message","Data not found");			
+			
+			return map;
+	}
+	@RequestMapping(value="/getAllStudents", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getAllStudents(){
+				
+		 Map<String,Object> map = new HashMap<String,Object>();
+	
+		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
+			List<User_Info> list = usersService1.getAllStudents();
+			List <Student> list2 = new ArrayList<Student>();
+			 		
+			if (list != null){
+				for (User_Info user:list){
+					Student student = new Student();
+					student.setId(user.getId());
+					student.setText(user.getUsername());
+					list2.add(student);
+				}
+				map.put("students", list2);
+			}
 			else
 				map.put("message","Data not found");			
 			
