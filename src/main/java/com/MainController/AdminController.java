@@ -29,7 +29,7 @@ import com.ServiceClasses.usersService;
 public class AdminController {
 	@Autowired
 	usersService usersService1;
-	
+
 	@RequestMapping(value="/customer_home")
 	public ModelAndView customer_home() {
 		return new ModelAndView("cusomer_home");
@@ -111,12 +111,12 @@ public class AdminController {
 	public ModelAndView ticketmng() {
 		return new ModelAndView("ticketmng");
 	}
-	
+
 	@RequestMapping(value="/admin_profile", method=RequestMethod.GET)
 	public ModelAndView admin_profile() {
 		return new ModelAndView("admin_profile");
 	}
-	
+
 	@RequestMapping(value="/student_home", method=RequestMethod.GET)
 	public ModelAndView Student_Home() {
 		return new ModelAndView("student_home");
@@ -160,8 +160,8 @@ public class AdminController {
 	public ModelAndView admin_booking() {
 		return new ModelAndView("admin_booking");
 	}
-	
-	
+
+
 //=========================Returns historical_booking_requestt view================================
 	@RequestMapping(value="/historical_booking_request", method=RequestMethod.GET)
 	public ModelAndView historical_booking_request() {
@@ -213,7 +213,7 @@ public class AdminController {
 		return new ModelAndView("bus_update","data",json);
 	}
 
-	
+
 //=========================Returns booking detail view================================
 	@RequestMapping(value="/booking_detail", method=RequestMethod.GET)
 	public ModelAndView booking_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
@@ -291,10 +291,10 @@ public class AdminController {
 
 
 
-	
-	
-	
-	
+
+
+
+
 //=========================Returns booking request detail view================================
 	@RequestMapping(value="/request_detail", method=RequestMethod.GET)
 	public ModelAndView request_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
@@ -313,9 +313,9 @@ public class AdminController {
 		}
 		return new ModelAndView("request_detail","data",json);
 	}
-	
-	
-	
+
+
+
 //=========================Returns historical booking request detail view================================
 	@RequestMapping(value="/historical_request_detail", method=RequestMethod.GET)
 	public ModelAndView historical_request_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
@@ -334,8 +334,8 @@ public class AdminController {
 		}
 		return new ModelAndView("historical_request_detail","data",json);
 	}
-	
-	
+
+
 //=========================Returns schedule detail view================================
 	@RequestMapping(value="/schedule_detail", method=RequestMethod.GET)
 	public ModelAndView schedule_detail(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) throws ParseException {
@@ -390,7 +390,7 @@ public class AdminController {
 		}
 		return new ModelAndView("create_schedule","data",json);
 	}
-	
+
 //=========================Returns create user view================================
 	@RequestMapping(value="/create_user", method=RequestMethod.GET)
 	public ModelAndView create_user() {
@@ -411,7 +411,7 @@ public class AdminController {
 	}
 
 
-	
+
 //====================To save bus============================
 	@RequestMapping(value="/createBus", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSaveProject(Bus_Master bus) throws Exception{
@@ -505,7 +505,7 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		return new ModelAndView("scheduleReport2","data",json);
-	}	
+	}
 
 
 
@@ -621,7 +621,7 @@ public class AdminController {
 
 
 
-	
+
 	//====================To getBookingByScheduleId by admin============================
 		@RequestMapping(value="/getBookingByScheduleId", method=RequestMethod.GET)
 		public @ResponseBody Map<String,Object> toGetBookingByScheduleId(@RequestParam(value = "id", required=true) Integer id) throws Exception{
@@ -644,7 +644,7 @@ public class AdminController {
 			int check =bookings.size();
 			if(check<=0)
 			{
-				
+
 				if(usersService1.deleteSchedule(id)==1)
 					{
 						map.put("status", "1");
@@ -655,9 +655,9 @@ public class AdminController {
 						map.put("status", "0");
 						map.put("message","This schedule has not been deleted!");
 					}
-				
+
 			}
-				
+
 			else
 				{
 				map.put("status", "5");
@@ -803,10 +803,10 @@ public class AdminController {
 			map.put("message","Bookings have not been successfully moved!");
 		}
 		return map;
-		}	
-	
-	
-	
+		}
+
+
+
 //====================To move booking to existing schedule by admin============================
 	@RequestMapping(value="/moveSimple", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toMoveSimlple(Schedule_Model s) throws Exception{
@@ -823,11 +823,11 @@ public class AdminController {
 			map.put("message","Bookings have not been successfully moved!");
 		}
 		return map;
-		}		
-	
-	
-	
-	
+		}
+
+
+
+
 //====================To confirm request by admin============================
 	@RequestMapping(value="/confirmRequest", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toConfirmRequest(Booking_Request_Master request) throws Exception{
@@ -845,14 +845,14 @@ public class AdminController {
 			map.put("message","This request has just been confirmed successfully");
 			User_Info user = usersService1.getCustomerById(request.getUser_id());
 			String email = user.getEmail();
-			usersService1.confirmedRequest(email);	
+			usersService1.confirmedRequest(email);
 		}
-		
+
 		return map;
 		}
-	
-	
-	
+
+
+
 //====================To reject request by admin============================
 	@RequestMapping(value="/rejectRequest", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toRejectRequest(Booking_Request_Master request) throws Exception{
@@ -862,7 +862,7 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
-			
+
 		}
 		else
 		{
@@ -872,10 +872,10 @@ public class AdminController {
 			String email = user.getEmail();
 			usersService1.rejectedRequest(email);
 		}
-		
+
 		return map;
 		}
-	
+
 
 
 	@RequestMapping(value="/ignoreRefund", method=RequestMethod.GET)
@@ -886,7 +886,7 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
-			
+
 		}
 		else
 		{
@@ -896,7 +896,7 @@ public class AdminController {
 			// String email = user.getEmail();
 			// usersService1.rejectedRequest(email);
 		}
-		
+
 		return map;
 		}
 
@@ -908,7 +908,7 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
-			
+
 		}
 		else
 		{
@@ -918,7 +918,7 @@ public class AdminController {
 			// String email = user.getEmail();
 			// usersService1.rejectedRequest(email);
 		}
-		
+
 		return map;
 		}
 
@@ -932,7 +932,7 @@ public class AdminController {
 		{
 			map.put("status","0");
 			map.put("message","Technical problem occurs!");
-			
+
 		}
 		else
 		{
@@ -942,13 +942,13 @@ public class AdminController {
 			// String email = user.getEmail();
 			// usersService1.rejectedRequest(email);
 		}
-		
+
 		return map;
 		}
 
 
-	
-	
+
+
 //====================To update bus============================
 		@RequestMapping(value="/updateBus", method=RequestMethod.GET)
 		public @ResponseBody Map<String,Object> toUpdateBus(Bus_Master bus) throws Exception{
@@ -1031,7 +1031,7 @@ public class AdminController {
 					map.put("status", "500");
 					map.put("message","Cannot be deleted, This bus has been assigned to either current or future schedule!");
 				}
-			else 	
+			else
 				{
 					map.put("status", "300");
 					map.put("message","Technical problem occurs");
@@ -1046,9 +1046,9 @@ public class AdminController {
 			status= usersService1.deleteLocation(id);
 			if(status==1)
 				map.put("status", "200");
-			else 	
+			else
 				map.put("status", "300");
-			
+
 			return map;
 			}
 //====================To delete pick up location============================
@@ -1059,12 +1059,12 @@ public class AdminController {
 			status= usersService1.deletePickUpLocation(id);
 			if(status==1)
 				map.put("status", "200");
-			else 	
+			else
 				map.put("status", "300");
-			
+
 			return map;
 			}
-		
+
 //====================To save location============================
 	@RequestMapping(value="/createLocation", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSaveLocation(Location_Master location) throws Exception{
@@ -1087,6 +1087,33 @@ public class AdminController {
 		}
 		return map;
 		}
+//====================To refill ticket============================
+	@RequestMapping(value="/refillTicket", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> refillTicket(Ticket refill) throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println("AAAA");
+		map.put("a", refill.getForall());
+		map.put("o", refill.getForold());
+		map.put("users", refill.getUsers());
+		map.put("noticket", refill.getNoticket());
+		// int check = usersService1.refillTicket(refill);
+		// if(check==0)
+		// {
+		// 	map.put("status","0");
+		// 	map.put("message","Location name already existed!");
+		// }
+		// else if(check==1)
+		// {
+		// 	map.put("status","1");
+		// 	map.put("message","Location has just been created successfully");
+		// }
+		// else
+		// {
+		// 	map.put("status","5");
+		// 	map.put("message","Technical problem occurs");
+		// }
+		return map;
+		}
 //====================Booking report============================
 	@RequestMapping(value="/bookingReport", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> bookingReport(){
@@ -1104,7 +1131,7 @@ public class AdminController {
 		map2.put("data", json);
 		return map2;
 		}
-	
+
 	@RequestMapping(value="/departure_time", method=RequestMethod.GET)
 	public ModelAndView departure_time() {
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -1144,8 +1171,8 @@ public class AdminController {
 		}
 		return new ModelAndView("pricemng","data",json);
 	}
-	
-	
+
+
 //====================To save location============================
 	@RequestMapping(value="/createPickUpLocation", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> toSavePickUpLocation(Pickup_Location_Master p_location) throws Exception{
@@ -1170,28 +1197,28 @@ public class AdminController {
 		}
 	@RequestMapping(value="/getAllBuses", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getProjectCategoryList(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Bus_Master> list = usersService1.getAllBuses();
-			 		
+
 			if (list != null)
 				map.put("buses", list);
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
 	@RequestMapping(value="/getAllStudents", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllStudents(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<User_Info> list = usersService1.getAllStudents();
 			List <Student> list2 = new ArrayList<Student>();
-			 		
+
 			if (list != null){
 				for (User_Info user:list){
 					Student student = new Student();
@@ -1202,19 +1229,19 @@ public class AdminController {
 				map.put("students", list2);
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
 	@RequestMapping(value="/getAllCurrentBookings", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllCurrentBookings(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Master> list = usersService1.getAllCurrentBookings();
 			List<Location_Master> list2 =  usersService1.getAllLocations();
-			 		
+
 			if (list != null)
 			{
 			map.put("locations", list2);
@@ -1224,24 +1251,24 @@ public class AdminController {
 			map.put("refund", usersService1.getAllRefunds());
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	@RequestMapping(value="/getAllCurrentBookingRequests", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllCurrentBookingRequests(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Request_Master> list = usersService1.getAllCurrentBookingRequests();
 			List<Location_Master> list2 =  usersService1.getAllLocations();
-			 		
+
 			if (list != null)
 			{
 			map.put("locations", list2);
@@ -1249,40 +1276,40 @@ public class AdminController {
 			map.put("customers", usersService1.getAlCustomers());
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
 
 
 	@RequestMapping(value="/getBookingRequestNotification", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getBookingRequestNotification(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Request_Master> list = usersService1.getAllCurrentBookingRequests();
-			
+
 			if (list != null)
 				map.put("requests", list);
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
-	
-	
-	
+
+
+
+
 	@RequestMapping(value="/getAllHistoricalBookingRequests", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllHistoricalBookingRequests(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Request_Master> list = usersService1.getAllHistoricalBookingRequests();
 			List<Location_Master> list2 =  usersService1.getAllLocations();
-			 		
+
 			if (list != null)
 			{
 			map.put("locations", list2);
@@ -1290,21 +1317,21 @@ public class AdminController {
 			map.put("customers", usersService1.getAlCustomers());
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	@RequestMapping(value="/getAllCurrentSchedules", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllCurrentSchedules(){
-				
+
 			Map<String,Object> map = new HashMap<String,Object>();
-			List<Schedule_Master> list = usersService1.getAllCurrentSchedules();			 		
+			List<Schedule_Master> list = usersService1.getAllCurrentSchedules();
 			if (list != null)
 			{
 			map.put("schedules", list);
@@ -1313,18 +1340,18 @@ public class AdminController {
 			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(value="/getAllHistoricalSchedules", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllHistoricalSchedules(){
-				
+
 			Map<String,Object> map = new HashMap<String,Object>();
-			List<Schedule_Master> list = usersService1.getAllHistoricalSchedules();			 		
+			List<Schedule_Master> list = usersService1.getAllHistoricalSchedules();
 			if (list != null)
 			{
 			map.put("schedules", list);
@@ -1333,45 +1360,45 @@ public class AdminController {
 			map.put("drivers", usersService1.getAlDrivers());
 			}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
 
-	
-	
+
+
+
 	@RequestMapping(value="/getAllHistoricalBookings", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllHistoricalBookings(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Booking_Master> list = usersService1.getAllHistoricalBookings();
 			List<Location_Master> list2 =  usersService1.getAllLocations();
-			 		
+
 			if (list != null)
 				{
 				map.put("locations", list2);
 				map.put("bookings", list);
 				map.put("customers", usersService1.getAlCustomers());
 				}
-			
+
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
+
 	@RequestMapping(value="/getAllSchedulesByMonth", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllSchedulesByMonth(@RequestParam(value = "month", required=true, defaultValue = "0") Integer month, @RequestParam(value = "year", required=true, defaultValue = "0") Integer year) throws ParseException{
 		 Map<String,Object> map = new HashMap<String,Object>();
 			List<Schedule_Master> list = usersService1.getAllSchedulesByMonth(Integer.toString(month),Integer.toString(year));
-			if (list != null)	
+			if (list != null)
 				map.put("schedules", list);
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
 //=========================Returns schedule list by month view================================
@@ -1441,28 +1468,28 @@ public class AdminController {
 
 
 
-	
-	
+
+
 	@RequestMapping(value="/getAllLocations", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getAllLocations(){
-				
+
 		 Map<String,Object> map = new HashMap<String,Object>();
-	
+
 		   // DaoClasses.userDaoImpl dao = new DaoClasses.userDaoImpl();
 			List<Location_Master> list = usersService1.getAllLocations();
 			List<Pickup_Location_Master> list2 =  usersService1.getAllPickUpLocations();
-			 		
+
 			if (list != null)
 				{
 				map.put("locations", list);
 				map.put("p_locations", list2);
 				}
 			else
-				map.put("message","Data not found");			
-			
+				map.put("message","Data not found");
+
 			return map;
 	}
-	
+
 	@RequestMapping(value="/getLocationById", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getLocationById(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
 		Location_Master location = usersService1.getLocationById(id);
@@ -1483,7 +1510,7 @@ public class AdminController {
 		map.put("driver", usersService1.getCustomerById(id));
 		return map;
 	}
-	
+
 	@RequestMapping(value="/getPickUpLocationById", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getPickUpLocationById(@RequestParam(value = "id", required=true, defaultValue = "0") Integer id) {
 		Pickup_Location_Master p_location = usersService1.getPickUpLocationById(id);
@@ -1511,11 +1538,11 @@ public class AdminController {
 			scode = scode.substring(1);
 			return "S"+scode;
 		}
-		else 
+		else
 			return "S"+scode;
-		
+
 	}
-	
+
 	public static String getBookingSequence(){
 		List<Booking_Master> bookings = new ArrayList<Booking_Master>();
 		bookings = new userDaoImpl().getAllBookings();
@@ -1529,8 +1556,8 @@ public class AdminController {
 			scode = scode.substring(1);
 			return "B"+scode;
 		}
-		else 
+		else
 			return "B"+scode;
-		
+
 	}
 }
