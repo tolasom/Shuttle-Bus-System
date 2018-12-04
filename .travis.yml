@@ -17,6 +17,8 @@ cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.sonar/cache'
+notification:
+  email: false
 after_success:
   - "mvn org.jacoco:jacoco-maven-plugin:prepare-agent coveralls:report"
 install:
@@ -29,5 +31,3 @@ notifications:
     - somtola16@kit.edu.kh
 script:
   - "mvn test jacoco:report"
-notification:
-  email: true
