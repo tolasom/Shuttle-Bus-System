@@ -3,10 +3,9 @@ sudo: false
 install: true
 addons:
   sonarcloud:
-    organization: "kitswdevteam-github"
+    organization: "tolasom-github"
     token:
-      secure: "bQ+/So8T7/sgCMl2MxjMkkRiKXPWwBgzWj+H+/HGGrw+wCZpUE4hQaI7CoSgl7QDr9qhRIODhUhoJz56HDUBEQQQ8kxHMWO1nWR9dFwvkReEQ90EWgXG2bCVu5QT6Ab+4j0XGAaCJnkTfn1FMal67d8rhje+adYOmXgxBqkBKJU4coyHr6MCGRMnGmoDZBDiaVUKIV+2A+2j0IY8YkrMSBiN8rVRX2LMe8DS1iwqM1p8MfWeVw7gYPHWOar+m6wBsaQ5hgbFUasdXE7iccVrItIIPV/5AyLtPCug5A0j/O3xLSglRR/jLYV2PS4WL1bB/YbVCinuW6+uYq1RlBzvwjc4dAYAPNVlHiJzkJ7fr49jyH8Cj5TX/CdEPCS5EVuxQTwNGAXOczmEkTGvOMhcjQhzJaCYsJUKTK8o4ENcnCsL5OmqYgKiT/eNpBPaplt8eKXBimAtjCDcIh2D+22VFnWQ1wjT2iInC6+T6ZcedDKOfuiyIf43zGAPyenClmLLzwd3qi0AK7sCsqj0ABFfve1XXQOWTHUmzTF2k5zckWIpWvmpcAU+bUHSJLL6wF4KOCu1dHlcgY9/shDeeehhMTPhJJGBkqOs8LvAY1j0LnDDXUB5Rqy44iF5Kd9praU7KtiHMVd7lwuzHyZ07Lup38xysBpTYs2Py9GJlorHACk="
-jdk:
+      secure: "wHNBj8gb/ZIVGds0Rs4g9H7CJhs4iMhLtLpYNaGOZU6G7dP+WZ6RDSdhzuG+0u1t5K/1XTU28OzManHvMe7VKH0C+BWTFcI1gx4yLfIkfxsIe2M0kqY7YTV/CNwzu5Lf0iDG3E3SGXbg7+0uDeGm6gLy87juMZViHY0/6FfQi8vsrJvmNBf2uUnjPnDmwXwr3Z9kH5xBZP46ETevTlK0q63LTfl3bu6BF4nINMyZQlEu4KxViSxSlhcnwKEsBHa7XJ8iK/V0exjrz6SO6yQZp9lTo3bJjLuZ58gJnfZNEfOI7nCoUZtwPjkNRvjG8sKweiLUmusbBd/iTTchIaAA+VZ05CWIWLakpipVTLRuluYzGpUxNFuEgyABWgqIDhEcYwSKoaVjv1K5Ky1g7uozXwt8XxVRUHCtlf1E1WwMfU7g4tQDRvchZTygvozkhpkgp/IMHzm0ZZvUFBO+CHXtHUB0WmYi3P0Cw2JGItE9o96rr0vnCz2EZc7dn0yF/B1idArhhf6wtk9S19akp7QNuMYpSLX7u3fy+R44V3F0wURwIbS/iydaXEeXDV9T/MCIGMRfmxBzPR3pxT+CHc7BomJZ96udCqNIfRtsVBZYkE9+TCvIMSavJcfiMafinKYqG/J7E0QdfMdT9lhCqxsW8BiJ2mV4Mp81eD04v3oCOpU="jdk:
   - oraclejdk8 -X
   
 script:
@@ -17,5 +16,17 @@ cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.sonar/cache'
+after_success:
+  - "mvn org.jacoco:jacoco-maven-plugin:prepare-agent coveralls:report"
+install:
+  - "mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+jdk:
+  - openjdk8
+language: java
+notifications:
+  email:
+    - somtola16@kit.edu.kh
+script:
+  - "mvn test jacoco:report"
 notification:
-  email: false
+  email: true
