@@ -19,15 +19,3 @@ cache:
     - '$HOME/.sonar/cache'
 notification:
   email: false
-after_success:
-  - "mvn org.jacoco:jacoco-maven-plugin:prepare-agent coveralls:report"
-install:
-  - "mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
-jdk:
-  - openjdk8
-language: java
-notifications:
-  email:
-    - somtola16@kit.edu.kh
-script:
-  - "mvn test jacoco:report"
